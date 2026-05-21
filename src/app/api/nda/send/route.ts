@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from:    'Codelude Legal <legal@codelude.com>',
       to:      [toEmail],
-      replyTo: 'codelude@gmail.com',
+      replyTo: 'shawaz@codelude.com',
       subject: `NDA signature requested — Codelude × ${party}`,
       html: `
         <div style="font-family:monospace;background:#0a0a08;color:#f5f3ee;padding:40px;max-width:600px;margin:0 auto;">

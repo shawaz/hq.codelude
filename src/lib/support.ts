@@ -50,7 +50,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to renew SSL certificates',
     venture: 'Codelude',
     category: 'Infrastructure',
-    content: `SSL certificates via Let\'s Encrypt / Certbot auto-renew via scheduled task.\n\nTo manually trigger renewal:\nsudo certbot renew\n\nTo check certificate expiry:\nsudo certbot certificates\n\nAll current certificates expire 2026-08-18. Certbot will auto-renew 30 days before expiry.\n\nTo add a new domain:\nsudo certbot --apache -d [domain.com] --non-interactive --agree-tos -m codelude@gmail.com\n\nNote: Domain must have DNS A record pointing to 64.227.160.224 before running certbot.`,
+    content: `SSL certificates via Let\'s Encrypt / Certbot auto-renew via scheduled task.\n\nTo manually trigger renewal:\nsudo certbot renew\n\nTo check certificate expiry:\nsudo certbot certificates\n\nAll current certificates expire 2026-08-18. Certbot will auto-renew 30 days before expiry.\n\nTo add a new domain:\nsudo certbot --apache -d [domain.com] --non-interactive --agree-tos -m shawaz@codelude.com\n\nNote: Domain must have DNS A record pointing to 64.227.160.224 before running certbot.`,
   },
   {
     title: 'Dextrip — strategy not executing',

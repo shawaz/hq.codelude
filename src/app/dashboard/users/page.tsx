@@ -25,7 +25,7 @@ interface Agent {
 const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles: string[] }> = {
   Roborns: {
     humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'codelude@gmail.com', location: 'Mangaluru, India', note: 'Overseeing site survey, engineering partner search, and seed round preparation.' },
+      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Overseeing site survey, engineering partner search, and seed round preparation.' },
       { name: 'Thermal Engineer', role: 'Coastal Heat Exchange Lead', type: 'open', note: 'Critical hire — must have coastal industrial heat exchange and desalination experience. Contract role for Phase 1 feasibility.' },
       { name: 'Government Liaison', role: 'Permits & Compliance', type: 'open', note: 'Karnataka coastal authority, MESCOM grid connection, CRZ clearance pathway.' },
     ],
@@ -34,7 +34,7 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
   },
   Franchiseen: {
     humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'codelude@gmail.com', location: 'Mangaluru, India', note: 'Leading platform development, franchise brand acquisition, and investor compliance structure.' },
+      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Leading platform development, franchise brand acquisition, and investor compliance structure.' },
       { name: 'Franchise Partnership Manager', role: 'Brand Acquisition', type: 'open', note: 'Owns franchise brand signing. Target: 5+ brands in first 6 months. B2B sales, franchise industry knowledge required.' },
       { name: 'Investment Legal Counsel', role: 'SEBI / Platform Compliance', type: 'open', note: 'External counsel — investment platform regulatory pathway, KYC/AML, investor agreements.' },
     ],
@@ -43,7 +43,7 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
   },
   HubCV: {
     humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'codelude@gmail.com', location: 'Mangaluru, India', note: 'Building the matching engine and recruiter onboarding pipeline. Owns first 5 design partner relationships.' },
+      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Building the matching engine and recruiter onboarding pipeline. Owns first 5 design partner relationships.' },
       { name: 'AI / ML Engineer', role: 'Matching Engine', type: 'open', note: 'Owns the AI candidate matching core — Python, LLM integration, vector databases, NLP. Remote.' },
       { name: 'Skill Verifiers', role: 'Human Assessment Network', type: 'open', note: 'Domain experts (engineering, finance, design) — paid per verification. Freelance / contract.' },
     ],
@@ -60,7 +60,7 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
   },
   Cuestay: {
     humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'codelude@gmail.com', location: 'Mangaluru, India', note: 'Finalised protocol spec. Leading hardware partner negotiation and property developer channel development.' },
+      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Finalised protocol spec. Leading hardware partner negotiation and property developer channel development.' },
       { name: 'Hardware Product Manager', role: 'Hub Device & Supply Chain', type: 'open', note: 'Owns ODM manufacturing partner relationship, Matter certification, MOQ management. IoT hardware experience required.' },
       { name: 'Firmware Engineer', role: 'Matter Protocol & Hub OS', type: 'open', note: 'Builds the Cuestay Hub firmware — Matter 1.3+ integration, device management, on-device AI layer.' },
     ],
@@ -77,7 +77,7 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
   },
   Dextrip: {
     humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'codelude@gmail.com', location: 'Mangaluru, India', note: 'Owns strategy development, creator programme launch, and public beta go-to-market.' },
+      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Owns strategy development, creator programme launch, and public beta go-to-market.' },
       { name: 'Strategy Creator Programme', role: 'Community Lead', type: 'open', note: 'Recruits and onboards strategy creators to the marketplace. Target: 20 creators before public beta. Crypto-native community experience.' },
     ],
     agents: [
