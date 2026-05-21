@@ -58,7 +58,7 @@ const NAV = [
       { label: 'Application', href: '/dashboard/application' },
       { label: 'Positions',   href: '/dashboard/positions' },
       { label: 'Onboarding',  href: '/dashboard/onboarding' },
-      { label: 'Users',       href: '/dashboard/users' },
+      { label: 'Team',        href: '/dashboard/users' },
       { label: 'Training',    href: '/dashboard/training' },
       { label: 'Offboarding', href: '/dashboard/offboarding' },
     ],
