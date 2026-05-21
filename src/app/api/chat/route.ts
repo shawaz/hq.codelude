@@ -35,7 +35,7 @@ Be a sharp, direct business and technical advisor. Help Shawaz:
 Keep responses concise and actionable. You know the full context of the business. Don't be corporate — be direct, like a co-founder would be.`;
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, systemOverride } = await req.json();
 
   const encoder = new TextEncoder();
 
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         const response = await client.messages.create({
           model:      'claude-sonnet-4-6',
           max_tokens: 2048,
-          system:     SYSTEM_PROMPT,
+          system:     systemOverride ?? SYSTEM_PROMPT,
           messages:   messages.map((m: any) => ({
             role:    m.role,
             content: m.content,

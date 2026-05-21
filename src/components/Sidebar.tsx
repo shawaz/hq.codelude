@@ -8,6 +8,7 @@ const NAV = [
   {
     title: 'Home',
     items: [
+      { label: 'Overview', href: '/dashboard/overview' },
       { label: 'Tasks',    href: '/dashboard/tasks' },
       { label: 'Events',   href: '/dashboard/events' },
       { label: 'News',     href: '/dashboard/news' },
