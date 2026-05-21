@@ -154,7 +154,7 @@ export default function Sidebar({ user }: Props) {
           className={`sidebar-link${pathname === '/dashboard' ? ' active' : ''}`}
           style={{ marginBottom: '0.25rem' }}
         >
-          Overview
+          Home
         </Link>
 
         {NAV.map(section => {
