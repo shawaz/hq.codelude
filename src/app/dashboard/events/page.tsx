@@ -136,30 +136,29 @@ export default function EventsPage() {
                   <div key={i} onClick={() => hasEvents && setSelected(isSelected ? null : ds)}
                     style={{
                       background: isSelected ? '#1a1a18' : isToday ? '#131311' : 'var(--card-bg)',
-                      minHeight: 80, padding: '0.6rem 0.5rem',
+                      minHeight: 72, padding: '0.5rem 0.5rem 0.4rem',
                       cursor: hasEvents ? 'pointer' : 'default',
-                      borderTop: isSelected ? '2px solid var(--accent)' : isToday ? '2px solid var(--card-border)' : '2px solid transparent',
+                      borderTop: isSelected ? '2px solid var(--accent)' : isToday ? '2px solid rgba(200,245,58,0.3)' : '2px solid transparent',
                       transition: 'background 0.12s',
                     }}>
                     {/* Day number */}
                     <div style={{
-                      fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: isToday ? 700 : 400,
+                      fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: isToday ? 700 : 400,
                       color: isToday ? 'var(--accent)' : hasEvents ? 'var(--off-white)' : 'var(--muted)',
                       marginBottom: '0.4rem',
                     }}>{day}</div>
 
-                    {/* Event dots + labels */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      {events.slice(0, 3).map((e, j) => (
-                        <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: VENTURE_COLORS[e.venture], flexShrink: 0 }} />
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{e.title}</span>
-                        </div>
-                      ))}
-                      {events.length > 3 && (
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', opacity: 0.7 }}>+{events.length - 3} more</div>
-                      )}
-                    </div>
+                    {/* Dots only — no text */}
+                    {hasEvents && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center' }}>
+                        {events.slice(0, 5).map((e, j) => (
+                          <span key={j} style={{ width: 7, height: 7, borderRadius: '50%', background: VENTURE_COLORS[e.venture], flexShrink: 0, display: 'inline-block' }} />
+                        ))}
+                        {events.length > 5 && (
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.48rem', color: 'var(--muted)' }}>+{events.length - 5}</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })}
