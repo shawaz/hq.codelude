@@ -99,14 +99,6 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'SXE',
-    domain: 'sxe.codelude.com',
-    color: '#7F77DD',
-    features: [
-      { name: 'Platform',              description: 'SXE — Self Xcellence Ecosystem. Now live on port 3001.',                                status: 'live' },
-    ],
-  },
-  {
     platform: 'Dextrip Client Portal',
     domain: 'client.dextrip.com',
     color: '#F0997B',
