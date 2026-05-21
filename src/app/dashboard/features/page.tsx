@@ -103,7 +103,46 @@ const DATA: PlatformFeatures[] = [
     domain: 'sxe.codelude.com',
     color: '#7F77DD',
     features: [
-      { name: 'Platform',              description: 'Next.js app — currently stopped, awaiting redeploy',                                    status: 'in-progress' },
+      { name: 'Platform',              description: 'SXE — Self Xcellence Ecosystem. Now live on port 3001.',                                status: 'live' },
+    ],
+  },
+  {
+    platform: 'Dextrip Client Portal',
+    domain: 'client.dextrip.com',
+    color: '#F0997B',
+    features: [
+      { name: 'Client dashboard',      description: 'Investor-facing portal to manage Dextrip investment — track trades, deposits, and profits', status: 'live' },
+      { name: 'Trade history',         description: 'Full trade log with P&L per trade and aggregate performance',                            status: 'live' },
+      { name: 'Deposit / withdrawal',  description: 'Capital management flows for client accounts',                                          status: 'live' },
+      { name: 'Authentication',        description: 'Secure client login and session management',                                            status: 'live' },
+      { name: 'Portfolio analytics',   description: 'Performance charts and ROI tracking across strategies',                                 status: 'in-progress' },
+    ],
+  },
+  {
+    platform: 'Franchiseen',
+    domain: 'franchiseen.com',
+    color: '#7F77DD',
+    features: [
+      { name: 'Fractional ownership engine', description: 'Core platform for fractional franchise investment — built with Crossmint and Solana', status: 'in-progress' },
+      { name: 'Jupiter / Solana integration',description: 'On-chain settlement via Jupiter aggregator on Solana for token-based ownership',  status: 'in-progress' },
+      { name: 'Investor dashboard',          description: 'Portfolio view for retail investors — holdings, payouts, performance',            status: 'in-progress' },
+      { name: 'Daily payout system',         description: 'Automated daily revenue distribution to fractional owners',                      status: 'planned' },
+      { name: 'Franchise operator portal',   description: 'Onboarding and management interface for franchise brand partners',               status: 'planned' },
+      { name: 'KYC / AML',                   description: 'Identity verification and compliance for investor onboarding',                   status: 'planned' },
+    ],
+  },
+  {
+    platform: 'HubCV',
+    domain: 'hubcv.com',
+    color: '#FAC775',
+    features: [
+      { name: 'AI matching engine',     description: 'Anthropic SDK-powered candidate-to-opportunity matching with skill graph analysis',     status: 'in-progress' },
+      { name: 'Authentication',         description: 'NextAuth-based login with multiple providers for professionals and recruiters',         status: 'in-progress' },
+      { name: 'PostgreSQL + Drizzle ORM',description: 'Relational database layer for profiles, matches, verifications, and job data',        status: 'in-progress' },
+      { name: 'Dynamic profile system', description: 'AI-enriched professional profiles that update with real skill progression',           status: 'in-progress' },
+      { name: 'Recruiter portal',        description: 'Dashboard for recruiters to search verified profiles and manage pipelines',           status: 'planned' },
+      { name: 'Human verification',      description: 'Domain-expert assessors validate skills — pay-per-assessment model',                 status: 'planned' },
+      { name: 'Premium billing',         description: 'Subscription paywall for premium professional features and recruiter seats',         status: 'planned' },
     ],
   },
 ];

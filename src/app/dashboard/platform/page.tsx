@@ -1,4 +1,4 @@
-type Status = 'live' | 'stopped' | 'static';
+type Status = 'live' | 'stopped' | 'static' | 'building';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static';
 
 interface Platform {
@@ -44,8 +44,24 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         pm2: 'sxe-web',
         stack: 'Next.js',
         kind: 'Web',
-        status: 'stopped',
-        note: 'Paused — awaiting redeploy',
+        status: 'live',
+        note: 'SXE — Self Xcellence Ecosystem',
+      },
+      {
+        name: 'Franchiseen',
+        domain: 'franchiseen.com',
+        stack: 'Next.js · Crossmint · Solana / Jupiter',
+        kind: 'Web',
+        status: 'building',
+        note: 'Franchise Finance OS — code on server, deployment in progress',
+      },
+      {
+        name: 'HubCV',
+        domain: 'hubcv.com',
+        stack: 'Next.js · NextAuth · Drizzle ORM · Anthropic SDK · PostgreSQL',
+        kind: 'Web',
+        status: 'building',
+        note: 'AI Career Intelligence — code on server, deployment in progress',
       },
     ],
   },
@@ -114,8 +130,18 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         pm2: 'dextrip-tv-bot-live',
         stack: 'Node.js v0.1.0',
         kind: 'Bot',
-        status: 'stopped',
-        note: 'Live signal stream — currently paused',
+        status: 'live',
+        note: 'Live signal stream — restored after server restart',
+      },
+      {
+        name: 'Dextrip Client Portal',
+        domain: 'client.dextrip.com',
+        port: 3006,
+        pm2: 'client-dextrip',
+        stack: 'Next.js · Manrope · Geist Mono',
+        kind: 'Web',
+        status: 'live',
+        note: 'Client-facing investment portal — track trades, deposits, and profits',
       },
       {
         name: 'Spot Bot',
@@ -167,9 +193,10 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
 ];
 
 const STATUS_COLOR: Record<Status, string> = {
-  live:    '#5DCAA5',
-  stopped: '#ff8080',
-  static:  '#FAC775',
+  live:     '#5DCAA5',
+  stopped:  '#ff8080',
+  static:   '#FAC775',
+  building: '#c8f53a',
 };
 
 const KIND_COLOR: Record<Kind, string> = {
