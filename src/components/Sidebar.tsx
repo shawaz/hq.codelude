@@ -17,16 +17,6 @@ const NAV = [
     ],
   },
   {
-    title: 'Operations',
-    items: [
-      { label: 'Projects',    href: '/dashboard/projects' },
-      { label: 'Office',      href: '/dashboard/office' },
-      { label: 'Departments', href: '/dashboard/departments' },
-      { label: 'Franchise',   href: '/dashboard/franchise' },
-      { label: 'Properties',  href: '/dashboard/properties' },
-    ],
-  },
-  {
     title: 'Management',
     items: [
       { label: 'Plan',      href: '/dashboard/plan' },
@@ -36,6 +26,16 @@ const NAV = [
       { label: 'Channel',   href: '/dashboard/channel' },
       { label: 'Resources', href: '/dashboard/resources' },
       { label: 'Relations', href: '/dashboard/relations' },
+    ],
+  },
+  {
+    title: 'Operations',
+    items: [
+      { label: 'Projects',    href: '/dashboard/projects' },
+      { label: 'Office',      href: '/dashboard/office' },
+      { label: 'Departments', href: '/dashboard/departments' },
+      { label: 'Franchise',   href: '/dashboard/franchise' },
+      { label: 'Properties',  href: '/dashboard/properties' },
     ],
   },
   {

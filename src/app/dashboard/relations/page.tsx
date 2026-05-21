@@ -1,99 +1,56 @@
 'use client';
-
 import { useState } from 'react';
-import { RELATIONS, type RelationCategory, type RelationHealth } from '@/lib/management';
+import { VENTURES, VENTURE_RELATIONS, type RHealth } from '@/lib/mgmt-ventures';
 
-const CATEGORIES: (RelationCategory | 'all')[] = ['all', 'Investor', 'Government', 'Media', 'Community', 'Advisor', 'Customer'];
-
-const HEALTH_STYLES: Record<RelationHealth, { color: string; label: string }> = {
-  strong:     { color: '#5DCAA5', label: 'Strong'     },
-  developing: { color: '#c8f53a', label: 'Developing' },
-  cold:       { color: '#7a7870', label: 'Cold'       },
-  target:     { color: '#F0997B', label: 'Target'     },
+const HEALTH_STYLES: Record<RHealth,{color:string;label:string}> = {
+  strong:{color:'#5DCAA5',label:'Strong'},developing:{color:'#c8f53a',label:'Developing'},cold:{color:'#7a7870',label:'Cold'},target:{color:'#F0997B',label:'Target'},
 };
-
-const CAT_COLORS: Record<RelationCategory, string> = {
-  Investor:   '#5DCAA5',
-  Government: '#F0997B',
-  Media:      '#c8f53a',
-  Community:  '#7F77DD',
-  Advisor:    '#FAC775',
-  Customer:   '#85B7EB',
-};
-
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+const CAT_COLORS: Record<string,string> = {
+  Investor:'#5DCAA5',Government:'#F0997B',Media:'#c8f53a',Community:'#7F77DD',Advisor:'#FAC775',Customer:'#85B7EB',
 };
 
 export default function RelationsPage() {
-  const [category, setCategory] = useState<RelationCategory | 'all'>('all');
-  const [health,   setHealth]   = useState<RelationHealth | 'all'>('all');
-
-  const filtered = RELATIONS.filter(r =>
-    (category === 'all' || r.category === category) &&
-    (health   === 'all' || r.health   === health)
-  );
+  const [vi, setVi] = useState(0);
+  const venture   = VENTURES[vi];
+  const relations = VENTURE_RELATIONS[venture.name] ?? [];
 
   return (
     <div>
       <h1 className="page-title">Relations</h1>
-      <p className="page-sub">Stakeholder map — investors, government, media, community, advisors, and customers.</p>
-
-      {/* Health summary */}
-      <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
-        {(Object.entries(HEALTH_STYLES) as [RelationHealth, typeof HEALTH_STYLES[RelationHealth]][]).map(([key, s]) => (
-          <div key={key} className="tasks-count-cell" style={{ cursor: 'pointer' }} onClick={() => setHealth(health === key ? 'all' : key)}>
-            <div className="tasks-count-num" style={{ color: s.color }}>{RELATIONS.filter(r => r.health === key).length}</div>
-            <div className="tasks-count-label">{s.label}</div>
-          </div>
+      <p className="page-sub">Stakeholder relationships — investors, government, media, and customers per venture.</p>
+      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
+        {VENTURES.map((v,i) => (
+          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
         ))}
       </div>
-
-      <div className="filter-bar" style={{ marginBottom: '0.5rem' }}>
-        {CATEGORIES.map(c => (
-          <button key={c} className={`filter-pill${category === c ? ' active' : ''}`}
-            style={category === c && c !== 'all' ? { borderColor: CAT_COLORS[c], color: CAT_COLORS[c] } : {}}
-            onClick={() => setCategory(c)}>{c === 'all' ? 'All categories' : c}</button>
-        ))}
+      <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
+        <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
+        <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em' }}>{venture.name} Relations</div>
       </div>
-      <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
-        <button className={`filter-pill${health === 'all' ? ' active' : ''}`} onClick={() => setHealth('all')}>All health</button>
-        {(Object.entries(HEALTH_STYLES) as [RelationHealth, typeof HEALTH_STYLES[RelationHealth]][]).map(([key, s]) => (
-          <button key={key} className={`filter-pill${health === key ? ' active' : ''}`}
-            style={health === key ? { borderColor: s.color, color: s.color } : {}}
-            onClick={() => setHealth(key)}>{s.label}</button>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
-        {filtered.map((r, i) => (
-          <div key={i} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: '220px 100px 100px 1fr', gap: '1.25rem', alignItems: 'start' }}>
-            <div>
-              <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.4rem' }}>{r.name}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                {r.ventures.map(v => (
-                  <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${VENTURE_COLORS[v]}40`, color: VENTURE_COLORS[v] }}>{v}</span>
-                ))}
+      <div style={{ display:'flex',flexDirection:'column',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)' }}>
+        {relations.map((r,i) => {
+          const hs = HEALTH_STYLES[r.health];
+          return (
+            <div key={i} style={{ background:'var(--card-bg)',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'200px 90px 100px 1fr',gap:'1.25rem',alignItems:'start' }}>
+              <div>
+                <div style={{ fontWeight:600,fontSize:'0.82rem',marginBottom:'0.3rem' }}>{r.name}</div>
+                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${CAT_COLORS[r.category]||'var(--card-border)'}40`,color:CAT_COLORS[r.category]||'var(--muted)' }}>{r.category}</span>
               </div>
-            </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${CAT_COLORS[r.category]}40`, color: CAT_COLORS[r.category], alignSelf: 'flex-start' }}>{r.category}</span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${HEALTH_STYLES[r.health].color}40`, color: HEALTH_STYLES[r.health].color, alignSelf: 'flex-start' }}>{HEALTH_STYLES[r.health].label}</span>
-            <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.5rem' }}>{r.description}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Last contact</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--off-white)' }}>{r.lastContact}</div>
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Next step</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--accent)', lineHeight: 1.5 }}>{r.nextStep}</div>
+              <span className="status-badge" style={{ color:hs.color,borderColor:`${hs.color}40`,alignSelf:'flex-start' }}>{hs.label}</span>
+              <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:'var(--muted)',lineHeight:1.6 }}>
+                <div style={{ textTransform:'uppercase',fontSize:'0.52rem',letterSpacing:'0.1em',marginBottom:'0.2rem' }}>Last contact</div>
+                {r.lastContact}
+              </div>
+              <div>
+                <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.68rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300,marginBottom:'0.5rem' }}>{r.description}</div>
+                <div style={{ display:'flex',alignItems:'flex-start',gap:'0.4rem' }}>
+                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',color:'var(--accent)',flexShrink:0 }}>→</span>
+                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.62rem',color:'var(--accent)',lineHeight:1.5 }}>{r.nextStep}</span>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
