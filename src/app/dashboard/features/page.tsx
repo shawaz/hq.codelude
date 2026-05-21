@@ -137,6 +137,20 @@ const DATA: PlatformFeatures[] = [
       { name: 'Premium billing',         description: 'Subscription paywall for premium professional features and recruiter seats',         status: 'planned' },
     ],
   },
+  {
+    platform: 'Cuestay',
+    domain: 'cuestay.com',
+    color: '#85B7EB',
+    features: [
+      { name: 'Protocol specification',    description: 'Home automation protocol spec — Matter-native, AI intelligence layer. Internal doc complete.', status: 'live' },
+      { name: 'Matter protocol integration',description: 'Cross-ecosystem device compatibility — Apple HomeKit, Google Home, Amazon Alexa via Matter 1.3+', status: 'in-progress' },
+      { name: 'AI personal assistant core',description: 'Routine learning algorithm — home learns behaviour and acts proactively before being asked',    status: 'planned' },
+      { name: 'Smart home hub',             description: 'Cuestay Hub hardware — ODM manufacturing partner in negotiation. Matter-certified device.',    status: 'planned' },
+      { name: 'Mobile app',                 description: 'iOS and Android app for home management, routine setup, and ambient intelligence controls',   status: 'planned' },
+      { name: 'IoT device management',      description: 'Unified device registry and control layer across all connected home devices',                 status: 'planned' },
+      { name: 'Property developer API',     description: 'B2B licence API for pre-installation in new residential builds — per-unit revenue model',    status: 'planned' },
+    ],
+  },
 ];
 
 const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {

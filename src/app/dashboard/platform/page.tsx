@@ -40,6 +40,62 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
     ],
   },
   {
+    title: 'Franchiseen',
+    color: '#7F77DD',
+    platforms: [
+      {
+        name: 'Franchiseen',
+        domain: 'franchiseen.com',
+        stack: 'Next.js · Crossmint · Solana / Jupiter · Convex',
+        kind: 'Web',
+        status: 'building',
+        note: 'Franchise Finance OS — fractional ownership platform. Code on server, deployment in progress.',
+      },
+    ],
+  },
+  {
+    title: 'HubCV',
+    color: '#FAC775',
+    platforms: [
+      {
+        name: 'HubCV',
+        domain: 'hubcv.com',
+        stack: 'Next.js · NextAuth · Drizzle ORM · Anthropic SDK · PostgreSQL',
+        kind: 'Web',
+        status: 'building',
+        note: 'AI Career Intelligence — dynamic verified profiles. Code on server, deployment in progress.',
+      },
+    ],
+  },
+  {
+    title: 'Cuestay',
+    color: '#85B7EB',
+    platforms: [
+      {
+        name: 'Cuestay',
+        domain: 'cuestay.com',
+        stack: 'Next.js · Matter Protocol · AI / IoT',
+        kind: 'Web',
+        status: 'building',
+        note: 'Home AI Automation — ambient intelligence layer. Platform in development.',
+      },
+    ],
+  },
+  {
+    title: 'Roborns',
+    color: '#5DCAA5',
+    platforms: [
+      {
+        name: 'Roborns Web',
+        domain: 'roborns.com',
+        stack: 'Apache · Static / PHP',
+        kind: 'Static',
+        status: 'live',
+        note: 'Public venture website — Roborns coastal AI and desalination',
+      },
+    ],
+  },
+  {
     title: 'Dextrip',
     color: '#F0997B',
     platforms: [
@@ -141,48 +197,6 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Static',
         status: 'live',
         note: 'PolyWorld — Sawabtech platform',
-      },
-    ],
-  },
-  {
-    title: 'Franchiseen',
-    color: '#7F77DD',
-    platforms: [
-      {
-        name: 'Franchiseen',
-        domain: 'franchiseen.com',
-        stack: 'Next.js · Crossmint · Solana / Jupiter · Convex',
-        kind: 'Web',
-        status: 'building',
-        note: 'Franchise Finance OS — fractional ownership platform. Code on server, deployment in progress.',
-      },
-    ],
-  },
-  {
-    title: 'HubCV',
-    color: '#FAC775',
-    platforms: [
-      {
-        name: 'HubCV',
-        domain: 'hubcv.com',
-        stack: 'Next.js · NextAuth · Drizzle ORM · Anthropic SDK · PostgreSQL',
-        kind: 'Web',
-        status: 'building',
-        note: 'AI Career Intelligence — dynamic verified profiles. Code on server, deployment in progress.',
-      },
-    ],
-  },
-  {
-    title: 'Roborns',
-    color: '#5DCAA5',
-    platforms: [
-      {
-        name: 'Roborns Web',
-        domain: 'roborns.com',
-        stack: 'Apache · Static / PHP',
-        kind: 'Static',
-        status: 'live',
-        note: 'Public venture website — Roborns coastal AI and desalination',
       },
     ],
   },
