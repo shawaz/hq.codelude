@@ -43,6 +43,7 @@ const NAV = [
     items: [
       { label: 'Model',     href: '/dashboard/financial-model' },
       { label: 'Budget',    href: '/dashboard/budget' },
+      { label: 'Expenses',  href: '/dashboard/expenses' },
       { label: 'Accounts',  href: '/dashboard/accounts' },
       { label: 'Wallets',   href: '/dashboard/wallets' },
       { label: 'Invoice',   href: '/dashboard/invoice' },
@@ -59,6 +60,7 @@ const NAV = [
       { label: 'Positions',   href: '/dashboard/positions' },
       { label: 'Onboarding',  href: '/dashboard/onboarding' },
       { label: 'Team',        href: '/dashboard/users' },
+      { label: 'Payroll',     href: '/dashboard/payroll' },
       { label: 'Training',    href: '/dashboard/training' },
       { label: 'Offboarding', href: '/dashboard/offboarding' },
     ],
