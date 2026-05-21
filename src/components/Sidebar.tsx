@@ -42,6 +42,7 @@ const NAV = [
     title: 'Finance',
     items: [
       { label: 'Model',     href: '/dashboard/financial-model' },
+      { label: 'Fundraise', href: '/dashboard/fundraise' },
       { label: 'Budget',    href: '/dashboard/budget' },
       { label: 'Expenses',  href: '/dashboard/expenses' },
       { label: 'Accounts',  href: '/dashboard/accounts' },
