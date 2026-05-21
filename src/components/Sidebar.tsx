@@ -17,24 +17,6 @@ const NAV = [
     ],
   },
   {
-    title: 'Fundraising',
-    items: [
-      { label: 'Pipeline',  href: '/dashboard/pipeline'    },
-      { label: 'Rounds',    href: '/dashboard/rounds'      },
-      { label: 'Token',     href: '/dashboard/token-plan'  },
-      { label: 'Decks',     href: '/dashboard/decks'       },
-    ],
-  },
-  {
-    title: 'Dextrip',
-    items: [
-      { label: 'Performance', href: '/dashboard/trading'         },
-      { label: 'Revenue',     href: '/dashboard/dextrip-revenue' },
-      { label: 'Health',      href: '/dashboard/bot-health'      },
-      { label: 'Creators',    href: '/dashboard/creators'        },
-    ],
-  },
-  {
     title: 'Management',
     items: [
       { label: 'Plan',      href: '/dashboard/plan' },
