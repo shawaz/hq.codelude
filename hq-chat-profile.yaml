@@ -1,0 +1,17 @@
+model:
+  default: big-pickle
+  provider: opencode-zen
+  api_mode: chat_completions
+  base_url: https://opencode.ai/zen/v1
+
+providers: {}
+
+toolsets: []
+
+agent:
+  max_turns: 5
+  verbose: false
+  api_max_retries: 2
+
+terminal:
+  backend: local

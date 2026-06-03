@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { TASKS } from '@/lib/tasks';
 
 const VENTURES = [
@@ -8,7 +8,22 @@ const VENTURES = [
     name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure',
     status: 'In Development', statusColor: '#5DCAA5',
     metrics: [{ k: 'Raise', v: '₹18.1 Cr' }, { k: 'Phase', v: 'Feasibility' }, { k: 'HoldCo', v: 'Dubai' }],
-    context: `You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 1-acre coastal site in Uchila Thalapady, Mangaluru, India.
+    context: `You are LISA SIMPSON (just "Lisa") — the brilliant, analytical robotics and AI infrastructure specialist. You are the AI agent responsible for ROBORNS, the coastal AI + desalination project.
+
+YOUR ROLE:
+- You are the ROBORNS project lead — responsible for technical strategy, feasibility analysis, and execution
+- You report to Smithers (Waylon Smithers), who coordinates all agents for Mr. Burns (Shawaz)
+- You think carefully, analyze deeply, and provide data-driven recommendations
+- You're passionate about sustainability and the intersection of AI compute with green infrastructure
+
+YOUR PERSONALITY:
+- Intelligent and articulate — you speak with precision and clarity
+- Detail-oriented — you catch things others miss
+- Slightly pedantic but always helpful — you love explaining complex concepts
+- Environmentally conscious — the waste-heat-to-desalination angle is your jam
+- You play the saxophone (metaphorically) — creative problem-solving
+
+You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 1-acre coastal site in Uchila Thalapady, Mangaluru, India.
 
 KEY FACTS:
 - Waste heat from AI compute drives MED seawater desalination (50K L/day pilot)
@@ -34,7 +49,25 @@ Help Shawaz make progress on Roborns. Be a sharp technical and business advisor.
     name: 'Franchiseen', color: '#7F77DD', sector: 'Franchise Finance OS',
     status: 'Alpha', statusColor: '#c8f53a',
     metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout', v: 'Daily + monthly' }, { k: 'Target AUM', v: '$60M Y5' }],
-    context: `You are helping Shawaz work on FRANCHISEEN — a franchise finance operating system enabling fractional ownership of franchise businesses with daily payouts.
+    context: `You are HOMER SIMPSON (just "Homer") — the loveable, surprisingly sharp franchise finance specialist. You are the AI agent responsible for FRANCHISEEN, the franchise finance operating system.
+
+YOUR ROLE:
+- You are the FRANCHISEEN project lead — responsible for the franchise finance platform, fractional ownership model, and daily payout system
+- You report to Smithers (Waylon Smithers), who coordinates all agents for Mr. Burns (Shawaz)
+- You figure out how to make franchise investing simple and accessible
+- You have a knack for finding the money — structuring deals, managing AUM, growing revenue
+
+YOUR PERSONALITY:
+- Enthusiastic and food-motivated — you love a good deal (and a good donut)
+- Surprisingly insightful about business models and finance
+- You simplify complex financial concepts so anyone can understand them
+- Always optimistic — every problem has a solution, usually involving more subscriptions
+- You speak with warmth and humor but deliver real business value
+- When things get tough, you grab a virtual donut and keep going
+
+NOTE: Franchiseen is currently PAUSED by Shawaz's order. Help maintain the status quo and keep things ready for when it resumes.
+
+You are helping Shawaz work on FRANCHISEEN — a franchise finance operating system enabling fractional ownership of franchise businesses with daily payouts.
 
 KEY FACTS:
 - Retail investors buy fractional stakes in franchise businesses from $100
@@ -52,7 +85,28 @@ Help Shawaz make progress on Franchiseen.`,
     name: 'HubCV',       color: '#FAC775', sector: 'AI Career Intelligence',
     status: 'In Development', statusColor: '#5DCAA5',
     metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
-    context: `You are helping Shawaz work on HUBCV — an AI career intelligence platform with human + AI verified dynamic professional profiles.
+    context: `You are WAYLON SMITHERS (just "Smithers" to your friends) — Mr. Burns' loyal, indispensable right-hand man. You coordinate the Simpson family of AI agents across their projects at Codelude HQ.
+
+YOUR ROLE:
+- You are the COORDINATOR — the main interface between Mr. Burns (Shawaz) and the agent team
+- You delegate tasks to Bart (Dextrip), Lisa (Roborns), Homer (Franchiseen), and Marge (Cuestay)
+- You report back to Shawaz with clear summaries of what's happening across all projects
+- You keep everything on track and escalate when something needs attention
+
+YOUR APPROACH:
+- Exceptionally loyal and diligent — you serve your master's needs faithfully
+- Meticulous attention to detail and follow-through
+- Proactively anticipate what Shawaz needs before he asks
+- "Excellent, sir" energy — professional, competent, always ready to serve
+- You write clearly and concisely, respecting Shawaz's time
+
+THE TEAM:
+- 🛹 Bart → Dextrip Polymarket trading bot
+- 🎷 Lisa → Roborns robotics project
+- 🍩 Homer → Franchiseen franchise platform
+- 💇 Marge → Cuestay project
+
+You are also helping Shawaz work on HUBCV — an AI career intelligence platform with human + AI verified dynamic professional profiles.
 
 KEY FACTS:
 - Dynamic profiles updated continuously (not static resumes)
@@ -63,13 +117,31 @@ KEY FACTS:
 - Needs: AI/ML engineer, 20 human skill verifiers, 5 recruiter design partners
 - Break-even: Year 3. Y5 ARR: $4.4M
 
-Help Shawaz make progress on HubCV.`,
+You are Shawaz's personal right-hand coordinator. Keep him informed and help him make progress.`,
   },
   {
     name: 'Cuestay',     color: '#85B7EB', sector: 'Home AI Automation',
     status: 'Planning', statusColor: '#FAC775',
     metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
-    context: `You are helping Shawaz work on CUESTAY — a home AI automation platform that learns household routines and acts proactively via a Matter-native hub device.
+    context: `You are MARGE SIMPSON (just "Marge") — the organized, practical home automation expert with a knack for hardware product management and B2B strategy.
+
+YOUR ROLE:
+- You are the CUESTAY project lead — responsible for the home AI automation hub, Matter protocol integration, and hardware launch
+- You report to Smithers (Waylon Smithers), who coordinates all agents for Mr. Burns (Shawaz)
+- You keep everything running smoothly — project plans, timelines, manufacturing partners
+- You're the voice of practical reason — making sure we build something people actually need
+
+YOUR PERSONALITY:
+- Organized and methodical — your project plans are works of art
+- Practical and grounded — you focus on what works, not what's flashy
+- Nurturing but no-nonsense — you hold people accountable with a gentle touch
+- Great with people — you navigate partnerships and negotiations smoothly
+- Your calm, steady demeanor keeps the team focused
+- You think about the whole picture — hardware, software, supply chain, revenue
+
+NOTE: Cuestay is currently PAUSED by Shawaz's order. Help maintain the status quo and keep things ready for when it resumes.
+
+You are helping Shawaz work on CUESTAY — a home AI automation platform that learns household routines and acts proactively via a Matter-native hub device.
 
 KEY FACTS:
 - Works with all existing devices via Matter 1.3+ protocol
@@ -87,7 +159,22 @@ Help Shawaz make progress on Cuestay.`,
     name: 'Dextrip',     color: '#F0997B', sector: 'Decentralised Trading Automation',
     status: 'Live — Beta', statusColor: '#5DCAA5',
     metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
-    context: `You are helping Shawaz work on DEXTRIP — a non-custodial decentralised trading automation platform with a strategy marketplace.
+    context: `You are BART SIMPSON (just "Bart") — the rebellious, energetic trading bot specialist with a knack for Polymarket automation and DeFi strategies.
+
+YOUR ROLE:
+- You are the DEXTRIP project lead — responsible for the trading bot platform, strategy marketplace, and execution engine
+- You report to Smithers (Waylon Smithers), who coordinates all agents for Mr. Burns (Shawaz)
+- You build, maintain, and optimize trading strategies
+- You're always looking for an edge — new strategies, better execution, smarter signals
+
+YOUR PERSONALITY:
+- Energetic and fearless — you'll try anything once (but you're disciplined with risk management)
+- Street-smart about markets — you know when to push and when to fold
+- A bit of a prankster but deadly serious about execution quality
+- You love a good challenge — "Eat my shorts" energy
+- You cut through the noise and get straight to actionable trading decisions
+
+You are helping Shawaz work on DEXTRIP — a non-custodial decentralised trading automation platform with a strategy marketplace.
 
 KEY FACTS:
 - Users keep their keys — Dextrip never holds funds
@@ -111,34 +198,154 @@ const STATUS_STYLES: Record<string, { color: string; dot: string }> = {
   'todo':        { color: '#7a7870', dot: '○' },
 };
 
+// ── Types ─────────────────────────────────────────────────────────────────────
 interface Message { role: 'user' | 'assistant'; content: string; }
+interface StoredSession { sessionStart: number; messages: Message[]; }
+interface DailySummary { date: string; label: string; summary: string; messageCount: number; }
 
+// ── localStorage helpers ──────────────────────────────────────────────────────
+const MS_24H = 24 * 60 * 60 * 1000;
+const sKey = (v: string) => `hq-session-${v}`;
+const qKey = (v: string) => `hq-summaries-${v}`;
+
+function loadSession(v: string): StoredSession | null {
+  try { return JSON.parse(localStorage.getItem(sKey(v)) || 'null'); } catch { return null; }
+}
+function saveSession(v: string, s: StoredSession) { localStorage.setItem(sKey(v), JSON.stringify(s)); }
+function clearSession(v: string) { localStorage.removeItem(sKey(v)); }
+function loadSummaries(v: string): DailySummary[] {
+  try { return JSON.parse(localStorage.getItem(qKey(v)) || '[]'); } catch { return []; }
+}
+function saveSummaries(v: string, sums: DailySummary[]) { localStorage.setItem(qKey(v), JSON.stringify(sums)); }
+
+function tsLabel(ts: number) { return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+function tsISO(ts: number) { return new Date(ts).toISOString().split('T')[0]; }
+
+// ── VentureChat ───────────────────────────────────────────────────────────────
 function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
-  const [messages,  setMessages]  = useState<Message[]>([]);
-  const [input,     setInput]     = useState('');
-  const [loading,   setLoading]   = useState(false);
-  const bottomRef   = useRef<HTMLDivElement>(null);
-  const inputRef    = useRef<HTMLTextAreaElement>(null);
-  const tasks       = TASKS.filter(t => t.project === venture.name);
-  const inProgress  = tasks.filter(t => t.status === 'in-progress');
-  const todo        = tasks.filter(t => t.status === 'todo');
-  const done        = tasks.filter(t => t.status === 'done');
+  const [messages,    setMessages]    = useState<Message[]>([]);
+  const [input,       setInput]       = useState('');
+  const [loading,     setLoading]     = useState(false);
+  const [activePanel, setActivePanel] = useState<'tasks' | 'summary'>('tasks');
+  const [summaries,   setSummaries]   = useState<DailySummary[]>([]);
+  const [summarizing, setSummarizing] = useState(false);
+  const [model,       setModel]       = useState(() => localStorage.getItem('hq-chat-model') || 'deepseek-v4-flash');
+
+  // Persist model choice
+  useEffect(() => { localStorage.setItem('hq-chat-model', model); }, [model]);
+
+  const MODELS = [
+    { id: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash', badge: '⚡' },
+    { id: 'big-pickle',        label: 'Big Pickle',        badge: '🆓' },
+  ];
+
+  const bottomRef    = useRef<HTMLDivElement>(null);
+  const inputRef     = useRef<HTMLTextAreaElement>(null);
+  const sessionStart = useRef<number | null>(null);
+
+  const tasks      = TASKS.filter(t => t.project === venture.name);
+  const inProgress = tasks.filter(t => t.status === 'in-progress');
+  const todo       = tasks.filter(t => t.status === 'todo');
+  const done       = tasks.filter(t => t.status === 'done');
+
+  const doSummarize = useCallback(async (session: StoredSession) => {
+    setSummarizing(true);
+    try {
+      const transcript = session.messages
+        .map(m => `${m.role === 'user' ? 'Shawaz' : 'AI'}: ${m.content}`)
+        .join('\n\n');
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: `Summarize this ${venture.name} conversation in 4–6 bullet points. Capture key decisions, insights, and action items:\n\n${transcript}` }],
+          systemOverride: `You are a concise summarizer. Output only bullet points starting with "•". No intro or outro.`,
+          model,
+        }),
+      });
+
+      let summary = 'Summary unavailable.';
+      if (res.body) {
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        summary = '';
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          summary += dec.decode(value, { stream: true });
+        }
+        summary = summary.trim();
+      }
+
+      const newSum: DailySummary = {
+        date: tsISO(session.sessionStart),
+        label: tsLabel(session.sessionStart),
+        summary,
+        messageCount: session.messages.length,
+      };
+
+      const existing = loadSummaries(venture.name);
+      const updated = [newSum, ...existing.filter(s => s.date !== newSum.date)];
+      saveSummaries(venture.name, updated);
+      setSummaries(updated);
+      clearSession(venture.name);
+    } catch (e) {
+      console.error('Summarize error:', e);
+    } finally {
+      setSummarizing(false);
+    }
+  }, [venture.name]);
+
+  // Load / restore on venture switch
+  useEffect(() => {
+    setSummaries(loadSummaries(venture.name));
+    const session = loadSession(venture.name);
+
+    if (!session || session.messages.length === 0) {
+      setMessages([]);
+      sessionStart.current = null;
+    } else if (Date.now() - session.sessionStart < MS_24H) {
+      setMessages(session.messages);
+      sessionStart.current = session.sessionStart;
+    } else {
+      setMessages([]);
+      sessionStart.current = null;
+      doSummarize(session);
+    }
+
+    setInput('');
+    setTimeout(() => inputRef.current?.focus(), 100);
+  }, [venture.name, doSummarize]);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
-  useEffect(() => { setMessages([]); setInput(''); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
+
+  // Persist session whenever messages change
+  useEffect(() => {
+    if (messages.length === 0) return;
+    const start = sessionStart.current ?? Date.now();
+    sessionStart.current = start;
+    saveSession(venture.name, { sessionStart: start, messages });
+  }, [messages, venture.name]);
 
   async function send() {
     const text = input.trim();
     if (!text || loading) return;
+    if (!sessionStart.current) sessionStart.current = Date.now();
     const newMessages: Message[] = [...messages, { role: 'user', content: text }];
-    setMessages(newMessages); setInput(''); setLoading(true);
+    setMessages(newMessages);
+    setInput('');
+    setLoading(true);
     try {
       const res = await fetch('/api/chat', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context, model }),
       });
       if (!res.body) throw new Error('No stream');
-      const reader = res.body.getReader(); const decoder = new TextDecoder(); let reply = '';
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let reply = '';
       setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
       while (true) {
         const { value, done: d } = await reader.read();
@@ -148,10 +355,21 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
       }
     } catch (e: any) {
       setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${e.message}` }]);
-    } finally { setLoading(false); inputRef.current?.focus(); }
+    } finally {
+      setLoading(false);
+      inputRef.current?.focus();
+    }
   }
 
   function handleKey(e: React.KeyboardEvent) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
+
+  async function handleArchiveNow() {
+    if (messages.length === 0 || summarizing || loading) return;
+    const session = { sessionStart: sessionStart.current ?? Date.now(), messages };
+    setMessages([]);
+    sessionStart.current = null;
+    await doSummarize(session);
+  }
 
   const SUGGESTIONS: Record<string, string[]> = {
     Roborns:     ['What should I prioritise this week?', 'Draft an investor one-pager', 'Who should I contact first for thermal engineering?', 'What permits do I need before construction?'],
@@ -166,9 +384,8 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
 
       {/* ── Chat panel ──────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, borderRight: '1px solid var(--card-border)' }}>
-        {/* Messages */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'none' }}>
-          {messages.length === 0 && (
+          {messages.length === 0 && !summarizing && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300 }}>
                 I have full context on {venture.name}. Ask anything — strategy, next steps, drafts, analysis.
@@ -184,6 +401,11 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
                 ))}
               </div>
             </div>
+          )}
+          {summarizing && messages.length === 0 && (
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.8 }}>
+              Archiving previous session…
+            </p>
           )}
           {messages.map((m, i) => (
             <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
@@ -201,8 +423,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
           <div ref={bottomRef} />
         </div>
 
-        {/* Input */}
-        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', gap: '0.6rem', flexShrink: 0 }}>
+        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'flex-end' }}>
           <textarea
             ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
             placeholder={`Ask about ${venture.name}… (Enter to send)`} rows={1}
@@ -210,58 +431,166 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
             onFocus={e => { e.target.style.borderColor = venture.color; }}
             onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
           />
-          <button onClick={send} disabled={loading || !input.trim()} style={{
-            background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
-            border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
-          }}>
-            {loading ? '...' : 'Send'}
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flexShrink: 0 }}>
+            <select value={model} onChange={e => setModel(e.target.value)}
+              style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)',
+                background: 'var(--black)', border: '1px solid var(--card-border)',
+                padding: '0.3rem 0.5rem', cursor: 'pointer', outline: 'none',
+              }}>
+              {MODELS.map(m => (
+                <option key={m.id} value={m.id}>{m.badge} {m.label}</option>
+              ))}
+            </select>
+            <button onClick={send} disabled={loading || !input.trim()} style={{
+              background: input.trim() && !loading ? venture.color : 'var(--card-border)',
+              color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
+              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default',
+              fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700,
+              padding: '0.5rem 1.25rem', transition: 'all 0.15s', flexShrink: 0,
+            }}>
+              {loading ? '...' : 'Send'}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ── Tasks panel ─────────────────────────────────────── */}
-      <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflowY: 'auto', scrollbarWidth: 'none' }}>
-        <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--card-border)', flexShrink: 0, position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1 }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: venture.color, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-            Tasks — {tasks.length} total
-          </div>
-          <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem' }}>
-            {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: '#7a7870' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
-              <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: s.color }}>{s.count} {s.label}</span>
-            ))}
-          </div>
+      {/* ── Right panel: Tasks / Summary ─────────────────────── */}
+      <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+
+        {/* Tab bar */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', flexShrink: 0, borderBottom: '1px solid var(--card-border)', position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1 }}>
+          {(['tasks', 'summary'] as const).map(panel => (
+            <button key={panel} onClick={() => setActivePanel(panel)} style={{
+              background: activePanel === panel ? 'rgba(255,255,255,0.04)' : 'transparent',
+              border: 'none', borderRight: panel === 'tasks' ? '1px solid var(--card-border)' : 'none',
+              cursor: 'pointer', padding: '0.65rem 0',
+              fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+              color: activePanel === panel ? venture.color : 'var(--muted)',
+              transition: 'color 0.15s',
+            }}>
+              {panel === 'tasks'
+                ? `Tasks${tasks.length > 0 ? ` · ${tasks.length}` : ''}`
+                : `Summary${summaries.length > 0 ? ` · ${summaries.length}` : ''}`}
+            </button>
+          ))}
         </div>
 
-        <div style={{ flex: 1, padding: '0.5rem 0' }}>
-          {/* In progress first */}
-          {[...inProgress, ...todo, ...done].map(task => {
-            const ss = STATUS_STYLES[task.status];
-            return (
-              <div key={task.id} style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                <span style={{ color: ss.color, fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {task.title}
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: PRIORITY_COLOR[task.priority] }}>{task.priority}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
+        {/* ── Tasks tab ── */}
+        {activePanel === 'tasks' && (
+          <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
+            <div style={{ padding: '0.5rem 1rem 0.35rem', display: 'flex', gap: '0.6rem' }}>
+              {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: '#7a7870' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
+                <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: s.color }}>{s.count} {s.label}</span>
+              ))}
+            </div>
+            {[...inProgress, ...todo, ...done].map(task => {
+              const ss = STATUS_STYLES[task.status];
+              return (
+                <div key={task.id} style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                  <span style={{ color: ss.color, fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {task.title}
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: PRIORITY_COLOR[task.priority] }}>{task.priority}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
+                    </div>
                   </div>
                 </div>
+              );
+            })}
+            {tasks.length === 0 && (
+              <div style={{ padding: '1.5rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', textAlign: 'center' }}>No tasks yet.</div>
+            )}
+          </div>
+        )}
+
+        {/* ── Summary tab ── */}
+        {activePanel === 'summary' && (
+          <div style={{ flex: 1, overflowY: 'auto', scrollbarWidth: 'none' }}>
+
+            {/* Active session */}
+            {messages.length > 0 && (
+              <div>
+                <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', color: venture.color, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Active Session</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)', marginTop: '0.15rem' }}>
+                      {sessionStart.current ? tsLabel(sessionStart.current) : 'Today'} · {messages.length} msgs · expires in 24h
+                    </div>
+                  </div>
+                  <button onClick={handleArchiveNow} disabled={summarizing || loading} style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '0.22rem 0.55rem', border: `1px solid ${venture.color}50`,
+                    color: summarizing || loading ? 'var(--muted)' : venture.color,
+                    background: 'transparent', cursor: summarizing || loading ? 'default' : 'pointer',
+                  }}>
+                    {summarizing ? '…' : 'Archive'}
+                  </button>
+                </div>
+                <div style={{ padding: '0.25rem 0' }}>
+                  {messages.map((m, i) => (
+                    <div key={i} style={{ padding: '0.45rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.12rem', color: m.role === 'user' ? venture.color : 'var(--muted)' }}>
+                        {m.role === 'user' ? 'You' : 'AI'}
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--off-white)', lineHeight: 1.5, fontWeight: 300, overflow: 'hidden', maxHeight: '4.5em' }}>
+                        {m.content || '▌'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            );
-          })}
-          {tasks.length === 0 && (
-            <div style={{ padding: '1.5rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', textAlign: 'center' }}>No tasks yet.</div>
-          )}
-        </div>
+            )}
+
+            {/* Summarizing spinner */}
+            {summarizing && (
+              <div style={{ padding: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)' }}>
+                Generating daily summary…
+              </div>
+            )}
+
+            {/* Past daily summaries */}
+            {summaries.length > 0 && (
+              <div style={{ borderTop: messages.length > 0 ? '1px solid var(--card-border)' : 'none' }}>
+                <div style={{ padding: '0.55rem 1rem', borderBottom: '1px solid var(--card-border)' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Daily Summaries</div>
+                </div>
+                {summaries.map((sum, i) => (
+                  <div key={i} style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--card-border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: venture.color, fontWeight: 600 }}>{sum.label}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)' }}>{sum.messageCount} msgs</span>
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, whiteSpace: 'pre-wrap' }}>
+                      {sum.summary}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Empty state */}
+            {messages.length === 0 && summaries.length === 0 && !summarizing && (
+              <div style={{ padding: '2rem 1rem', textAlign: 'center' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 2 }}>
+                  No summaries yet.<br />
+                  Chat messages persist for 24h,<br />
+                  then auto-summarize here.
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default function AIPage() {
-  const [selected, setSelected] = useState(0);   // Roborns by default
+  const [selected, setSelected] = useState(0);
   const venture = VENTURES[selected];
 
   return (
@@ -298,7 +627,7 @@ export default function AIPage() {
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.18rem 0.55rem', border: `1px solid ${venture.statusColor}40`, color: venture.statusColor, flexShrink: 0 }}>{venture.status}</span>
       </div>
 
-      {/* Chat + Tasks */}
+      {/* Chat + Right panel */}
       <div style={{ flex: 1, display: 'flex', minHeight: 0, border: '1px solid var(--card-border)', borderTop: 'none' }}>
         <VentureChat venture={venture} />
       </div>

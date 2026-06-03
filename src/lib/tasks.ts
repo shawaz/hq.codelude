@@ -39,6 +39,14 @@ export const TASKS: Task[] = [
   { id: 'r16', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Seed infrastructure round — term sheet' },
   { id: 'r17', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Financial model — Phase 1 capex / opex' },
   { id: 'r18', project: 'Roborns', category: 'Finance',        priority: 'medium', status: 'todo',        title: 'Strategic investor outreach' },
+  // ── Partnerships (email outreach) ────────────────────────────
+  { id: 'r19', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'in-progress', title: 'Sachidananda / KPT — transmission connection + land parcels (email sent 10 AM)' },
+  { id: 'r20', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'in-progress', title: 'VA Tech Wabag — MED-TVC desalination skid RFP (sent)' },
+  { id: 'r21', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'in-progress', title: 'Greenko / ReNew Power — PPA inquiry (sent)' },
+  { id: 'r22', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'in-progress', title: 'Afcons Infrastructure — coastal site survey RFP (sent)' },
+  { id: 'r23', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'in-progress', title: 'Karnataka Coastal Authority — CRZ clearance (inquiry sent via MoEFCC)' },
+  { id: 'r24', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'todo',        title: 'NVIDIA / E2E Networks — compute colocation LOI' },
+  { id: 'r25', project: 'Roborns', category: 'Partnerships',   priority: 'medium', status: 'todo',        title: 'Tata Chemicals / GHCL — Mg(OH)₂ offtake MoU' },
 
   // ── FRANCHISEEN ───────────────────────────────────────────────────────
   { id: 'f01', project: 'Franchiseen', category: 'Product',    priority: 'high',   status: 'in-progress', title: 'Platform core development' },

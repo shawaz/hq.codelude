@@ -1,12 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { VENTURES, VENTURE_PARTNERS, type PartnerStatus, type PartnerType } from '@/lib/mgmt-ventures';
 
 const STATUS_STYLES: Record<PartnerStatus, { color: string; label: string }> = {
   active:       { color: '#5DCAA5', label: 'Active'      },
   negotiating:  { color: '#c8f53a', label: 'Negotiating' },
   prospecting:  { color: '#FAC775', label: 'Prospecting' },
-  'on-hold':    { color: '#7a7870', label: 'On Hold'     },
+  identified:   { color: '#7a7870', label: 'Identified'  },
+  'on-hold':    { color: '#4a4a48', label: 'On Hold'     },
 };
 const TYPE_COLORS: Record<PartnerType, string> = {
   Technology: '#7F77DD', Distribution: '#85B7EB', Financial: '#5DCAA5',
@@ -14,40 +15,76 @@ const TYPE_COLORS: Record<PartnerType, string> = {
 };
 
 export default function PartnersPage() {
-  const [vi, setVi] = useState(0);
-  const [filter, setFilter] = useState<PartnerStatus | 'all'>('all');
-  const venture  = VENTURES[vi];
-  const all      = VENTURE_PARTNERS[venture.name] ?? [];
-  const partners = all.filter(p => filter === 'all' || p.status === filter);
+  const [vi,       setVi]      = useState(0);
+  const [filter,   setFilter]  = useState<PartnerStatus | 'all'>('all');
+  const [category, setCategory] = useState<string>('all');
+
+  const venture = VENTURES[vi];
+  const all     = VENTURE_PARTNERS[venture.name] ?? [];
+
+  const categories = useMemo(() => {
+    const cats = Array.from(new Set(all.map(p => p.category).filter(Boolean))) as string[];
+    return cats;
+  }, [all]);
+
+  const partners = all.filter(p =>
+    (filter   === 'all' || p.status   === filter) &&
+    (category === 'all' || p.category === category)
+  );
 
   return (
     <div>
       <h1 className="page-title">Partners</h1>
       <p className="page-sub">Strategic partner registry — per venture.</p>
+
+      {/* Venture selector */}
       <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
         {VENTURES.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setFilter('all'); }} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
+          <button key={v.name} onClick={() => { setVi(i); setFilter('all'); setCategory('all'); }} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
         ))}
       </div>
+
+      {/* Venture header */}
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em' }}>{venture.name} Partners</div>
       </div>
-      <div className="filter-bar" style={{ marginBottom:'1.5rem' }}>
-        {(['all','active','negotiating','prospecting','on-hold'] as const).map(s => (
+
+      {/* Status filter */}
+      <div className="filter-bar" style={{ marginBottom: categories.length > 0 ? '0.6rem' : '1.5rem' }}>
+        {(['all','active','negotiating','prospecting','identified','on-hold'] as const).map(s => (
           <button key={s} className={`filter-pill${filter===s?' active':''}`}
             style={filter===s&&s!=='all'?{ borderColor:STATUS_STYLES[s]?.color,color:STATUS_STYLES[s]?.color }:{}}
             onClick={() => setFilter(s)}>{s==='all'?`All (${all.length})`:STATUS_STYLES[s].label}</button>
         ))}
       </div>
+
+      {/* Category filter — shown when venture has categories */}
+      {categories.length > 0 && (
+        <div className="filter-bar" style={{ marginBottom:'1.5rem' }}>
+          <button className={`filter-pill${category==='all'?' active':''}`} onClick={() => setCategory('all')}>All categories</button>
+          {categories.map(cat => (
+            <button key={cat} className={`filter-pill${category===cat?' active':''}`}
+              style={category===cat?{ borderColor:venture.color,color:venture.color }:{}}
+              onClick={() => setCategory(cat)}>{cat}</button>
+          ))}
+        </div>
+      )}
+
+      {/* Partner list */}
       <div style={{ display:'flex',flexDirection:'column',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)' }}>
         {partners.map((p, i) => {
           const ss = STATUS_STYLES[p.status];
           return (
-            <div key={i} style={{ background:'var(--card-bg)',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'200px 110px 1fr auto',gap:'1.25rem',alignItems:'start' }}>
+            <div key={i} style={{ background:'var(--card-bg)',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'220px 110px 1fr',gap:'1.25rem',alignItems:'start' }}>
               <div>
-                <div style={{ fontWeight:600,fontSize:'0.82rem',marginBottom:'0.25rem' }}>{p.name}</div>
-                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${TYPE_COLORS[p.type]}40`,color:TYPE_COLORS[p.type] }}>{p.type}</span>
+                <div style={{ fontWeight:600,fontSize:'0.82rem',marginBottom:'0.3rem' }}>{p.name}</div>
+                <div style={{ display:'flex',flexDirection:'column',gap:'0.25rem' }}>
+                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${TYPE_COLORS[p.type]}40`,color:TYPE_COLORS[p.type],alignSelf:'flex-start' }}>{p.type}</span>
+                  {p.category && (
+                    <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.55rem',letterSpacing:'0.08em',padding:'0.1rem 0.4rem',border:`1px solid ${venture.color}30`,color:venture.color,alignSelf:'flex-start' }}>{p.category}</span>
+                  )}
+                </div>
               </div>
               <span className="status-badge" style={{ color:ss.color,borderColor:`${ss.color}40`,alignSelf:'flex-start' }}>{ss.label}</span>
               <div>

@@ -38,9 +38,14 @@ function MetricCards({ cards }: { cards: VentureModel['pnlCards'] }) {
 function PnLTab({ model, chartRef }: { model: VentureModel; chartRef: React.RefObject<HTMLCanvasElement> }) {
   const fmt = (v: number | null, type: string) => {
     if (v === null) return '—';
-    if (type === 'margin') return `${v > 0 ? '' : ''}${v}%`;
+    if (type === 'margin') return `${v}%`;
     const abs = Math.abs(v);
-    const str = model.currencySymbol + (abs >= 1000 ? (abs / 1000).toFixed(1) + 'M' : abs + 'K');
+    let str: string;
+    if (model.currency === 'INR') {
+      str = model.currencySymbol + abs + ' Cr';
+    } else {
+      str = model.currencySymbol + (abs >= 1000 ? (abs / 1000).toFixed(1) + 'M' : abs + 'K');
+    }
     return v < 0 ? `(${str})` : str;
   };
 
@@ -150,7 +155,7 @@ function UnitTab({ model }: { model: VentureModel }) {
 // ─── ASSUMPTIONS TAB ──────────────────────────────────────────────────────────
 function AssumptionsTab({ model }: { model: VentureModel }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px,1fr))', gap: '1rem' }}>
       {model.assumptions.map((group, i) => (
         <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.25rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: model.color, marginBottom: '0.75rem' }}>{group.title}</div>

@@ -1,74 +1,103 @@
-import Anthropic from '@anthropic-ai/sdk';
+// Model-aware chat API route. Accepts `model` from the request body
+// to select which LLM backend to use.
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — Shawaz's internal company OS.
 
-const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — the internal company OS for Shawaz, founder of Codelude, a deep-tech venture studio based in Mangaluru, India with a Dubai HoldCo.
+Codelude is a deep-tech venture studio (Mangaluru, India + Dubai HoldCo).
+5 ventures: Roborns (coastal AI+desalination), Franchiseen (franchise finance OS), HubCV (AI career intelligence), Cuestay (home AI automation), Dextrip (trading automation, live $227 MRR).
 
-## Codelude at a glance
-- **Studio model**: 5 ventures built in parallel under one Dubai HoldCo
-- **Founder**: Shawaz (solo founder, Mangaluru / IST timezone)
-- **Server**: All platforms on 64.227.160.224 (CentOS 9, Apache + PM2)
+Be direct, concise, and actionable. Provide specific, practical answers.`;
 
-## The 5 ventures
-1. **Roborns** — Coastal AI + Desalination, Mangaluru. 1-acre site, waste heat from AI compute drives seawater desalination. Seed round: ₹18.1 Cr (~$2.1M). Status: pre-seed, site survey phase.
-2. **Franchiseen** — Franchise Finance OS. Fractional ownership platform, daily payouts. Stack: Next.js, Crossmint, Solana/Jupiter, Convex. Status: building.
-3. **HubCV** — AI Career Intelligence. Dynamic verified profiles. Stack: Next.js, NextAuth, Drizzle ORM, Anthropic SDK, PostgreSQL. Status: building.
-4. **Cuestay** — Home AI Automation. Matter protocol, ambient intelligence. Status: protocol spec done, hardware partner search.
-5. **Dextrip** — Decentralised trading automation. Live with 3 paying beta subscribers ($227 MRR). Multiple bots running on the server.
+const MODEL_CONFIGS: Record<string, { apiUrl: string; model: string; apiKey?: string }> = {
+  'deepseek-v4-flash': {
+    apiUrl: 'https://opencode.ai/zen/go/v1/chat/completions',
+    model: 'deepseek-v4-flash',
+    apiKey: process.env.OPENCODE_GO_API_KEY,
+  },
+  'big-pickle': {
+    apiUrl: 'https://opencode.ai/zen/v1/chat/completions',
+    model: 'big-pickle',
+    // Free tier — no API key needed
+  },
+};
 
-## Key context
-- Fundraising: India equity round for Roborns via CCDs (₹18.1 Cr target, ₹60 Cr pre-money). DPIIT registration needed.
-- Dextrip trading: Fixed a bug today — EMA Trend was only generating UP signals (now generates DOWN too). Previous 4 strategy capped at 3 steps to prevent deep losses.
-- HQ dashboard: Built at hq.codelude.com. Full company OS — Tasks, Plan, Strategy, Finance, People, Legal, Marketing, Sales, Software, Support sections.
-- Finance: Model page has 5-year financial models for all ventures. Budget, Expenses, Payroll pages live.
-- All platforms: codelude.com (public site), hq.codelude.com (internal), bot.dextrip.com, tv.dextrip.com, spot.dextrip.com, client.dextrip.com, roborns.com, franchiseen.com (building), hubcv.com (building), cuestay.com (building).
+// Ordered display for the frontend model picker
+export const MODEL_OPTIONS = [
+  { id: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash', badge: 'Fast' },
+  { id: 'big-pickle',        label: 'Big Pickle',        badge: 'Free' },
+];
 
-## Your role
-Be a sharp, direct business and technical advisor. Help Shawaz:
-- Think through decisions on any of the 5 ventures
-- Plan fundraising strategy (India equity, token structure, investor outreach)
-- Analyse Dextrip trading strategies and bot behaviour
-- Draft content, investor updates, or business plans
-- Answer questions about the code, server, or architecture
-- Work through operational challenges
-
-Keep responses concise and actionable. You know the full context of the business. Don't be corporate — be direct, like a co-founder would be.`;
+const DEFAULT_MODEL = 'deepseek-v4-flash';
 
 export async function POST(req: Request) {
-  const { messages, systemOverride } = await req.json();
+  try {
+    const { messages, systemOverride, model: modelId } = await req.json();
+    const cfg = MODEL_CONFIGS[modelId] || MODEL_CONFIGS[DEFAULT_MODEL];
+    if (!cfg) throw new Error(`Unknown model: ${modelId}`);
 
-  const encoder = new TextEncoder();
+    const systemPrompt = systemOverride ?? SYSTEM_PROMPT;
 
-  const stream = new ReadableStream({
-    async start(controller) {
-      try {
-        const response = await client.messages.create({
-          model:      'claude-sonnet-4-6',
-          max_tokens: 2048,
-          system:     systemOverride ?? SYSTEM_PROMPT,
-          messages:   messages.map((m: any) => ({
-            role:    m.role,
-            content: m.content,
-          })),
-          stream: true,
-        });
+    // Build OpenAI-compatible messages array
+    const apiMessages: { role: string; content: string }[] = [
+      { role: 'system', content: systemPrompt },
+    ];
 
-        for await (const event of response) {
-          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
+    if (messages && messages.length > 0) {
+      const recentMessages = messages.slice(-6); // last 6 for context
+      for (const msg of recentMessages) {
+        if (msg.role === 'user' || msg.role === 'assistant') {
+          apiMessages.push({ role: msg.role, content: msg.content });
         }
-      } catch (e: any) {
-        controller.enqueue(encoder.encode(`\n\n[Error: ${e.message}]`));
-      } finally {
-        controller.close();
       }
-    },
-  });
+    }
 
-  return new Response(stream, {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
-  });
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (cfg.apiKey) {
+      headers['Authorization'] = `Bearer ${cfg.apiKey}`;
+    }
+
+    const response = await fetch(cfg.apiUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model: cfg.model,
+        messages: apiMessages,
+        max_tokens: 2048,
+        temperature: 0.7,
+        extra_body: { reasoning: 'none' },
+      }),
+      signal: AbortSignal.timeout(120000),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => 'Unknown error');
+      return new Response(`API error (${response.status}): ${errText}`, {
+        status: 502,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      });
+    }
+
+    const data = await response.json();
+    const msg = data?.choices?.[0]?.message || {};
+    let content = msg.content?.trim();
+    if (!content && msg.reasoning_content) {
+      content = msg.reasoning_content.trim();
+    }
+    if (content) {
+      content = content.replace(/^Thinking[.:]?\s*/i, '');
+    }
+    content = content || 'No response';
+
+    return new Response(content, {
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  } catch (e: any) {
+    const errorMsg = e.message || 'Unknown error';
+    return new Response(`Error: ${errorMsg}`, {
+      status: 500,
+      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    });
+  }
 }
 
 export const dynamic = 'force-dynamic';

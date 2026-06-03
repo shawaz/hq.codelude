@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const NAV = [
   {
@@ -201,6 +202,7 @@ export default function Sidebar({ user }: Props) {
             <span className="sidebar-user-role">{user.role}</span>
           </div>
         </div>
+        <ThemeSwitcher />
         <button onClick={handleLogout} className="sidebar-logout">Sign out →</button>
       </div>
     </aside>
