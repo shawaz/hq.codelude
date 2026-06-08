@@ -34,29 +34,74 @@ Be a sharp, direct business and technical advisor. Help Shawaz:
 
 Keep responses concise and actionable. You know the full context of the business. Don't be corporate — be direct, like a co-founder would be.`;
 
-export async function POST(req: Request) {
-  const { messages, systemOverride } = await req.json();
+async function streamClaude(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2048,
+    system: systemOverride ?? SYSTEM_PROMPT,
+    messages: messages.map((m: any) => ({ role: m.role, content: m.content })),
+    stream: true,
+  });
+  for await (const event of response) {
+    if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+      controller.enqueue(encoder.encode(event.delta.text));
+    }
+  }
+}
 
+async function streamDeepSeek(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'deepseek/deepseek-chat-v3-0324:free',
+      max_tokens: 2048,
+      stream: true,
+      messages: [
+        { role: 'system', content: systemOverride ?? SYSTEM_PROMPT },
+        ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+      ],
+    }),
+  });
+
+  if (!res.body) throw new Error('No response body from OpenRouter');
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = '';
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split('\n');
+    buf = lines.pop() ?? '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6).trim();
+      if (data === '[DONE]') return;
+      try {
+        const json = JSON.parse(data);
+        const text = json.choices?.[0]?.delta?.content;
+        if (text) controller.enqueue(encoder.encode(text));
+      } catch { /* skip malformed chunks */ }
+    }
+  }
+}
+
+export async function POST(req: Request) {
+  const { messages, systemOverride, model } = await req.json();
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const response = await client.messages.create({
-          model:      'claude-sonnet-4-6',
-          max_tokens: 2048,
-          system:     systemOverride ?? SYSTEM_PROMPT,
-          messages:   messages.map((m: any) => ({
-            role:    m.role,
-            content: m.content,
-          })),
-          stream: true,
-        });
-
-        for await (const event of response) {
-          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-            controller.enqueue(encoder.encode(event.delta.text));
-          }
+        if (model === 'deepseek') {
+          await streamDeepSeek(messages, systemOverride, controller, encoder);
+        } else {
+          await streamClaude(messages, systemOverride, controller, encoder);
         }
       } catch (e: any) {
         controller.enqueue(encoder.encode(`\n\n[Error: ${e.message}]`));
