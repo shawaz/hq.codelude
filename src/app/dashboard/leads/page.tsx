@@ -1,10 +1,13 @@
 import fs from 'fs';
 import { LEADS } from '@/lib/sales';
+import ConvertToProjectButton from './convert-to-project-button';
+import { isConvertibleLead } from '@/lib/lead-conversion';
 
 interface ContactLead {
   id: string; name: string; email: string;
   interest: string; message: string;
   source: string; date: string; status: string;
+  config?: string;
 }
 
 function loadContactLeads(): ContactLead[] {
@@ -38,7 +41,7 @@ const VENTURE_COLORS: Record<string, string> = {
 export default function LeadsPage() {
   const contactLeads = loadContactLeads();
   const allLeads = [
-    ...LEADS,
+    ...LEADS.map(l => ({ ...l, config: undefined as string | undefined })),
     ...contactLeads.map(c => ({
       id:       c.id,
       name:     c.name,
@@ -50,6 +53,7 @@ export default function LeadsPage() {
       value:    '—',
       nextStep: `Reply to ${c.email}`,
       notes:    c.message,
+      config:   c.config,
     })),
   ];
 
@@ -85,11 +89,17 @@ export default function LeadsPage() {
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{l.source}</span>
                   </div>
                   <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40`, alignSelf: 'flex-start' }}>{ss.label}</span>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)' }}>→ {l.nextStep}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-end' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)' }}>→ {l.nextStep}</div>
+                    {isConvertibleLead(l) && (
+                      <ConvertToProjectButton lead={{ id: l.id, name: l.name, venture: l.venture, config: l.config }} />
+                    )}
+                  </div>
                 </div>
-                {isContact && l.notes && (
+                {isContact && (l.notes || l.config) && (
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, paddingTop: '0.75rem', borderTop: '1px solid var(--card-border)' }}>
-                    &ldquo;{l.notes}&rdquo;
+                    {l.notes && <>&ldquo;{l.notes}&rdquo;</>}
+                    {l.config && <div style={{ marginTop: l.notes ? '0.5rem' : 0, color: 'var(--accent)', opacity: 0.8 }}>{l.config}</div>}
                   </div>
                 )}
               </div>

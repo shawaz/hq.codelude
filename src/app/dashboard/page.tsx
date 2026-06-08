@@ -111,12 +111,15 @@ const STATUS_STYLES: Record<string, { color: string; dot: string }> = {
   'todo':        { color: '#7a7870', dot: '○' },
 };
 
+type AIModel = 'claude' | 'deepseek';
+
 interface Message { role: 'user' | 'assistant'; content: string; }
 
 function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
   const [messages,  setMessages]  = useState<Message[]>([]);
   const [input,     setInput]     = useState('');
   const [loading,   setLoading]   = useState(false);
+  const [model,     setModel]     = useState<AIModel>('claude');
   const bottomRef   = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
   const tasks       = TASKS.filter(t => t.project === venture.name);
@@ -135,7 +138,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
     try {
       const res = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context }),
+        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context, model }),
       });
       if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let reply = '';
@@ -202,20 +205,34 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
         </div>
 
         {/* Input */}
-        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', gap: '0.6rem', flexShrink: 0 }}>
-          <textarea
-            ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
-            placeholder={`Ask about ${venture.name}… (Enter to send)`} rows={1}
-            style={{ flex: 1, background: 'var(--black)', border: '1px solid var(--card-border)', color: 'var(--off-white)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', padding: '0.6rem 0.85rem', outline: 'none', resize: 'none', lineHeight: 1.6, maxHeight: 96, overflowY: 'auto' }}
-            onFocus={e => { e.target.style.borderColor = venture.color; }}
-            onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
-          />
-          <button onClick={send} disabled={loading || !input.trim()} style={{
-            background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
-            border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
-          }}>
-            {loading ? '...' : 'Send'}
-          </button>
+        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0 }}>
+          <div style={{ display: 'flex', gap: '0.6rem' }}>
+            <textarea
+              ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
+              placeholder={`Ask about ${venture.name}… (Enter to send)`} rows={1}
+              style={{ flex: 1, background: 'var(--black)', border: '1px solid var(--card-border)', color: 'var(--off-white)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', padding: '0.6rem 0.85rem', outline: 'none', resize: 'none', lineHeight: 1.6, maxHeight: 96, overflowY: 'auto' }}
+              onFocus={e => { e.target.style.borderColor = venture.color; }}
+              onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
+            />
+            <button onClick={send} disabled={loading || !input.trim()} style={{
+              background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
+              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
+            }}>
+              {loading ? '...' : 'Send'}
+            </button>
+          </div>
+          <div style={{ display: 'flex', gap: '0.35rem' }}>
+            {(['claude', 'deepseek'] as AIModel[]).map(m => (
+              <button key={m} onClick={() => setModel(m)} style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', textTransform: 'uppercase',
+                padding: '0.2rem 0.65rem', border: `1px solid ${model === m ? venture.color : 'var(--card-border)'}`,
+                background: model === m ? `${venture.color}18` : 'transparent',
+                color: model === m ? venture.color : 'var(--muted)', cursor: 'pointer', transition: 'all 0.15s',
+              }}>
+                {m === 'claude' ? 'Claude Sonnet' : 'DeepSeek Flash'}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
