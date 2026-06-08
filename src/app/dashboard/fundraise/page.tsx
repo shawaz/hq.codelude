@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 
-type Tab = 'round' | 'investors' | 'legal' | 'timeline';
+type Tab = 'round' | 'investors' | 'legal' | 'timeline' | 'hyperscaler';
 
 const TABS: { key: Tab; label: string }[] = [
-  { key: 'round',     label: 'Round Structure' },
-  { key: 'investors', label: 'Investor Targets' },
-  { key: 'legal',     label: 'Legal & Compliance' },
-  { key: 'timeline',  label: 'Timeline' },
+  { key: 'round',       label: 'Round Structure' },
+  { key: 'investors',   label: 'Investor Targets' },
+  { key: 'legal',       label: 'Legal & Compliance' },
+  { key: 'timeline',    label: 'Timeline' },
+  { key: 'hyperscaler', label: 'Hyperscaler & Govt Pitch' },
 ];
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -135,6 +136,101 @@ const TIMELINE = [
   { month: 'Oct 2026',     phase: 'First Close',  color: '#5DCAA5', items: ['First close: target ₹8–10 Cr from anchor investors', 'SHA signed, CCDs allotted', 'RBI FC-GPR filing if foreign investors', 'Escrow account funded'] },
   { month: 'Nov–Dec 2026', phase: 'Final Close',  color: '#5DCAA5', items: ['Final close: reach ₹18.1 Cr target', 'CRZ permits filed (parallel track)', 'Engineering contractor shortlist', 'MESCOM HT application submitted'] },
   { month: 'Q1 2027',      phase: 'Deploy',       color: '#7F77DD', items: ['Construction commences (Building A + Thermal loop)', 'Working capital deployed for site operations', 'Pilot compute tenant onboarded', 'Series A preparation begins'] },
+];
+
+// ─── HYPERSCALER & GOVT PITCH ─────────────────────────────────────────────────
+// Pitch angle: Roborns isn't just an investment — it's the infrastructure
+// hyperscalers need to keep building AI data centers without tripping over
+// freshwater scarcity. Stats below are sourced (see notes); replace/refresh
+// with newer figures as the pitch deck is built (task r20).
+
+const CRISIS_STATS = [
+  { label: 'Avg. data center water draw',  val: '1.8 L / kWh',  sub: 'Direct cooling water per kWh of IT load (EESI / TechTarget)', color: '#ff8080' },
+  { label: 'AI vs. traditional clusters',  val: '10–50×',       sub: 'More cooling water consumed by AI training/inference vs. legacy server farms', color: '#FAC775' },
+  { label: 'US projects blocked/delayed',  val: '$64B+',        sub: '48+ data center projects stalled by local opposition in 2025 — water & grid strain are the lead causes (Data Center Watch)', color: '#c8f53a' },
+  { label: 'Roborns freshwater draw',      val: 'Zero',         sub: 'Seawater-cooled — fresh water is the byproduct, not the input', color: '#5DCAA5' },
+];
+
+const CRISIS_NARRATIVE = [
+  { q: 'The problem',          a: 'Microsoft (2020) and Google (2026) have both publicly pledged to be "water positive" by 2030 — replenishing more water than their data centers consume. Yet in 2025 alone, at least 48 AI data center projects representing $150B+ were blocked or stalled by local communities, citing water and grid strain as the top concerns (e.g. Meta\'s ~$1B Michigan site, killed in Dec 2025 after opposition over water use). The pledges and the pipeline are on a collision course.' },
+  { q: 'The Roborns angle',    a: 'A Roborns facility draws zero freshwater — it cools GPUs with seawater and turns the waste heat into a desalination asset that produces fresh water as an output. We don\'t compete with a community for its water table; we add to it. That converts the hyperscalers\' single biggest siting liability into a siting advantage, on day one, by design — not via a decade of retrofits and offset purchases.' },
+  { q: 'Why coastal India, first', a: 'India is simultaneously a priority hyperscale expansion market (data-localisation rules, surging AI demand, new Azure/Google Cloud regions) and a water-stressed geography where new industrial water draw is politically and regulatorily contentious. Coastal siting resolves both constraints at once — and the model is exportable to other coastal, water-stressed markets (MENA, Southeast Asia, the US Gulf Coast, California).' },
+  { q: 'The ask — instrument-agnostic', a: 'The conversation with a hyperscaler is not "invest in our round" — it\'s "secure GPU colocation / water-offtake capacity in a facility that removes your #1 unspoken siting risk." Whether that capacity commitment ultimately closes via equity (CCDs), a strategic/anchor-tenant pre-purchase, or a token-based revenue share, the anchor-tenant relationship is the unlock for all three — and is the explicit prerequisite already on record for the token round (see Investor Targets / R1 notes).' },
+];
+
+const HYPERSCALER_TARGETS = [
+  {
+    category: 'Google', color: '#85B7EB',
+    why: 'Google pledged to be water-positive by 2030 and is investing $500M in public watershed infrastructure in response to AI-driven backlash. Its India Cloud expansion needs new regional capacity.',
+    targets: [
+      { name: 'Google Data Center Sustainability / Water Stewardship', ticket: 'Pilot MOU / capacity pre-commit', fit: 'Directly accountable for delivering the 2030 water-positive pledge — owns the search for net-water-positive site models' },
+      { name: 'Google.org — climate & infrastructure grants', ticket: 'Grant / pilot funding', fit: 'Funds external pilots that visibly advance Google\'s public sustainability commitments' },
+      { name: 'Google Cloud — APAC / India regional infrastructure', ticket: 'Anchor tenant LOI', fit: 'Actively scouting India colocation capacity for data-localisation and AI-demand growth' },
+    ],
+  },
+  {
+    category: 'Microsoft', color: '#c8f53a',
+    why: 'Microsoft was first to pledge water-positive by 2030 (Sept 2020) and has cut datacenter water-use intensity 80%+ since its first-gen sites. Its Climate Innovation Fund backs exactly this kind of infrastructure thesis.',
+    targets: [
+      { name: 'Microsoft Climate Innovation Fund', ticket: 'Equity / strategic investment', fit: '$1B+ fund explicitly targeting carbon, water and waste-reduction infrastructure — coastal zero-freshwater compute is squarely in scope' },
+      { name: 'Microsoft Datacenter Sustainability & Water Positive program', ticket: 'Pilot site partnership', fit: 'Owns delivery of the 2030 commitment; needs working proof points of net-water-positive sites, not just closed-loop retrofits' },
+      { name: 'Microsoft India / Azure regional infrastructure', ticket: 'Anchor tenant LOI / colo capacity', fit: 'Expanding Azure India regions — needs sites that clear local water-permitting friction from day one' },
+    ],
+  },
+  {
+    category: 'Nvidia', color: '#5DCAA5',
+    why: 'Nvidia isn\'t a data-center operator, but it co-designs and invests in the infrastructure layer that AI compute depends on — including India "sovereign AI" partnerships — through its corporate development and ecosystem programs.',
+    targets: [
+      { name: 'NVentures (Nvidia\'s corporate venture arm)', ticket: 'Equity / strategic investment', fit: 'Invests in infrastructure and energy companies expanding AI compute capacity — coastal compute is an adjacent infrastructure thesis' },
+      { name: 'Nvidia AI Infrastructure Partnerships / Sovereign AI India', ticket: 'Reference-design / co-marketing partnership', fit: 'Actively building India sovereign-AI compute partnerships — a novel-cooling new entrant is a differentiated story to co-promote' },
+      { name: 'Nvidia Inception (startup program)', ticket: 'Non-dilutive — credits, technical access, intros', fit: 'Provides cloud credits, technical enablement and investor introductions to infrastructure/AI startups' },
+    ],
+  },
+  {
+    category: 'Meta', color: '#F0997B',
+    why: 'Meta has pledged to restore more water than its data centers consume by 2030 and drives the industry\'s liquid-cooling standards through the Open Compute Project — a natural technical-fit conversation, not a cold pitch.',
+    targets: [
+      { name: 'Meta Sustainability — Water Restoration & DC Strategy', ticket: 'Pilot partnership', fit: 'Owns the "water restoration positive by 2030" target; actively seeking novel cooling/siting case studies after high-profile project cancellations (e.g. Michigan, Dec 2025)' },
+      { name: 'Open Compute Project — liquid cooling workgroup', ticket: 'Technical partnership / reference site', fit: 'Meta drives immersion/liquid-cooling standards through OCP — a working coastal immersion site is reference-case material for the whole consortium' },
+    ],
+  },
+  {
+    category: 'Amazon (AWS)', color: '#7F77DD',
+    why: 'AWS already runs some of the most water-efficient sites in the industry (≈0.15 L/kWh) and has pledged water-positive operations by 2030, backed by the Climate Pledge Fund\'s infrastructure-decarbonisation mandate.',
+    targets: [
+      { name: 'AWS Sustainable Data Centers / Water Stewardship', ticket: 'Pilot site partnership', fit: 'Owns delivery of the water-positive 2030 pledge; wants provable net-positive site models to point to publicly' },
+      { name: 'The Climate Pledge Fund (Amazon)', ticket: 'Equity / strategic investment', fit: 'Invests in companies building infrastructure that decarbonises and reduces resource intensity at scale' },
+    ],
+  },
+];
+
+const GOVT_PIPELINE = [
+  {
+    phase: 'Pre-requisite — Credibility Gate', color: '#ff8080',
+    steps: [
+      { title: 'Recalibrate financial model before any submission', status: 'required', cost: '—', notes: 'validation_report.md (Jun 2026) found power costs modelled ~2.3x too low, desalination water revenue overestimated ~100x, and immersion-cooling CapEx understated ~3x. Submitting today\'s numbers to a government evaluator or a hyperscaler infrastructure team — both of whom will sanity-check them — would do permanent damage. This must close before anything below goes out the door.' },
+    ],
+  },
+  {
+    phase: 'National — Compute & AI', color: '#5DCAA5',
+    steps: [
+      { title: 'IndiaAI Mission — compute subsidy application', status: 'apply now', cost: 'National pool: ₹10,372 Cr', notes: 'The single most relevant scheme on the table — explicitly funds AI compute infrastructure buildout, MeitY-administered. Needs a corrected financial model and technical DPR before submission (see Credibility Gate above).' },
+      { title: 'Startup India Seed Fund Scheme (SISFS)', status: 'apply now', cost: 'Up to ₹50L grant + ₹5 Cr debt', notes: 'Early-stage validation funding. Gated on DPIIT Startup India recognition — already a planned step in the Legal & Compliance phase of this round.' },
+    ],
+  },
+  {
+    phase: 'National — Cleantech & Water', color: '#c8f53a',
+    steps: [
+      { title: 'SIDBI Clean Tech Fund — soft loan application', status: 'recommended', cost: 'Soft loans up to ₹5 Cr', notes: 'Concessional debt for clean-tech / water-integration infrastructure — pairs naturally with the desalination + immersion-cooling combined pitch.' },
+      { title: 'AMRUT 2.0 — water management technology grant', status: 'conditional', cost: 'Grant — amount set per state allocation', notes: 'Targets urban/industrial water-management technology. The desalination + brine-to-mineral (zero liquid discharge) angle is the qualifying hook; requires coordination with Karnataka\'s urban development department.' },
+    ],
+  },
+  {
+    phase: 'State — Karnataka', color: '#FAC775',
+    steps: [
+      { title: 'Karnataka Industrial Policy — capex & power-tariff subsidy', status: 'recommended', cost: 'Capex subsidies + power tariff concessions (cleantech thrust sector)', notes: 'State-level incentive for cleantech industrial investment on the Karnataka coast. Same relationship as Karnataka Udyog Mitra in the Investor Targets tab — a different ask to the same desk.' },
+    ],
+  },
 ];
 
 // ─── COMPONENTS ───────────────────────────────────────────────────────────────
@@ -351,6 +447,75 @@ export default function FundraisePage() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ── HYPERSCALER & GOVT PITCH ─────────────────────────────────────────── */}
+      {tab === 'hyperscaler' && (
+        <div>
+          <Section title="The data center freshwater crisis — in numbers" />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
+            {CRISIS_STATS.map(c => (
+              <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.3rem' }}>{c.label}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: c.color, marginBottom: '0.1rem', lineHeight: 1 }}>{c.val}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', lineHeight: 1.5 }}>{c.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          <Section title="Positioning — why hyperscalers should care" />
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.25rem', marginBottom: '1.5rem' }}>
+            {CRISIS_NARRATIVE.map((r, i) => (
+              <div key={i} style={{ marginBottom: i < CRISIS_NARRATIVE.length - 1 ? '0.85rem' : 0, paddingBottom: i < CRISIS_NARRATIVE.length - 1 ? '0.85rem' : 0, borderBottom: i < CRISIS_NARRATIVE.length - 1 ? '1px solid var(--card-border)' : 'none' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)', marginBottom: '0.3rem' }}>{r.q}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{r.a}</div>
+              </div>
+            ))}
+          </div>
+
+          <Section title="Hyperscaler targets — realistic entry points" />
+          {HYPERSCALER_TARGETS.map((cat, ci) => (
+            <div key={ci} style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--card-border)' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: cat.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{cat.category}</span>
+              </div>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{cat.why}</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
+                {cat.targets.map((t, ti) => (
+                  <div key={ti} style={{ background: 'var(--card-bg)', padding: '0.85rem 1.25rem', display: 'grid', gridTemplateColumns: '300px 160px 1fr', gap: '1.25rem', alignItems: 'start', borderLeft: `2px solid ${cat.color}30` }}>
+                    <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{t.name}</div>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: cat.color }}>{t.ticket}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', lineHeight: 1.5, fontWeight: 300 }}>{t.fit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <Section title="Government tender & subsidy pipeline" />
+          {GOVT_PIPELINE.map((phase, pi) => (
+            <div key={pi} style={{ marginBottom: '1.5rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: phase.color, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--card-border)' }}>
+                {phase.phase}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
+                {phase.steps.map((s, si) => {
+                  const statusColor = s.status === 'required' ? '#ff8080' : s.status === 'apply now' ? '#5DCAA5' : s.status === 'recommended' ? '#FAC775' : '#7a7870';
+                  return (
+                    <div key={si} style={{ background: 'var(--card-bg)', padding: '1rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 200px 110px', gap: '1.25rem', alignItems: 'start' }}>
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.3rem' }}>{s.title}</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.63rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{s.notes}</div>
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#FAC775', lineHeight: 1.5 }}>{s.cost}</div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${statusColor}40`, color: statusColor, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{s.status}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
