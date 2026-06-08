@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TASKS, PROJECT_COLORS, type Project, type Status, type Priority } from '@/lib/tasks';
 
 const PROJECTS: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
@@ -12,12 +13,25 @@ const STATUSES: { key: Status | 'all'; label: string }[] = [
 ];
 
 export default function TasksPage() {
-  const [project, setProject]   = useState<Project | 'all'>('all');
-  const [status,  setStatus]    = useState<Status | 'all'>('all');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlProject = searchParams.get('project') as Project | null;
+  const urlCategory = searchParams.get('category');
+
+  const [project, setProject] = useState<Project | 'all'>(urlProject || 'all');
+  const [status,  setStatus]  = useState<Status | 'all'>('all');
+
+  // Sync URL params into state on mount
+  const [synced, setSynced] = useState(false);
+  if (!synced) {
+    if (urlProject) setProject(urlProject);
+    setSynced(true);
+  }
 
   const filtered = TASKS.filter(t =>
     (project === 'all' || t.project === project) &&
-    (status  === 'all' || t.status  === status)
+    (status  === 'all' || t.status  === status) &&
+    (!urlCategory || t.category === urlCategory)
   );
 
   const total      = filtered.length;
@@ -28,7 +42,11 @@ export default function TasksPage() {
   return (
     <div>
       <h1 className="page-title">Tasks</h1>
-      <p className="page-sub">All tasks across the five ventures — filtered by project and status.</p>
+      <p className="page-sub">
+        {urlProject
+          ? `Tasks for ${urlProject}${urlCategory ? ` — ${urlCategory}` : ''}`
+          : 'All tasks across the five ventures — filtered by project and status.'}
+      </p>
 
       <div className="tasks-count-row">
         <div className="tasks-count-cell">
@@ -88,7 +106,11 @@ export default function TasksPage() {
         </thead>
         <tbody>
           {filtered.map(task => (
-            <tr key={task.id}>
+            <tr
+              key={task.id}
+              onClick={() => router.push(`/dashboard/tasks/${task.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <td className="task-title">{task.title}</td>
               <td>
                 <span className="project-label">

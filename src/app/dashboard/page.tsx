@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { TASKS } from '@/lib/tasks';
 
 const VENTURES = [
@@ -229,15 +230,6 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
   const [activePanel, setActivePanel] = useState<'tasks' | 'summary'>('tasks');
   const [summaries,   setSummaries]   = useState<DailySummary[]>([]);
   const [summarizing, setSummarizing] = useState(false);
-  const [model,       setModel]       = useState(() => localStorage.getItem('hq-chat-model') || 'deepseek-v4-flash');
-
-  // Persist model choice
-  useEffect(() => { localStorage.setItem('hq-chat-model', model); }, [model]);
-
-  const MODELS = [
-    { id: 'deepseek-v4-flash', label: 'DeepSeek V4 Flash', badge: '⚡' },
-    { id: 'big-pickle',        label: 'Big Pickle',        badge: '🆓' },
-  ];
 
   const bottomRef    = useRef<HTMLDivElement>(null);
   const inputRef     = useRef<HTMLTextAreaElement>(null);
@@ -261,7 +253,6 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
         body: JSON.stringify({
           messages: [{ role: 'user', content: `Summarize this ${venture.name} conversation in 4–6 bullet points. Capture key decisions, insights, and action items:\n\n${transcript}` }],
           systemOverride: `You are a concise summarizer. Output only bullet points starting with "•". No intro or outro.`,
-          model,
         }),
       });
 
@@ -340,7 +331,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context, model }),
+        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context }),
       });
       if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader();
@@ -383,8 +374,8 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
     <div style={{ display: 'flex', flex: 1, minHeight: 0, gap: 0 }}>
 
       {/* ── Chat panel ──────────────────────────────────────── */}
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, borderRight: '1px solid var(--card-border)' }}>
-        <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'none' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, borderRight: '1px solid var(--card-border)', background: 'var(--card-bg)' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'none', background: 'var(--card-bg)' }}>
           {messages.length === 0 && !summarizing && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300 }}>
@@ -411,7 +402,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
             <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
               <div style={{
                 maxWidth: '88%', padding: '0.75rem 1rem',
-                background: m.role === 'user' ? `${venture.color}15` : 'rgba(255,255,255,0.03)',
+                background: m.role === 'user' ? `${venture.color}15` : 'var(--card-bg)',
                 border: `1px solid ${m.role === 'user' ? `${venture.color}30` : 'var(--card-border)'}`,
                 fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)',
                 lineHeight: 1.85, fontWeight: 300, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
@@ -423,46 +414,31 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
           <div ref={bottomRef} />
         </div>
 
-        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'flex-end' }}>
+        <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', gap: '0.6rem', flexShrink: 0, background: 'var(--card-bg)' }}>
           <textarea
             ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
             placeholder={`Ask about ${venture.name}… (Enter to send)`} rows={1}
-            style={{ flex: 1, background: 'var(--black)', border: '1px solid var(--card-border)', color: 'var(--off-white)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', padding: '0.6rem 0.85rem', outline: 'none', resize: 'none', lineHeight: 1.6, maxHeight: 96, overflowY: 'auto' }}
+            style={{ flex: 1, background: 'var(--card-bg)', border: '1px solid var(--card-border)', color: 'var(--off-white)', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', padding: '0.6rem 0.85rem', outline: 'none', resize: 'none', lineHeight: 1.6, maxHeight: 96, overflowY: 'auto' }}
             onFocus={e => { e.target.style.borderColor = venture.color; }}
             onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
           />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', flexShrink: 0 }}>
-            <select value={model} onChange={e => setModel(e.target.value)}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)',
-                background: 'var(--black)', border: '1px solid var(--card-border)',
-                padding: '0.3rem 0.5rem', cursor: 'pointer', outline: 'none',
-              }}>
-              {MODELS.map(m => (
-                <option key={m.id} value={m.id}>{m.badge} {m.label}</option>
-              ))}
-            </select>
-            <button onClick={send} disabled={loading || !input.trim()} style={{
-              background: input.trim() && !loading ? venture.color : 'var(--card-border)',
-              color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
-              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default',
-              fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700,
-              padding: '0.5rem 1.25rem', transition: 'all 0.15s', flexShrink: 0,
-            }}>
-              {loading ? '...' : 'Send'}
-            </button>
-          </div>
+          <button onClick={send} disabled={loading || !input.trim()} style={{
+            background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
+            border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
+          }}>
+            {loading ? '...' : 'Send'}
+          </button>
         </div>
       </div>
 
       {/* ── Right panel: Tasks / Summary ─────────────────────── */}
-      <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--card-bg)' }}>
 
         {/* Tab bar */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', flexShrink: 0, borderBottom: '1px solid var(--card-border)', position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1 }}>
           {(['tasks', 'summary'] as const).map(panel => (
             <button key={panel} onClick={() => setActivePanel(panel)} style={{
-              background: activePanel === panel ? 'rgba(255,255,255,0.04)' : 'transparent',
+              background: activePanel === panel ? `${venture.color}12` : 'transparent',
               border: 'none', borderRight: panel === 'tasks' ? '1px solid var(--card-border)' : 'none',
               cursor: 'pointer', padding: '0.65rem 0',
               fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em', textTransform: 'uppercase',
@@ -486,19 +462,24 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
             </div>
             {[...inProgress, ...todo, ...done].map(task => {
               const ss = STATUS_STYLES[task.status];
+              const taskUrl = `/dashboard/tasks?project=${task.project}&category=${encodeURIComponent(task.category)}`;
               return (
-                <div key={task.id} style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                  <span style={{ color: ss.color, fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {task.title}
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: PRIORITY_COLOR[task.priority] }}>{task.priority}</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
+                <Link key={task.id} href={taskUrl} style={{ textDecoration: 'none' }}>
+                  <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', cursor: 'pointer', transition: 'background 0.1s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
+                    <span style={{ color: ss.color, fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {task.title}
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: PRIORITY_COLOR[task.priority] }}>{task.priority}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
             {tasks.length === 0 && (
@@ -594,7 +575,7 @@ export default function AIPage() {
   const venture = VENTURES[selected];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 4rem)', minHeight: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 4rem)', minHeight: 0, background: 'var(--card-bg)' }}>
 
       {/* Venture selector */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
@@ -611,7 +592,7 @@ export default function AIPage() {
       </div>
 
       {/* Venture header */}
-      <div style={{ padding: '0.85rem 1.25rem', borderLeft: '1px solid var(--card-border)', borderRight: '1px solid var(--card-border)', borderBottom: '1px solid var(--card-border)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+      <div style={{ padding: '0.85rem 1.25rem', borderLeft: '1px solid var(--card-border)', borderRight: '1px solid var(--card-border)', borderBottom: '1px solid var(--card-border)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '1.25rem', background: 'var(--card-bg)' }}>
         <div style={{ borderLeft: `2px solid ${venture.color}`, paddingLeft: '0.85rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: venture.color, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.1rem' }}>{venture.sector}</div>
           <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{venture.name}</div>

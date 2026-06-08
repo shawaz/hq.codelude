@@ -150,6 +150,36 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .ptc-num{font-size:0.95rem;font-weight:700}
 .ptc-label{font-family:var(--font-mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
 
+/* ── TASK DETAIL PAGE ── */
+.task-back{display:inline-flex;align-items:center;gap:0.4rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;margin-bottom:1.25rem}
+.task-back:hover{color:var(--off-white)}
+.task-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.task-detail-meta{display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;margin-top:0.6rem}
+.task-tabs{display:flex;gap:0.4rem;border-bottom:1px solid var(--card-border);margin-bottom:1.5rem}
+.task-tab{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:transparent;border:none;border-bottom:2px solid transparent;padding:0.7rem 0.2rem;margin-right:1.5rem;cursor:pointer;transition:all 0.15s}
+.task-tab:hover{color:var(--off-white)}
+.task-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.note-form{display:flex;gap:0.6rem;margin-bottom:1.25rem}
+.note-list{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
+.note-item{background:var(--card-bg);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.4rem}
+.note-item-top{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.note-date{font-family:var(--font-mono);font-size:0.56rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
+.note-text{font-family:var(--font-mono);font-size:0.7rem;color:var(--off-white);line-height:1.7;font-weight:300;white-space:pre-wrap;word-break:break-word}
+.icon-btn{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:color 0.15s;padding:0;letter-spacing:0.08em}
+.icon-btn:hover{color:#ff8080}
+.file-list{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
+.file-item{background:var(--card-bg);padding:0.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.file-item-left{display:flex;align-items:center;gap:0.7rem;min-width:0}
+.file-icon{width:30px;height:30px;flex-shrink:0;background:var(--card-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.5rem;letter-spacing:0.05em;color:var(--muted);text-transform:uppercase}
+.file-name{font-family:var(--font-mono);font-size:0.7rem;color:var(--off-white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-name a{color:inherit;text-decoration:none}
+.file-name a:hover{color:var(--accent)}
+.file-meta{font-family:var(--font-mono);font-size:0.56rem;color:var(--muted);letter-spacing:0.06em;margin-top:0.15rem}
+.file-actions{display:flex;align-items:center;gap:0.9rem;flex-shrink:0}
+.upload-zone{border:1px dashed var(--card-border);padding:1.5rem;text-align:center;margin-bottom:1.25rem;transition:border-color 0.15s}
+.upload-zone:hover{border-color:var(--muted)}
+.empty-note{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);text-align:center;padding:2rem;border:1px solid var(--card-border)}
+
 @media(max-width:900px){
   .sidebar{display:none}
   .hq-main{margin-left:0}

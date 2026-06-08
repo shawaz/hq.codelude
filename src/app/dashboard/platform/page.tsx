@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 type Status = 'live' | 'stopped' | 'static' | 'building';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static';
 
@@ -10,6 +12,7 @@ interface Platform {
   kind: Kind;
   status: Status;
   note?: string;
+  featuresId?: string;
 }
 
 const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
@@ -26,6 +29,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'live',
         note: 'Public company website — ventures, token, news, contact',
+        featuresId: 'codelude-web',
       },
       {
         name: 'Codelude HQ',
@@ -36,6 +40,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'live',
         note: 'Internal company dashboard with team login',
+        featuresId: 'codelude-hq',
       },
     ],
   },
@@ -50,6 +55,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'building',
         note: 'Franchise Finance OS — fractional ownership platform. Code on server, deployment in progress.',
+        featuresId: 'franchiseen',
       },
     ],
   },
@@ -64,6 +70,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'building',
         note: 'AI Career Intelligence — dynamic verified profiles. Code on server, deployment in progress.',
+        featuresId: 'hubcv',
       },
     ],
   },
@@ -78,6 +85,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'building',
         note: 'Home AI Automation — ambient intelligence layer. Platform in development.',
+        featuresId: 'cuestay',
       },
     ],
   },
@@ -92,6 +100,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Static',
         status: 'live',
         note: 'Public venture website — Roborns coastal AI and desalination',
+        featuresId: 'roborns',
       },
     ],
   },
@@ -100,34 +109,26 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
     color: '#F0997B',
     platforms: [
       {
-        name: 'Dextrip Web',
+        name: 'Dextrip Marketplace',
+        domain: 'dextrip.com',
+        port: 3007,
+        pm2: 'dextrip-com',
+        stack: 'Next.js 16 · SQLite · Drizzle ORM',
+        kind: 'Web',
+        status: 'live',
+        note: 'Public strategy marketplace — browse, publish, and subscribe to trading strategies',
+        featuresId: 'dextrip-marketplace',
+      },
+      {
+        name: 'Dextrip Bot',
         domain: 'bot.dextrip.com',
         port: 3000,
         pm2: 'dextrip-web',
         stack: 'Next.js',
         kind: 'Web',
         status: 'live',
-        note: 'Main Dextrip dashboard — strategies and account management',
-      },
-      {
-        name: 'Dextrip TV',
-        domain: 'tv.dextrip.com',
-        port: 3002,
-        pm2: 'dextrip-tv-dashboard',
-        stack: 'Next.js',
-        kind: 'Web',
-        status: 'live',
-        note: 'Live market TV dashboard — real-time charts and signals',
-      },
-      {
-        name: 'Spot Dashboard',
-        domain: 'spot.dextrip.com',
-        port: 3003,
-        pm2: 'spot-dashboard',
-        stack: 'Next.js',
-        kind: 'Web',
-        status: 'live',
-        note: 'Spot trading dashboard',
+        note: 'Investment platform — strategy dashboard, P&L tracking, and investor strategy cards',
+        featuresId: 'dextrip-bot',
       },
       {
         name: 'Dextrip Multi-Bot',
@@ -146,58 +147,6 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         status: 'live',
         note: 'Strategy evaluation and signal generation',
       },
-      {
-        name: 'TV Bot',
-        port: 8787,
-        pm2: 'dextrip-tv-bot',
-        stack: 'Python 3',
-        kind: 'Bot',
-        status: 'live',
-        note: 'Live feed processing for TV dashboard — webhook on /webhook/5m and /webhook/15m',
-      },
-      {
-        name: 'TV Bot Live',
-        pm2: 'dextrip-tv-bot-live',
-        stack: 'Node.js v0.1.0',
-        kind: 'Bot',
-        status: 'live',
-        note: 'Live signal stream — restored after server restart',
-      },
-      {
-        name: 'Dextrip Client Portal',
-        domain: 'client.dextrip.com',
-        port: 3006,
-        pm2: 'client-dextrip',
-        stack: 'Next.js · Manrope · Geist Mono',
-        kind: 'Web',
-        status: 'live',
-        note: 'Client-facing investment portal — track trades, deposits, and profits',
-      },
-      {
-        name: 'Spot Bot',
-        port: 8788,
-        pm2: 'spot-bot',
-        stack: 'Python 3',
-        kind: 'Bot',
-        status: 'live',
-        note: 'Automated spot trade execution',
-      },
-      {
-        name: 'Div14',
-        domain: 'div14.sawabtech.com',
-        stack: 'Apache · Static / PHP',
-        kind: 'Static',
-        status: 'live',
-        note: 'Sawabtech Div14 property',
-      },
-      {
-        name: 'PolyWorld',
-        domain: 'polyworld.sawabtech.com',
-        stack: 'Apache · Static / PHP',
-        kind: 'Static',
-        status: 'live',
-        note: 'PolyWorld — Sawabtech platform',
-      },
     ],
   },
 ];
@@ -215,6 +164,69 @@ const KIND_COLOR: Record<Kind, string> = {
   API:    '#c8f53a',
   Static: '#85B7EB',
 };
+
+function PlatformRow({ p, color }: { p: Platform; color: string }) {
+  const inner = (
+    <div style={{
+      background: 'var(--card-bg)', padding: '1.1rem 1.5rem',
+      display: 'grid', gridTemplateColumns: '200px 140px 1fr auto',
+      gap: '1.5rem', alignItems: 'center',
+      borderLeft: `2px solid ${color}`,
+      transition: p.featuresId ? 'background 0.15s' : undefined,
+    }}>
+      <div>
+        <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.2rem' }}>{p.name}</div>
+        {p.domain && (
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)' }}>{p.domain}</div>
+        )}
+        {p.pm2 && (
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', opacity: 0.6, marginTop: '0.1rem' }}>pm2: {p.pm2}</div>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+        <span style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
+          textTransform: 'uppercase', padding: '0.15rem 0.5rem',
+          border: `1px solid ${KIND_COLOR[p.kind]}40`, color: KIND_COLOR[p.kind],
+          display: 'inline-block', alignSelf: 'flex-start',
+        }}>{p.kind}</span>
+        {p.port && (
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>:{p.port}</span>
+        )}
+      </div>
+
+      <div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>{p.stack}</div>
+        {p.note && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', opacity: 0.6, lineHeight: 1.5 }}>{p.note}</div>}
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.4rem' }}>
+        <span style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
+          textTransform: 'uppercase', padding: '0.15rem 0.55rem',
+          border: `1px solid ${STATUS_COLOR[p.status]}40`, color: STATUS_COLOR[p.status],
+          whiteSpace: 'nowrap',
+        }}>{p.status}</span>
+        {p.featuresId && (
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: color, opacity: 0.7,
+            whiteSpace: 'nowrap',
+          }}>Features →</span>
+        )}
+      </div>
+    </div>
+  );
+
+  if (p.featuresId) {
+    return (
+      <Link key={p.name} href={`/dashboard/features#${p.featuresId}`} style={{ textDecoration: 'none', display: 'block' }}>
+        {inner}
+      </Link>
+    );
+  }
+  return <div key={p.name}>{inner}</div>;
+}
 
 export default function PlatformPage() {
   const total   = GROUPS.flatMap(g => g.platforms).length;
@@ -246,46 +258,7 @@ export default function PlatformPage() {
           <div className="section-label" style={{ color: group.color }}>{group.title}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {group.platforms.map(p => (
-              <div key={p.name} style={{
-                background: 'var(--card-bg)', padding: '1.1rem 1.5rem',
-                display: 'grid', gridTemplateColumns: '200px 140px 1fr auto',
-                gap: '1.5rem', alignItems: 'center',
-                borderLeft: `2px solid ${group.color}`,
-              }}>
-                <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.2rem' }}>{p.name}</div>
-                  {p.domain && (
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)' }}>{p.domain}</div>
-                  )}
-                  {p.pm2 && (
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', opacity: 0.6, marginTop: '0.1rem' }}>pm2: {p.pm2}</div>
-                  )}
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                  <span style={{
-                    fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
-                    textTransform: 'uppercase', padding: '0.15rem 0.5rem',
-                    border: `1px solid ${KIND_COLOR[p.kind]}40`, color: KIND_COLOR[p.kind],
-                    display: 'inline-block', alignSelf: 'flex-start',
-                  }}>{p.kind}</span>
-                  {p.port && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>:{p.port}</span>
-                  )}
-                </div>
-
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', marginBottom: '0.25rem' }}>{p.stack}</div>
-                  {p.note && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', opacity: 0.6, lineHeight: 1.5 }}>{p.note}</div>}
-                </div>
-
-                <span style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
-                  textTransform: 'uppercase', padding: '0.15rem 0.55rem',
-                  border: `1px solid ${STATUS_COLOR[p.status]}40`, color: STATUS_COLOR[p.status],
-                  whiteSpace: 'nowrap',
-                }}>{p.status}</span>
-              </div>
+              <PlatformRow key={p.name} p={p} color={group.color} />
             ))}
           </div>
         </div>

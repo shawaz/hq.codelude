@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
 
 interface Feature {
@@ -10,6 +12,7 @@ interface PlatformFeatures {
   platform: string;
   domain?: string;
   color: string;
+  id: string;
   features: Feature[];
 }
 
@@ -18,6 +21,7 @@ const DATA: PlatformFeatures[] = [
     platform: 'Codelude Web',
     domain: 'codelude.com',
     color: '#c8f53a',
+    id: 'codelude-web',
     features: [
       { name: 'Venture pages',         description: 'Individual deep-dive pages for Roborns, Franchiseen, HubCV, and Cuestay',                status: 'live' },
       { name: 'Token / thesis page',   description: 'Dubai HoldCo tokenization structure and investment thesis',                               status: 'live' },
@@ -36,6 +40,7 @@ const DATA: PlatformFeatures[] = [
     platform: 'Codelude HQ',
     domain: 'hq.codelude.com',
     color: '#c8f53a',
+    id: 'codelude-hq',
     features: [
       { name: 'Team login',            description: 'iron-session cookie auth — credentials managed via TEAM_USERS env var',                  status: 'live' },
       { name: 'Protected routes',      description: 'Middleware-level auth guard — all /dashboard/* routes require active session',           status: 'live' },
@@ -56,42 +61,43 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Dextrip Web',
+    platform: 'Dextrip Marketplace',
+    domain: 'dextrip.com',
+    color: '#F0997B',
+    id: 'dextrip-marketplace',
+    features: [
+      { name: 'Live trading dashboard',  description: 'Real-time signals and trades feed with auto-refresh — home page for all users',                  status: 'live' },
+      { name: 'Strategy marketplace',    description: 'Browse, search, and filter community strategies by chain, monetisation, and performance',         status: 'live' },
+      { name: 'Strategy detail page',    description: 'Per-strategy view with performance charts, trade history, and adopt panel',                       status: 'live' },
+      { name: 'Publish wizard',          description: '3-step strategy creation flow — pair selection, strategy config, and monetisation settings',      status: 'live' },
+      { name: 'Saved strategies',        description: 'Bookmark strategies to a personal watchlist — localStorage-based, no auth required',             status: 'live' },
+      { name: 'Creator profile',         description: 'Creator page showing published strategies and cumulative earnings',                               status: 'live' },
+      { name: 'Ticker bar',              description: 'Scrolling strategy ticker across the top of all marketplace pages',                              status: 'live' },
+      { name: 'TradingView webhook',     description: 'Ingest external signals via /api/signal — powers live feed and strategy performance',            status: 'live' },
+      { name: 'Strategist commissions',  description: 'Revenue share for strategy creators when subscribers copy their signals',                        status: 'planned' },
+      { name: 'Public beta',             description: 'Open registration, onboarding flow, and paid subscriptions for commercial launch',               status: 'planned' },
+    ],
+  },
+  {
+    platform: 'Dextrip Bot',
     domain: 'bot.dextrip.com',
     color: '#F0997B',
+    id: 'dextrip-bot',
     features: [
-      { name: 'Strategy dashboard',    description: 'View and manage active trading strategies across exchanges',                             status: 'live' },
-      { name: 'Account management',    description: 'Exchange API key management and account overview',                                       status: 'live' },
-      { name: 'Live P&L tracking',     description: 'Real-time profit and loss across all active strategies',                                status: 'live' },
-      { name: 'Multi-exchange support',description: 'Supports multiple exchanges via the dextrip-multi-bot engine',                          status: 'live' },
-      { name: 'Webhook integration',   description: 'External signal ingestion via /webhook/5m and /webhook/15m endpoints',                  status: 'live' },
-      { name: 'Strategy marketplace',  description: 'Shareable strategy library for team and eventually public users',                       status: 'planned' },
-      { name: 'Public beta',           description: 'Open registration and onboarding for paying users',                                     status: 'planned' },
-    ],
-  },
-  {
-    platform: 'Dextrip TV',
-    domain: 'tv.dextrip.com',
-    color: '#F0997B',
-    features: [
-      { name: 'Live market dashboard', description: 'Real-time price charts and market data display optimised for large screens',            status: 'live' },
-      { name: '5m / 15m signal feed',  description: 'Automated signal updates pushed via TV bot Python service on port 8787',               status: 'live' },
-      { name: 'Health endpoint',       description: '/health check endpoint for monitoring and uptime tracking',                             status: 'live' },
-    ],
-  },
-  {
-    platform: 'Spot Dashboard',
-    domain: 'spot.dextrip.com',
-    color: '#F0997B',
-    features: [
-      { name: 'Spot trade dashboard',  description: 'Real-time spot trading interface backed by spot-bot Python service on port 8788',       status: 'live' },
-      { name: 'Automated execution',   description: 'Spot bot handles trade execution automatically based on configured strategy',           status: 'live' },
+      { name: 'Strategy dashboard',      description: 'View and manage active trading strategies across exchanges',                                      status: 'live' },
+      { name: 'Account management',      description: 'Exchange API key management and account overview',                                                status: 'live' },
+      { name: 'Live P&L tracking',       description: 'Real-time profit and loss across all active strategies',                                         status: 'live' },
+      { name: 'Multi-exchange support',  description: 'Supports multiple exchanges via the dextrip-multi-bot engine',                                   status: 'live' },
+      { name: 'Webhook integration',     description: 'External signal ingestion via /webhook/5m and /webhook/15m endpoints',                           status: 'live' },
+      { name: 'Investor strategy cards', description: 'Clients see strategy cards and performance tied to their capital allocation in the bot',          status: 'planned' },
+      { name: 'Client onboarding',       description: 'Investor sign-up, capital allocation, and strategy assignment flow',                             status: 'planned' },
     ],
   },
   {
     platform: 'Roborns',
     domain: 'roborns.com',
     color: '#5DCAA5',
+    id: 'roborns',
     features: [
       { name: 'Public venture page',   description: 'Company website explaining the coastal AI + desalination concept',                      status: 'live' },
       { name: 'Investor section',      description: 'Information for potential investors and strategic partners',                            status: 'in-progress' },
@@ -99,21 +105,10 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Dextrip Client Portal',
-    domain: 'client.dextrip.com',
-    color: '#F0997B',
-    features: [
-      { name: 'Client dashboard',      description: 'Investor-facing portal to manage Dextrip investment — track trades, deposits, and profits', status: 'live' },
-      { name: 'Trade history',         description: 'Full trade log with P&L per trade and aggregate performance',                            status: 'live' },
-      { name: 'Deposit / withdrawal',  description: 'Capital management flows for client accounts',                                          status: 'live' },
-      { name: 'Authentication',        description: 'Secure client login and session management',                                            status: 'live' },
-      { name: 'Portfolio analytics',   description: 'Performance charts and ROI tracking across strategies',                                 status: 'in-progress' },
-    ],
-  },
-  {
     platform: 'Franchiseen',
     domain: 'franchiseen.com',
     color: '#7F77DD',
+    id: 'franchiseen',
     features: [
       { name: 'Fractional ownership engine', description: 'Core platform for fractional franchise investment — built with Crossmint and Solana', status: 'in-progress' },
       { name: 'Jupiter / Solana integration',description: 'On-chain settlement via Jupiter aggregator on Solana for token-based ownership',  status: 'in-progress' },
@@ -127,6 +122,7 @@ const DATA: PlatformFeatures[] = [
     platform: 'HubCV',
     domain: 'hubcv.com',
     color: '#FAC775',
+    id: 'hubcv',
     features: [
       { name: 'AI matching engine',     description: 'Anthropic SDK-powered candidate-to-opportunity matching with skill graph analysis',     status: 'in-progress' },
       { name: 'Authentication',         description: 'NextAuth-based login with multiple providers for professionals and recruiters',         status: 'in-progress' },
@@ -141,6 +137,7 @@ const DATA: PlatformFeatures[] = [
     platform: 'Cuestay',
     domain: 'cuestay.com',
     color: '#85B7EB',
+    id: 'cuestay',
     features: [
       { name: 'Protocol specification',    description: 'Home automation protocol spec — Matter-native, AI intelligence layer. Internal doc complete.', status: 'live' },
       { name: 'Matter protocol integration',description: 'Cross-ecosystem device compatibility — Apple HomeKit, Google Home, Amazon Alexa via Matter 1.3+', status: 'in-progress' },
@@ -190,9 +187,27 @@ export default function FeaturesPage() {
       </div>
 
       {DATA.map(d => (
-        <div key={d.platform} style={{ marginBottom: '2rem' }}>
-          <div className="section-label" style={{ color: d.color }}>
-            {d.platform}{d.domain ? ` — ${d.domain}` : ''}
+        <div key={d.platform} id={d.id} style={{ marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+            <div className="section-label" style={{ color: d.color, marginBottom: 0 }}>
+              {d.platform}{d.domain ? ` — ${d.domain}` : ''}
+            </div>
+            <Link
+              href="/dashboard/bugs"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.6rem',
+                letterSpacing: '0.1em',
+                color: '#ff8080',
+                opacity: 0.6,
+                textDecoration: 'none',
+                padding: '0.15rem 0.5rem',
+                border: '1px solid #ff808030',
+                transition: 'opacity 0.15s',
+              }}
+            >
+              Bugs →
+            </Link>
           </div>
           <table className="tasks-table">
             <thead>
