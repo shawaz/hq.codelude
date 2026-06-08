@@ -8,6 +8,9 @@ interface ContactLead {
   interest: string; message: string;
   source: string; date: string; status: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
 }
 
 function loadContactLeads(): ContactLead[] {
@@ -41,7 +44,7 @@ const VENTURE_COLORS: Record<string, string> = {
 export default function LeadsPage() {
   const contactLeads = loadContactLeads();
   const allLeads = [
-    ...LEADS.map(l => ({ ...l, config: undefined as string | undefined })),
+    ...LEADS.map(l => ({ ...l, config: undefined as string | undefined, boundary: undefined as GeoJSON.Polygon | undefined, center: undefined as [number, number] | undefined, areaHectares: undefined as number | undefined })),
     ...contactLeads.map(c => ({
       id:       c.id,
       name:     c.name,
@@ -54,6 +57,9 @@ export default function LeadsPage() {
       nextStep: `Reply to ${c.email}`,
       notes:    c.message,
       config:   c.config,
+      boundary: c.boundary,
+      center:   c.center,
+      areaHectares: c.areaHectares,
     })),
   ];
 
@@ -92,7 +98,7 @@ export default function LeadsPage() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-end' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)' }}>→ {l.nextStep}</div>
                     {isConvertibleLead(l) && (
-                      <ConvertToProjectButton lead={{ id: l.id, name: l.name, venture: l.venture, config: l.config }} />
+                      <ConvertToProjectButton lead={{ id: l.id, name: l.name, venture: l.venture, config: l.config, boundary: l.boundary, center: l.center, areaHectares: l.areaHectares }} />
                     )}
                   </div>
                 </div>

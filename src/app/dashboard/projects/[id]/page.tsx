@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECT_COLORS, type Status } from '@/lib/tasks';
 import type { SiteProject, BudgetLine, TeamMember, ProjectTask, Activity, SiteProjectStatus, ActivityStatus } from '@/lib/site-projects';
+import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
 
 type Tab = 'overview' | 'budget' | 'team' | 'tasks' | 'activities';
 
@@ -109,6 +110,9 @@ export default function ProjectDetailPage() {
 // ─────────────────────────────────────────────────────────────────────
 function OverviewPanel({ project, color, onStatusChange }: { project: SiteProject; color: string; onStatusChange: () => void }) {
   const [saving, setSaving] = useState(false);
+  const [editingBoundary, setEditingBoundary] = useState(false);
+  const [draftBoundary, setDraftBoundary] = useState<BoundaryResult | null>(null);
+  const [savingBoundary, setSavingBoundary] = useState(false);
 
   async function setStatus(status: SiteProjectStatus) {
     if (status === project.status || saving) return;
@@ -120,6 +124,38 @@ function OverviewPanel({ project, color, onStatusChange }: { project: SiteProjec
       });
       onStatusChange();
     } finally { setSaving(false); }
+  }
+
+  function startEditingBoundary() {
+    setDraftBoundary(
+      project.boundary && project.center != null && project.areaHectares != null
+        ? { polygon: project.boundary, center: project.center, areaHectares: project.areaHectares }
+        : null
+    );
+    setEditingBoundary(true);
+  }
+
+  function cancelEditingBoundary() {
+    setEditingBoundary(false);
+    setDraftBoundary(null);
+  }
+
+  async function saveBoundary() {
+    if (savingBoundary) return;
+    setSavingBoundary(true);
+    try {
+      await fetch(`/api/projects/${project.id}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          boundary: draftBoundary?.polygon ?? null,
+          center: draftBoundary?.center ?? null,
+          areaHectares: draftBoundary?.areaHectares ?? null,
+        }),
+      });
+      setEditingBoundary(false);
+      setDraftBoundary(null);
+      onStatusChange();
+    } finally { setSavingBoundary(false); }
   }
 
   return (
@@ -158,6 +194,57 @@ function OverviewPanel({ project, color, onStatusChange }: { project: SiteProjec
             );
           })}
         </div>
+      </div>
+
+      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>Site boundary</div>
+          {!editingBoundary ? (
+            <button onClick={startEditingBoundary} style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+              padding: '0.4rem 0.9rem', border: '1px solid var(--accent)', color: 'var(--accent)', background: 'transparent', cursor: 'pointer',
+            }}>
+              {project.boundary ? 'Edit boundary' : 'Add boundary'}
+            </button>
+          ) : (
+            <div style={{ display: 'flex', gap: '0.6rem' }}>
+              <button onClick={saveBoundary} disabled={savingBoundary} style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                padding: '0.4rem 0.9rem', border: 'none', color: 'var(--black)', background: 'var(--accent)', cursor: 'pointer', fontWeight: 600,
+              }}>
+                {savingBoundary ? 'Saving…' : 'Save boundary'}
+              </button>
+              <button onClick={cancelEditingBoundary} disabled={savingBoundary} style={{
+                fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                padding: '0.4rem 0.9rem', border: '1px solid var(--card-border)', color: 'var(--muted)', background: 'transparent', cursor: 'pointer',
+              }}>
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+        {editingBoundary ? (
+          <SiteBoundaryMap
+            key="edit"
+            editable
+            boundary={null}
+            center={project.center ?? null}
+            onChange={setDraftBoundary}
+          />
+        ) : (
+          <SiteBoundaryMap
+            key="view"
+            editable={false}
+            boundary={project.boundary ?? null}
+            center={project.center ?? null}
+          />
+        )}
+        {!editingBoundary && project.areaHectares != null && (
+          <div style={{ marginTop: '0.85rem', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)' }}>
+            Marked area: <strong style={{ color: 'var(--off-white)' }}>{project.areaHectares.toLocaleString()} ha</strong>
+            {project.center && <> · Center: {project.center[1].toFixed(4)}°, {project.center[0].toFixed(4)}°</>}
+          </div>
+        )}
       </div>
     </div>
   );

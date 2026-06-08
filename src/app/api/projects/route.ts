@@ -10,7 +10,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { ventureId, name, location, status, source, leadId, config } = body;
+  const { ventureId, name, location, status, source, leadId, config, boundary, center, areaHectares } = body;
 
   if (!ventureId || !KNOWN_VENTURES.includes(ventureId)) {
     return NextResponse.json({ error: 'Valid ventureId required' }, { status: 400 });
@@ -30,6 +30,9 @@ export async function POST(req: NextRequest) {
     source,
     leadId: leadId || undefined,
     config: config || undefined,
+    boundary: boundary || undefined,
+    center: Array.isArray(center) && center.length === 2 ? (center as [number, number]) : undefined,
+    areaHectares: typeof areaHectares === 'number' ? areaHectares : undefined,
   });
   return NextResponse.json(project, { status: 201 });
 }
