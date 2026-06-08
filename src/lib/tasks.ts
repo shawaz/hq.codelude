@@ -39,6 +39,13 @@ export const TASKS: Task[] = [
   { id: 'r16', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Seed infrastructure round — term sheet' },
   { id: 'r17', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Financial model — Phase 1 capex / opex' },
   { id: 'r18', project: 'Roborns', category: 'Finance',        priority: 'medium', status: 'todo',        title: 'Strategic investor outreach' },
+  { id: 'r19', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Recalibrate financial model per validation_report.md (power, water, CapEx)' },
+  { id: 'r20', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'todo',        title: 'Build hyperscaler pitch narrative — "freshwater crisis" positioning deck' },
+  { id: 'r21', project: 'Roborns', category: 'Partnerships',   priority: 'high',   status: 'todo',        title: 'Map target contacts — Google/Microsoft/Nvidia/Meta/AWS sustainability & infra teams' },
+  { id: 'r22', project: 'Roborns', category: 'Partnerships',   priority: 'medium', status: 'todo',        title: 'Secure anchor-tenant LOI — pilot GPU colocation commitment' },
+  { id: 'r23', project: 'Roborns', category: 'Finance',        priority: 'high',   status: 'todo',        title: 'Build government tender & subsidy application pipeline (IndiaAI, SIDBI, SISFS, AMRUT 2.0, Karnataka)' },
+  { id: 'r24', project: 'Roborns', category: 'Finance',        priority: 'medium', status: 'todo',        title: 'IndiaAI Mission compute-subsidy application — DPR + submission' },
+  { id: 'r25', project: 'Roborns', category: 'Partnerships',   priority: 'low',    status: 'todo',        title: 'Engage NVentures / Nvidia Inception for technical & investor introductions' },
 
   // ── FRANCHISEEN ───────────────────────────────────────────────────────
   { id: 'f01', project: 'Franchiseen', category: 'Product',    priority: 'high',   status: 'in-progress', title: 'Platform core development' },
