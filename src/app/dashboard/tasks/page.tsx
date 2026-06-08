@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { TASKS, PROJECT_COLORS, type Project, type Status, type Priority } from '@/lib/tasks';
 
 const PROJECTS: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
@@ -12,6 +13,7 @@ const STATUSES: { key: Status | 'all'; label: string }[] = [
 ];
 
 export default function TasksPage() {
+  const router = useRouter();
   const [project, setProject]   = useState<Project | 'all'>('all');
   const [status,  setStatus]    = useState<Status | 'all'>('all');
 
@@ -88,7 +90,11 @@ export default function TasksPage() {
         </thead>
         <tbody>
           {filtered.map(task => (
-            <tr key={task.id}>
+            <tr
+              key={task.id}
+              onClick={() => router.push(`/dashboard/tasks/${task.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <td className="task-title">{task.title}</td>
               <td>
                 <span className="project-label">
