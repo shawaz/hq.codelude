@@ -26,6 +26,9 @@ interface LeadForConversion {
   name: string;
   venture: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
 }
 
 export default function ConvertToProjectButton({ lead }: { lead: LeadForConversion }) {
@@ -61,6 +64,9 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
           source: 'lead',
           leadId: lead.id,
           config: lead.config,
+          boundary: lead.boundary,
+          center: lead.center,
+          areaHectares: lead.areaHectares,
         }),
       });
       if (!res.ok) throw new Error();
@@ -92,7 +98,12 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Convert lead to site project</div>
             <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.3rem' }}>{lead.name}</div>
             {lead.config && (
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>{lead.config}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.6, marginBottom: lead.boundary ? '0.5rem' : '1.5rem' }}>{lead.config}</div>
+            )}
+            {lead.boundary && (
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '1.5rem' }}>
+                ✓ Site boundary marked on submission — {lead.areaHectares?.toLocaleString()} ha. Will carry over to the new project.
+              </div>
             )}
 
             <form onSubmit={handleConvert} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

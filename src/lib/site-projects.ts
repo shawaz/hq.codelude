@@ -19,6 +19,9 @@ export interface SiteProject {
   source: 'lead' | 'manual';
   leadId?: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
   budget: BudgetLine[];
   team: TeamMember[];
   tasks: ProjectTask[];
@@ -99,6 +102,9 @@ export interface CreateProjectInput {
   source: 'lead' | 'manual';
   leadId?: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
   budget?: BudgetLine[];
 }
 
@@ -113,6 +119,9 @@ export function createProject(input: CreateProjectInput): SiteProject {
     source: input.source,
     leadId: input.leadId,
     config: input.config,
+    boundary: input.boundary,
+    center: input.center,
+    areaHectares: input.areaHectares,
     budget: input.budget ?? [],
     team: [],
     tasks: [],
@@ -124,7 +133,7 @@ export function createProject(input: CreateProjectInput): SiteProject {
   return project;
 }
 
-export function updateProject(id: string, patch: Partial<Pick<SiteProject, 'name' | 'location' | 'status'>>): SiteProject | undefined {
+export function updateProject(id: string, patch: Partial<Pick<SiteProject, 'name' | 'location' | 'status' | 'boundary' | 'center' | 'areaHectares'>>): SiteProject | undefined {
   const all = readAll();
   const project = all.find(p => p.id === id);
   if (!project) return undefined;

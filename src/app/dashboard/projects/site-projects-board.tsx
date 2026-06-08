@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { PROJECT_COLORS, type Project } from '@/lib/tasks';
 import type { SiteProject, SiteProjectStatus } from '@/lib/site-projects';
+import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
 
 const VENTURES: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 
@@ -31,11 +32,13 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
   const [ventureId, setVentureId] = useState<Project>('Roborns');
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState<SiteProjectStatus>('planning');
+  const [boundary, setBoundary] = useState<BoundaryResult | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   function openModal() {
     setName(''); setVentureId('Roborns'); setLocation(''); setStatus('planning');
+    setBoundary(null);
     setSaving(false); setError('');
     setOpen(true);
   }
@@ -48,7 +51,12 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
       const res = await fetch('/api/projects', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, ventureId, location, status, source: 'manual' }),
+        body: JSON.stringify({
+          name, ventureId, location, status, source: 'manual',
+          boundary: boundary?.polygon ?? null,
+          center: boundary?.center ?? null,
+          areaHectares: boundary?.areaHectares ?? null,
+        }),
       });
       if (!res.ok) throw new Error();
       setOpen(false);
@@ -131,7 +139,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
       {open && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
           onClick={() => setOpen(false)}>
-          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', maxWidth: 480, width: '100%', padding: '2rem' }}
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', maxWidth: 640, width: '100%', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>New site project</div>
             <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '1.5rem' }}>Plan a new location-based project</div>
@@ -158,6 +166,10 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 <label style={labelStyle}>Location</label>
                 <input style={inputStyle} type="text" value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Uchila Thalapady, Mangaluru" required />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <label style={labelStyle}>Site boundary (optional)</label>
+                <SiteBoundaryMap editable height={320} onChange={setBoundary} />
               </div>
               {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
