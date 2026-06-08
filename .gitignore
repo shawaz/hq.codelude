@@ -21,3 +21,7 @@ npm-debug.log*
 
 # Turbopack
 .next/cache/
+
+# Local task data / uploads (persisted on the server, not in git)
+/data/
+/public/uploads/
