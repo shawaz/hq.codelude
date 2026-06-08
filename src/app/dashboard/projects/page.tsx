@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { TASKS, PROJECT_COLORS, type Project } from '@/lib/tasks';
+import { getAllProjects } from '@/lib/site-projects';
+import SiteProjectsBoard from './site-projects-board';
 
 const PROJECTS: { name: Project; sector: string }[] = [
   { name: 'Roborns',     sector: 'Coastal AI Infrastructure' },
@@ -10,6 +12,8 @@ const PROJECTS: { name: Project; sector: string }[] = [
 ];
 
 export default function ProjectsPage() {
+  const siteProjects = getAllProjects();
+
   return (
     <div>
       <h1 className="page-title">Projects</h1>
@@ -67,6 +71,8 @@ export default function ProjectsPage() {
           );
         })}
       </div>
+
+      <SiteProjectsBoard projects={siteProjects} />
     </div>
   );
 }
