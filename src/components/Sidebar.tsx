@@ -15,6 +15,7 @@ const NAV = [
       { label: 'News',     href: '/dashboard/news' },
       { label: 'Travels',  href: '/dashboard/travels' },
       { label: 'Files',    href: '/dashboard/files' },
+      { label: 'Docs',     href: '/dashboard/docs' },
       { label: 'Handbook', href: '/dashboard/handbook' },
     ],
   },
