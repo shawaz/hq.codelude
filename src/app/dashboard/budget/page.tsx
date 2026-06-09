@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { VENTURE_BUDGETS, type BudgetLine } from '@/lib/budget-data';
+import { useVenture } from '@/contexts/venture-context';
 
 type Tab = 'planned' | 'actual' | 'variance';
 
@@ -41,7 +42,7 @@ function groupByCategory(lines: BudgetLine[]) {
 }
 
 export default function BudgetPage() {
-  const [vi,  setVi]  = useState(0);
+  const { vi, setVi } = useVenture();
   const [tab, setTab] = useState<Tab>('planned');
   const vb = VENTURE_BUDGETS[vi];
 
