@@ -1,4 +1,7 @@
+'use client';
+
 import { FRANCHISE_BRANDS } from '@/lib/ops';
+import { useVenture } from '@/contexts/venture-context';
 import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
@@ -10,38 +13,49 @@ const STATUS_STYLES: Record<string, { color: string; label: string }> = {
 };
 
 export default function FranchisePage() {
+  const { vi } = useVenture();
+  const isFranchiseen = vi === 1;
+
   return (
     <div>
       <h1 className="page-title">Franchise</h1>
       <p className="page-sub">Franchiseen brand partner registry — target brands, status, and deal parameters.</p>
       <VentureTabs />
-      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7F77DD', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Target: Q3 2026</div>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
-          First franchise brand partner signed by Q3 2026. Focus on <strong style={{ color: 'var(--off-white)' }}>mid-size regional F&B or retail chains</strong> with 5–20 units and verified unit economics. The first brand defines the pilot — choose carefully.
-        </p>
-      </div>
-      <table className="tasks-table">
-        <thead>
-          <tr><th>Brand</th><th>Category</th><th>Country</th><th style={{ textAlign: 'right' }}>Min. Investment</th><th style={{ textAlign: 'right' }}>Expected Revenue</th><th>Status</th><th>Notes</th></tr>
-        </thead>
-        <tbody>
-          {FRANCHISE_BRANDS.map((b, i) => {
-            const ss = STATUS_STYLES[b.status];
-            return (
-              <tr key={i}>
-                <td style={{ fontWeight: 600, fontSize: '0.8rem' }}>{b.name}</td>
-                <td><span className="category-label">{b.category}</span></td>
-                <td><span className="category-label">{b.country}</span></td>
-                <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)' }}>{b.investmentMin}</td>
-                <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#5DCAA5' }}>{b.expectedRevenue}</td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
-                <td><span className="category-label" style={{ fontSize: '0.62rem' }}>{b.notes}</span></td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {!isFranchiseen ? (
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8 }}>
+          Franchise is a <span style={{ color: '#7F77DD' }}>Franchiseen</span> venture — select Franchiseen above to view brand partners.
+        </div>
+      ) : (
+        <>
+          <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7F77DD', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Target: Q3 2026</div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
+              First franchise brand partner signed by Q3 2026. Focus on <strong style={{ color: 'var(--off-white)' }}>mid-size regional F&amp;B or retail chains</strong> with 5–20 units and verified unit economics. The first brand defines the pilot — choose carefully.
+            </p>
+          </div>
+          <table className="tasks-table">
+            <thead>
+              <tr><th>Brand</th><th>Category</th><th>Country</th><th style={{ textAlign: 'right' }}>Min. Investment</th><th style={{ textAlign: 'right' }}>Expected Revenue</th><th>Status</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              {FRANCHISE_BRANDS.map((b, i) => {
+                const ss = STATUS_STYLES[b.status];
+                return (
+                  <tr key={i}>
+                    <td style={{ fontWeight: 600, fontSize: '0.8rem' }}>{b.name}</td>
+                    <td><span className="category-label">{b.category}</span></td>
+                    <td><span className="category-label">{b.country}</span></td>
+                    <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)' }}>{b.investmentMin}</td>
+                    <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#5DCAA5' }}>{b.expectedRevenue}</td>
+                    <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                    <td><span className="category-label" style={{ fontSize: '0.62rem' }}>{b.notes}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 }

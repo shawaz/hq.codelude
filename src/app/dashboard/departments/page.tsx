@@ -1,4 +1,8 @@
+'use client';
+
 import { DEPARTMENTS } from '@/lib/ops';
+import { useVenture } from '@/contexts/venture-context';
+import { VENTURES } from '@/lib/ventures';
 import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
@@ -13,35 +17,46 @@ const VENTURE_COLORS: Record<string, string> = {
 };
 
 export default function DepartmentsPage() {
+  const { vi } = useVenture();
+  const ventureName = VENTURES[vi].name;
+  const ventureColor = VENTURES[vi].color;
+  const filtered = DEPARTMENTS.filter(d => d.ventures.includes(ventureName));
+
   return (
     <div>
       <h1 className="page-title">Departments</h1>
       <p className="page-sub">Organisational structure — current departments, leads, headcount, and responsibilities.</p>
       <VentureTabs />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {DEPARTMENTS.map((d, i) => {
-          const ss = STATUS_STYLES[d.status];
-          return (
-            <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>{d.name}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>Lead: {d.lead} · {d.headcount} {d.headcount === 1 ? 'person' : 'people'}</div>
+      {filtered.length === 0 ? (
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8 }}>
+          No departments assigned to <span style={{ color: ventureColor }}>{ventureName}</span> yet.
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {filtered.map((d, i) => {
+            const ss = STATUS_STYLES[d.status];
+            return (
+              <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>{d.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>Lead: {d.lead} · {d.headcount} {d.headcount === 1 ? 'person' : 'people'}</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                  {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${VENTURE_COLORS[v] || 'var(--card-border)'}40`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                  {d.responsibilities.map((r, j) => <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', padding: '0.2rem 0.65rem', border: '1px solid var(--card-border)' }}>{r}</span>)}
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${VENTURE_COLORS[v] || 'var(--card-border)'}40`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-                {d.responsibilities.map((r, j) => <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', padding: '0.2rem 0.65rem', border: '1px solid var(--card-border)' }}>{r}</span>)}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
