@@ -11,11 +11,6 @@ const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   planned:  { color: '#7a7870', label: 'Planned'  },
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
-};
-
 export default function DepartmentsPage() {
   const { vi } = useVenture();
   const ventureName = VENTURES[vi].name;
@@ -24,7 +19,16 @@ export default function DepartmentsPage() {
 
   return (
     <div>
-      <h1 className="page-title">Departments</h1>
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+        <h1 className="page-title" style={{ margin: 0 }}>Departments</h1>
+        <button style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase',
+          padding: '0.55rem 1.1rem', border: '1px solid var(--accent)', color: 'var(--accent)',
+          background: 'transparent', cursor: 'pointer',
+        }}>
+          + Add Department
+        </button>
+      </div>
       <p className="page-sub">Organisational structure — current departments, leads, headcount, and responsibilities.</p>
       <VentureTabs />
       {filtered.length === 0 ? (
@@ -42,12 +46,7 @@ export default function DepartmentsPage() {
                     <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>{d.name}</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>Lead: {d.lead} · {d.headcount} {d.headcount === 1 ? 'person' : 'people'}</div>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                  {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${VENTURE_COLORS[v] || 'var(--card-border)'}40`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                   {d.responsibilities.map((r, j) => <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', padding: '0.2rem 0.65rem', border: '1px solid var(--card-border)' }}>{r}</span>)}
