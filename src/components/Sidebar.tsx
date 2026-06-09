@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
->>>>>>> fb7b8f8 (Replace sidebar venture dots with tab bar on all dashboard sections)
+import ThemeSwitcher from './ThemeSwitcher';
 
 const NAV = [
   {
