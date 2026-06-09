@@ -36,7 +36,6 @@ const NAV = [
       { label: 'Projects',    href: '/dashboard/projects' },
       { label: 'Office',      href: '/dashboard/office' },
       { label: 'Departments', href: '/dashboard/departments' },
-      { label: 'Franchise',   href: '/dashboard/franchise' },
       { label: 'Properties',  href: '/dashboard/properties' },
     ],
   },
