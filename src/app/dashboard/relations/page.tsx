@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { VENTURES, VENTURE_RELATIONS, type RHealth } from '@/lib/mgmt-ventures';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 const HEALTH_STYLES: Record<RHealth,{color:string;label:string}> = {
   strong:{color:'#5DCAA5',label:'Strong'},developing:{color:'#c8f53a',label:'Developing'},cold:{color:'#7a7870',label:'Cold'},target:{color:'#F0997B',label:'Target'},
@@ -10,7 +12,7 @@ const CAT_COLORS: Record<string,string> = {
 };
 
 export default function RelationsPage() {
-  const [vi, setVi] = useState(0);
+  const { vi } = useVenture();
   const venture   = VENTURES[vi];
   const relations = VENTURE_RELATIONS[venture.name] ?? [];
 
@@ -18,11 +20,7 @@ export default function RelationsPage() {
     <div>
       <h1 className="page-title">Relations</h1>
       <p className="page-sub">Stakeholder relationships — investors, government, media, and customers per venture.</p>
-      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {VENTURES.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
-        ))}
-      </div>
+      <VentureTabs />
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em' }}>{venture.name} Relations</div>

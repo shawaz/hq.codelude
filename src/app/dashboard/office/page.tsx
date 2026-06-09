@@ -1,4 +1,5 @@
 import { OFFICES } from '@/lib/ops';
+import VentureTabs from '@/components/VentureTabs';
 
 const TYPE_COLORS: Record<string, string> = { Registered: '#c8f53a', Engineering: '#5DCAA5', Remote: '#85B7EB', Server: '#7F77DD' };
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
@@ -12,6 +13,7 @@ export default function OfficePage() {
     <div>
       <h1 className="page-title">Office</h1>
       <p className="page-sub">Physical and virtual office locations — registered addresses, engineering bases, and infrastructure.</p>
+      <VentureTabs />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {OFFICES.map((o, i) => {
           const ss = STATUS_STYLES[o.status];

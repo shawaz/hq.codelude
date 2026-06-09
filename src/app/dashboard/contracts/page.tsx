@@ -1,4 +1,5 @@
 import { CONTRACTS, type ContractStatus } from '@/lib/legal-data';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = {
   draft:      { color: '#7a7870', label: 'Draft'      },
@@ -17,6 +18,7 @@ export default function ContractsPage() {
     <div>
       <h1 className="page-title">Contracts</h1>
       <p className="page-sub">Contract registry — all vendor, service, SaaS, and partnership agreements.</p>
+      <VentureTabs />
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell"><div className="tasks-count-num">{CONTRACTS.length}</div><div className="tasks-count-label">Total contracts</div></div>
         <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{active}</div><div className="tasks-count-label">Active</div></div>

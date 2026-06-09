@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { HELP_ARTICLES } from '@/lib/support';
+import VentureTabs from '@/components/VentureTabs';
 
 const CAT_COLORS: Record<string, string> = { Infrastructure: '#7F77DD', Admin: '#85B7EB', Platform: '#F0997B' };
 
@@ -10,6 +11,7 @@ export default function HelpDeskPage() {
     <div>
       <h1 className="page-title">Help Desk</h1>
       <p className="page-sub">Internal knowledge base — how to handle common technical and operational situations.</p>
+      <VentureTabs />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {HELP_ARTICLES.map((a, i) => {
           const isOpen = open === a.title;

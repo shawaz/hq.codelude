@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { VENTURES, VENTURE_RESOURCES, type ResType, type ResStatus, type ResPriority } from '@/lib/mgmt-ventures';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 type Tab = 'human' | 'technology' | 'legal' | 'summary';
 
@@ -73,7 +75,7 @@ function ResourceTable({ resources }: { resources: Resource[] }) {
 }
 
 export default function ResourcesPage() {
-  const [vi,  setVi]  = useState(0);
+  const { vi } = useVenture();
   const [tab, setTab] = useState<Tab>('human');
   const venture = VENTURES[vi];
   const all     = VENTURE_RESOURCES[venture.name] ?? [];
@@ -106,17 +108,7 @@ export default function ResourcesPage() {
       <h1 className="page-title">Resources</h1>
       <p className="page-sub">All resources needed per venture — human, technology, legal, and physical — with costs.</p>
 
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {VENTURES.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setTab('human'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem', background: vi === i ? v.color : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: vi === i ? 'var(--black)' : 'var(--muted)',
-            fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
+      <VentureTabs />
 
       {/* Header + cost snapshot */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem' }}>

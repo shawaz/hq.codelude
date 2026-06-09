@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { PROSPECTS, type ProspectStatus } from '@/lib/sales';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<ProspectStatus, { color: string; label: string }> = {
   identified:     { color: '#7a7870', label: 'Identified'     },
@@ -20,6 +21,7 @@ export default function ProspectsPage() {
     <div>
       <h1 className="page-title">Prospects</h1>
       <p className="page-sub">Top-of-funnel prospect registry — investors, partners, customers, and franchise brands.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [ProspectStatus, typeof STATUS_STYLES[ProspectStatus]][]).map(([key, s]) => (

@@ -1,4 +1,5 @@
 import { ACCOUNTS, type AccountStatus, type AccountType } from '@/lib/finance';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<AccountStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
@@ -22,6 +23,7 @@ export default function AccountsPage() {
     <div>
       <h1 className="page-title">Accounts</h1>
       <p className="page-sub">Bank and exchange accounts across all entities — current, pending, and planned.</p>
+      <VentureTabs />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
         {[

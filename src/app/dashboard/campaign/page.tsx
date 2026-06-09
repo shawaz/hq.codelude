@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { CAMPAIGNS, type CampaignStatus } from '@/lib/mktg';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = {
   live:      { color: '#5DCAA5', label: 'Live'      },
@@ -18,6 +19,7 @@ export default function CampaignPage() {
     <div>
       <h1 className="page-title">Campaign</h1>
       <p className="page-sub">Marketing campaigns across all ventures — planning, execution, and goals.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [CampaignStatus, typeof STATUS_STYLES[CampaignStatus]][]).map(([key, s]) => (

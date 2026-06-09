@@ -1,4 +1,5 @@
 import { INVOICES, type InvoiceStatus } from '@/lib/finance';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
   paid:    { color: '#5DCAA5', label: 'Paid'    },
@@ -21,6 +22,7 @@ export default function InvoicePage() {
     <div>
       <h1 className="page-title">Invoice</h1>
       <p className="page-sub">Outgoing invoices across all ventures — issued, pending, and drafted.</p>
+      <VentureTabs />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
         {[

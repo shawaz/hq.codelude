@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { INVESTOR_ROUNDS, type RoundStatus, type RoundType } from '@/lib/finance';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<RoundStatus, { color: string; label: string }> = {
   planning:    { color: '#FAC775', label: 'Planning'    },
@@ -32,6 +33,7 @@ export default function InvestorsPage() {
     <div>
       <h1 className="page-title">Investors</h1>
       <p className="page-sub">Fundraising rounds, token tranches, and investor allocation across all ventures.</p>
+      <VentureTabs />
 
       {/* Token structure note */}
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>

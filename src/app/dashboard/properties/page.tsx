@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { PROPERTIES, type PropertyType } from '@/lib/ops';
+import VentureTabs from '@/components/VentureTabs';
 
 const TYPE_COLORS: Record<PropertyType, string> = { Digital: '#7F77DD', Physical: '#5DCAA5', IP: '#c8f53a', Domain: '#85B7EB' };
 const STATUS_STYLES: Record<string, { color: string }> = {
@@ -22,6 +23,7 @@ export default function PropertiesPage() {
     <div>
       <h1 className="page-title">Properties</h1>
       <p className="page-sub">Physical and digital asset registry — servers, domains, IP, and infrastructure.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {TYPES.map(t => (
           <button key={t} className={`filter-pill${type === t ? ' active' : ''}`}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { NDAS, type NDAStatus } from '@/lib/legal-data';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
@@ -61,6 +62,7 @@ export default function NDAPage() {
     <div>
       <h1 className="page-title">NDA</h1>
       <p className="page-sub">Non-disclosure agreement registry — send, track, and file all NDAs.</p>
+      <VentureTabs />
 
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #F0997B', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#F0997B', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Policy reminder</div>

@@ -1,4 +1,5 @@
 import { DEALS } from '@/lib/sales';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   discovery:    { color: '#85B7EB', label: 'Discovery'   },
@@ -15,6 +16,7 @@ export default function DealsPage() {
     <div>
       <h1 className="page-title">Deals</h1>
       <p className="page-sub">Active deals — investor rounds, franchise agreements, and partnership negotiations.</p>
+      <VentureTabs />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {DEALS.map((d, i) => {
           const ss = STATUS_STYLES[d.status];

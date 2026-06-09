@@ -1,6 +1,8 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { VENTURES, VENTURE_PARTNERS, type PartnerStatus, type PartnerType } from '@/lib/mgmt-ventures';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 const STATUS_STYLES: Record<PartnerStatus, { color: string; label: string }> = {
   active:       { color: '#5DCAA5', label: 'Active'      },
@@ -15,36 +17,17 @@ const TYPE_COLORS: Record<PartnerType, string> = {
 };
 
 export default function PartnersPage() {
-  const [vi,       setVi]      = useState(0);
-  const [filter,   setFilter]  = useState<PartnerStatus | 'all'>('all');
-  const [category, setCategory] = useState<string>('all');
-
-  const venture = VENTURES[vi];
-  const all     = VENTURE_PARTNERS[venture.name] ?? [];
-
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(all.map(p => p.category).filter(Boolean))) as string[];
-    return cats;
-  }, [all]);
-
-  const partners = all.filter(p =>
-    (filter   === 'all' || p.status   === filter) &&
-    (category === 'all' || p.category === category)
-  );
+  const { vi } = useVenture();
+  const [filter, setFilter] = useState<PartnerStatus | 'all'>('all');
+  const venture  = VENTURES[vi];
+  const all      = VENTURE_PARTNERS[venture.name] ?? [];
+  const partners = all.filter(p => filter === 'all' || p.status === filter);
 
   return (
     <div>
       <h1 className="page-title">Partners</h1>
       <p className="page-sub">Strategic partner registry — per venture.</p>
-
-      {/* Venture selector */}
-      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {VENTURES.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setFilter('all'); setCategory('all'); }} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
-        ))}
-      </div>
-
-      {/* Venture header */}
+      <VentureTabs />
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em' }}>{venture.name} Partners</div>

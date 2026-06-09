@@ -1,4 +1,5 @@
 import { FRANCHISE_BRANDS } from '@/lib/ops';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   prospecting: { color: '#FAC775', label: 'Prospecting' },
@@ -13,6 +14,7 @@ export default function FranchisePage() {
     <div>
       <h1 className="page-title">Franchise</h1>
       <p className="page-sub">Franchiseen brand partner registry — target brands, status, and deal parameters.</p>
+      <VentureTabs />
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7F77DD', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Target: Q3 2026</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>

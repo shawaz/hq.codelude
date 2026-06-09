@@ -1,4 +1,5 @@
 import { WALLETS, type WalletStatus } from '@/lib/finance';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<WalletStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
@@ -19,6 +20,7 @@ export default function WalletsPage() {
     <div>
       <h1 className="page-title">Wallets</h1>
       <p className="page-sub">Dubai HoldCo crypto treasury — wallet registry, purpose, and deployment status.</p>
+      <VentureTabs />
 
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7F77DD', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Treasury policy</div>

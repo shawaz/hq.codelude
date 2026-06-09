@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { EXPENSES, type ExpenseStatus } from '@/lib/budget-data';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
   paid:       { color: '#5DCAA5', label: 'Paid'       },
@@ -41,6 +42,7 @@ export default function ExpensesPage() {
     <div>
       <h1 className="page-title">Expenses</h1>
       <p className="page-sub">All company expenses — paid, pending, and recurring across all ventures.</p>
+      <VentureTabs />
 
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>

@@ -1,4 +1,5 @@
 import { DEPARTMENTS } from '@/lib/ops';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
@@ -16,6 +17,7 @@ export default function DepartmentsPage() {
     <div>
       <h1 className="page-title">Departments</h1>
       <p className="page-sub">Organisational structure — current departments, leads, headcount, and responsibilities.</p>
+      <VentureTabs />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {DEPARTMENTS.map((d, i) => {
           const ss = STATUS_STYLES[d.status];

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 type Status = 'live' | 'stopped' | 'static' | 'building';
+import VentureTabs from '@/components/VentureTabs';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static';
 
 interface Platform {
@@ -237,6 +238,7 @@ export default function PlatformPage() {
     <div>
       <h1 className="page-title">Platform</h1>
       <p className="page-sub">All platforms and services running on 64.227.160.224 — Apache + PM2 stack.</p>
+      <VentureTabs />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">

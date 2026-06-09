@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { STRATEGIES } from '@/lib/management';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 type Tab = 'positioning' | 'initiatives' | 'risks' | 'vision';
 
@@ -17,7 +19,7 @@ const STATUS_COLOR   = { active: '#5DCAA5',  planned: '#c8f53a', 'on-hold': '#7a
 const SEVERITY_COLOR = { high: '#ff8080', medium: '#FAC775', low: '#7a7870' };
 
 export default function StrategyPage() {
-  const [vi, setVi] = useState(0);
+  const { vi } = useVenture();
   const [tab, setTab] = useState<Tab>('positioning');
   const s = STRATEGIES[vi];
 
@@ -26,16 +28,7 @@ export default function StrategyPage() {
       <h1 className="page-title">Strategy</h1>
       <p className="page-sub">Strategic positioning, key initiatives, risks, and 3-year vision per venture.</p>
 
-      {/* Venture tabs */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {STRATEGIES.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setTab('positioning'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem', background: vi === i ? v.color : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: vi === i ? 'var(--black)' : 'var(--muted)', fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
+      <VentureTabs />
 
       <div style={{ borderLeft: `2px solid ${s.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: s.color, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>{s.name}</div>
