@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { MODELS, type VentureModel } from '@/lib/fin-models';
+import { useVenture } from '@/contexts/venture-context';
 
 type Tab = 'pnl' | 'capex' | 'unit' | 'assumptions';
 const TABS: { key: Tab; label: string }[] = [
@@ -173,7 +174,7 @@ function AssumptionsTab({ model }: { model: VentureModel }) {
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function FinancialModelPage() {
-  const [vi,  setVi]  = useState(0);
+  const { vi, setVi } = useVenture();
   const [tab, setTab] = useState<Tab>('pnl');
   const chartRef  = useRef<HTMLCanvasElement>(null);
   const chartInst = useRef<unknown>(null);
