@@ -17,7 +17,7 @@ function renderMarkdown(md: string): string {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code>$1</code>')
     .replace(/^---$/gm, '<hr />')
-    .replace(/```([\s\S]*?)```/g, (_, inner) => {
+    .replace(/```([^`]*(?:`[^`]+)*)```/g, (_, inner) => {
       const body = inner.replace(/^\w+\n/, '');
       return `<pre><code>${body.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
     })
@@ -25,7 +25,7 @@ function renderMarkdown(md: string): string {
       const cells = row.slice(1, -1).split('|').map((c: string) => c.trim());
       return `<tr>${cells.map((c: string) => `<td>${c}</td>`).join('')}</tr>`;
     })
-    .replace(/(<tr>.*?<\/tr>\n?)+/gs, (block: string) => {
+    .replace(/(<tr>[^]*?<\/tr>\n?)+/g, (block: string) => {
       const rows = block.trim().split('\n');
       const [header, , ...body] = rows;
       if (!header) return block;
@@ -34,7 +34,7 @@ function renderMarkdown(md: string): string {
     })
     .replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ol">$2</li>')
     .replace(/^[-*]\s+(.+)$/gm, '<li>$1</li>')
-    .replace(/(<li[^>]*>.*?<\/li>\n?)+/gs, (m: string) => `<ul>${m}</ul>`)
+    .replace(/(<li[^>]*>[^]*?<\/li>\n?)+/g, (m: string) => `<ul>${m}</ul>`)
     .replace(/^(?!<[hultpodre]).+$/gm, (m: string) => m.trim() ? `<p>${m}</p>` : '')
     .replace(/\n{2,}/g, '\n');
 }
