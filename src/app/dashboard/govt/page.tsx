@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/legal-data';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   required:      { color: '#ff8080', label: 'Required'     },
@@ -20,6 +21,7 @@ export default function GovtPage() {
     <div>
       <h1 className="page-title">Govt</h1>
       <p className="page-sub">Government filings, regulatory clearances, and compliance requirements.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {JURISDICTIONS.map(j => <button key={j} className={`filter-pill${juris === j ? ' active' : ''}`} style={juris === j && j !== 'all' ? { borderColor: JURIS_COLORS[j as GovtJurisdiction], color: JURIS_COLORS[j as GovtJurisdiction] } : {}} onClick={() => setJuris(j)}>{j === 'all' ? 'All jurisdictions' : j}</button>)}
       </div>

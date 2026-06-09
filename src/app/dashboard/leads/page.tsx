@@ -2,6 +2,7 @@ import fs from 'fs';
 import { LEADS } from '@/lib/sales';
 import ConvertToProjectButton from './convert-to-project-button';
 import { isConvertibleLead } from '@/lib/lead-conversion';
+import VentureTabs from '@/components/VentureTabs';
 
 interface ContactLead {
   id: string; name: string; email: string;
@@ -67,6 +68,7 @@ export default function LeadsPage() {
     <div>
       <h1 className="page-title">Leads</h1>
       <p className="page-sub">Qualified leads — from direct outreach and codelude.com/contact form submissions.</p>
+      <VentureTabs />
 
       {contactLeads.length > 0 && (
         <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1rem 1.5rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>

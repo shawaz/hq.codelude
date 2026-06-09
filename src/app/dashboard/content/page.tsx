@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { CONTENT, type ContentStatus } from '@/lib/mktg';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   published:   { color: '#5DCAA5', label: 'Published'   },
@@ -18,6 +19,7 @@ export default function ContentPage() {
     <div>
       <h1 className="page-title">Content</h1>
       <p className="page-sub">Content calendar — articles, social posts, case studies, and press releases across all ventures.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [ContentStatus, typeof STATUS_STYLES[ContentStatus]][]).map(([key, s]) => (

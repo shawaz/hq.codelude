@@ -1,10 +1,12 @@
 import { TICKETS } from '@/lib/support';
+import VentureTabs from '@/components/VentureTabs';
 
 export default function TicketsPage() {
   return (
     <div>
       <h1 className="page-title">Tickets</h1>
       <p className="page-sub">Support ticket queue — bugs, feature requests, and help requests from users and partners.</p>
+      <VentureTabs />
       {TICKETS.length === 0 ? (
         <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '2rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>No tickets open</div>

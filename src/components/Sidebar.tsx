@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { useVenture } from '@/contexts/venture-context';
-import { VENTURES } from '@/lib/ventures';
 
 const NAV = [
   {
@@ -128,8 +126,6 @@ export default function Sidebar({ user }: Props) {
   const pathname = usePathname();
   const router   = useRouter();
   const [open, setOpen] = useState<string | null>(() => activeSection(pathname));
-  const { vi, setVi } = useVenture();
-
   useEffect(() => {
     const section = activeSection(pathname);
     if (section) setOpen(section);
@@ -150,28 +146,6 @@ export default function Sidebar({ user }: Props) {
       <div className="sidebar-logo">
         <span className="logo-text">Code<span>lude</span></span>
         <span className="hq-badge">HQ</span>
-      </div>
-
-      <div style={{ padding: '0.75rem 1.25rem 0.85rem', borderBottom: '1px solid var(--sidebar-border)' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.55rem' }}>Venture</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-          {VENTURES.map((v, i) => (
-            <button key={v.name} onClick={() => setVi(i)} style={{
-              display: 'flex', alignItems: 'center', gap: '0.55rem',
-              background: 'none', border: 'none', padding: '0.28rem 0.4rem',
-              cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.65rem',
-              letterSpacing: '0.04em', color: vi === i ? 'var(--off-white)' : 'var(--muted)',
-              textAlign: 'left', transition: 'color 0.15s',
-            }}>
-              <span style={{
-                width: 7, height: 7, borderRadius: '50%', flexShrink: 0, transition: 'background 0.15s',
-                background: vi === i ? v.color : 'transparent',
-                border: `1.5px solid ${v.color}`,
-              }} />
-              {v.name}
-            </button>
-          ))}
-        </div>
       </div>
 
       <nav className="sidebar-nav">

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import VentureTabs from '@/components/VentureTabs';
 
 type Tab = 'round' | 'investors' | 'legal' | 'timeline' | 'hyperscaler';
 
@@ -261,6 +262,7 @@ export default function FundraisePage() {
     <div>
       <h1 className="page-title">Roborns — India Equity Fundraise</h1>
       <p className="page-sub">₹18.1 Cr seed round plan via Compulsorily Convertible Debentures (CCDs) — Indian private limited company, equity structure.</p>
+      <VentureTabs />
 
       {/* Summary strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem', borderLeft: '2px solid #5DCAA5' }}>

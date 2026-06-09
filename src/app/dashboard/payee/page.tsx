@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PAYEES, type PayeeStatus, type PayeeFrequency } from '@/lib/finance';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<PayeeStatus, { color: string; label: string }> = {
   active:    { color: '#5DCAA5', label: 'Active'    },
@@ -35,6 +36,7 @@ export default function PayeePage() {
     <div>
       <h1 className="page-title">Payee</h1>
       <p className="page-sub">Vendor, contractor, and subscription payment registry.</p>
+      <VentureTabs />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell">

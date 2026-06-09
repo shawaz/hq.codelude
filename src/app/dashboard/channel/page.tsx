@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { VENTURES, VENTURE_CHANNELS, type ChStatus } from '@/lib/mgmt-ventures';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 const STATUS_STYLES: Record<ChStatus,{color:string;label:string}> = {
   active:{color:'#5DCAA5',label:'Active'},building:{color:'#c8f53a',label:'Building'},planned:{color:'#7a7870',label:'Planned'},
@@ -10,7 +12,7 @@ const TYPE_COLORS: Record<string,string> = {
 };
 
 export default function ChannelPage() {
-  const [vi, setVi] = useState(0);
+  const { vi } = useVenture();
   const venture  = VENTURES[vi];
   const channels = VENTURE_CHANNELS[venture.name] ?? [];
   const counts   = { active:channels.filter(c=>c.status==='active').length, building:channels.filter(c=>c.status==='building').length, planned:channels.filter(c=>c.status==='planned').length };
@@ -19,11 +21,7 @@ export default function ChannelPage() {
     <div>
       <h1 className="page-title">Channel</h1>
       <p className="page-sub">Marketing, sales, distribution, and community channels — per venture.</p>
-      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {VENTURES.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
-        ))}
-      </div>
+      <VentureTabs />
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em',display:'flex',alignItems:'center',gap:'1rem' }}>

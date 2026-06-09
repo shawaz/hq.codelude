@@ -1,4 +1,5 @@
 import { CLIENTS } from '@/lib/sales';
+import VentureTabs from '@/components/VentureTabs';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
@@ -13,6 +14,7 @@ export default function ClientsPage() {
     <div>
       <h1 className="page-title">Clients</h1>
       <p className="page-sub">Active client accounts — current customers across all ventures.</p>
+      <VentureTabs />
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell"><div className="tasks-count-num">{CLIENTS.length}</div><div className="tasks-count-label">Total clients</div></div>
         <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{CLIENTS.filter(c => c.status === 'active').length}</div><div className="tasks-count-label">Active</div></div>

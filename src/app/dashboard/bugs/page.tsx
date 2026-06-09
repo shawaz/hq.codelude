@@ -1,8 +1,11 @@
+import VentureTabs from '@/components/VentureTabs';
+
 export default function BugsPage() {
   return (
     <div style={{ maxWidth: 640 }}>
       <h1 className="page-title">Bugs</h1>
       <p className="page-sub">Automated bug detection, reporting, and resolution across all platforms.</p>
+      <VentureTabs />
 
       <div style={{
         background: 'var(--card-bg)', border: '1px solid var(--card-border)',

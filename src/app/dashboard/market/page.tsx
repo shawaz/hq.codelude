@@ -1,10 +1,12 @@
 import { MARKETS } from '@/lib/mktg';
+import VentureTabs from '@/components/VentureTabs';
 
 export default function MarketPage() {
   return (
     <div>
       <h1 className="page-title">Market</h1>
       <p className="page-sub">Market sizing and key trends per venture — TAM, SAM, SOM, and strategic insight.</p>
+      <VentureTabs />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         {MARKETS.map((m, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: `2px solid ${m.color}`, padding: '1.5rem' }}>

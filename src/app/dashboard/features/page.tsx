@@ -1,4 +1,5 @@
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
+import VentureTabs from '@/components/VentureTabs';
 
 interface Feature {
   name: string;
@@ -169,6 +170,7 @@ export default function FeaturesPage() {
     <div>
       <h1 className="page-title">Features</h1>
       <p className="page-sub">Feature inventory across all platforms — what's live, what's being built, and what's planned.</p>
+      <VentureTabs />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">

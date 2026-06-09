@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { VENTURES, VENTURE_ACTIVITIES } from '@/lib/mgmt-ventures';
+import VentureTabs from '@/components/VentureTabs';
+import { useVenture } from '@/contexts/venture-context';
 
 const CAT_COLORS: Record<string, string> = {
   Milestone:'#c8f53a',Launch:'#5DCAA5',Decision:'#FAC775',Product:'#7F77DD',
@@ -8,7 +10,7 @@ const CAT_COLORS: Record<string, string> = {
 };
 
 export default function ActivityPage() {
-  const [vi, setVi] = useState(0);
+  const { vi } = useVenture();
   const venture = VENTURES[vi];
   const items = [...(VENTURE_ACTIVITIES[venture.name] ?? [])].sort((a,b) => b.date.localeCompare(a.date));
 
@@ -16,11 +18,7 @@ export default function ActivityPage() {
     <div>
       <h1 className="page-title">Activity</h1>
       <p className="page-sub">Chronological log of decisions, milestones, and events — per venture.</p>
-      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {VENTURES.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
-        ))}
-      </div>
+      <VentureTabs />
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em' }}>{venture.name} — {items.length} events</div>

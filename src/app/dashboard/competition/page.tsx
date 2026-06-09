@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { COMPETITORS } from '@/lib/mktg';
+import VentureTabs from '@/components/VentureTabs';
 
 const VENTURES = ['All', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 const VENTURE_COLORS: Record<string, string> = {
@@ -16,6 +17,7 @@ export default function CompetitionPage() {
     <div>
       <h1 className="page-title">Competition</h1>
       <p className="page-sub">Competitor intelligence — direct, indirect, and adjacent competition per venture.</p>
+      <VentureTabs />
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: VENTURE_COLORS[v] } : {}} onClick={() => setVenture(v)}>{v}</button>)}
       </div>
