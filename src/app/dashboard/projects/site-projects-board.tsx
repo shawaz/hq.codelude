@@ -25,11 +25,11 @@ const labelStyle: React.CSSProperties = {
   letterSpacing: '0.12em', textTransform: 'uppercase',
 };
 
-export default function SiteProjectsBoard({ projects }: { projects: SiteProject[] }) {
+export default function SiteProjectsBoard({ projects, initialVenture }: { projects: SiteProject[]; initialVenture?: Project }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
-  const [ventureId, setVentureId] = useState<Project>('Roborns');
+  const [ventureId, setVentureId] = useState<Project>(initialVenture ?? 'Roborns');
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState<SiteProjectStatus>('planning');
   const [boundary, setBoundary] = useState<BoundaryResult | null>(null);
@@ -37,7 +37,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
   const [error, setError] = useState('');
 
   function openModal() {
-    setName(''); setVentureId('Roborns'); setLocation(''); setStatus('planning');
+    setName(''); setVentureId(initialVenture ?? 'Roborns'); setLocation(''); setStatus('planning');
     setBoundary(null);
     setSaving(false); setError('');
     setOpen(true);
