@@ -9,7 +9,12 @@ export async function middleware(request: NextRequest) {
   const session = await getIronSession<SessionData>(request, response, sessionOptions);
   const { pathname } = request.nextUrl;
 
-  const isPublic = pathname.startsWith('/login') || pathname.startsWith('/api/auth');
+  const isPublic =
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/share') ||
+    pathname.startsWith('/api/share') ||
+    pathname.startsWith('/letterhead');
 
   if (!session.isLoggedIn && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url));
