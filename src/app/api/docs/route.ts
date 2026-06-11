@@ -14,7 +14,8 @@ function docsDir(): string {
   return fallback;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const q = req.nextUrl.searchParams.get('q')?.trim().toLowerCase() ?? '';
   const dir = docsDir();
   const files = fs.readdirSync(dir)
     .filter(f => f.endsWith('.md'))
@@ -29,8 +30,11 @@ export async function GET() {
         title,
         size: stat.size,
         updatedAt: stat.mtime.toISOString(),
+        matches: q ? title.toLowerCase().includes(q) || content.toLowerCase().includes(q) : true,
       };
     })
+    .filter(f => f.matches)
+    .map(({ matches: _matches, ...rest }) => rest)
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   return NextResponse.json(files);
 }
