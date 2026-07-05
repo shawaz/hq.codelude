@@ -54,6 +54,50 @@ export const PIPELINE: InvestorLead[] = [
     nextAction: 'Schedule call to discuss creator programme equity participation.',
     notes: 'One of the 3 paying beta users. Strong engagement — natural early investor candidate for the marketplace round.',
   },
+
+  // ── KSA Expansion Targets (added Jun 2026) ─────────────────────────────
+  {
+    id: 'INV-006', name: 'ACWA Power', firm: 'ACWA Power (TADAWUL: 2082)',
+    type: 'Strategic Partner', round: 'Roborns KSA Seed',
+    stage: 'identified', targetAmount: '$2–5M strategic investment', lastContact: '—',
+    nextAction: '✓ One-pager drafted (docs/ACWA-Power-One-Pager.md). Deliver via former Saudi partner (Riyadh) — request intro call.',
+    notes: 'ACWA Power is the world\'s largest private water desal company and a major power player. They own the desal technology AND could be the offtaker. Natural strategic partner for KSA Roborns.',
+  },
+  {
+    id: 'INV-007', name: 'PIF — Public Investment Fund', firm: 'PIF (Saudi SWF)',
+    type: 'Sovereign Wealth Fund', round: 'Roborns KSA Seed',
+    stage: 'identified', targetAmount: '$2–10M', lastContact: '—',
+    nextAction: 'Map PIF tech portfolio companies (NEOM, Aramco Digital, etc.) for warm introductions. PIF has $40B+ AI compute commitment.',
+    notes: 'PIF committed $40B+ to AI infrastructure under Vision 2030. Also owns ACWA Power (27.5%). Direct PIF investment unlikely at seed stage, but portfolio company invest or PIF-backed VC is feasible.',
+  },
+  {
+    id: 'INV-008', name: 'MCIT AI Fund', firm: 'Saudi Ministry of Communications & IT',
+    type: 'Government Grant', round: 'Roborns KSA Grant',
+    stage: 'identified', targetAmount: '$1–3M grant', lastContact: '—',
+    nextAction: 'Research MCIT AI grant programme parameters. Apply through local partner (Riyadh). National AI strategy alignment = higher approval odds.',
+    notes: 'Saudi National Strategy for Data & AI (SDAIA) has dedicated funding for AI infrastructure. Immersion cooling + water desal = dual-benefit use case that aligns with Vision 2030 environmental goals.',
+  },
+  {
+    id: 'INV-009', name: 'G42 / Mubadala', firm: 'G42 (Abu Dhabi) / Mubadala Investment Co.',
+    type: 'Strategic / SWF', round: 'Roborns KSA Seed',
+    stage: 'identified', targetAmount: '$2–5M', lastContact: '—',
+    nextAction: 'Approach G42\'s data center arm as a conduit for Middle East AI compute infrastructure. G42 builds data centers across GCC.',
+    notes: 'G42 is Abu Dhabi\'s AI & cloud giant with data centers across the region. They\'re building compute infrastructure for the Middle East. Immersion cooling + water desal is a differentiator for their new builds.',
+  },
+  {
+    id: 'INV-010', name: 'SIDF — Saudi Industrial Dev Fund', firm: 'Saudi Industrial Development Fund',
+    type: 'Govt Loan/Grant', round: 'Roborns KSA Grant',
+    stage: 'identified', targetAmount: '$2–5M concessional loan', lastContact: '—',
+    nextAction: 'Prepare industrial loan application. SIDF provides concessional loans up to 50–75% of project cost for manufacturing and industrial facilities in KSA.',
+    notes: 'SIDF offers loans up to SAR 40M ($10.7M) per project at concessional rates for industrial facilities. Roborns\' manufacturing/industrial nature qualifies. Lowers equity requirement for KSA Phase 1.',
+  },
+  {
+    id: 'INV-011', name: 'Masdar', firm: 'Masdar (Abu Dhabi Future Energy Co.)',
+    type: 'Strategic Partner', round: 'Roborns KSA Seed',
+    stage: 'identified', targetAmount: 'PPA + equity', lastContact: '—',
+    nextAction: 'Explore renewable PPA for KSA Roborns facility. Masdar develops utility-scale solar/wind and could be the PPA counterparty.',
+    notes: 'Masdar is the natural PPA partner for a zero-carbon Roborns facility. Pairing immersion cooling with Masdar renewable generation creates a compelling net-zero datacenter pitch.',
+  },
 ];
 
 export const PIPELINE_STAGES: { key: PipelineStage; label: string; color: string }[] = [
@@ -96,9 +140,9 @@ export const ROUNDS: Round[] = [
     targetAmount: '₹18.1 Cr (~$2.1M USD)', raisedAmount: '₹0', raisedPct: 0,
     instrumentNote: 'Token represents proportional revenue share in facility (compute + water + minerals). Not equity. 12-month lock-up.',
     closeTarget: 'Q4 2026', status: 'planning', investorCount: 0,
-    keyTerms: 'Pre-money: ₹60 Cr. Exit: 10–12× EBITDA (infra REIT or M&A). Seed investor return target: 18–23×.',
+    keyTerms: 'Pre-money: ₹40 Cr (recalibrated Jun 2026). Exit: 10–12× EBITDA (infra REIT or M&A). Seed investor return target: 18–23×.',
     milestones: [
-      { done: true,  label: 'Financial model published (₹142 Cr Y5 revenue)' },
+      { done: true,  label: '✓ Financial model recalibrated — realistic power/water/capex (see fin-models.ts)' },
       { done: false, label: 'Thermal engineering partner engaged' },
       { done: false, label: 'Site survey complete (Mangaluru)' },
       { done: false, label: 'Anchor compute tenant LOI signed' },
@@ -140,6 +184,24 @@ export const ROUNDS: Round[] = [
       { done: false, label: '$500K MRR — consider strategic raise' },
     ],
     notes: 'Dextrip is the most capital-efficient venture. Prioritise organic growth through the creator flywheel before external capital.',
+  },
+  {
+    id: 'R4', name: 'Roborns KSA Expansion Round', venture: 'Roborns KSA', color: '#E8A87C',
+    type: 'Equity + Strategic Grant',
+    targetAmount: '$4.5M (~₹38 Cr)', raisedAmount: '$0', raisedPct: 0,
+    instrumentNote: 'Equity via Dubai HoldCo → KSA subsidiary (local partner). Bundled with MCIT AI Fund grant + SIDF concessional loan.',
+    closeTarget: 'Q2 2027', status: 'planning', investorCount: 0,
+    keyTerms: 'Pre-money: $4.5M (₹38 Cr). Dual track: India Phase 1 prototype proves tech, KSA round scales it. Leverages subsidized KSA power ($0.048/kWh).',
+    milestones: [
+      { done: true,  label: '✓ Financial model added — KSA scenario in fin-models.ts' },
+      { done: false, label: 'India Phase 1 construction completes (proof of concept)' },
+      { done: false, label: 'ACWA Power strategic one-pager delivered via Riyadh partner' },
+      { done: false, label: 'MCIT AI Fund grant application submitted' },
+      { done: false, label: 'Dammam/Jubail industrial site scoped via Dammam contact' },
+      { done: false, label: 'KSA subsidiary incorporated (Dubai HoldCo → MISA)' },
+      { done: false, label: 'KSA seed round first close — PIF-backed VC / strategic anchor' },
+    ],
+    notes: 'KSA round is sequenced AFTER India Phase 1 construction. India prototype provides the operational proof that unlocks KSA institutional capital. Exceptions: ACWA Power engagement and MCIT grant can start in parallel with India build.',
   },
 ];
 

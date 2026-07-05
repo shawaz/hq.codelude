@@ -15,39 +15,67 @@ const TABS: { key: Tab; label: string }[] = [
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
+const TOTAL_RAISE = 420;      // Cr (all sites)
+const INVESTOR_EQUITY = 315;  // 75%
+const SPONSOR_EQUITY = 105;   // 25%
+const PREF_RETURN = 0.08;     // 8%
+const PERF_SPLIT = 0.7;       // 70/30
+const FULL_PROFIT = 126;      // Cr/yr
+
 const ROUND = {
-  name:       'Roborns Seed Round — India Equity',
+  name:       'Roborns Infrastructure Developer Round — Company Equity',
   entity:     'Roborns Energy & Infrastructure Pvt. Ltd.',
   domicile:   'Mangaluru, Karnataka, India',
-  instrument: 'Compulsorily Convertible Debentures (CCDs)',
-  target:     '₹18.1 Crore (~$2.1M USD)',
-  premoney:   '₹60 Crore',
-  postmoney:  '₹78.1 Crore',
-  dilution:   '23.2%',
+  instrument: 'Equity Shares (Infrastructure Developer Model)',
+  target:     `₹${TOTAL_RAISE} Crore (65MW across 3 sites)`,
+  premoney:   `₹${TOTAL_RAISE} Crore (total project valuation)`,
+  postmoney:  `₹${TOTAL_RAISE} Crore (no valuation step-up — all sites same SPV)`,
+  dilution:   '75% to investors / 25% sponsor retained',
   minTicket:  '₹50 Lakh',
-  maxTicket:  '₹5 Crore',
-  conversion: 'Auto-converts to equity at Series A or 36 months, whichever is earlier',
-  interest:   '0% — pure equity-equivalent instrument',
-  rights:     ['Pro-rata participation rights at Series A', 'Information rights (quarterly P&L, site milestones)', 'Board observer seat for investors above ₹2 Cr'],
+  maxTicket:  '₹100 Crore (anchor investor limit)',
+  interest:   `${PREF_RETURN * 100}% preferred return — paid before sponsor distributions`,
+  conversion: 'N/A — direct equity from day one. No convertible instruments.',
+  rights:     [
+    '8% preferred return on invested capital (paid first)',
+    '70% of profit above preferred return (performance split)',
+    'Quarterly distribution statements + site milestone reports',
+    'Board observer seat for investors above ₹5 Cr',
+    'Pro-rata participation in future rounds',
+    'Tag-along rights on sponsor exit',
+  ],
 };
 
 const USE_OF_FUNDS = [
-  { item: 'Immersion tanks + compute (2MW)', amount: '₹5.0 Cr', pct: 27.6, phase: 'Building A' },
-  { item: 'Network, UPS, power distribution', amount: '₹1.2 Cr', pct: 6.6, phase: 'Building A' },
-  { item: 'Subterranean vault civil works',   amount: '₹2.1 Cr', pct: 11.6, phase: 'Building A' },
-  { item: 'Titanium heat exchangers',          amount: '₹1.8 Cr', pct: 9.9, phase: 'Thermal Loop' },
-  { item: 'Marine intake pipeline (500m)',     amount: '₹1.4 Cr', pct: 7.7, phase: 'Thermal Loop' },
-  { item: 'MED desalination skid (50K L/day)',amount: '₹2.8 Cr', pct: 15.5, phase: 'Building B' },
-  { item: 'Pre-filtration + mineralisation',  amount: '₹0.9 Cr', pct: 5.0, phase: 'Building B' },
-  { item: 'Grid connection + solar (500 kW)', amount: '₹4.1 Cr', pct: 22.7, phase: 'Site & Power' },
-  { item: 'Working capital + 12m opex reserve',amount:'₹2.5 Cr', pct: 13.8, phase: 'Operations' },
+  { item: 'Kapu Site — 20MW buildout (incl. substation)', amount: '₹150 Cr', pct: 35.7, phase: 'Kapu' },
+  { item: 'Hejamadi (15 ac) — 40MW flagship campus',     amount: '₹230 Cr', pct: 54.8, phase: 'Hejamadi' },
+  { item: 'Hejamadi (2 ac) — 5MW satellite node',         amount: '₹40 Cr',  pct: 9.5,  phase: 'Hejamadi' },
 ];
 
 const RETURN_SCENARIOS = [
-  { scenario: 'Base case',      multiple: '8×',  irr: '32%', basis: 'EBITDA at ₹20 Cr (Y3). Exit at 8× EBITDA = ₹160 Cr valuation.' },
-  { scenario: 'Upside case',    multiple: '15×', irr: '48%', basis: 'Full scale (10MW + minerals). Exit at ₹600 Cr+ via infrastructure REIT.' },
-  { scenario: 'Conservative',   multiple: '4×',  irr: '19%', basis: 'Compute only, slower ramp. Still generates strong infrastructure yield.' },
+  { scenario: 'Base case',      multiple: '8×',  irr: '28%', basis: `Full scale 65MW. ₹${FULL_PROFIT} Cr/yr profit. Investor yield ~30% annual.` },
+  { scenario: 'Upside case',    multiple: '15×', irr: '42%', basis: 'Expansion to 100MW+ with adjacent land + mineral revenue upside. Exit via infra REIT.' },
+  { scenario: 'Conservative',   multiple: '5×',  irr: '18%', basis: 'Compute only (no water/mineral revenue). Still clears 8% preferred return + moderate upside.' },
 ];
+
+const DEAL_TERMS = [
+  { step: 1, label: 'Operating Expenses', detail: 'Electricity, staff, maintenance, insurance — deducted from revenue first', pct: 30, color: '#7a7870' },
+  { step: 2, label: "8% Investor Preferred Return", detail: `8% annual return paid to ALL investors before sponsor receives any distribution`, pct: 20, color: '#5DCAA5' },
+  { step: 3, label: '70/30 Performance Split', detail: 'Remaining profit: 70% to investors, 30% to sponsor (Roborns)', pct: 35, color: '#7ddfbe' },
+  { step: 4, label: 'Sponsor Catch-Up (25% equity)', detail: 'Sponsor receives dividends from 25% retained equity after pref + performance', pct: 15, color: '#c8f53a' },
+];
+
+/* Investor return calculator */
+function calcInvestorReturn(investmentCr: number) {
+  const totalInvestorEquity = INVESTOR_EQUITY;
+  const prefAmount = totalInvestorEquity * PREF_RETURN;
+  const remainingProfit = FULL_PROFIT - prefAmount;
+  const investorPerfShare = remainingProfit * PERF_SPLIT;
+  // individual investor share
+  const share = investmentCr / totalInvestorEquity;
+  const pref = investmentCr * PREF_RETURN;
+  const perf = investorPerfShare * share;
+  return { preferred: pref, performance: perf, total: pref + perf };
+}
 
 const INVESTORS = [
   {
@@ -253,6 +281,47 @@ function InfoRow({ label, value, accent }: { label: string; value: string; accen
   );
 }
 
+/* ── Investor return calculator component ────────────────────────── */
+function InvestorCalc() {
+  const [inv, setInv] = useState(1); // Cr
+
+  const ret = calcInvestorReturn(inv);
+  const payback = inv / ret.total;
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem' }}>
+        <span style={{ color: 'var(--muted)' }}>Investment Amount</span>
+        <span style={{ color: 'var(--off-white)', fontWeight: 700 }}>₹{inv} Cr</span>
+      </div>
+      <input type="range" min={0.5} max={100} step={0.5} value={inv}
+        onChange={(e) => setInv(Number(e.target.value))}
+        style={{ width: '100%', height: '6px', appearance: 'none', background: 'var(--card-border)', borderRadius: '3px', outline: 'none', cursor: 'pointer', marginBottom: '1rem' }} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
+        <div style={{ background: 'var(--card-bg)', padding: '0.85rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Annual Return</div>
+          <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--accent)' }}>₹{ret.total.toFixed(1)} Cr</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', marginTop: '0.15rem' }}>{(ret.total / inv * 100).toFixed(1)}% yield</div>
+        </div>
+        <div style={{ background: 'var(--card-bg)', padding: '0.85rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>10-Yr Projected</div>
+          <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--off-white)' }}>₹{(ret.total * 10).toFixed(1)} Cr</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', marginTop: '0.15rem' }}>{(ret.total * 10 / inv).toFixed(1)}× ROI</div>
+        </div>
+        <div style={{ background: 'var(--card-bg)', padding: '0.85rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Payback Period</div>
+          <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--off-white)' }}>{payback.toFixed(1)} yrs</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--muted)', marginTop: '0.15rem' }}>pref covered first</div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', marginTop: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>
+        <span>Preferred (8%): <strong style={{ color: '#5DCAA5' }}>₹{ret.preferred.toFixed(2)} Cr/yr</strong></span>
+        <span>Performance (70%): <strong style={{ color: '#7ddfbe' }}>₹{ret.performance.toFixed(2)} Cr/yr</strong></span>
+      </div>
+    </div>
+  );
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function FundraisePage() {
@@ -267,11 +336,11 @@ export default function FundraisePage() {
       {/* Summary strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem', borderLeft: '2px solid #5DCAA5' }}>
         {[
-          { label: 'Target raise',  val: '₹18.1 Cr', sub: '~$2.1M USD',          color: '#5DCAA5' },
-          { label: 'Pre-money',     val: '₹60 Cr',   sub: '~$7.1M valuation',    color: 'var(--off-white)' },
-          { label: 'Dilution',      val: '23.2%',     sub: 'Seed investors',       color: '#FAC775' },
-          { label: 'Instrument',    val: 'CCDs',      sub: 'Converts at Series A', color: '#c8f53a' },
-          { label: 'Min ticket',    val: '₹50 Lakh',  sub: '~$60K',              color: 'var(--muted)' },
+          { label: 'Total raise',  val: `₹${TOTAL_RAISE} Cr`, sub: '65MW · 3 sites',  color: '#5DCAA5' },
+          { label: 'Structure',     val: '8% Pref',   sub: '70/30 perf split',    color: 'var(--off-white)' },
+          { label: 'Split',      val: '75/25',     sub: 'Investor / Sponsor',       color: '#FAC775' },
+          { label: 'Instrument',    val: 'Equity',      sub: 'Direct shares', color: '#c8f53a' },
+          { label: 'Min ticket',    val: '₹50 L',  sub: '~$60K',              color: 'var(--muted)' },
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.3rem' }}>{c.label}</div>
@@ -342,7 +411,7 @@ export default function FundraisePage() {
 
             {/* Use of funds */}
             <div>
-              <Section title="Use of funds — ₹18.1 Crore" />
+              <Section title="Use of Funds — ₹420 Crore (3 Sites)" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
                 {USE_OF_FUNDS.map((u, i) => (
                   <div key={i} style={{ background: 'var(--card-bg)', padding: '0.85rem 1rem' }}>
@@ -360,19 +429,34 @@ export default function FundraisePage() {
                 ))}
               </div>
 
-              <Section title="Why CCDs (not SAFE)" />
-              <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.25rem' }}>
-                {[
-                  { q: 'Why not SAFE?',         a: 'SAFE is not a recognised instrument under Indian Companies Act. CCDs are the closest equivalent — legally clean, well-understood by Indian lawyers and investors.' },
-                  { q: 'Why not equity shares?', a: 'Issuing equity at seed requires an exact valuation from a registered valuer (Section 56 angel tax risk). CCDs defer this to Series A when valuation is easier to establish.' },
-                  { q: 'Conversion trigger',     a: 'At Series A (institutional round), or automatically after 36 months. Conversion price set at Series A price or a pre-agreed floor.' },
-                  { q: 'DPIIT benefit',          a: 'With DPIIT Startup India recognition, angel tax exemption (Section 56(2)(viib)) applies — no need for registered valuer certificate for CCD issuance.' },
-                ].map((r, i) => (
-                  <div key={i} style={{ marginBottom: i < 3 ? '0.85rem' : 0, paddingBottom: i < 3 ? '0.85rem' : 0, borderBottom: i < 3 ? '1px solid var(--card-border)' : 'none' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)', marginBottom: '0.3rem' }}>{r.q}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{r.a}</div>
+              <Section title="Deal Structure — Waterfall Terms" />
+              <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
+                {DEAL_TERMS.map((t) => (
+                  <div key={t.step} style={{
+                    display: 'grid', gridTemplateColumns: '28px 1fr auto',
+                    gap: '0.75rem', padding: '0.85rem 1.25rem',
+                    borderBottom: t.step < DEAL_TERMS.length ? '1px solid var(--card-border)' : 'none',
+                    alignItems: 'center',
+                  }}>
+                    <div style={{
+                      width: '28px', height: '28px', borderRadius: '50%',
+                      background: `${t.color}20`, border: `1px solid ${t.color}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700,
+                      color: t.color,
+                    }}>{t.step}</div>
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)', fontWeight: 600, marginBottom: '0.15rem' }}>{t.label}</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', lineHeight: 1.5 }}>{t.detail}</div>
+                    </div>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: t.color, fontWeight: 600, whiteSpace: 'nowrap' }}>{t.pct}%</span>
                   </div>
                 ))}
+              </div>
+
+              <Section title="Investor Return Calculator" />
+              <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.25rem' }}>
+                <InvestorCalc />
               </div>
             </div>
           </div>

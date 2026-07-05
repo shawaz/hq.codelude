@@ -21,7 +21,7 @@ export const EVENTS: CalEvent[] = [
   { id: 'E03', date: '2026-05-23', time: '11:00', title: 'HubCV recruiter design partner outreach batch 1',    type: 'Call',      venture: 'HubCV',       location: 'Phone / LinkedIn',      status: 'upcoming',  notes: 'Cold outreach to 10 tech-focused recruitment agencies. Target: 2 design partner commitments.' },
   { id: 'E04', date: '2026-05-26', time: '09:00', title: 'Codelude weekly check-in',                          type: 'Meeting',   venture: 'Codelude',    location: 'Internal',              status: 'upcoming',  notes: 'Review all five ventures — status, blockers, one action per project this week.' },
   { id: 'E05', date: '2026-05-28', time: '15:00', title: 'Dubai HoldCo legal counsel intro call',             type: 'Legal',     venture: 'Codelude',    location: 'Zoom',                  status: 'upcoming',  notes: 'Intro call with DIFC-registered law firm. Scope: HoldCo incorporation + token structure.' },
-  { id: 'E06', date: '2026-06-01', time: '',       title: 'Roborns site survey — Uchila Thalapady',           type: 'Site Visit',venture: 'Roborns',     location: 'Mangaluru, Karnataka',  status: 'upcoming',  notes: 'On-ground survey of coastal site. Assess land access, water intake feasibility, grid proximity.' },
+  { id: 'E06', date: '2026-06-13', time: '',       title: 'Roborns site visit — Kapu',           type: 'Site Visit',venture: 'Roborns',     location: 'Kapu, Udupi, Karnataka',  status: 'planned',  notes: 'On-ground survey of Kapu coastal site (13°12\'11.4"N 74°44\'37.0"E). Assess land access, water intake feasibility, grid proximity.' },
   { id: 'E07', date: '2026-06-02', time: '',       title: 'Roborns site survey — day 2',                      type: 'Site Visit',venture: 'Roborns',     location: 'Mangaluru, Karnataka',  status: 'upcoming',  notes: 'Meeting with local government liaison re coastal authority permits pathway.' },
   { id: 'E08', date: '2026-06-05', time: '10:00', title: 'Franchiseen franchise partner pitch — brand 1',     type: 'Meeting',   venture: 'Franchiseen', location: 'Zoom',                  status: 'upcoming',  notes: 'First franchise brand pitch. Present platform, payout model, and pilot structure.' },
   { id: 'E09', date: '2026-06-10', time: '14:00', title: 'Dextrip public beta go/no-go review',               type: 'Milestone', venture: 'Dextrip',     location: 'Internal',              status: 'upcoming',  notes: 'Review multi-exchange connector readiness. Decision: launch public beta or delay 2 weeks.' },
@@ -102,7 +102,7 @@ export const TRIPS: Trip[] = [
     purpose: 'Site Visit',
     status: 'planned',
     objectives: [
-      'On-ground survey of Uchila Thalapady coastal site — access, water intake, grid proximity',
+      'On-ground survey of Kapu coastal site — access, water intake, grid proximity',
       'Meet local government liaison — coastal authority permit pathway',
       'Photograph and document site for investor deck',
       'Assess local contractor availability for marine construction',

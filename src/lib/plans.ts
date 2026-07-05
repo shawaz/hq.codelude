@@ -58,7 +58,7 @@ export const PLANS: VenturePlan[] = [
         { segment: 'HoldCo investors',    description: 'Strategic and retail investors buying tokenised exposure to physical infrastructure' },
       ],
       costStructure: [
-        'Land lease — 1-acre coastal site, Mangaluru',
+        'Land lease — 2-acre coastal site, Kapu (expandable to 4)',
         'Phase 1 construction capex — facility, cooling systems, water intake',
         'Thermal engineering and ongoing technical operations',
         'Energy infrastructure — power supply and backup',
@@ -74,7 +74,7 @@ export const PLANS: VenturePlan[] = [
     },
     businessPlan: {
       problem: 'AI compute is energy and water-intensive, placing unsustainable load on inland infrastructure. Simultaneously, coastal cities face fresh water scarcity. There is no integrated solution that addresses both.',
-      solution: 'Co-locate an AI datacenter on a 1-acre coastal site. Waste heat from compute servers drives multi-effect distillation of seawater. Brine byproduct feeds mineral extraction. Every resource loop is closed — compute costs go down, water is produced as a byproduct, minerals generate additional revenue.',
+      solution: 'Co-locate an AI datacenter on a 2-acre coastal site in Kapu, Karnataka (expandable to 4). Waste heat from compute servers drives multi-effect distillation of seawater. Brine byproduct feeds mineral extraction. Every resource loop is closed — compute costs go down, water is produced as a byproduct, minerals generate additional revenue.',
       market: [
         { label: 'AI Infrastructure',  size: '$100B+ globally, 30% CAGR' },
         { label: 'Desalination',       size: '$15B globally, coastal demand accelerating' },

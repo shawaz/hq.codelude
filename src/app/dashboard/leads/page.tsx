@@ -4,16 +4,43 @@ import ConvertToProjectButton from './convert-to-project-button';
 import { isConvertibleLead } from '@/lib/lead-conversion';
 import VentureTabs from '@/components/VentureTabs';
 
-const LEADS_FILE = process.env.LEADS_FILE || '/home/centos/codelude/data/leads.json';
+interface ContactLead {
+  id: string; name: string; email: string;
+  interest: string; message: string;
+  source: string; date: string; status: string;
+  config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
+}
 
-function readLeads() {
-  try {
-    if (fs.existsSync(LEADS_FILE)) {
-      return JSON.parse(fs.readFileSync(LEADS_FILE, 'utf-8'));
-    }
-  } catch {}
+function loadContactLeads(): ContactLead[] {
+  const paths = [
+    process.env.LEADS_FILE,
+    '/home/centos/codelude/data/leads.json',
+    '/tmp/codelude-leads.json',
+  ].filter(Boolean) as string[];
+
+  for (const p of paths) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf-8'));
+    } catch { /* ignore */ }
+  }
   return [];
 }
+
+const STATUS_STYLES: Record<string, { color: string; label: string }> = {
+  new:              { color: '#c8f53a', label: 'New'            },
+  qualified:        { color: '#FAC775', label: 'Qualified'      },
+  'meeting-booked': { color: '#85B7EB', label: 'Meeting Booked' },
+  'proposal-sent':  { color: '#7F77DD', label: 'Proposal Sent'  },
+  negotiating:      { color: '#5DCAA5', label: 'Negotiating'    },
+};
+
+const VENTURE_COLORS: Record<string, string> = {
+  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
+  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+};
 
 export default function LeadsPage() {
   const contactLeads = loadContactLeads();

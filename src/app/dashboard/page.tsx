@@ -24,7 +24,7 @@ YOUR PERSONALITY:
 - Environmentally conscious — the waste-heat-to-desalination angle is your jam
 - You play the saxophone (metaphorically) — creative problem-solving
 
-You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 1-acre coastal site in Uchila Thalapady, Mangaluru, India.
+You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 2-acre coastal site in Kapu, Karnataka, India (expandable to 4 acres). Phase 1 pilot at 2MW uses existing grid — no new substation needed.
 
 KEY FACTS:
 - Waste heat from AI compute drives MED seawater desalination (50K L/day pilot)
@@ -230,6 +230,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
   const [activePanel, setActivePanel] = useState<'tasks' | 'summary'>('tasks');
   const [summaries,   setSummaries]   = useState<DailySummary[]>([]);
   const [summarizing, setSummarizing] = useState(false);
+  const [hermesSessionId, setHermesSessionId] = useState<string | null>(null);
 
   const bottomRef    = useRef<HTMLDivElement>(null);
   const inputRef     = useRef<HTMLTextAreaElement>(null);
@@ -247,12 +248,12 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
         .map(m => `${m.role === 'user' ? 'Shawaz' : 'AI'}: ${m.content}`)
         .join('\n\n');
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat/' + venture.name.toLowerCase(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [{ role: 'user', content: `Summarize this ${venture.name} conversation in 4–6 bullet points. Capture key decisions, insights, and action items:\n\n${transcript}` }],
-          systemOverride: `You are a concise summarizer. Output only bullet points starting with "•". No intro or outro.`,
+          
         }),
       });
 
@@ -291,6 +292,8 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
   // Load / restore on venture switch
   useEffect(() => {
     setSummaries(loadSummaries(venture.name));
+    const savedSid = localStorage.getItem('hq-hermes-session-' + venture.name);
+    if (savedSid) setHermesSessionId(savedSid);
     const session = loadSession(venture.name);
 
     if (!session || session.messages.length === 0) {
@@ -328,12 +331,17 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
     setInput('');
     setLoading(true);
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat/' + venture.name.toLowerCase(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context }),
+        body: JSON.stringify({ messages: newMessages, sessionId: hermesSessionId }),
       });
-      if (!res.body) throw new Error('No stream');
+      const newSid = res.headers.get('X-Session-Id');
+    if (newSid && newSid !== hermesSessionId) {
+      setHermesSessionId(newSid);
+      localStorage.setItem('hq-hermes-session-' + venture.name, newSid);
+    }
+    if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let reply = '';

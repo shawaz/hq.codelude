@@ -9,7 +9,7 @@ Be direct, concise, and actionable. Provide specific, practical answers.`;
 
 const MODEL = {
   apiUrl: 'https://opencode.ai/zen/go/v1/chat/completions',
-  model: 'deepseek-v4-flash',
+  model: 'big-pickle',
   apiKey: process.env.OPENCODE_GO_API_KEY,
 };
 

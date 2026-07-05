@@ -4,6 +4,7 @@ export const VENTURES = [
   { name: 'HubCV',       color: '#FAC775' },
   { name: 'Cuestay',     color: '#85B7EB' },
   { name: 'Dextrip',     color: '#F0997B' },
+  { name: 'DROS',        color: '#5B8A5E' },
 ] as const;
 
 export type VentureName = typeof VENTURES[number]['name'];

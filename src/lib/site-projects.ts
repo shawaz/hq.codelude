@@ -19,6 +19,9 @@ export interface SiteProject {
   source: 'lead' | 'manual';
   leadId?: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
   budget: BudgetLine[];
   team: TeamMember[];
   tasks: ProjectTask[];
@@ -48,13 +51,13 @@ const SEED_PROJECTS: SiteProject[] = [
   {
     id: 'SP-seed-mangaluru',
     ventureId: 'Roborns',
-    name: 'Roborns Coastal Site — Mangaluru',
-    location: 'Uchila Thalapady, Mangaluru',
+    name: 'Roborns Coastal Site — Kapu, Karnataka',
+    location: 'Kapu, Udupi, Karnataka (13°12\'11.4"N 74°44\'37.0"E)',
     status: 'planning',
     source: 'manual',
-    config: 'West Coast, India · $10M – $50M (Pilot Infrastructure) · 2 MW compute · 15 kL/day water · 30 t/mo minerals',
+    config: 'West Coast, India · Pilot 2MW · 2 acres (expandable to 4) · 5km from substation (existing capacity) · 430K L/day water · 30 t/mo minerals',
     budget: [
-      { id: genId('bl'), label: 'Coastal land lease (1 acre)', category: 'Land', amount: 0, currency: 'INR', notes: 'Lease value TBD — pending site survey and permits' },
+      { id: genId('bl'), label: 'Coastal land lease (2 acres, expandable to 4)', category: 'Land', amount: 0, currency: 'INR', notes: 'Kapu site — 5km from substation. Lease TBD.' },
     ],
     team: [],
     tasks: [
@@ -63,7 +66,8 @@ const SEED_PROJECTS: SiteProject[] = [
       { id: genId('pt'), title: 'Coastal construction permits (Govt)', status: 'todo' },
     ],
     activities: [
-      { id: genId('act'), title: 'Site identified — Uchila Thalapady, 1-acre coastal plot', date: new Date().toISOString(), status: 'done' },
+      { id: genId('act'), title: 'Uchila Thalapady cancelled — substation capacity insufficient', date: new Date().toISOString(), status: 'done' },
+      { id: genId('act'), title: 'Kapu site identified — 2 acres, 5km from substation, 13°12\'11.4"N 74°44\'37.0"E', date: new Date().toISOString(), status: 'done' },
     ],
     createdAt: new Date().toISOString(),
   },
@@ -99,6 +103,9 @@ export interface CreateProjectInput {
   source: 'lead' | 'manual';
   leadId?: string;
   config?: string;
+  boundary?: GeoJSON.Polygon;
+  center?: [number, number];
+  areaHectares?: number;
   budget?: BudgetLine[];
 }
 
@@ -113,6 +120,9 @@ export function createProject(input: CreateProjectInput): SiteProject {
     source: input.source,
     leadId: input.leadId,
     config: input.config,
+    boundary: input.boundary,
+    center: input.center,
+    areaHectares: input.areaHectares,
     budget: input.budget ?? [],
     team: [],
     tasks: [],
@@ -124,7 +134,7 @@ export function createProject(input: CreateProjectInput): SiteProject {
   return project;
 }
 
-export function updateProject(id: string, patch: Partial<Pick<SiteProject, 'name' | 'location' | 'status'>>): SiteProject | undefined {
+export function updateProject(id: string, patch: Partial<Pick<SiteProject, 'name' | 'location' | 'status' | 'boundary' | 'center' | 'areaHectares'>>): SiteProject | undefined {
   const all = readAll();
   const project = all.find(p => p.id === id);
   if (!project) return undefined;

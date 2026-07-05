@@ -22,7 +22,7 @@ export const BUDGET: BudgetLine[] = [
   // Roborns
   { venture: 'Roborns',  category: 'Engineering',     monthlyBudget: 5000,   spentToDate: 0,      currency: 'USD', note: 'Thermal engineering partner — feasibility study',            status: 'not-started' },
   { venture: 'Roborns',  category: 'Legal',           monthlyBudget: 2000,   spentToDate: 0,      currency: 'USD', note: 'Coastal permits, environmental clearance legal counsel',     status: 'not-started' },
-  { venture: 'Roborns',  category: 'Site Survey',     monthlyBudget: 3000,   spentToDate: 0,      currency: 'INR', note: 'Uchila Thalapady site survey and land assessment',          status: 'not-started' },
+  { venture: 'Roborns',  category: 'Site Survey',     monthlyBudget: 3000,   spentToDate: 0,      currency: 'INR', note: 'Kapu site survey and land assessment (Uchila Thalapady cancelled — insufficient substation capacity)',          status: 'not-started' },
 
   // Franchiseen
   { venture: 'Franchiseen', category: 'Development',  monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: 'In-house development — no external cost',                   status: 'on-track' },
