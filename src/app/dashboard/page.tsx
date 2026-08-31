@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { TASKS } from '@/lib/tasks';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import ChatHistory, { useLazySummarise } from '@/components/ChatHistory';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -91,26 +92,45 @@ const MODEL_LABELS: Record<AIModel, string> = {
 interface Message { role: 'user' | 'assistant'; content: string; }
 
 function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
-  const [messages,  setMessages]  = useState<Message[]>([]);
+  // Today's conversation is the source of truth; local state only holds the
+  // in-flight turn, so a refresh mid-thought loses nothing.
+  const stored      = useQuery(api.aichat.today, { venture: venture.name });
+  const append      = useMutation(api.aichat.append);
+  const clearToday  = useMutation(api.aichat.clearToday);
+  const [pending,   setPending]   = useState<Message[]>([]);
   const [input,     setInput]     = useState('');
   const [loading,   setLoading]   = useState(false);
   const [model,     setModel]     = useState<AIModel>('opencode');
+  const [rail,      setRail]      = useState<'tasks' | 'history'>('tasks');
+  // Roll up any finished day the moment the assistant is opened, so the
+  // summary exists before anyone goes looking for it.
+  useLazySummarise(venture.name);
   const bottomRef   = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
   const briefing    = useQuery(api.pipeline.ventureBriefing, { venture: venture.name });
+
+  // Persisted turns, plus whatever is still streaming.
+  const messages: Message[] = [
+    ...(stored ?? []).map(m => ({ role: m.role, content: m.content })),
+    ...pending,
+  ];
   const tasks       = TASKS.filter(t => t.project === venture.name);
   const inProgress  = tasks.filter(t => t.status === 'in-progress');
   const todo        = tasks.filter(t => t.status === 'todo');
   const done        = tasks.filter(t => t.status === 'done');
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
-  useEffect(() => { setMessages([]); setInput(''); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
+  useEffect(() => { setPending([]); setInput(''); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
 
   async function send() {
     const text = input.trim();
     if (!text || loading) return;
     const newMessages: Message[] = [...messages, { role: 'user', content: text }];
-    setMessages(newMessages); setInput(''); setLoading(true);
+    // Show the turn immediately, persist it in the background — a failed write
+    // should not swallow what was typed.
+    setPending([{ role: 'user', content: text }]);
+    setInput(''); setLoading(true);
+    void append({ venture: venture.name, role: 'user', content: text });
     try {
       const res = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -133,15 +153,21 @@ ${tasksSection(tasks)}`,
       });
       if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let reply = '';
-      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setPending(prev => [...prev, { role: 'assistant', content: '' }]);
       while (true) {
         const { value, done: d } = await reader.read();
         if (d) break;
         reply += decoder.decode(value, { stream: true });
-        setMessages(prev => { const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply }; return u; });
+        setPending(prev => { const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply }; return u; });
+      }
+      // Persist the completed reply, then drop the local copy — the Convex
+      // query re-renders it, so clearing early would blank the thread.
+      if (reply.trim()) {
+        await append({ venture: venture.name, role: 'assistant', content: reply });
+        setPending([]);
       }
     } catch (e: any) {
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${e.message}` }]);
+      setPending(prev => [...prev, { role: 'assistant', content: `Error: ${e.message}` }]);
     } finally { setLoading(false); inputRef.current?.focus(); }
   }
 
@@ -227,19 +253,37 @@ ${tasksSection(tasks)}`,
         </div>
       </div>
 
-      {/* ── Tasks panel ─────────────────────────────────────── */}
+      {/* ── Right rail: Tasks | History ──────────────────────── */}
       <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflowY: 'auto', scrollbarWidth: 'none' }}>
-        <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--card-border)', flexShrink: 0, position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1 }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: venture.color, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-            Tasks — {tasks.length} total
-          </div>
-          <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem' }}>
-            {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: 'var(--muted)' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
-              <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: sc(s.color) }}>{s.count} {s.label}</span>
+        <div style={{ flexShrink: 0, position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1, borderBottom: '1px solid var(--card-border)' }}>
+          <div style={{ display: 'flex' }}>
+            {([['tasks', `Tasks (${tasks.length})`], ['history', 'History']] as const).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setRail(key)}
+                style={{
+                  flex: 1, padding: '0.7rem 0.5rem', background: 'none', cursor: 'pointer',
+                  border: 'none', borderBottom: `2px solid ${rail === key ? venture.color : 'transparent'}`,
+                  fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: rail === key ? 'var(--off-white)' : 'var(--muted)',
+                  transition: 'all 0.15s',
+                }}
+              >{label}</button>
             ))}
           </div>
+          {rail === 'tasks' && (
+            <div style={{ display: 'flex', gap: '0.6rem', padding: '0 1rem 0.6rem' }}>
+              {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: 'var(--muted)' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
+                <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: sc(s.color) }}>{s.count} {s.label}</span>
+              ))}
+            </div>
+          )}
         </div>
 
+        {rail === 'history' && <ChatHistory venture={venture.name} accent={venture.color} />}
+
+        {rail === 'tasks' && (
         <div style={{ flex: 1, padding: '0.5rem 0' }}>
           {/* In progress first */}
           {[...inProgress, ...todo, ...done].map(task => {
@@ -263,6 +307,7 @@ ${tasksSection(tasks)}`,
             <div style={{ padding: '1.5rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', textAlign: 'center' }}>No tasks yet.</div>
           )}
         </div>
+        )}
       </div>
     </div>
   );
