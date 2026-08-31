@@ -34,13 +34,13 @@ export const BUDGET: BudgetLine[] = [
   { venture: 'HubCV',    category: 'AI Infrastructure',monthlyBudget: 400,   spentToDate: 0,      currency: 'USD', note: 'LLM API costs for matching engine — OpenAI / Anthropic',   status: 'not-started' },
   { venture: 'HubCV',    category: 'Verifier Network', monthlyBudget: 1000,  spentToDate: 0,      currency: 'USD', note: 'Pay-per-assessment for human skill verifiers',              status: 'not-started' },
 
-  // Cuestay
-  { venture: 'Cuestay',  category: 'Product Dev',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: 'In-house — no external dev cost yet',                      status: 'on-track' },
-  { venture: 'Cuestay',  category: 'Hardware (MOQ)',   monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: '$200K–400K one-time MOQ — budgeted at manufacturing sign',  status: 'not-started' },
-
   // Dextrip
   { venture: 'Dextrip',  category: 'Infrastructure',  monthlyBudget: 200,    spentToDate: 180,    currency: 'USD', note: 'Exchange API costs, bot hosting, strategy engine compute',  status: 'on-track' },
   { venture: 'Dextrip',  category: 'Marketing',       monthlyBudget: 500,    spentToDate: 0,      currency: 'USD', note: 'Creator acquisition and public beta launch campaign',       status: 'not-started' },
+
+  // Llife
+  { venture: 'Llife',  category: 'Product Dev',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: 'In-house — no external dev cost yet',                      status: 'on-track' },
+  { venture: 'Llife',  category: 'Integrations',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: '$120K build — HubCV, Dextrip, Franchiseen and AA connectors', status: 'not-started' },
 ];
 
 // ─── INVESTORS ────────────────────────────────────────────────────────────────
@@ -136,7 +136,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
   },
   {
     id: 'R6',
-    venture: 'Cuestay',
+    venture: 'Llife',
     roundName: 'Hardware Pre-Seed',
     type: 'equity',
     targetAmount: '$200K – $400K',
@@ -144,7 +144,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
     status: 'planning',
     structure: 'Pre-seed to fund hardware MOQ, firmware development, and 10-home pilot programme. Property developer pre-installation deal could replace or reduce equity needed.',
     keyTerms: 'SAFE — $2M cap, 20% discount. Hardware-first investors preferred for operational expertise.',
-    leadInvestor: 'Seeking — property tech or IoT-focused angel',
+    leadInvestor: 'Seeking — consumer AI or personal-finance angel',
     targetClose: 'Q3 2026 — or when hardware partner is signed',
     notes: 'Property developer anchor deal (pre-installation for new builds) is the alternative to equity — explore both simultaneously.',
   },
@@ -170,7 +170,7 @@ export const SHARES: ShareEntry[] = [
   { entity: 'Franchiseen (Project)',    shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
   { entity: 'Dextrip (Project)',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
   { entity: 'HubCV (Project)',          shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
-  { entity: 'Cuestay (Project)',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Hardware pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
+  { entity: 'Llife (Project)',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
 ];
 
 // ─── WALLETS ─────────────────────────────────────────────────────────────────
@@ -264,7 +264,7 @@ export interface Payee {
 
 export const PAYEES: Payee[] = [
   { name: 'VPS Provider (Server)',        type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$120',      currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: '64.227.160.224 — 2C/8G/160G CentOS 9 server hosting all platforms.' },
-  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'codelude.com, roborns.com, franchiseen.com, hubcv.com, cuestay.com, dextrip.com.' },
+  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'codelude.com, roborns.com, franchiseen.com, hubcv.com, llife.ai, dextrip.com.' },
   { name: 'AI API (Anthropic/OpenAI)',   type: 'SaaS',           ventures: ['HubCV', 'Codelude'],                    amount: '$50–400',    currency: 'USD', frequency: 'variable', status: 'pending', category: 'AI Infrastructure', notes: 'LLM API usage for HubCV matching engine and internal tools. Cost scales with usage.' },
   { name: 'Thermal Engineering Firm',    type: 'Contractor',     ventures: ['Roborns'],                              amount: '$5,000–10K', currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Engineering', notes: 'Feasibility study and technical validation of closed-loop heat exchange system.' },
   { name: 'Dubai Legal Counsel',         type: 'Legal',          ventures: ['Codelude', 'Roborns'],                  amount: '$1,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'HoldCo incorporation, token structure, and ongoing compliance. DIFC-registered firm.' },
@@ -272,7 +272,7 @@ export const PAYEES: Payee[] = [
   { name: 'KYC / AML Provider',         type: 'SaaS',           ventures: ['Franchiseen'],                          amount: '$200–500',   currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Compliance', notes: 'Per-verification pricing model. Cost scales with investor onboarding volume.' },
   { name: 'Stripe / Payment Processor', type: 'SaaS',           ventures: ['Franchiseen', 'Dextrip'],               amount: '2.9% + $0.30',currency:'USD', frequency: 'variable', status: 'pending', category: 'Payments', notes: 'Per-transaction fee. Apply to Stripe after business entity registration.' },
   { name: 'Binance API (VIP tier)',      type: 'Infrastructure', ventures: ['Dextrip'],                              amount: 'Volume-based',currency:'USD', frequency: 'variable', status: 'active',  category: 'Infrastructure', notes: 'Exchange API access. VIP tier needed for higher rate limits at public beta scale.' },
-  { name: 'Hardware ODM Manufacturer',  type: 'Supplier',       ventures: ['Cuestay'],                              amount: '$200K–400K', currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Manufacturing', notes: 'MOQ for Cuestay Hub production run. One-time capex — triggers at hardware partner sign.' },
+  { name: 'LLM Inference (Llife)',      type: 'Supplier',       ventures: ['Llife'],                              amount: '$2K/month',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Technology',    notes: 'Per-user assistant reasoning — daily summaries, nudges and domain reviews. Scales with active users.' },
   { name: 'Human Skill Verifiers',      type: 'Contractor',     ventures: ['HubCV'],                                amount: '$20–50/assess',currency:'USD', frequency: 'variable', status: 'pending', category: 'Operations', notes: 'Pay-per-assessment model for domain expert verifiers. Cost scales with profile volume.' },
   { name: 'Smart Contract Audit',       type: 'Professional',   ventures: ['Roborns', 'Codelude'],                  amount: '$20K–50K',   currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Legal', notes: 'Required before token issuance. Budget for Roborns token smart contract security audit.' },
 ];

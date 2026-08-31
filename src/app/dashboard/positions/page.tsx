@@ -11,7 +11,7 @@ const STATUS_STYLES: Record<string, { color: string; label: string }> = {
 const PRIORITY_COLOR: Record<string, string> = { critical: '#ff8080', high: '#FAC775', medium: '#7a7870' };
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 const TYPES = ['all', 'Full-time', 'Contract', 'Advisory'];
 

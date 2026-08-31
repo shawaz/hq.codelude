@@ -1,52 +1,58 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
+import MemberForm, { type MemberDraft } from '@/components/MemberForm';
+import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { ALL_SCOPES, isUnrestricted, type Grant } from '@/lib/nav';
+
+/** A row from team.getTeam — a real user, or an invite not yet redeemed. */
+interface Member {
+  _id: string;
+  pending: boolean;
+  name: string;
+  email: string;
+  image?: string;
+  role: string;
+  title?: string;
+  access?: Grant[];
+  ventureRoles: { venture: string; role: string }[];
+}
+
+/** Members holding at least one grant on this venture. */
+function membersOf(team: Member[] | undefined, venture: string): Member[] {
+  return (team ?? []).filter(m =>
+    isUnrestricted(m) || (m.access ?? []).some(g => g.venture === venture && g.pages.length > 0),
+  );
+}
+
+function roleLabel(m: Member, venture: string): string {
+  return (
+    m.ventureRoles.find(r => r.venture === venture)?.role ||
+    m.title ||
+    (m.role === 'admin' ? 'Admin' : 'Member')
+  );
+}
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
-
-const VENTURES = [
-  { name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure' },
-  { name: 'Franchiseen', color: '#7F77DD', sector: 'Franchise Finance OS' },
-  { name: 'HubCV',       color: '#FAC775', sector: 'AI Career Intelligence' },
-  { name: 'Cuestay',     color: '#85B7EB', sector: 'Home AI Automation' },
-  { name: 'Dextrip',     color: '#F0997B', sector: 'Decentralised Trading' },
-];
-
-interface Human {
-  name: string; role: string; type: 'founder' | 'hire' | 'open';
-  email?: string; location?: string; note?: string;
-}
 
 interface Agent {
   name: string; emoji: string; color: string; type: string;
   model: string; tf: string[]; role: string; tools: string[];
 }
 
-const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles: string[] }> = {
+const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
   Roborns: {
-    humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Overseeing site survey, engineering partner search, and seed round preparation.' },
-      { name: 'Thermal Engineer', role: 'Coastal Heat Exchange Lead', type: 'open', note: 'Critical hire — must have coastal industrial heat exchange and desalination experience. Contract role for Phase 1 feasibility.' },
-      { name: 'Government Liaison', role: 'Permits & Compliance', type: 'open', note: 'Karnataka coastal authority, MESCOM grid connection, CRZ clearance pathway.' },
-    ],
     agents: [],
     openRoles: ['Thermal Engineer', 'Government Liaison', 'Site Survey Coordinator'],
   },
   Franchiseen: {
-    humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Leading platform development, franchise brand acquisition, and investor compliance structure.' },
-      { name: 'Franchise Partnership Manager', role: 'Brand Acquisition', type: 'open', note: 'Owns franchise brand signing. Target: 5+ brands in first 6 months. B2B sales, franchise industry knowledge required.' },
-      { name: 'Investment Legal Counsel', role: 'SEBI / Platform Compliance', type: 'open', note: 'External counsel — investment platform regulatory pathway, KYC/AML, investor agreements.' },
-    ],
     agents: [],
     openRoles: ['Franchise Partnership Manager', 'Investment Legal Counsel', 'KYC Integration Engineer'],
   },
   HubCV: {
-    humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Building the matching engine and recruiter onboarding pipeline. Owns first 5 design partner relationships.' },
-      { name: 'AI / ML Engineer', role: 'Matching Engine', type: 'open', note: 'Owns the AI candidate matching core — Python, LLM integration, vector databases, NLP. Remote.' },
-      { name: 'Skill Verifiers', role: 'Human Assessment Network', type: 'open', note: 'Domain experts (engineering, finance, design) — paid per verification. Freelance / contract.' },
-    ],
     agents: [
       {
         name: 'HubCV Matcher', emoji: '🔍', color: '#FAC775',
@@ -58,28 +64,19 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
     ],
     openRoles: ['AI/ML Engineer', 'Skill Verifiers (×20)', 'Recruiter Success Manager'],
   },
-  Cuestay: {
-    humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Finalised protocol spec. Leading hardware partner negotiation and property developer channel development.' },
-      { name: 'Hardware Product Manager', role: 'Hub Device & Supply Chain', type: 'open', note: 'Owns ODM manufacturing partner relationship, Matter certification, MOQ management. IoT hardware experience required.' },
-      { name: 'Firmware Engineer', role: 'Matter Protocol & Hub OS', type: 'open', note: 'Builds the Cuestay Hub firmware — Matter 1.3+ integration, device management, on-device AI layer.' },
-    ],
+  Llife: {
     agents: [
       {
-        name: 'Cuestay Ambience', emoji: '🏠', color: '#85B7EB',
+        name: 'Llife Daily', emoji: '🗓️', color: '#85B7EB',
         type: 'Claude Agent', model: 'claude-3-5-haiku',
-        tf: ['realtime'],
-        role: 'Ambient home intelligence agent — learns household routines, anticipates needs, and coordinates device actions proactively. Runs on-device with cloud fallback.',
-        tools: ['routine_learning', 'device_control', 'environment_sensing', 'proactive_action'],
+        tf: ['daily'],
+        role: 'Personal life agent — reviews the day across Finances, Education, Earnings, Mind and Body, flags what slipped, and prepares tomorrow\u2019s time blocks.',
+        tools: ['domain_review', 'net_worth_rollup', 'streak_tracking', 'daily_briefing'],
       },
     ],
-    openRoles: ['Hardware Product Manager', 'Firmware Engineer', 'IoT QA Engineer'],
+    openRoles: ['Integrations Engineer', 'Product Engineer (Mobile)', 'Privacy & Compliance Lead'],
   },
   Dextrip: {
-    humans: [
-      { name: 'Shawaz', role: 'Founder — Venture Lead', type: 'founder', email: 'shawaz@codelude.com', location: 'Mangaluru, India', note: 'Owns strategy development, creator programme launch, and public beta go-to-market.' },
-      { name: 'Strategy Creator Programme', role: 'Community Lead', type: 'open', note: 'Recruits and onboards strategy creators to the marketplace. Target: 20 creators before public beta. Crypto-native community experience.' },
-    ],
     agents: [
       { name: 'Alpha', emoji: '🔴', color: '#ff8080', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Aggressive UP-biased trader. Strong in breakout and bullish continuation regimes.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
       { name: 'Sigma', emoji: '🔵', color: '#85B7EB', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Balanced risk manager. Reads regime before committing direction. Holds more than most.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
@@ -103,35 +100,88 @@ const VENTURE_DATA: Record<string, { humans: Human[]; agents: Agent[]; openRoles
 
 // ─── SUB-COMPONENTS ───────────────────────────────────────────────────────────
 
-function HumansSection({ venture }: { venture: string }) {
-  const { humans } = VENTURE_DATA[venture];
-  const color = VENTURES.find(v => v.name === venture)!.color;
+function HumansSection({
+  venture,
+  team,
+  canManage,
+  onEdit,
+}: {
+  venture: string;
+  team: Member[] | undefined;
+  canManage: boolean;
+  onEdit: (m: Member) => void;
+}) {
+  const revokeInvite = useMutation(api.team.revokeInvite);
+  const color = ALL_SCOPES.find(v => v.name === venture)!.color;
+  const people = membersOf(team, venture);
+  const { openRoles } = VENTURE_DATA[venture];
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-      {humans.map(h => (
-        <div key={h.name} style={{
-          background: 'var(--card-bg)', border: '1px solid var(--card-border)',
-          borderTop: `2px solid ${h.type === 'founder' ? color : h.type === 'open' ? 'var(--card-border)' : color}`,
-          padding: '1.5rem',
-          opacity: h.type === 'open' ? 0.75 : 1,
-        }}>
+      {people.map(m => (
+        <div
+          key={m._id}
+          onClick={canManage && !m.pending ? () => onEdit(m) : undefined}
+          style={{
+            background: 'var(--card-bg)', border: '1px solid var(--card-border)',
+            borderTop: `2px solid ${m.pending ? 'var(--card-border)' : color}`,
+            padding: '1.5rem',
+            opacity: m.pending ? 0.75 : 1,
+            cursor: canManage && !m.pending ? 'pointer' : 'default',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-            <div style={{ width: 36, height: 36, background: h.type === 'open' ? 'var(--card-border)' : color, color: h.type === 'open' ? 'var(--muted)' : 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.85rem', flexShrink: 0 }}>
-              {h.type === 'open' ? '+' : h.name[0]}
+            <div style={{ width: 36, height: 36, background: m.pending ? 'var(--card-border)' : color, color: m.pending ? 'var(--muted)' : 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.85rem', flexShrink: 0 }}>
+              {(m.name || m.email || '?')[0].toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.name}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: h.type === 'open' ? 'var(--muted)' : color, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{h.role}</div>
+              <div style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || m.email}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: m.pending ? 'var(--muted)' : color, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{roleLabel(m, venture)}</div>
             </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${h.type === 'founder' ? 'rgba(93,202,165,0.3)' : 'var(--card-border)'}`, color: h.type === 'founder' ? '#5DCAA5' : 'var(--muted)', flexShrink: 0 }}>
-              {h.type === 'founder' ? 'Active' : 'Hiring'}
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${m.pending ? 'var(--card-border)' : 'rgba(93,202,165,0.3)'}`, color: m.pending ? 'var(--muted)' : '#5DCAA5', flexShrink: 0 }}>
+              {m.pending ? 'Invited' : 'Active'}
             </span>
           </div>
-          {h.email && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>{h.email}</div>}
-          {h.location && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>{h.location}</div>}
-          {h.note && <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>{h.note}</p>}
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>{m.email}</div>
+          {m.pending && (
+            <>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
+                Access applies the first time they sign in with this Google account.
+              </p>
+              {canManage && (
+                <button
+                  onClick={() => revokeInvite({ inviteId: m._id as Id<'invites'> })}
+                  style={{ marginTop: '0.6rem', padding: '0.2rem 0.55rem', background: 'transparent', border: '1px solid var(--card-border)', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                >
+                  Revoke invite
+                </button>
+              )}
+            </>
+          )}
         </div>
       ))}
+
+      {/* Open roles — job reqs, not people */}
+      {openRoles.map(r => (
+        <div key={r} style={{
+          background: 'var(--card-bg)', border: '1px dashed var(--card-border)',
+          padding: '1.5rem', opacity: 0.6,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ width: 36, height: 36, background: 'var(--card-border)', color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, flexShrink: 0 }}>+</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{r}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Open role</div>
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {people.length === 0 && openRoles.length === 0 && (
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>
+          Nobody has access to {venture} yet.
+        </div>
+      )}
     </div>
   );
 }
@@ -169,12 +219,12 @@ function AgentsSection({ venture }: { venture: string }) {
   );
 }
 
-function OrgSection({ venture }: { venture: string }) {
-  const { humans, agents, openRoles } = VENTURE_DATA[venture];
-  const color = VENTURES.find(v => v.name === venture)!.color;
-  const sector = VENTURES.find(v => v.name === venture)!.sector;
-  const activeHumans = humans.filter(h => h.type === 'founder' || h.type === 'hire');
-  const openHumans   = humans.filter(h => h.type === 'open');
+function OrgSection({ venture, team }: { venture: string; team: Member[] | undefined }) {
+  const { agents, openRoles } = VENTURE_DATA[venture];
+  const scope  = ALL_SCOPES.find(v => v.name === venture)!;
+  const color  = scope.color;
+  const sector = scope.sector;
+  const activeHumans = membersOf(team, venture).filter(m => !m.pending);
 
   return (
     <div style={{ maxWidth: 600 }}>
@@ -194,11 +244,11 @@ function OrgSection({ venture }: { venture: string }) {
             <div style={{ height: 1, background: 'var(--card-border)', width: '40%' }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: 0 }}>
-            {activeHumans.map(h => (
-              <div key={h.name} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.5rem', textAlign: 'center', flex: 1 }}>
-                <div style={{ width: 30, height: 30, background: color, color: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, margin: '0 auto 0.3rem' }}>{h.name[0]}</div>
-                <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{h.name}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)' }}>{h.role.split(' — ')[1] || h.role}</div>
+            {activeHumans.map(m => (
+              <div key={m._id} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.5rem', textAlign: 'center', flex: 1 }}>
+                <div style={{ width: 30, height: 30, background: color, color: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, margin: '0 auto 0.3rem' }}>{(m.name || m.email || '?')[0].toUpperCase()}</div>
+                <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{m.name || m.email}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)' }}>{roleLabel(m, venture)}</div>
               </div>
             ))}
           </div>
@@ -219,15 +269,15 @@ function OrgSection({ venture }: { venture: string }) {
       )}
 
       {/* Open roles */}
-      {openHumans.length > 0 && (
+      {openRoles.length > 0 && (
         <>
           <div style={{ display: 'flex', justifyContent: 'center' }}><div style={{ width: 1, height: 20, background: 'var(--card-border)' }} /></div>
           <div style={{ background: 'var(--card-bg)', border: '1px dashed var(--card-border)', padding: '1rem' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Open roles ({openHumans.length})</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Open roles ({openRoles.length})</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-              {openHumans.map(h => (
-                <div key={h.name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--accent)' }}>+</span>{h.role}
+              {openRoles.map(r => (
+                <div key={r} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ color: 'var(--accent)' }}>+</span>{r}
                 </div>
               ))}
             </div>
@@ -249,26 +299,84 @@ const TABS: { key: Tab; label: string }[] = [
 ];
 
 export default function TeamPage() {
+  const { scopes, loading } = usePageScopes('users');
+  const me   = useQuery(api.team.getCurrentUser);
+  const team = useQuery(api.team.getTeam) as Member[] | undefined;
+
   const [vi,  setVi]  = useState(0);
   const [tab, setTab] = useState<Tab>('humans');
-  const venture = VENTURES[vi];
+  const [form, setForm] = useState<{ initial?: MemberDraft; venture: string } | null>(null);
+
+  // Only ventures that carry static agent/open-role content can be rendered here.
+  const ventures = scopes.filter(v => VENTURE_DATA[v.name]);
+  const index    = clampIndex(vi, ventures.length);
+  const venture  = ventures[index];
+  const canManage = me?.role === 'admin';
+
+  if (loading) return null;
+  if (!venture) {
+    return (
+      <div>
+        <h1 className="page-title">Team</h1>
+        <p className="page-sub">Humans, AI agents, and org chart — per venture.</p>
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>
+          You do not have access to any ventures on this page.
+        </div>
+      </div>
+    );
+  }
+
   const data    = VENTURE_DATA[venture.name];
+  const people  = membersOf(team, venture.name);
+  const active  = people.filter(m => !m.pending).length;
+  const invited = people.filter(m => m.pending).length;
+
+  function openAdd() {
+    setForm({ venture: venture.name });
+  }
+
+  function openEdit(m: Member) {
+    setForm({
+      venture: venture.name,
+      initial: {
+        userId: m._id,
+        pending: m.pending,
+        name: m.name,
+        email: m.email,
+        title: m.title,
+        role: m.role === 'admin' ? 'admin' : 'member',
+        access: m.access ?? [],
+        ventureRoles: m.ventureRoles,
+      },
+    });
+  }
 
   return (
     <div>
-      <h1 className="page-title">Team</h1>
-      <p className="page-sub">Humans, AI agents, and org chart — per venture.</p>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+        <div>
+          <h1 className="page-title">Team</h1>
+          <p className="page-sub">Humans, AI agents, and org chart — per venture.</p>
+        </div>
+        {canManage && (
+          <button onClick={openAdd} style={{
+            padding: '0.5rem 1.1rem', background: 'var(--accent)', border: '1px solid var(--accent)',
+            color: 'var(--black)', cursor: 'pointer', fontWeight: 700, flexShrink: 0,
+            fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+          }}>+ Add team member</button>
+        )}
+      </div>
 
       {/* Venture selector */}
       <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {VENTURES.map((v, i) => (
+        {ventures.map((v, i) => (
           <button key={v.name} onClick={() => { setVi(i); setTab('humans'); }} style={{
             flex: 1, padding: '0.8rem 0.5rem',
-            background: vi === i ? v.color : 'var(--card-bg)',
+            background: index === i ? v.color : 'var(--card-bg)',
             border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: vi === i ? 'var(--black)' : 'var(--muted)',
-            fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
+            color: index === i ? 'var(--black)' : 'var(--muted)',
+            fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
           }}>{v.name}</button>
         ))}
       </div>
@@ -279,7 +387,9 @@ export default function TeamPage() {
         <div style={{ fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.01em', display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {venture.name}
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', fontWeight: 400, letterSpacing: '0.1em' }}>
-            {data.humans.filter(h => h.type !== 'open').length} human{data.humans.filter(h => h.type !== 'open').length !== 1 ? 's' : ''} · {data.agents.length} agent{data.agents.length !== 1 ? 's' : ''} · {data.humans.filter(h => h.type === 'open').length} open role{data.humans.filter(h => h.type === 'open').length !== 1 ? 's' : ''}
+            {active} human{active !== 1 ? 's' : ''}
+            {invited > 0 && ` · ${invited} invited`}
+            {' '}· {data.agents.length} agent{data.agents.length !== 1 ? 's' : ''} · {data.openRoles.length} open role{data.openRoles.length !== 1 ? 's' : ''}
           </span>
         </div>
       </div>
@@ -298,9 +408,26 @@ export default function TeamPage() {
         ))}
       </div>
 
-      {tab === 'humans' && <HumansSection venture={venture.name} />}
+      {tab === 'humans' && (
+        <HumansSection venture={venture.name} team={team} canManage={canManage} onEdit={openEdit} />
+      )}
       {tab === 'agents' && <AgentsSection venture={venture.name} />}
-      {tab === 'org'    && <OrgSection    venture={venture.name} />}
+      {tab === 'org'    && <OrgSection    venture={venture.name} team={team} />}
+
+      {canManage && tab === 'humans' && (
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', marginTop: '1.5rem', lineHeight: 1.7 }}>
+          Click a member to edit their page access. Access is granted per venture and per page —
+          everything is off by default.
+        </p>
+      )}
+
+      {form && (
+        <MemberForm
+          initial={form.initial}
+          defaultVenture={form.venture}
+          onClose={() => setForm(null)}
+        />
+      )}
     </div>
   );
 }

@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { FILES, type FileCategory, type FileStatus } from '@/lib/workspace';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
 const CATEGORIES: (FileCategory | 'all')[] = ['all', 'Financial Model', 'Pitch Deck', 'Legal', 'Brand', 'Technical', 'Research', 'Internal'];
-const VENTURES = ['All', 'Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
 const CAT_COLORS: Record<FileCategory, string> = {
@@ -34,10 +34,13 @@ const FORMAT_COLORS: Record<string, string> = {
 };
 
 export default function FilesPage() {
+  const { names: allowed } = usePageScopes('files');
+  const VENTURES = ['All', ...allowed];
   const [category, setCategory] = useState<FileCategory | 'all'>('all');
   const [venture,  setVenture]  = useState('All');
 
   const filtered = FILES.filter(f =>
+    allowed.includes(f.venture) &&
     (category === 'all' || f.category === category) &&
     (venture  === 'All' || f.venture  === venture)
   );

@@ -1,0 +1,252 @@
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+import { authTables } from "@convex-dev/auth/server";
+
+const schema = defineSchema({
+  ...authTables,
+
+  users: defineTable({
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
+    email: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phone: v.optional(v.string()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    role: v.optional(v.union(v.literal("admin"), v.literal("member"))),
+    title: v.optional(v.string()),
+
+    // Per-(venture, page) permission matrix. See src/convex/access.ts.
+    //   undefined ⇒ unrestricted (admins, and pre-existing docs)
+    //   []        ⇒ signed in, granted nothing
+    // The model fails closed: new members default to [].
+    access: v.optional(
+      v.array(
+        v.object({
+          venture: v.string(),        // scope name, must match ALL_SCOPE_NAMES
+          pages: v.array(v.string()), // page slugs, must match ALL_PAGE_SLUGS
+        }),
+      ),
+    ),
+    // Display-only label per venture, e.g. { venture: "Dextrip", role: "Co-founder" }.
+    // Carries no permissions — `access` is the only thing that grants anything.
+    ventureRoles: v.optional(
+      v.array(v.object({ venture: v.string(), role: v.string() })),
+    ),
+  })
+    .index("email", ["email"])
+    .index("phone", ["phone"]),
+
+  // Pending team members. A person cannot exist in `users` until they have
+  // signed in with Google, so an admin configures them here first; auth.ts
+  // applies and deletes the invite on their first sign-in.
+  invites: defineTable({
+    email: v.string(),   // lowercased on write — the join key against users.email
+    name: v.optional(v.string()),
+    title: v.optional(v.string()),
+    role: v.union(v.literal("admin"), v.literal("member")),
+    access: v.array(
+      v.object({ venture: v.string(), pages: v.array(v.string()) }),
+    ),
+    ventureRoles: v.optional(
+      v.array(v.object({ venture: v.string(), role: v.string() })),
+    ),
+    invitedBy: v.id("users"),
+    createdAt: v.number(),
+  }).index("by_email", ["email"]),
+
+  // ─── Writable app data ──────────────────────────────────────────────
+
+  site_projects: defineTable({
+    id: v.string(),
+    ventureId: v.string(),
+    name: v.string(),
+    location: v.string(),
+    status: v.union(
+      v.literal("planning"),
+      v.literal("active"),
+      v.literal("paused"),
+      v.literal("completed"),
+    ),
+    source: v.union(v.literal("lead"), v.literal("manual")),
+    leadId: v.optional(v.string()),
+    config: v.optional(v.string()),
+    boundary: v.optional(v.any()),
+    center: v.optional(v.array(v.number())),
+    areaHectares: v.optional(v.number()),
+    budget: v.array(
+      v.object({
+        id: v.string(),
+        label: v.string(),
+        category: v.string(),
+        amount: v.number(),
+        currency: v.string(),
+        notes: v.optional(v.string()),
+      }),
+    ),
+    team: v.array(
+      v.object({
+        id: v.string(),
+        name: v.string(),
+        role: v.string(),
+        contact: v.optional(v.string()),
+      }),
+    ),
+    tasks: v.array(
+      v.object({
+        id: v.string(),
+        title: v.string(),
+        status: v.string(),
+        assignee: v.optional(v.string()),
+        dueDate: v.optional(v.string()),
+      }),
+    ),
+    activities: v.array(
+      v.object({
+        id: v.string(),
+        title: v.string(),
+        notes: v.optional(v.string()),
+        date: v.string(),
+        status: v.union(v.literal("planned"), v.literal("in-progress"), v.literal("done")),
+      }),
+    ),
+    createdAt: v.string(),
+  }),
+
+  task_extras: defineTable({
+    taskId: v.string(),
+    notes: v.array(
+      v.object({ id: v.string(), text: v.string(), createdAt: v.string() }),
+    ),
+    files: v.array(
+      v.object({
+        id: v.string(),
+        name: v.string(),
+        url: v.string(),
+        size: v.number(),
+        type: v.string(),
+        uploadedAt: v.string(),
+      }),
+    ),
+  }).index("by_taskId", ["taskId"]),
+
+  leads: defineTable({
+    id: v.string(),
+    name: v.string(),
+    company: v.string(),
+    type: v.string(),
+    venture: v.string(),
+    status: v.string(),
+    source: v.string(),
+    value: v.string(),
+    nextStep: v.string(),
+    notes: v.optional(v.string()),
+    config: v.optional(v.string()),
+    boundary: v.optional(v.any()),
+    center: v.optional(v.array(v.number())),
+    areaHectares: v.optional(v.number()),
+  }),
+
+  // ─── QR appointment booking ─────────────────────────────────────────
+
+  qr_codes: defineTable({
+    label: v.string(),
+    url: v.string(),
+    scans: v.number(),
+    bookings: v.number(),
+    createdAt: v.number(),
+  }),
+
+  appointments: defineTable({
+    qrCodeId: v.id("qr_codes"),
+    name: v.string(),
+    email: v.string(),
+    phone: v.optional(v.string()),
+    company: v.optional(v.string()),
+    date: v.string(),
+    time: v.string(),
+    notes: v.optional(v.string()),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("cancelled"),
+    ),
+    createdAt: v.number(),
+  }).index("by_qrCodeId", ["qrCodeId"]),
+
+  // ─── Sales pipeline ─────────────────────────────────────────────────
+  // One table, four stages: prospect → lead → deal → client. Converting a
+  // record patches `stage` rather than copying it between tables, so history,
+  // contact details and notes travel with it down the funnel.
+  //
+  // Sized for bulk datasets (UDISE+ schools, AISHE colleges, MCA registries).
+  // Never collect() this table — always paginate or use an index.
+
+  pipeline_orgs: defineTable({
+    stage: v.string(),          // "prospect" | "lead" | "deal" | "client"
+    venture: v.string(),        // "HubCV", "Roborns", ...
+    segment: v.string(),        // "school" | "compute" | "investor" | ...
+    name: v.string(),
+    // Official registry code (UDISE / AISHE / CIN). Used to dedupe on import.
+    code: v.optional(v.string()),
+    category: v.optional(v.string()),
+    state: v.optional(v.string()),
+    district: v.optional(v.string()),
+    city: v.optional(v.string()),
+    contactName: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    website: v.optional(v.string()),
+    size: v.optional(v.number()),      // students / headcount
+    status: v.string(),                // stage-specific, see STAGES in pipeline.ts
+    priority: v.optional(v.string()),  // "high" | "medium" | "low"
+    source: v.optional(v.string()),    // "manual" | "import" | "sample" | form/social channel
+    notes: v.optional(v.string()),
+
+    // ── Lead stage ──
+    interest: v.optional(v.string()),  // what the inbound enquiry asked about
+    message: v.optional(v.string()),   // raw form/DM body
+
+    // ── Deal stage (calls & appointments) ──
+    value: v.optional(v.string()),     // "₹18 Cr", "$99/month"
+    meetingAt: v.optional(v.number()),  // scheduled call/appointment (epoch ms)
+    meetingNote: v.optional(v.string()),
+    closeDate: v.optional(v.string()),  // target close, e.g. "Q4 2026"
+
+    // ── Client stage ──
+    since: v.optional(v.string()),      // ISO date they converted
+
+    // ── Roborns site leads ──
+    // Carried from the site enquiry form so a lead can still be converted into
+    // a SiteProject with its drawn boundary intact.
+    config: v.optional(v.string()),
+    boundary: v.optional(v.any()),
+    center: v.optional(v.array(v.number())),
+    areaHectares: v.optional(v.number()),
+
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_stage_venture_segment", ["stage", "venture", "segment"])
+    .index("by_stage_venture_segment_status", ["stage", "venture", "segment", "status"])
+    .index("by_stage_venture_segment_state", ["stage", "venture", "segment", "state"])
+    .index("by_stage_meetingAt", ["stage", "meetingAt"])
+    .index("by_code", ["code"])
+    .searchIndex("search_name", {
+      searchField: "name",
+      filterFields: ["stage", "venture", "segment", "status", "state"],
+    }),
+
+  // Incrementally maintained counters. Convex has no cheap COUNT(*), and
+  // counting millions of docs per page render would blow the read limit, so
+  // every write to pipeline_orgs bumps the matching counter row here.
+  pipeline_stats: defineTable({
+    stage: v.string(),
+    venture: v.string(),
+    segment: v.string(),
+    status: v.string(),   // "*" holds the segment total across all statuses
+    count: v.number(),
+  }).index("by_key", ["stage", "venture", "segment", "status"]),
+});
+
+export default schema;

@@ -2,10 +2,11 @@
 
 import { useState, useMemo } from 'react';
 import { EVENTS, type EventType, type EventStatus } from '@/lib/workspace';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
 const STATUS_STYLES: Record<EventStatus, { color: string; label: string }> = {
@@ -22,7 +23,6 @@ const TYPE_COLORS: Record<EventType, string> = {
 };
 
 const TYPES: (EventType | 'all')[] = ['all', 'Meeting', 'Call', 'Site Visit', 'Legal', 'Milestone', 'Deadline', 'Launch', 'Travel'];
-const VENTURES = ['All', 'Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -43,6 +43,8 @@ function dateStr(year: number, month: number, day: number) {
 
 export default function EventsPage() {
   const now    = new Date();
+  const { names: allowed } = usePageScopes('events');
+  const VENTURES = ['All', ...allowed];
   const [view,    setView]    = useState<'list' | 'calendar'>('calendar');
   const [venture, setVenture] = useState('All');
   const [type,    setType]    = useState<EventType | 'all'>('all');
@@ -55,11 +57,12 @@ export default function EventsPage() {
 
   const filtered = useMemo(() => EVENTS
     .filter(e =>
+      allowed.includes(e.venture) &&
       (venture === 'All' || e.venture === venture) &&
       (type === 'all'  || e.type    === type)
     )
     .sort((a, b) => a.date.localeCompare(b.date)),
-    [venture, type]
+    [allowed, venture, type]
   );
 
   // Build a date→events map for the calendar

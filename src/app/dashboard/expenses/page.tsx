@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { EXPENSES, type ExpenseStatus } from '@/lib/budget-data';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
 const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
   paid:       { color: '#5DCAA5', label: 'Paid'       },
@@ -12,23 +13,26 @@ const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
-const VENTURES  = ['All', 'Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 const STATUSES  = ['all', 'paid', 'pending', 'recurring', 'reimbursed'] as const;
 const CATS      = ['All', 'Infrastructure', 'Engineering', 'Legal', 'Domain', 'SaaS', 'AI Infrastructure'];
 
 export default function ExpensesPage() {
+  // 'All' means all ventures *this user can see*, never the whole company.
+  const { names: allowed } = usePageScopes('expenses');
+  const VENTURES = ['All', ...allowed];
   const [venture, setVenture] = useState('All');
   const [status,  setStatus]  = useState<'all' | ExpenseStatus>('all');
   const [cat,     setCat]     = useState('All');
 
   const filtered = useMemo(() => EXPENSES.filter(e =>
+    allowed.includes(e.venture) &&
     (venture === 'All' || e.venture === venture) &&
     (status  === 'all' || e.status  === status) &&
     (cat     === 'All' || e.category === cat)
-  ), [venture, status, cat]);
+  ), [allowed, venture, status, cat]);
 
   const paid      = EXPENSES.filter(e => e.status === 'paid').reduce((s, e) => s + e.amount, 0);
   const pending   = EXPENSES.filter(e => e.status === 'pending').reduce((s, e) => s + e.amount, 0);

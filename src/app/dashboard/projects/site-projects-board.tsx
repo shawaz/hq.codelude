@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { PROJECT_COLORS, type Project } from '@/lib/tasks';
 import type { SiteProject, SiteProjectStatus } from '@/lib/site-projects';
 import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
-const VENTURES: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
   planning:  { color: '#FAC775', label: 'Planning'  },
@@ -29,6 +29,10 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
+  // Only offer ventures this user can actually create a project under — the
+  // POST /api/projects handler rejects the rest anyway.
+  const { names: allowed } = usePageScopes('projects');
+  const VENTURES = allowed as Project[];
   const [ventureId, setVentureId] = useState<Project>('Roborns');
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState<SiteProjectStatus>('planning');

@@ -5,10 +5,10 @@ import SiteProjectsBoard from './site-projects-board';
 
 const PROJECTS: { name: Project; sector: string }[] = [
   { name: 'Roborns',     sector: 'Coastal AI Infrastructure' },
-  { name: 'Franchiseen', sector: 'Franchise Finance OS' },
-  { name: 'HubCV',       sector: 'AI Career Intelligence' },
-  { name: 'Cuestay',     sector: 'Home AI Automation' },
-  { name: 'Dextrip',     sector: 'Decentralised Trading Automation' },
+  { name: 'Franchiseen', sector: 'AI Business Assistant' },
+  { name: 'HubCV',       sector: 'AI Career Assistant' },
+  { name: 'Dextrip',     sector: 'AI Trading Assistant' },
+  { name: 'Llife',       sector: 'AI Life Assistant' },
 ];
 
 export default function ProjectsPage() {

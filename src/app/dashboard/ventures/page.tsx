@@ -1,4 +1,5 @@
-const VENTURES = [
+import { getUserScopeNames } from '@/lib/page-scopes-server';
+const ALL_VENTURE_CARDS = [
   {
     num: '01', name: 'Roborns', sector: 'Coastal AI Infrastructure', color: '#5DCAA5',
     url: 'roborns.com', holdco: 'Dubai, UAE', status: 'In Development',
@@ -6,26 +7,35 @@ const VENTURES = [
     milestones: ['Thermal engineering partner engaged', 'Site survey in progress', 'Phase 1 feasibility Q3 2026', 'Groundbreaking target Q4 2026'],
   },
   {
-    num: '02', name: 'Franchiseen', sector: 'Franchise Finance OS', color: '#7F77DD',
+    num: '02', name: 'Franchiseen', sector: 'AI Business Assistant', color: '#7F77DD',
     url: 'franchiseen.com', holdco: '—', status: 'Alpha',
     desc: 'Fractional ownership of franchise businesses with daily and monthly payout infrastructure. Platform handles entire ownership OS from onboarding to distribution.',
     milestones: ['Payout architecture finalized', 'First franchise partner onboarding', 'Alpha testing in progress', 'First payout cycle Q3 2026'],
   },
   {
-    num: '03', name: 'HubCV', sector: 'AI Career Intelligence', color: '#FAC775',
-    url: 'hubcv.com', holdco: '—', status: 'In Development',
+    num: '03', name: 'HubCV', sector: 'AI Career Assistant', color: '#FAC775',
+    url: 'hubcv.pro', holdco: '—', status: 'In Development',
     desc: 'Dynamic, AI-curated profiles that reflect real skills — verified by humans, enriched by AI. Connects professionals to upskilling pathways before the market prices them in.',
     milestones: ['Matching engine in development', 'Recruiter partnership outreach started', 'Beta target Q4 2026', 'Full launch 2027'],
   },
   {
-    num: '04', name: 'Cuestay', sector: 'Home AI Automation', color: '#85B7EB',
-    url: 'cuestay.com', holdco: '—', status: 'Planning',
-    desc: 'AI automation that learns routines, anticipates environments, and provides a personal assistant layer that acts before you ask. Home as a living system.',
-    milestones: ['Protocol spec complete', 'Hardware partner conversations started', 'Development begins Q4 2026', 'Launch 2027'],
+    num: '04', name: 'Dextrip', sector: 'AI Trading Assistant', color: '#F0997B',
+    url: 'dextrip.com', holdco: '—', status: 'Closed Beta',
+    desc: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies and let Dextrip execute across exchanges — your keys, your funds, automated.',
+    milestones: ['Strategy engine — closed beta live', 'Multi-exchange connector in build', 'Public beta Q3 2026', 'Strategy marketplace opens to creators'],
+  },
+  {
+    num: '05', name: 'Llife', sector: 'AI Life Assistant', color: '#85B7EB',
+    url: 'llife.ai', holdco: '—', status: 'Planning',
+    desc: 'An AI personal assistant for day-to-day life across five domains — Finances, Education, Earnings, Mind and Body — on a daily time-block board. Education is fed by the HubCV API, Earnings by the Dextrip (job, crypto, stocks) and Franchiseen (franchise) APIs, so the board arrives already populated.',
+    milestones: ['Five-domain model defined', 'HubCV Education API integration in build', 'Dextrip + Franchiseen Earnings integration Q4 2026', 'Private beta Q4 2026'],
   },
 ];
 
-export default function VenturesPage() {
+export default async function VenturesPage() {
+  const allowed = await getUserScopeNames();
+  const VENTURES = ALL_VENTURE_CARDS.filter(v => allowed.includes(v.name));
+
   return (
     <div>
       <div className="venture-cards" style={{ gap: 0 }}>

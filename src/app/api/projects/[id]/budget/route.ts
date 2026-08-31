@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiProject } from '@/lib/api-auth';
 import { addBudgetLine, removeBudgetLine } from '@/lib/site-projects';
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function POST(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const { label, category, amount, currency, notes } = await req.json();
   if (!label?.trim() || !category?.trim() || typeof amount !== 'number' || !currency?.trim()) {
     return NextResponse.json({ error: 'label, category, amount, currency required' }, { status: 400 });
@@ -16,6 +19,8 @@ export async function POST(req: NextRequest, { params }: Ctx) {
 
 export async function DELETE(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const lineId = req.nextUrl.searchParams.get('lineId');
   if (!lineId) return NextResponse.json({ error: 'lineId required' }, { status: 400 });
   removeBudgetLine(id, lineId);

@@ -1,5 +1,5 @@
 type Status = 'live' | 'stopped' | 'static' | 'building';
-type Kind   = 'Web' | 'Bot' | 'API' | 'Static';
+type Kind   = 'Web' | 'Bot' | 'API' | 'Static' | 'Mobile';
 
 interface Platform {
   name: string;
@@ -32,10 +32,10 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         domain: 'hq.codelude.com',
         port: 3005,
         pm2: 'hq-codelude',
-        stack: 'Next.js 16 · iron-session',
+        stack: 'Next.js 16 · Convex Auth (Google OAuth)',
         kind: 'Web',
         status: 'live',
-        note: 'Internal company dashboard with team login',
+        note: 'Internal company dashboard with Google sign-in',
       },
     ],
   },
@@ -49,7 +49,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         stack: 'Next.js · Crossmint · Solana / Jupiter · Convex',
         kind: 'Web',
         status: 'building',
-        note: 'Franchise Finance OS — fractional ownership platform. Code on server, deployment in progress.',
+        note: 'AI Business Assistant — fractional ownership platform. Code on server, deployment in progress.',
       },
     ],
   },
@@ -58,26 +58,50 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
     color: '#FAC775',
     platforms: [
       {
-        name: 'HubCV',
-        domain: 'hubcv.com',
-        stack: 'Next.js · NextAuth · Drizzle ORM · Anthropic SDK · PostgreSQL',
+        name: 'HubCV Web',
+        domain: 'hubcv.pro',
+        stack: 'Next.js 16 · React 19 · Convex · Convex Auth · Tailwind 4',
         kind: 'Web',
+        status: 'live',
+        note: 'AI Career Assistant — skill-verified profiles, hubs, rooms and feed. 121 routes across marketing, platform and hub surfaces. Deployed on Vercel.',
+      },
+      {
+        name: 'HubCV Backend',
+        domain: 'savory-marmot-392.convex.site',
+        stack: 'Convex · 72 tables · 70 function modules',
+        kind: 'API',
+        status: 'live',
+        note: 'Reactive backend — auth, feed, rooms, scoring, enrolment, billing. Dev deployment jovial-anaconda-656.',
+      },
+      {
+        name: 'HubCV Company',
+        domain: 'hubcv.pro/company',
+        stack: 'Next.js 16 · Convex — internal console',
+        kind: 'Web',
+        status: 'live',
+        note: 'HubCV\'s own internal ops console — 45 modules (hubs, leads, verifications, resumes, payroll, tickets).',
+      },
+      {
+        name: 'HubCV Mobile',
+        domain: 'pro.hubcv.app',
+        stack: 'Capacitor 8 · Android + iOS shells',
+        kind: 'Mobile',
         status: 'building',
-        note: 'AI Career Intelligence — dynamic verified profiles. Code on server, deployment in progress.',
+        note: 'Native wrappers with push notifications, haptics, network and preferences plugins. Android project scaffolded; not yet published to stores.',
       },
     ],
   },
   {
-    title: 'Cuestay',
+    title: 'Llife',
     color: '#85B7EB',
     platforms: [
       {
-        name: 'Cuestay',
-        domain: 'cuestay.com',
-        stack: 'Next.js · Matter Protocol · AI / IoT',
+        name: 'Llife',
+        domain: 'llife.ai',
+        stack: 'Next.js · Convex · LLM assistant · Ecosystem APIs',
         kind: 'Web',
         status: 'building',
-        note: 'Home AI Automation — ambient intelligence layer. Platform in development.',
+        note: 'AI Life Assistant — five-domain daily tracker (Finances, Education, Earnings, Mind, Body). Pulls from the HubCV, Dextrip and Franchiseen APIs. In development.',
       },
     ],
   },
@@ -214,6 +238,7 @@ const KIND_COLOR: Record<Kind, string> = {
   Bot:    '#F0997B',
   API:    '#c8f53a',
   Static: '#85B7EB',
+  Mobile: '#FAC775',
 };
 
 export default function PlatformPage() {

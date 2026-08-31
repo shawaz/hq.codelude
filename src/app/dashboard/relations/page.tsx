@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { VENTURES, VENTURE_RELATIONS, type RHealth } from '@/lib/mgmt-ventures';
+import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 
 const HEALTH_STYLES: Record<RHealth,{color:string;label:string}> = {
   strong:{color:'#5DCAA5',label:'Strong'},developing:{color:'#c8f53a',label:'Developing'},cold:{color:'#7a7870',label:'Cold'},target:{color:'#F0997B',label:'Target'},
@@ -10,8 +11,24 @@ const CAT_COLORS: Record<string,string> = {
 };
 
 export default function RelationsPage() {
+  const { names: allowed, loading } = usePageScopes('relations');
+  const ventures = VENTURES.filter(v => allowed.includes(v.name));
   const [vi, setVi] = useState(0);
-  const venture   = VENTURES[vi];
+  const index = clampIndex(vi, ventures.length);
+  const venture   = ventures[index];
+
+  // A member with no grant on this page has no venture to render.
+  if (loading) return null;
+  if (!venture) {
+    return (
+      <div>
+        <h1 className="page-title">Relations</h1>
+        <div style={{ background:'var(--card-bg)',border:'1px solid var(--card-border)',padding:'2rem',fontFamily:'var(--font-mono)',fontSize:'0.7rem',color:'var(--muted)' }}>
+          You do not have access to any ventures on this page.
+        </div>
+      </div>
+    );
+  }
   const relations = VENTURE_RELATIONS[venture.name] ?? [];
 
   return (
@@ -19,8 +36,8 @@ export default function RelationsPage() {
       <h1 className="page-title">Relations</h1>
       <p className="page-sub">Stakeholder relationships — investors, government, media, and customers per venture.</p>
       <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {VENTURES.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:vi===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:vi===i?'var(--black)':'var(--muted)',fontWeight:vi===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
+        {ventures.map((v,i) => (
+          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--black)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
         ))}
       </div>
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>

@@ -38,7 +38,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to add a new team member to HQ',
     venture: 'Codelude',
     category: 'Admin',
-    content: `1. Edit .env.local on the server: ssh centos@64.227.160.224\n2. nano ~/codelude/company/software/hq-codelude/.env.local\n3. Add new user to TEAM_USERS JSON array:\n   {"id":"2","name":"Name","email":"email@codelude.com","password":"initialPassword","role":"member","title":"Role Title"}\n4. Save the file\n5. Restart hq-codelude: pm2 restart hq-codelude\n6. Share the initial password with the new team member via secure channel\n7. Ask them to change password on first login (feature: coming soon)\n\nNote: Passwords are stored in plaintext in .env.local. For production, migrate to hashed passwords before team > 5.`,
+    content: `1. Add their email as a user in the Google Workspace codelude.com domain\n2. Ask them to visit hq.codelude.com → Continue with Google\n3. Sign-in is restricted to @codelude.com accounts (enforced by Convex Auth)\n4. They will appear in HQ → Team as a member\n5. The first person to sign in becomes admin and can assign roles from the Convex dashboard`,
   },
   {
     title: 'How to check server health',

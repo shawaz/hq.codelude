@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PAYROLL, type PayrollType, type PayrollStatus } from '@/lib/budget-data';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
 const STATUS_STYLES: Record<PayrollStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
@@ -18,16 +19,19 @@ const TYPE_COLORS: Record<PayrollType, string> = {
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
-const VENTURES = ['All', 'Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 
 export default function PayrollPage() {
+  const { names: allowed } = usePageScopes('payroll');
+  const VENTURES = ['All', ...allowed];
   const [venture, setVenture] = useState('All');
   const [status,  setStatus]  = useState<PayrollStatus | 'all'>('all');
 
   const filtered = PAYROLL.filter(p =>
+    // A payroll row spans ventures; showing it needs access to at least one.
+    p.ventures.some((v: string) => allowed.includes(v)) &&
     (venture === 'All' || p.ventures.includes(venture)) &&
     (status  === 'all' || p.status === status)
   );

@@ -32,7 +32,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Franchiseen', color: '#7F77DD', sector: 'Franchise Finance OS',
+    venture: 'Franchiseen', color: '#7F77DD', sector: 'AI Business Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Legal',         subcategory: 'Platform compliance',   planned: 2500, actual: 0,    ytdActual: 0,    note: 'SEBI pathway + investor agreements — pending engagement' },
@@ -44,7 +44,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'HubCV', color: '#FAC775', sector: 'AI Career Intelligence',
+    venture: 'HubCV', color: '#FAC775', sector: 'AI Career Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'AI Infrastructure', subcategory: 'Anthropic API',     planned: 400,  actual: 0,    ytdActual: 0,    note: 'Claude API for matching engine — starts at platform launch' },
@@ -55,17 +55,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Cuestay', color: '#85B7EB', sector: 'Home AI Automation',
-    currency: 'USD', period: 'May 2026',
-    lines: [
-      { category: 'Technology',    subcategory: 'Design tools (Figma)',   planned: 100,  actual: 0,    ytdActual: 0,    note: 'UI design and hardware CAD tooling' },
-      { category: 'Technology',    subcategory: 'AI inference',           planned: 200,  actual: 0,    ytdActual: 0,    note: 'Cloud AI inference — starts at pilot launch' },
-      { category: 'Infrastructure',subcategory: 'Server (shared)',        planned: 40,   actual: 40,   ytdActual: 200,  note: 'Shared VPS allocation' },
-      { category: 'Domain',        subcategory: 'cuestay.com',            planned: 2,    actual: 2,    ytdActual: 10,   note: 'Annual domain — monthly allocation' },
-    ],
-  },
-  {
-    venture: 'Dextrip', color: '#F0997B', sector: 'Decentralised Trading',
+    venture: 'Dextrip', color: '#F0997B', sector: 'AI Trading Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Infrastructure',subcategory: 'Binance API (VIP)',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'Exchange API — VIP tier for rate limits' },
@@ -73,6 +63,16 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
       { category: 'Infrastructure',subcategory: 'Server allocation',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'VPS shared allocation for all Dextrip apps' },
       { category: 'Legal',         subcategory: 'Terms of service',       planned: 0,    actual: 0,    ytdActual: 0,    note: 'Non-custodial ToS drafting — pending engagement' },
       { category: 'Domain',        subcategory: 'dextrip.com + subdomains',planned: 5,   actual: 5,    ytdActual: 25,   note: 'dextrip.com, bot, tv, spot, client subdomains' },
+    ],
+  },
+  {
+    venture: 'Llife', color: '#85B7EB', sector: 'AI Life Assistant',
+    currency: 'USD', period: 'May 2026',
+    lines: [
+      { category: 'Technology',    subcategory: 'Design tools (Figma)',   planned: 100,  actual: 0,    ytdActual: 0,    note: 'UI design and hardware CAD tooling' },
+      { category: 'Technology',    subcategory: 'AI inference',           planned: 200,  actual: 0,    ytdActual: 0,    note: 'Cloud AI inference — starts at pilot launch' },
+      { category: 'Infrastructure',subcategory: 'Server (shared)',        planned: 40,   actual: 40,   ytdActual: 200,  note: 'Shared VPS allocation' },
+      { category: 'Domain',        subcategory: 'llife.ai',            planned: 2,    actual: 2,    ytdActual: 10,   note: 'Annual domain — monthly allocation' },
     ],
   },
 ];
@@ -130,7 +130,7 @@ export interface PayrollEntry {
 export const PAYROLL: PayrollEntry[] = [
   {
     id: 'PAY-001', name: 'Shawaz', role: 'Founder & CEO', type: 'founder',
-    ventures: ['Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'],
+    ventures: ['Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Llife', 'Dextrip'],
     status: 'active', monthlyCost: 0, oneTimeCost: 0, currency: 'USD',
     startDate: '2025-01-01', equityNote: '100% HoldCo — fully vested',
     notes: 'Founder is not drawing a salary at this stage. Compensation via equity and future distributions.',
@@ -172,10 +172,10 @@ export const PAYROLL: PayrollEntry[] = [
   },
   {
     id: 'PAY-007', name: 'Hardware Product Manager (TBD)', role: 'Hub Device & Supply Chain', type: 'employee',
-    ventures: ['Cuestay'],
+    ventures: ['Llife'],
     status: 'open', monthlyCost: 6000, oneTimeCost: 0, currency: 'USD',
     startDate: 'Q4 2026', equityNote: 'ESOP — 0.75–1.25%',
-    notes: 'Owns ODM manufacturing partner, Matter certification, MOQ management. IoT hardware experience required.',
+    notes: 'Owns the HubCV, Dextrip, Franchiseen and Account Aggregator connectors that populate the five domains.',
   },
   {
     id: 'PAY-008', name: 'Dubai HoldCo Legal Counsel (TBD)', role: 'DIFC Incorporation & Token Structure', type: 'contractor',

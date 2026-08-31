@@ -2,105 +2,35 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { TASKS } from '@/lib/tasks';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 
-const VENTURES = [
+const ALL_VENTURE_CARDS = [
   {
     name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure',
     status: 'In Development', statusColor: '#5DCAA5',
     metrics: [{ k: 'Raise', v: '₹18.1 Cr' }, { k: 'Phase', v: 'Feasibility' }, { k: 'HoldCo', v: 'Dubai' }],
-    context: `You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 1-acre coastal site in Uchila Thalapady, Mangaluru, India.
-
-KEY FACTS:
-- Waste heat from AI compute drives MED seawater desalination (50K L/day pilot)
-- Brine byproduct feeds mineral extraction (salt, Mg, bromine)
-- Tokenised via Dubai HoldCo — token = revenue share, not equity
-- Phase 1 seed: ₹18.1 Cr (~$2.1M) for Buildings A (compute) + B (desalination) + thermal loop
-- Series A: ₹65–80 Cr for Building C (minerals) post pilot
-- Y5 revenue: ₹142 Cr at 80% EBITDA margin
-- Pre-money valuation: ₹60 Cr. Seed investor return target: 18–23×
-- Fundraising via India equity (CCDs — Compulsorily Convertible Debentures)
-- Needs: thermal engineering partner, site survey, govt permits (CRZ, MESCOM), anchor compute tenant LOI
-
-CURRENT STATUS:
-- Financial model published (HQ)
-- Thermal feasibility study commissioned May 2026
-- Site survey planned June 2026
-- Dubai HoldCo incorporation in progress
-- India entity (Roborns Energy & Infrastructure Pvt. Ltd.) to be incorporated
-
-Help Shawaz make progress on Roborns. Be a sharp technical and business advisor.`,
   },
   {
-    name: 'Franchiseen', color: '#7F77DD', sector: 'Franchise Finance OS',
+    name: 'Franchiseen', color: '#7F77DD', sector: 'AI Business Assistant',
     status: 'Alpha', statusColor: '#c8f53a',
     metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout', v: 'Daily + monthly' }, { k: 'Target AUM', v: '$60M Y5' }],
-    context: `You are helping Shawaz work on FRANCHISEEN — a franchise finance operating system enabling fractional ownership of franchise businesses with daily payouts.
-
-KEY FACTS:
-- Retail investors buy fractional stakes in franchise businesses from $100
-- Daily + monthly revenue distributions to investors
-- Franchise operators get capital without bank debt
-- Platform fee: 1.5% of deals + 0.5% AUM management fee
-- Stack: Next.js, Crossmint, Solana/Jupiter, Convex
-- Code on server at /home/centos/codelude/franchiseen/software/client/
-- Needs: KYC/AML provider (Onfido/Signzy), payment processor, SEBI compliance, first franchise brand partner
-- Break-even: Year 3 at ~$11M AUM. Y5 revenue: $1.26M at 79% EBITDA
-
-Help Shawaz make progress on Franchiseen.`,
   },
   {
-    name: 'HubCV',       color: '#FAC775', sector: 'AI Career Intelligence',
+    name: 'HubCV',       color: '#FAC775', sector: 'AI Career Assistant',
     status: 'In Development', statusColor: '#5DCAA5',
     metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
-    context: `You are helping Shawaz work on HUBCV — an AI career intelligence platform with human + AI verified dynamic professional profiles.
-
-KEY FACTS:
-- Dynamic profiles updated continuously (not static resumes)
-- Skills verified by domain experts + enriched by Anthropic Claude API
-- B2B first: recruiters pay $99–299/month per seat
-- Stack: Next.js, NextAuth, Drizzle ORM (PostgreSQL), Anthropic SDK
-- Code on server at /home/centos/codelude/hubcv/
-- Needs: AI/ML engineer, 20 human skill verifiers, 5 recruiter design partners
-- Break-even: Year 3. Y5 ARR: $4.4M
-
-Help Shawaz make progress on HubCV.`,
   },
   {
-    name: 'Cuestay',     color: '#85B7EB', sector: 'Home AI Automation',
-    status: 'Planning', statusColor: '#FAC775',
-    metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
-    context: `You are helping Shawaz work on CUESTAY — a home AI automation platform that learns household routines and acts proactively via a Matter-native hub device.
-
-KEY FACTS:
-- Works with all existing devices via Matter 1.3+ protocol
-- AI learns routines + acts proactively — NOT just remote control
-- Revenue: Hub hardware ($499, 35% margin) + AI subscription ($29/month, 85% margin)
-- Hardware MOQ: $300K first production run
-- B2B channel: property developer pre-installation agreements
-- Protocol spec complete (published April 2026)
-- Needs: hardware manufacturing partner (ODM), firmware engineer, hardware PM
-- Y5 revenue: $8.95M
-
-Help Shawaz make progress on Cuestay.`,
-  },
-  {
-    name: 'Dextrip',     color: '#F0997B', sector: 'Decentralised Trading Automation',
+    name: 'Dextrip',     color: '#F0997B', sector: 'AI Trading Assistant',
     status: 'Live — Beta', statusColor: '#5DCAA5',
     metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
-    context: `You are helping Shawaz work on DEXTRIP — a non-custodial decentralised trading automation platform with a strategy marketplace.
-
-KEY FACTS:
-- Users keep their keys — Dextrip never holds funds
-- Strategies: Every UP, Every DOWN, EMA Trend (fixed today — was only doing UP), RSI, Previous 2, Previous 4 (capped at 3 steps today)
-- 3 paying beta subscribers: 2 × $99/month Pro, 1 × $29/month Base = $227 MRR
-- Stack: Next.js, Python bots, Node.js execution engine
-- Server: all bots on 64.227.160.224, PM2 managed
-- Today's fixes: EMA Trend DOWN signal bug fixed. Previous 4 max_streak reduced to 3.
-- Entry mode: dual window — first 60s of event AND last 60s before next event
-- Price filter: ask < $0.55
-- Y5 ARR: $7.1M at 90% EBITDA (pure SaaS)
-
-Help Shawaz work on Dextrip.`,
+  },
+  {
+    name: 'Llife',     color: '#85B7EB', sector: 'AI Life Assistant',
+    status: 'Planning', statusColor: '#FAC775',
+    metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
   },
 ];
 
@@ -111,17 +41,62 @@ const STATUS_STYLES: Record<string, { color: string; dot: string }> = {
   'todo':        { color: '#7a7870', dot: '○' },
 };
 
-type AIModel = 'claude' | 'deepseek';
+type AIModel = 'opencode' | 'claude' | 'deepseek';
+
+
+/** Renders the live Convex pipeline snapshot into prompt text. */
+function pipelineSection(briefing: any): string {
+  if (!briefing || !briefing.stages?.length) {
+    return 'No prospects, leads, deals or clients recorded for this venture yet.';
+  }
+  const fmt = (r: any) => {
+    const bits = [
+      r.segment,
+      r.status,
+      r.priority && r.priority !== 'medium' ? `${r.priority} priority` : null,
+      r.category,
+      [r.city, r.state].filter(Boolean).join(', ') || null,
+      r.value,
+      r.interest ? `wants: ${r.interest}` : null,
+      r.source ? `via ${r.source}` : null,
+      r.email,
+      r.phone,
+      r.meetingAt ? `meeting ${new Date(r.meetingAt).toLocaleString('en-IN')}` : null,
+    ].filter(Boolean);
+    return `  - ${r.name} — ${bits.join(' · ')}`;
+  };
+  return briefing.stages.map((s: any) => {
+    const seg = s.bySegment.map((b: any) => `${b.segment} ${b.count}`).join(', ');
+    const head = `${s.stage.toUpperCase()}S — ${s.total} total (${seg})`;
+    const rows = s.sample.map(fmt).join('\n');
+    const more = s.truncated ? `\n  …and ${s.total - s.sample.length} more not listed here.` : '';
+    return `${head}\n${rows}${more}`;
+  }).join('\n\n');
+}
+
+/** Renders the venture's task board into prompt text. */
+function tasksSection(tasks: typeof TASKS): string {
+  if (!tasks.length) return 'No tasks recorded for this venture.';
+  const line = (t: any) => `  - [${t.status}] ${t.title} (${t.priority} · ${t.category})`;
+  return tasks.map(line).join('\n');
+}
+
+const MODEL_LABELS: Record<AIModel, string> = {
+  opencode: 'Big Pickle',
+  claude:   'Claude Sonnet',
+  deepseek: 'DeepSeek Flash',
+};
 
 interface Message { role: 'user' | 'assistant'; content: string; }
 
-function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
+function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const [messages,  setMessages]  = useState<Message[]>([]);
   const [input,     setInput]     = useState('');
   const [loading,   setLoading]   = useState(false);
-  const [model,     setModel]     = useState<AIModel>('claude');
+  const [model,     setModel]     = useState<AIModel>('opencode');
   const bottomRef   = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
+  const briefing    = useQuery(api.pipeline.ventureBriefing, { venture: venture.name });
   const tasks       = TASKS.filter(t => t.project === venture.name);
   const inProgress  = tasks.filter(t => t.status === 'in-progress');
   const todo        = tasks.filter(t => t.status === 'todo');
@@ -138,7 +113,22 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
     try {
       const res = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages, systemOverride: venture.context, model }),
+        body: JSON.stringify({
+          messages: newMessages,
+          venture: venture.name,
+          liveData: `## LIVE DATA FROM THE HQ DATABASE (${venture.name})
+This is real current data from the dashboard, not an example. Use it directly
+when asked about prospects, leads, deals, clients or tasks. Sample rows are
+capped — where a count exceeds the rows listed, say so rather than implying the
+list is complete.
+
+### Sales pipeline
+${pipelineSection(briefing)}
+
+### Tasks (${tasks.length} total — ${inProgress.length} active, ${todo.length} todo, ${done.length} done)
+${tasksSection(tasks)}`,
+          model,
+        }),
       });
       if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let reply = '';
@@ -160,7 +150,7 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
     Roborns:     ['What should I prioritise this week?', 'Draft an investor one-pager', 'Who should I contact first for thermal engineering?', 'What permits do I need before construction?'],
     Franchiseen: ['Which KYC provider should I choose?', 'How do I find the first franchise brand partner?', 'Draft an outreach email to a franchise brand', 'What are the SEBI compliance steps?'],
     HubCV:       ['How do I get the first 5 recruiter design partners?', 'Draft outreach to a bootcamp', 'What should the matching engine prioritise?', 'How do I recruit human skill verifiers?'],
-    Cuestay:     ['How do I evaluate ODM manufacturers?', 'Draft a pitch to a Dubai property developer', 'What is the Matter certification process?', 'How should I fund the hardware MOQ?'],
+    Llife:     ['How should Llife pull Education data from HubCV?', 'Design the daily time-block board', 'What does Account Aggregator onboarding require?', 'How do I keep daily retention above 40%?'],
     Dextrip:     ['Why is EMA Trend performing this way?', 'How should I recruit the first strategy creators?', 'Draft a tweet for the public beta launch', 'What DeFi integrations should I prioritise?'],
   };
 
@@ -222,14 +212,14 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
             </button>
           </div>
           <div style={{ display: 'flex', gap: '0.35rem' }}>
-            {(['claude', 'deepseek'] as AIModel[]).map(m => (
+            {(['opencode', 'claude', 'deepseek'] as AIModel[]).map(m => (
               <button key={m} onClick={() => setModel(m)} style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', textTransform: 'uppercase',
                 padding: '0.2rem 0.65rem', border: `1px solid ${model === m ? venture.color : 'var(--card-border)'}`,
                 background: model === m ? `${venture.color}18` : 'transparent',
                 color: model === m ? venture.color : 'var(--muted)', cursor: 'pointer', transition: 'all 0.15s',
               }}>
-                {m === 'claude' ? 'Claude Sonnet' : 'DeepSeek Flash'}
+                {MODEL_LABELS[m]}
               </button>
             ))}
           </div>
@@ -278,8 +268,22 @@ function VentureChat({ venture }: { venture: typeof VENTURES[0] }) {
 }
 
 export default function AIPage() {
-  const [selected, setSelected] = useState(0);   // Roborns by default
-  const venture = VENTURES[selected];
+  // The AI page is not in the nav registry, so scope it by any-grant rather
+  // than by page. The chat API re-checks this server-side — see api/chat.
+  const { names: allowed, loading } = usePageScopes('overview');
+  const VENTURES = ALL_VENTURE_CARDS.filter(v => allowed.includes(v.name));
+  const [selected, setSelected] = useState(0);
+  const index = clampIndex(selected, VENTURES.length);
+  const venture = VENTURES[index];
+
+  if (loading) return null;
+  if (!venture) {
+    return (
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', padding: '2rem' }}>
+        No ventures assigned to your account yet. Ask an admin for access.
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 4rem)', minHeight: 0 }}>
@@ -288,12 +292,12 @@ export default function AIPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
         {VENTURES.map((v, i) => (
           <button key={v.name} onClick={() => setSelected(i)} style={{
-            background: selected === i ? v.color : 'var(--card-bg)', border: 'none', cursor: 'pointer',
+            background: index === i ? v.color : 'var(--card-bg)', border: 'none', cursor: 'pointer',
             padding: '1rem 0.75rem', textAlign: 'left', transition: 'background 0.15s',
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: selected === i ? 'rgba(0,0,0,0.55)' : v.color, marginBottom: '0.25rem' }}>0{i + 1}</div>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: selected === i ? 'var(--black)' : 'var(--off-white)', marginBottom: '0.15rem' }}>{v.name}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: selected === i ? 'rgba(0,0,0,0.5)' : 'var(--muted)', letterSpacing: '0.04em' }}>{v.sector}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: index === i ? 'rgba(0,0,0,0.55)' : v.color, marginBottom: '0.25rem' }}>0{i + 1}</div>
+            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: index === i ? 'var(--black)' : 'var(--off-white)', marginBottom: '0.15rem' }}>{v.name}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: index === i ? 'rgba(0,0,0,0.5)' : 'var(--muted)', letterSpacing: '0.04em' }}>{v.sector}</div>
           </button>
         ))}
       </div>
