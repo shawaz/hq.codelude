@@ -262,6 +262,36 @@ const schema = defineSchema({
     .index("by_org", ["orgId"])
     .index("by_org_primary", ["orgId", "isPrimary"]),
 
+  // ─── AI assistant history ───────────────────────────────────────────
+  // The dashboard assistant keeps one day of conversation, then rolls it up
+  // into a summary. Private per (user, venture) — this is someone's working
+  // notes, not a team record.
+  //
+  // `day` is an IST calendar date (YYYY-MM-DD), not UTC: the founder works in
+  // Mangaluru, and a UTC boundary would cut the day at 5:30am local.
+
+  ai_messages: defineTable({
+    userId: v.id("users"),
+    venture: v.string(),
+    day: v.string(),
+    role: v.union(v.literal("user"), v.literal("assistant")),
+    content: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_user_venture_day", ["userId", "venture", "day"])
+    .index("by_user_venture", ["userId", "venture"]),
+
+  ai_day_summaries: defineTable({
+    userId: v.id("users"),
+    venture: v.string(),
+    day: v.string(),
+    summary: v.string(),
+    messageCount: v.number(),
+    createdAt: v.number(),
+  })
+    .index("by_user_venture_day", ["userId", "venture", "day"])
+    .index("by_user_venture", ["userId", "venture"]),
+
   // Incrementally maintained counters. Convex has no cheap COUNT(*), and
   // counting millions of docs per page render would blow the read limit, so
   // every write to pipeline_orgs bumps the matching counter row here.
