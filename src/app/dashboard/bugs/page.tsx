@@ -1,3 +1,4 @@
+import { sc, scBorder } from '@/lib/status-colors';
 type Severity = 'high' | 'medium' | 'low';
 type BugStatus = 'open' | 'fixed';
 
@@ -146,7 +147,7 @@ export default function BugsPage() {
           <div key={s.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.5rem', flex: 1 }}>
             <div style={{ ...mono('0.58rem'), color: 'var(--muted)', letterSpacing: '0.14em',
               textTransform: 'uppercase', marginBottom: '0.35rem' }}>{s.label}</div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: s.color }}>{s.value}</div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: sc(s.color) }}>{s.value}</div>
           </div>
         ))}
       </div>
@@ -182,13 +183,13 @@ export default function BugsPage() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', alignItems: 'flex-end' }}>
                     <span style={{ ...mono('0.54rem'), letterSpacing: '0.12em', textTransform: 'uppercase',
                       padding: '0.15rem 0.5rem', whiteSpace: 'nowrap',
-                      border: `1px solid ${isFixed ? '#5DCAA5' : '#FAC775'}40`,
+                      border: `1px solid ${scBorder(isFixed ? '#5DCAA5' : '#FAC775')}`,
                       color: isFixed ? '#5DCAA5' : '#FAC775' }}>
                       {isFixed ? 'Fixed' : 'Open'}
                     </span>
                     <span style={{ ...mono('0.54rem'), letterSpacing: '0.12em', textTransform: 'uppercase',
                       padding: '0.15rem 0.5rem', whiteSpace: 'nowrap',
-                      border: `1px solid ${sev.color}40`, color: sev.color }}>
+                      border: `1px solid ${scBorder(sev.color)}`, color: sev.color }}>
                       {sev.label}
                     </span>
                   </div>

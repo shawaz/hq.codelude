@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { STRATEGIES } from '@/lib/management';
+import { sc, scBorder } from '@/lib/status-colors';
 
 type Tab = 'positioning' | 'initiatives' | 'risks' | 'vision';
 
@@ -38,7 +39,7 @@ export default function StrategyPage() {
       </div>
 
       <div style={{ borderLeft: `2px solid ${s.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: s.color, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>{s.name}</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(s.color), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>{s.name}</div>
         <div style={{ fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.01em' }}>Strategic overview</div>
       </div>
 
@@ -65,7 +66,7 @@ export default function StrategyPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {s.competitiveAdvantages.map((a, i) => (
               <div key={i} style={{ background: 'var(--card-bg)', padding: '0.9rem 1.25rem', display: 'grid', gridTemplateColumns: '1.5rem 1fr', gap: '0.75rem', alignItems: 'start' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: s.color, paddingTop: '0.1rem' }}>{String(i + 1).padStart(2, '0')}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(s.color), paddingTop: '0.1rem' }}>{String(i + 1).padStart(2, '0')}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)', lineHeight: 1.7, fontWeight: 300 }}>{a}</span>
               </div>
             ))}
@@ -80,8 +81,8 @@ export default function StrategyPage() {
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', marginBottom: '0.5rem' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{init.title}</div>
                 <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${PRIORITY_COLOR[init.priority]}40`, color: PRIORITY_COLOR[init.priority] }}>{init.priority}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${STATUS_COLOR[init.status]}40`, color: STATUS_COLOR[init.status] }}>{init.status}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(PRIORITY_COLOR[init.priority])}`, color: sc(PRIORITY_COLOR[init.priority]) }}>{init.priority}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(STATUS_COLOR[init.status])}`, color: sc(STATUS_COLOR[init.status]) }}>{init.status}</span>
                 </div>
               </div>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>{init.description}</p>
@@ -102,7 +103,7 @@ export default function StrategyPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>Mitigation</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{r.mitigation}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.2rem 0.6rem', border: `1px solid ${SEVERITY_COLOR[r.severity]}40`, color: SEVERITY_COLOR[r.severity], whiteSpace: 'nowrap' }}>{r.severity}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.2rem 0.6rem', border: `1px solid ${scBorder(SEVERITY_COLOR[r.severity])}`, color: sc(SEVERITY_COLOR[r.severity]), whiteSpace: 'nowrap' }}>{r.severity}</span>
             </div>
           ))}
         </div>
@@ -110,7 +111,7 @@ export default function StrategyPage() {
 
       {tab === 'vision' && (
         <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: `2px solid ${s.color}`, padding: '2rem' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: s.color, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '1rem' }}>3-year vision — {s.name}</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(s.color), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '1rem' }}>3-year vision — {s.name}</div>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--off-white)', lineHeight: 2, fontWeight: 300 }}>{s.threeYearVision}</p>
         </div>
       )}

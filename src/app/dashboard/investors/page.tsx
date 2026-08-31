@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { INVESTOR_ROUNDS, type RoundStatus, type RoundType } from '@/lib/finance';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<RoundStatus, { color: string; label: string }> = {
   planning:    { color: '#FAC775', label: 'Planning'    },
@@ -51,12 +52,12 @@ export default function InvestorsPage() {
                 style={{ background: isActive ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '1.25rem 1.5rem', cursor: 'pointer', borderLeft: isActive ? `2px solid ${VENTURE_COLORS[r.venture]}` : '2px solid transparent', transition: 'background 0.15s' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '0.5rem' }}>
                   <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: VENTURE_COLORS[r.venture], letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{r.venture}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(VENTURE_COLORS[r.venture]), letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{r.venture}</div>
                     <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{r.roundName}</div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${TYPE_COLORS[r.type]}40`, color: TYPE_COLORS[r.type] }}>{r.type}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[r.type])}`, color: sc(TYPE_COLORS[r.type]) }}>{r.type}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color) }}>{ss.label}</span>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '2rem' }}>

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VENTURES, VENTURE_CHANNELS, type ChStatus } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ChStatus,{color:string;label:string}> = {
   active:{color:'#5DCAA5',label:'Active'},building:{color:'#c8f53a',label:'Building'},planned:{color:'var(--muted)',label:'Planned'},
@@ -54,7 +55,7 @@ export default function ChannelPage() {
           return (
             <div key={i} style={{ background:'var(--card-bg)',padding:'1.1rem 1.5rem',display:'grid',gridTemplateColumns:'180px 100px 1fr auto',gap:'1.25rem',alignItems:'start' }}>
               <div style={{ fontWeight:600,fontSize:'0.8rem' }}>{c.name}</div>
-              <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.15rem 0.5rem',border:`1px solid ${TYPE_COLORS[c.type]||'var(--card-border)'}40`,color:TYPE_COLORS[c.type]||'var(--muted)',alignSelf:'flex-start' }}>{c.type}</span>
+              <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.15rem 0.5rem',border:`1px solid ${scBorder(TYPE_COLORS[c.type]||'var(--card-border)')}`,color:TYPE_COLORS[c.type]||'var(--muted)',alignSelf:'flex-start' }}>{c.type}</span>
               <div>
                 <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.68rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300,marginBottom:'0.35rem' }}>{c.description}</div>
                 <div style={{ display:'flex',alignItems:'center',gap:'0.4rem' }}>
@@ -62,7 +63,7 @@ export default function ChannelPage() {
                   <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.62rem',color:'var(--off-white)' }}>{c.metric}</span>
                 </div>
               </div>
-              <span className="status-badge" style={{ color:ss.color,borderColor:`${ss.color}40`,whiteSpace:'nowrap',alignSelf:'flex-start' }}>{ss.label}</span>
+              <span className="status-badge" style={{ color:sc(ss.color),borderColor:`${scBorder(ss.color)}`,whiteSpace:'nowrap',alignSelf:'flex-start' }}>{ss.label}</span>
             </div>
           );
         })}

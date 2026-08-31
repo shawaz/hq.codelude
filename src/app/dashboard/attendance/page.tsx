@@ -1,3 +1,4 @@
+import { sc } from '@/lib/status-colors';
 export default function AttendancePage() {
   const team = [{ name: 'Shawaz', role: 'Founder & CEO', location: 'Mangaluru', timezone: 'IST (UTC+5:30)' }];
   return (
@@ -17,7 +18,7 @@ export default function AttendancePage() {
               <td><span className="category-label">{m.role}</span></td>
               <td><span className="category-label">{m.location}</span></td>
               <td><span className="category-label">{m.timezone}</span></td>
-              <td><span className="status-badge" style={{ color: '#5DCAA5', borderColor: 'rgba(93,202,165,0.3)' }}>Active</span></td>
+              <td><span className="status-badge" style={{ color: sc('#5DCAA5'), borderColor: 'rgba(93,202,165,0.3)' }}>Active</span></td>
             </tr>
           ))}
         </tbody>

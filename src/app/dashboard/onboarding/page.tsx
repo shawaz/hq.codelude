@@ -1,4 +1,5 @@
 import { ONBOARDING_TEMPLATE } from '@/lib/people';
+import { scBorder } from '@/lib/status-colors';
 
 const CAT_COLORS: Record<string, string> = { Admin: '#7F77DD', Culture: '#c8f53a', Work: '#5DCAA5' };
 
@@ -15,7 +16,7 @@ export default function OnboardingPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: CAT_COLORS[step.category] || 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{step.day}</div>
                 <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{step.title}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${CAT_COLORS[step.category] || 'var(--accent)'}40`, color: CAT_COLORS[step.category] || 'var(--accent)' }}>{step.category}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${scBorder(CAT_COLORS[step.category] || 'var(--accent)')}`, color: CAT_COLORS[step.category] || 'var(--accent)' }}>{step.category}</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {step.items.map((item, j) => (

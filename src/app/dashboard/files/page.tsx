@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FILES, type FileCategory, type FileStatus } from '@/lib/workspace';
 import { usePageScopes } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const CATEGORIES: (FileCategory | 'all')[] = ['all', 'Financial Model', 'Pitch Deck', 'Legal', 'Brand', 'Technical', 'Research', 'Internal'];
 
@@ -58,7 +59,7 @@ export default function FilesPage() {
           { label: 'Review',  val: FILES.filter(f => f.status === 'review').length,     color: '#c8f53a' },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
-            <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>
+            <div className="tasks-count-num" style={{ color: sc(c.color) }}>{c.val}</div>
             <div className="tasks-count-label">{c.label}</div>
           </div>
         ))}
@@ -67,14 +68,14 @@ export default function FilesPage() {
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
         {VENTURES.map(v => (
           <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: VENTURE_COLORS[v] } : {}}
+            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
             onClick={() => setVenture(v)}>{v}</button>
         ))}
       </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {CATEGORIES.map(c => (
           <button key={c} className={`filter-pill${category === c ? ' active' : ''}`}
-            style={category === c && c !== 'all' ? { borderColor: CAT_COLORS[c as FileCategory], color: CAT_COLORS[c as FileCategory] } : {}}
+            style={category === c && c !== 'all' ? { borderColor: CAT_COLORS[c as FileCategory], color: sc(CAT_COLORS[c as FileCategory]) } : {}}
             onClick={() => setCategory(c)}>{c === 'all' ? 'All types' : c}</button>
         ))}
       </div>
@@ -101,12 +102,12 @@ export default function FilesPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.2rem' }}>{f.name}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', lineHeight: 1.5 }}>{f.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: VENTURE_COLORS[f.venture] }}>{f.venture}</span></td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', color: CAT_COLORS[f.category] }}>{f.category}</span></td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${FORMAT_COLORS[f.format] || 'var(--card-border)'}40`, color: FORMAT_COLORS[f.format] || 'var(--muted)' }}>{f.format}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[f.venture]) }}>{f.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', color: sc(CAT_COLORS[f.category]) }}>{f.category}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(FORMAT_COLORS[f.format] || 'var(--card-border)')}`, color: FORMAT_COLORS[f.format] || 'var(--muted)' }}>{f.format}</span></td>
                 <td><span className="category-label">{f.version}</span></td>
                 <td><span className="category-label">{f.date}</span></td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', wordBreak: 'break-all' }}>{f.location}</span></td>
               </tr>
             );

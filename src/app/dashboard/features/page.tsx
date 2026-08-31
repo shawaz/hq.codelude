@@ -1,3 +1,4 @@
+import { sc, scBorder } from '@/lib/status-colors';
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
 
 interface Feature {
@@ -198,11 +199,11 @@ export default function FeaturesPage() {
           <div className="tasks-count-label">Total features</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{live}</div>
+          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{live}</div>
           <div className="tasks-count-label">Live</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#c8f53a' }}>{inProgress}</div>
+          <div className="tasks-count-num" style={{ color: sc('#c8f53a') }}>{inProgress}</div>
           <div className="tasks-count-label">In Progress</div>
         </div>
         <div className="tasks-count-cell">
@@ -232,7 +233,7 @@ export default function FeaturesPage() {
                     <td style={{ fontWeight: 600, fontSize: '0.78rem' }}>{f.name}</td>
                     <td><span className="category-label" style={{ fontSize: '0.7rem' }}>{f.description}</span></td>
                     <td>
-                      <span className="status-badge" style={{ color: s.color, borderColor: `${s.color}40` }}>
+                      <span className="status-badge" style={{ color: sc(s.color), borderColor: `${scBorder(s.color)}` }}>
                         {s.label}
                       </span>
                     </td>

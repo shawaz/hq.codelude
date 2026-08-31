@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { EXPENSES, type ExpenseStatus } from '@/lib/budget-data';
 import { usePageScopes } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
   paid:       { color: '#5DCAA5', label: 'Paid'       },
@@ -56,7 +57,7 @@ export default function ExpensesPage() {
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: c.color, lineHeight: 1 }}>{c.val}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: sc(c.color), lineHeight: 1 }}>{c.val}</div>
           </div>
         ))}
       </div>
@@ -65,7 +66,7 @@ export default function ExpensesPage() {
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
         {VENTURES.map(v => (
           <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: VENTURE_COLORS[v] } : {}}
+            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
             onClick={() => setVenture(v)}>{v}</button>
         ))}
       </div>
@@ -107,7 +108,7 @@ export default function ExpensesPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.15rem' }}>{e.description}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{e.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: VENTURE_COLORS[e.venture] }}>{e.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[e.venture]) }}>{e.venture}</span></td>
                 <td><span className="category-label">{e.category}</span></td>
                 <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: e.amount > 0 ? 'var(--off-white)' : 'var(--muted)', fontWeight: 600 }}>
                   {e.amount > 0 ? `$${e.amount.toLocaleString()}` : 'Free'}
@@ -117,7 +118,7 @@ export default function ExpensesPage() {
                     {e.receipt ? '✓' : '—'}
                   </span>
                 </td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
               </tr>
             );
           })}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { TASKS, PROJECT_COLORS } from '@/lib/tasks';
+import { sc, scBorder } from '@/lib/status-colors';
 
 interface Note { id: string; text: string; createdAt: string; }
 interface FileRec { id: string; name: string; url: string; size: number; type: string; uploadedAt: string; }
@@ -227,7 +228,7 @@ function FilesPanel({ taskId }: { taskId: string }) {
         <button className="btn-primary" onClick={() => inputRef.current?.click()} disabled={uploading}>
           {uploading ? 'Uploading…' : 'Choose files'}
         </button>
-        {error && <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#ff8080', marginTop: '0.75rem' }}>{error}</p>}
+        {error && <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc('#ff8080'), marginTop: '0.75rem' }}>{error}</p>}
       </div>
 
       {loading ? (
@@ -345,7 +346,7 @@ Help him think through this task — break it down into steps, identify blockers
             <div style={{
               maxWidth: '88%', padding: '0.75rem 1rem',
               background: m.role === 'user' ? `${color}15` : 'rgba(255,255,255,0.03)',
-              border: `1px solid ${m.role === 'user' ? `${color}30` : 'var(--card-border)'}`,
+              border: `1px solid ${m.role === 'user' ? `${scBorder(color, 30)}` : 'var(--card-border)'}`,
               fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)',
               lineHeight: 1.85, fontWeight: 300, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
             }}>

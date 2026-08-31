@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PAYEES, type PayeeStatus, type PayeeFrequency } from '@/lib/finance';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<PayeeStatus, { color: string; label: string }> = {
   active:    { color: '#5DCAA5', label: 'Active'    },
@@ -42,7 +43,7 @@ export default function PayeePage() {
           <div className="tasks-count-label">Total payees</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{active}</div>
+          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{active}</div>
           <div className="tasks-count-label">Active</div>
         </div>
         <div className="tasks-count-cell">
@@ -66,7 +67,7 @@ export default function PayeePage() {
                 <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.3rem' }}>{p.name}</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
                   {p.ventures.map(v => (
-                    <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${VENTURE_COLORS[v]}40`, color: VENTURE_COLORS[v] }}>{v}</span>
+                    <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(VENTURE_COLORS[v])}`, color: sc(VENTURE_COLORS[v]) }}>{v}</span>
                   ))}
                 </div>
               </div>
@@ -74,11 +75,11 @@ export default function PayeePage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)', marginBottom: '0.3rem' }}>{p.amount}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>{p.currency}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${FREQ_COLORS[p.frequency]}40`, color: FREQ_COLORS[p.frequency], alignSelf: 'flex-start' }}>{p.frequency}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(FREQ_COLORS[p.frequency])}`, color: sc(FREQ_COLORS[p.frequency]), alignSelf: 'flex-start' }}>{p.frequency}</span>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{p.notes}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color, whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>{ss.label}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color), whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>{ss.label}</span>
             </div>
           );
         })}

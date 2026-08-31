@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { MODELS, type VentureModel } from '@/lib/fin-models';
+import { sc, scBorder } from '@/lib/status-colors';
 
 type Tab = 'pnl' | 'capex' | 'unit' | 'assumptions';
 const TABS: { key: Tab; label: string }[] = [
@@ -26,7 +27,7 @@ function MetricCards({ cards }: { cards: VentureModel['pnlCards'] }) {
       {cards.map((c, i) => (
         <div key={i} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em', color: CARD_COLORS[c.color], marginBottom: '0.2rem', lineHeight: 1 }}>{c.value}</div>
+          <div style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em', color: sc(CARD_COLORS[c.color]), marginBottom: '0.2rem', lineHeight: 1 }}>{c.value}</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', lineHeight: 1.4 }}>{c.sub}</div>
         </div>
       ))}
@@ -118,7 +119,7 @@ function CapexTab({ model }: { model: VentureModel }) {
           <tr key={i} style={row.highlight ? { background: 'rgba(255,255,255,0.04)', fontWeight: 600 } : {}}>
             <td style={{ fontSize: '0.78rem', color: row.highlight ? model.color : 'var(--off-white)' }}>{row.item}</td>
             <td>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', padding: '0.15rem 0.5rem', border: `1px solid ${phaseColor[row.phase] || 'var(--card-border)'}40`, color: phaseColor[row.phase] || 'var(--muted)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(phaseColor[row.phase] || 'var(--card-border)')}`, color: phaseColor[row.phase] || 'var(--muted)' }}>
                 {row.phase}
               </span>
             </td>

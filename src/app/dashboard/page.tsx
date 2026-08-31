@@ -5,6 +5,7 @@ import { TASKS } from '@/lib/tasks';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const ALL_VENTURE_CARDS = [
   {
@@ -183,7 +184,7 @@ ${tasksSection(tasks)}`,
               <div style={{
                 maxWidth: '88%', padding: '0.75rem 1rem',
                 background: m.role === 'user' ? `${venture.color}15` : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${m.role === 'user' ? `${venture.color}30` : 'var(--card-border)'}`,
+                border: `1px solid ${m.role === 'user' ? `${scBorder(venture.color, 30)}` : 'var(--card-border)'}`,
                 fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)',
                 lineHeight: 1.85, fontWeight: 300, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
               }}>
@@ -234,7 +235,7 @@ ${tasksSection(tasks)}`,
           </div>
           <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem' }}>
             {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: 'var(--muted)' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
-              <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: s.color }}>{s.count} {s.label}</span>
+              <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: sc(s.color) }}>{s.count} {s.label}</span>
             ))}
           </div>
         </div>
@@ -245,13 +246,13 @@ ${tasksSection(tasks)}`,
             const ss = STATUS_STYLES[task.status];
             return (
               <div key={task.id} style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                <span style={{ color: ss.color, fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
+                <span style={{ color: sc(ss.color), fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {task.title}
                   </div>
                   <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: PRIORITY_COLOR[task.priority] }}>{task.priority}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: sc(PRIORITY_COLOR[task.priority]) }}>{task.priority}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
                   </div>
                 </div>
@@ -316,7 +317,7 @@ export default function AIPage() {
             </div>
           ))}
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.18rem 0.55rem', border: `1px solid ${venture.statusColor}40`, color: venture.statusColor, flexShrink: 0 }}>{venture.status}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.18rem 0.55rem', border: `1px solid ${scBorder(venture.statusColor)}`, color: venture.statusColor, flexShrink: 0 }}>{venture.status}</span>
       </div>
 
       {/* Chat + Tasks */}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { sc, scBorder } from '@/lib/status-colors';
 
 type Tab = 'round' | 'investors' | 'legal' | 'timeline' | 'hyperscaler';
 
@@ -273,7 +274,7 @@ export default function FundraisePage() {
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.3rem' }}>{c.label}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: c.color, marginBottom: '0.1rem', lineHeight: 1 }}>{c.val}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: sc(c.color), marginBottom: '0.1rem', lineHeight: 1 }}>{c.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)' }}>{c.sub}</div>
           </div>
         ))}
@@ -315,7 +316,7 @@ export default function FundraisePage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 {ROUND.rights.map((r, i) => (
                   <div key={i} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start' }}>
-                    <span style={{ color: '#5DCAA5', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', flexShrink: 0 }}>—</span>
+                    <span style={{ color: sc('#5DCAA5'), fontFamily: 'var(--font-mono)', fontSize: '0.65rem', flexShrink: 0 }}>—</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{r}</span>
                   </div>
                 ))}
@@ -328,8 +329,8 @@ export default function FundraisePage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)', fontWeight: 600 }}>{s.scenario}</span>
                       <div style={{ display: 'flex', gap: '1rem' }}>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#5DCAA5', fontWeight: 700 }}>{s.multiple}</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#FAC775' }}>{s.irr} IRR</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: sc('#5DCAA5'), fontWeight: 700 }}>{s.multiple}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: sc('#FAC775') }}>{s.irr} IRR</span>
                       </div>
                     </div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', lineHeight: 1.5 }}>{s.basis}</div>
@@ -346,7 +347,7 @@ export default function FundraisePage() {
                   <div key={i} style={{ background: 'var(--card-bg)', padding: '0.85rem 1rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.67rem', color: 'var(--off-white)' }}>{u.item}</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#5DCAA5', fontWeight: 700, flexShrink: 0, marginLeft: '1rem' }}>{u.amount}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#5DCAA5'), fontWeight: 700, flexShrink: 0, marginLeft: '1rem' }}>{u.amount}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                       <div style={{ flex: 1, height: 3, background: 'var(--card-border)', borderRadius: 2 }}>
@@ -388,7 +389,7 @@ export default function FundraisePage() {
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{cat.why}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
                 {cat.targets.map((t, ti) => (
-                  <div key={ti} style={{ background: 'var(--card-bg)', padding: '0.85rem 1.25rem', display: 'grid', gridTemplateColumns: '220px 120px 1fr', gap: '1.25rem', alignItems: 'start', borderLeft: `2px solid ${cat.color}30` }}>
+                  <div key={ti} style={{ background: 'var(--card-bg)', padding: '0.85rem 1.25rem', display: 'grid', gridTemplateColumns: '220px 120px 1fr', gap: '1.25rem', alignItems: 'start', borderLeft: `2px solid ${scBorder(cat.color, 30)}` }}>
                     <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{t.name}</div>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: cat.color }}>{t.ticket}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', lineHeight: 1.5, fontWeight: 300 }}>{t.fit}</span>
@@ -417,8 +418,8 @@ export default function FundraisePage() {
                         <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.3rem' }}>{s.title}</div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.63rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{s.notes}</div>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#FAC775', lineHeight: 1.5 }}>{s.cost}</div>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${statusColor}40`, color: statusColor, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{s.status}</span>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc('#FAC775'), lineHeight: 1.5 }}>{s.cost}</div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(statusColor)}`, color: statusColor, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{s.status}</span>
                     </div>
                   );
                 })}
@@ -435,7 +436,7 @@ export default function FundraisePage() {
             {TIMELINE.map((t, i) => (
               <div key={i} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: '160px 110px 1fr', gap: '1.5rem', alignItems: 'start', borderLeft: `2px solid ${t.color}` }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)', fontWeight: 600 }}>{t.month}</div>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${t.color}40`, color: t.color, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{t.phase}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(t.color)}`, color: t.color, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{t.phase}</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                   {t.items.map((item, j) => (
                     <div key={j} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
@@ -458,7 +459,7 @@ export default function FundraisePage() {
             {CRISIS_STATS.map(c => (
               <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem' }}>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.3rem' }}>{c.label}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: c.color, marginBottom: '0.1rem', lineHeight: 1 }}>{c.val}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: sc(c.color), marginBottom: '0.1rem', lineHeight: 1 }}>{c.val}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', lineHeight: 1.5 }}>{c.sub}</div>
               </div>
             ))}
@@ -483,7 +484,7 @@ export default function FundraisePage() {
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{cat.why}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
                 {cat.targets.map((t, ti) => (
-                  <div key={ti} style={{ background: 'var(--card-bg)', padding: '0.85rem 1.25rem', display: 'grid', gridTemplateColumns: '300px 160px 1fr', gap: '1.25rem', alignItems: 'start', borderLeft: `2px solid ${cat.color}30` }}>
+                  <div key={ti} style={{ background: 'var(--card-bg)', padding: '0.85rem 1.25rem', display: 'grid', gridTemplateColumns: '300px 160px 1fr', gap: '1.25rem', alignItems: 'start', borderLeft: `2px solid ${scBorder(cat.color, 30)}` }}>
                     <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{t.name}</div>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: cat.color }}>{t.ticket}</span>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', lineHeight: 1.5, fontWeight: 300 }}>{t.fit}</span>
@@ -508,8 +509,8 @@ export default function FundraisePage() {
                         <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.3rem' }}>{s.title}</div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.63rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{s.notes}</div>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: '#FAC775', lineHeight: 1.5 }}>{s.cost}</div>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${statusColor}40`, color: statusColor, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{s.status}</span>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc('#FAC775'), lineHeight: 1.5 }}>{s.cost}</div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(statusColor)}`, color: statusColor, alignSelf: 'flex-start', whiteSpace: 'nowrap' }}>{s.status}</span>
                     </div>
                   );
                 })}

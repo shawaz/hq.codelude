@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { SiteProjectStatus } from '@/lib/site-projects';
 import { parseInfraLocation } from '@/lib/lead-conversion';
+import { sc } from '@/lib/status-colors';
 
 const STATUS_OPTIONS: { value: SiteProjectStatus; label: string }[] = [
   { value: 'planning',  label: 'Planning'  },
@@ -123,7 +124,7 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
                   </select>
                 </div>
               </div>
-              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{error}</div>}
+              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#ff8080') }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
                 <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Converting...' : 'Convert →'}

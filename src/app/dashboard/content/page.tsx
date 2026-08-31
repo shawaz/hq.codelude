@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { CONTENT, type ContentStatus } from '@/lib/mktg';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   published:   { color: '#5DCAA5', label: 'Published'   },
@@ -21,7 +22,7 @@ export default function ContentPage() {
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [ContentStatus, typeof STATUS_STYLES[ContentStatus]][]).map(([key, s]) => (
-          <button key={key} className={`filter-pill${status === key ? ' active' : ''}`} style={status === key ? { borderColor: s.color, color: s.color } : {}} onClick={() => setStatus(key)}>{s.label}</button>
+          <button key={key} className={`filter-pill${status === key ? ' active' : ''}`} style={status === key ? { borderColor: s.color, color: sc(s.color) } : {}} onClick={() => setStatus(key)}>{s.label}</button>
         ))}
       </div>
       <table className="tasks-table">
@@ -35,11 +36,11 @@ export default function ContentPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.2rem' }}>{c.title}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{c.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: VENTURE_COLORS[c.venture] }}>{c.venture}</span></td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${TYPE_COLORS[c.type]}40`, color: TYPE_COLORS[c.type] }}>{c.type}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[c.venture]) }}>{c.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[c.type])}`, color: sc(TYPE_COLORS[c.type]) }}>{c.type}</span></td>
                 <td><span className="category-label">{c.channel}</span></td>
                 <td><span className="category-label">{c.dueDate}</span></td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
               </tr>
             );
           })}
