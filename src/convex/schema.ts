@@ -193,6 +193,9 @@ const schema = defineSchema({
     state: v.optional(v.string()),
     district: v.optional(v.string()),
     city: v.optional(v.string()),
+    // Superseded by the pipeline_contacts table. Kept so existing rows stay
+    // valid; nothing reads them after the contacts migration has run. New
+    // writes go to pipeline_contacts.
     contactName: v.optional(v.string()),
     email: v.optional(v.string()),
     phone: v.optional(v.string()),
@@ -236,6 +239,28 @@ const schema = defineSchema({
       searchField: "name",
       filterFields: ["stage", "venture", "segment", "status", "state"],
     }),
+
+  // People at a pipeline org. The funnel is company-first: a `prospect` is the
+  // company itself, a `lead` is the set of people you have found there, and a
+  // `client` has one of them promoted to primary — the main point of contact
+  // once the deal closed.
+  //
+  // Separate table rather than an array on the org because contacts are edited
+  // individually and a single org can accumulate a lot of them.
+  pipeline_contacts: defineTable({
+    orgId: v.id("pipeline_orgs"),
+    name: v.string(),
+    role: v.optional(v.string()),    // their job title at the company
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    // At most one per org. Enforced in the mutations, not the schema.
+    isPrimary: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_org", ["orgId"])
+    .index("by_org_primary", ["orgId", "isPrimary"]),
 
   // Incrementally maintained counters. Convex has no cheap COUNT(*), and
   // counting millions of docs per page render would blow the read limit, so

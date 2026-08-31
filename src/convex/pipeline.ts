@@ -328,7 +328,7 @@ export const add = mutation({
   args: { stage: v.string(), ...recordFields },
   handler: async (ctx, args) => {
     await assertAccess(ctx, args.venture, pageForStage(args.stage));
-    const { stage, ...rest } = args;
+    const { stage, contactName, email, phone, ...rest } = args;
     const status = rest.status ?? ENTRY_STATUS[stage] ?? "identified";
     const id = await ctx.db.insert("pipeline_orgs", {
       ...rest,
@@ -338,6 +338,19 @@ export const add = mutation({
       createdAt: Date.now(),
     });
     await bumpBoth(ctx, { stage, venture: rest.venture, segment: rest.segment, status }, 1);
+
+    // A prospect is the company; people live in pipeline_contacts. If the form
+    // supplied someone, they become the org's first (and so primary) contact.
+    if (contactName?.trim() || email?.trim() || phone?.trim()) {
+      await ctx.db.insert("pipeline_contacts", {
+        orgId: id,
+        name: contactName?.trim() || email?.trim() || "Unnamed contact",
+        email: email?.trim() || undefined,
+        phone: phone?.trim() || undefined,
+        isPrimary: true,
+        createdAt: Date.now(),
+      });
+    }
     return id;
   },
 });
@@ -502,17 +515,18 @@ export const submitLead = mutation({
     areaHectares: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const name = args.name.trim().slice(0, 200);
-    if (!name) throw new Error("Name is required");
+    const person = args.name.trim().slice(0, 200);
+    if (!person) throw new Error("Name is required");
 
+    // The funnel is company-first: the org row is the company, the human who
+    // filled in the form becomes its contact. Sole traders and individuals
+    // submit no company, so fall back to their own name as the org.
+    const company = args.company?.trim().slice(0, 200);
     const id = await ctx.db.insert("pipeline_orgs", {
       stage: "lead",
       venture: args.venture,
       segment: args.segment,
-      name,
-      category: args.company?.trim().slice(0, 200) || undefined,
-      email: args.email?.trim().slice(0, 320) || undefined,
-      phone: args.phone?.trim().slice(0, 40) || undefined,
+      name: company || person,
       city: args.city?.trim().slice(0, 100) || undefined,
       state: args.state?.trim().slice(0, 100) || undefined,
       interest: args.interest?.trim().slice(0, 200) || undefined,
@@ -526,6 +540,15 @@ export const submitLead = mutation({
       areaHectares: args.areaHectares,
       createdAt: Date.now(),
     });
+    await ctx.db.insert("pipeline_contacts", {
+      orgId: id,
+      name: person,
+      email: args.email?.trim().slice(0, 320) || undefined,
+      phone: args.phone?.trim().slice(0, 40) || undefined,
+      isPrimary: true,
+      createdAt: Date.now(),
+    });
+
     await bumpBoth(
       ctx,
       { stage: "lead", venture: args.venture, segment: args.segment, status: "new" },
@@ -548,11 +571,22 @@ export const clearBySource = internalMutation({
       .query("pipeline_orgs")
       .filter((q) => q.eq(q.field("source"), args.source))
       .take(args.limit ?? 2000);
+    let contactsDeleted = 0;
     for (const row of rows) {
+      // Cascade: contacts hang off the org and would otherwise be orphaned
+      // rows pointing at a dead id.
+      const contacts = await ctx.db
+        .query("pipeline_contacts")
+        .withIndex("by_org", (q) => q.eq("orgId", row._id))
+        .collect();
+      for (const c of contacts) {
+        await ctx.db.delete(c._id);
+        contactsDeleted++;
+      }
       await ctx.db.delete(row._id);
       await bumpBoth(ctx, row, -1);
     }
-    return { deleted: rows.length };
+    return { deleted: rows.length, contactsDeleted };
   },
 });
 
