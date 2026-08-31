@@ -54,7 +54,7 @@ function fromGeometry(geometry: GeoJSON.Polygon): BoundaryResult {
 
 const btnStyle: React.CSSProperties = {
   fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-  padding: '0.55rem 1.1rem', border: '1px solid var(--accent)', color: 'var(--accent)',
+  padding: '0.55rem 1.1rem', border: '1px solid var(--accent)', color: 'var(--accent-text)',
   background: 'transparent', cursor: 'pointer',
 };
 const inputStyle: React.CSSProperties = {
@@ -239,7 +239,7 @@ export default function SiteBoundaryMap({ boundary, center, editable, height = 3
             </button>
           )}
           {editable && drawing && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.08em' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.08em' }}>
               Click to place each corner · click the first point again to finish
             </span>
           )}

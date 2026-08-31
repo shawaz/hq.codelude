@@ -6,7 +6,7 @@ import { PAYEES, type PayeeStatus, type PayeeFrequency } from '@/lib/finance';
 const STATUS_STYLES: Record<PayeeStatus, { color: string; label: string }> = {
   active:    { color: '#5DCAA5', label: 'Active'    },
   pending:   { color: '#FAC775', label: 'Pending'   },
-  paused:    { color: '#7a7870', label: 'Paused'    },
+  paused:    { color: 'var(--muted)', label: 'Paused'    },
   cancelled: { color: '#ff8080', label: 'Cancelled' },
 };
 
@@ -46,7 +46,7 @@ export default function PayeePage() {
           <div className="tasks-count-label">Active</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: 'var(--accent)' }}>~${monthly.reduce((s) => s + 440, 0)}</div>
+          <div className="tasks-count-num" style={{ color: 'var(--accent-text)' }}>~${monthly.reduce((s) => s + 440, 0)}</div>
           <div className="tasks-count-label">Est. monthly (active)</div>
         </div>
       </div>

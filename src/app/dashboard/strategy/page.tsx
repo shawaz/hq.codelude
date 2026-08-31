@@ -12,9 +12,9 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'vision',       label: '3-Year Vision' },
 ];
 
-const PRIORITY_COLOR = { critical: '#ff8080', high: '#FAC775', medium: '#7a7870' };
-const STATUS_COLOR   = { active: '#5DCAA5',  planned: '#c8f53a', 'on-hold': '#7a7870' };
-const SEVERITY_COLOR = { high: '#ff8080', medium: '#FAC775', low: '#7a7870' };
+const PRIORITY_COLOR = { critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)' };
+const STATUS_COLOR   = { active: '#5DCAA5',  planned: '#c8f53a', 'on-hold': 'var(--muted)' };
+const SEVERITY_COLOR = { high: '#ff8080', medium: '#FAC775', low: 'var(--muted)' };
 
 export default function StrategyPage() {
   const [vi, setVi] = useState(0);
@@ -61,7 +61,7 @@ export default function StrategyPage() {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Strategic positioning</div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--off-white)', lineHeight: 1.9, fontWeight: 300 }}>{s.positioning}</p>
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Competitive advantages</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Competitive advantages</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {s.competitiveAdvantages.map((a, i) => (
               <div key={i} style={{ background: 'var(--card-bg)', padding: '0.9rem 1.25rem', display: 'grid', gridTemplateColumns: '1.5rem 1fr', gap: '0.75rem', alignItems: 'start' }}>

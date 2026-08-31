@@ -12,7 +12,7 @@ type Tab = 'overview' | 'budget' | 'team' | 'tasks' | 'activities';
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
   planning:  { color: '#FAC775', label: 'Planning'  },
   active:    { color: '#5DCAA5', label: 'Active'    },
-  paused:    { color: '#7a7870', label: 'Paused'    },
+  paused:    { color: 'var(--muted)', label: 'Paused'    },
   completed: { color: '#85B7EB', label: 'Completed' },
 };
 
@@ -80,7 +80,7 @@ export default function ProjectDetailPage() {
             <span className="category-label">· {project.location}</span>
             <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span>
             {project.source === 'lead' && (
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Converted from lead
               </span>
             )}
@@ -202,7 +202,7 @@ function OverviewPanel({ project, color, onStatusChange }: { project: SiteProjec
           {!editingBoundary ? (
             <button onClick={startEditingBoundary} style={{
               fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-              padding: '0.4rem 0.9rem', border: '1px solid var(--accent)', color: 'var(--accent)', background: 'transparent', cursor: 'pointer',
+              padding: '0.4rem 0.9rem', border: '1px solid var(--accent)', color: 'var(--accent-text)', background: 'transparent', cursor: 'pointer',
             }}>
               {project.boundary ? 'Edit boundary' : 'Add boundary'}
             </button>
@@ -210,7 +210,7 @@ function OverviewPanel({ project, color, onStatusChange }: { project: SiteProjec
             <div style={{ display: 'flex', gap: '0.6rem' }}>
               <button onClick={saveBoundary} disabled={savingBoundary} style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                padding: '0.4rem 0.9rem', border: 'none', color: 'var(--black)', background: 'var(--accent)', cursor: 'pointer', fontWeight: 600,
+                padding: '0.4rem 0.9rem', border: 'none', color: 'var(--on-brand)', background: 'var(--accent)', cursor: 'pointer', fontWeight: 600,
               }}>
                 {savingBoundary ? 'Saving…' : 'Save boundary'}
               </button>
@@ -296,7 +296,7 @@ function BudgetPanel({ projectId, budget, onChange }: { projectId: string; budge
       {Object.keys(totals).length > 0 && (
         <div style={{ display: 'flex', gap: '1.5rem', margin: '1.25rem 0', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
           {Object.entries(totals).map(([cur, total]) => (
-            <div key={cur}><span style={{ color: 'var(--muted)' }}>Total {cur}: </span><span style={{ color: 'var(--accent)', fontWeight: 700 }}>{total.toLocaleString()}</span></div>
+            <div key={cur}><span style={{ color: 'var(--muted)' }}>Total {cur}: </span><span style={{ color: 'var(--accent-text)', fontWeight: 700 }}>{total.toLocaleString()}</span></div>
           ))}
         </div>
       )}
@@ -313,7 +313,7 @@ function BudgetPanel({ projectId, budget, onChange }: { projectId: string; budge
               </div>
               <div className="note-text" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>{b.label}</span>
-                <span style={{ color: 'var(--accent)', fontWeight: 700 }}>{b.amount.toLocaleString()} {b.currency}</span>
+                <span style={{ color: 'var(--accent-text)', fontWeight: 700 }}>{b.amount.toLocaleString()} {b.currency}</span>
               </div>
             </div>
           ))}

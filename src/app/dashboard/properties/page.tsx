@@ -6,7 +6,7 @@ const TYPE_COLORS: Record<PropertyType, string> = { Digital: '#7F77DD', Physical
 const STATUS_STYLES: Record<string, { color: string }> = {
   active:           { color: '#5DCAA5' },
   pending:          { color: '#FAC775' },
-  planned:          { color: '#7a7870' },
+  planned:          { color: 'var(--muted)' },
   'in-development': { color: '#c8f53a' },
 };
 const VENTURE_COLORS: Record<string, string> = {

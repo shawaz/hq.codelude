@@ -365,7 +365,7 @@ Help him think through this task — break it down into steps, identify blockers
           onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
         />
         <button onClick={send} disabled={loading || !input.trim()} style={{
-          background: input.trim() && !loading ? color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
+          background: input.trim() && !loading ? color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--on-brand)' : 'var(--muted)',
           border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
         }}>
           {loading ? '...' : 'Send'}

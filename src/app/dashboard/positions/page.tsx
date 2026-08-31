@@ -5,10 +5,10 @@ import { POSITIONS } from '@/lib/people';
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   open:      { color: '#c8f53a', label: 'Open'     },
   hiring:    { color: '#5DCAA5', label: 'Hiring'   },
-  filled:    { color: '#7a7870', label: 'Filled'   },
+  filled:    { color: 'var(--muted)', label: 'Filled'   },
   'on-hold': { color: '#FAC775', label: 'On Hold'  },
 };
-const PRIORITY_COLOR: Record<string, string> = { critical: '#ff8080', high: '#FAC775', medium: '#7a7870' };
+const PRIORITY_COLOR: Record<string, string> = { critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)' };
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
   HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',

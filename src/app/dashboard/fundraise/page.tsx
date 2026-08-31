@@ -129,7 +129,7 @@ const LEGAL_STEPS = [
 ];
 
 const TIMELINE = [
-  { month: 'May–Jun 2026', phase: 'Preparation',  color: '#7a7870', items: ['Incorporate Roborns Energy & Infrastructure Pvt. Ltd.', 'Apply for DPIIT Startup India recognition', 'Engage legal counsel for CCD term sheet and SHA', 'Finalise Roborns investor deck (v1.2 is ready)'] },
+  { month: 'May–Jun 2026', phase: 'Preparation',  color: 'var(--muted)', items: ['Incorporate Roborns Energy & Infrastructure Pvt. Ltd.', 'Apply for DPIIT Startup India recognition', 'Engage legal counsel for CCD term sheet and SHA', 'Finalise Roborns investor deck (v1.2 is ready)'] },
   { month: 'Jun 2026',     phase: 'Site Proof',   color: '#FAC775', items: ['Complete Mangaluru coastal site survey', 'Thermal feasibility study commissioned', 'CRZ permit pathway analysis initiated', 'Site photos and documentation for investor deck'] },
   { month: 'Jul–Aug 2026', phase: 'Outreach',     color: '#c8f53a', items: ['Approach Karnataka family offices (warm intros)', 'Submit IAN / Mumbai Angels application', 'First investor meetings', 'Share financial model and site survey outcomes'] },
   { month: 'Aug–Sep 2026', phase: 'Due Diligence',color: '#F0997B', items: ['CCD term sheet issued to interested investors', 'Shareholder agreement negotiation', 'Investor due diligence on land, permits, feasibility', 'Valuation report from registered CA/valuer'] },
@@ -237,7 +237,7 @@ const GOVT_PIPELINE = [
 
 function Section({ title }: { title: string }) {
   return (
-    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--card-border)', marginTop: '1.5rem' }}>
+    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--card-border)', marginTop: '1.5rem' }}>
       {title}
     </div>
   );
@@ -367,7 +367,7 @@ export default function FundraisePage() {
                   { q: 'DPIIT benefit',          a: 'With DPIIT Startup India recognition, angel tax exemption (Section 56(2)(viib)) applies — no need for registered valuer certificate for CCD issuance.' },
                 ].map((r, i) => (
                   <div key={i} style={{ marginBottom: i < 3 ? '0.85rem' : 0, paddingBottom: i < 3 ? '0.85rem' : 0, borderBottom: i < 3 ? '1px solid var(--card-border)' : 'none' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)', marginBottom: '0.3rem' }}>{r.q}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent-text)', marginBottom: '0.3rem' }}>{r.q}</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{r.a}</div>
                   </div>
                 ))}
@@ -410,7 +410,7 @@ export default function FundraisePage() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
                 {phase.steps.map((s, si) => {
-                  const statusColor = s.status === 'required' ? '#ff8080' : s.status === 'recommended' ? '#FAC775' : '#7a7870';
+                  const statusColor = s.status === 'required' ? '#ff8080' : s.status === 'recommended' ? '#FAC775' : 'var(--muted)';
                   return (
                     <div key={si} style={{ background: 'var(--card-bg)', padding: '1rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 120px 110px', gap: '1.25rem', alignItems: 'start' }}>
                       <div>
@@ -468,7 +468,7 @@ export default function FundraisePage() {
           <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.25rem', marginBottom: '1.5rem' }}>
             {CRISIS_NARRATIVE.map((r, i) => (
               <div key={i} style={{ marginBottom: i < CRISIS_NARRATIVE.length - 1 ? '0.85rem' : 0, paddingBottom: i < CRISIS_NARRATIVE.length - 1 ? '0.85rem' : 0, borderBottom: i < CRISIS_NARRATIVE.length - 1 ? '1px solid var(--card-border)' : 'none' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent)', marginBottom: '0.3rem' }}>{r.q}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--accent-text)', marginBottom: '0.3rem' }}>{r.q}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{r.a}</div>
               </div>
             ))}
@@ -501,7 +501,7 @@ export default function FundraisePage() {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
                 {phase.steps.map((s, si) => {
-                  const statusColor = s.status === 'required' ? '#ff8080' : s.status === 'apply now' ? '#5DCAA5' : s.status === 'recommended' ? '#FAC775' : '#7a7870';
+                  const statusColor = s.status === 'required' ? '#ff8080' : s.status === 'apply now' ? '#5DCAA5' : s.status === 'recommended' ? '#FAC775' : 'var(--muted)';
                   return (
                     <div key={si} style={{ background: 'var(--card-bg)', padding: '1rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 200px 110px', gap: '1.25rem', alignItems: 'start' }}>
                       <div>

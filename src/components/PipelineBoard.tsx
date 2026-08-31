@@ -162,7 +162,7 @@ function AddForm({
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
         <button type="submit" disabled={saving} style={{
           padding: '0.5rem 1.4rem', border: 'none', cursor: saving ? 'default' : 'pointer',
-          background: color, color: 'var(--black)', fontFamily: 'var(--font-mono)',
+          background: color, color: 'var(--on-brand)', fontFamily: 'var(--font-mono)',
           fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase',
           fontWeight: 700, opacity: saving ? 0.6 : 1,
         }}>{saving ? 'Saving…' : 'Save'}</button>
@@ -276,7 +276,7 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
             background: index === i ? v.color : 'var(--card-bg)',
             border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: index === i ? 'var(--black)' : 'var(--muted)',
+            color: index === i ? 'var(--on-brand)' : 'var(--muted)',
             fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
           }}>{v.name}</button>
         ))}

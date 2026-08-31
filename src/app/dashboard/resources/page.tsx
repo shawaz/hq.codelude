@@ -7,10 +7,10 @@ type Tab = 'human' | 'technology' | 'legal' | 'summary';
 const STATUS_STYLES: Record<ResStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
   needed:  { color: '#FAC775', label: 'Needed'  },
-  planned: { color: '#7a7870', label: 'Planned' },
+  planned: { color: 'var(--muted)', label: 'Planned' },
 };
 const PRIORITY_COLOR: Record<ResPriority, string> = {
-  critical: '#ff8080', high: '#FAC775', medium: '#7a7870', low: '#4a4845',
+  critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)', low: '#4a4845',
 };
 const TYPE_COLORS: Record<ResType, string> = {
   Human: '#c8f53a', Technology: '#7F77DD', Legal: '#F0997B', Physical: '#5DCAA5', Financial: '#FAC775',
@@ -129,7 +129,7 @@ export default function ResourcesPage() {
           <button key={v.name} onClick={() => { setVi(i); setTab('human'); }} style={{
             flex: 1, padding: '0.8rem 0.5rem', background: index === i ? v.color : 'var(--card-bg)',
             border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: index === i ? 'var(--black)' : 'var(--muted)',
+            letterSpacing: '0.06em', color: index === i ? 'var(--on-brand)' : 'var(--muted)',
             fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
           }}>{v.name}</button>
         ))}
@@ -191,15 +191,15 @@ export default function ResourcesPage() {
               );
             })}
             <div style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem', borderTop: '2px solid var(--accent)' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Total</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.2rem' }}>{fmtCost(totalMonthly)}/mo</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Total</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-text)', marginBottom: '0.2rem' }}>{fmtCost(totalMonthly)}/mo</div>
               {totalOneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#FAC775' }}>{fmtCost(totalOneTime)} one-time</div>}
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '0.4rem' }}>{all.length} total resources</div>
             </div>
           </div>
 
           {/* Full sorted table */}
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
             All resources — sorted by priority
           </div>
           <ResourceTable resources={tabResources.summary} />

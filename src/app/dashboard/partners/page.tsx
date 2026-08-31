@@ -7,7 +7,7 @@ const STATUS_STYLES: Record<PartnerStatus, { color: string; label: string }> = {
   active:       { color: '#5DCAA5', label: 'Active'      },
   negotiating:  { color: '#c8f53a', label: 'Negotiating' },
   prospecting:  { color: '#FAC775', label: 'Prospecting' },
-  'on-hold':    { color: '#7a7870', label: 'On Hold'     },
+  'on-hold':    { color: 'var(--muted)', label: 'On Hold'     },
 };
 const TYPE_COLORS: Record<PartnerType, string> = {
   Technology: '#7F77DD', Distribution: '#85B7EB', Financial: '#5DCAA5',
@@ -43,7 +43,7 @@ export default function PartnersPage() {
       <p className="page-sub">Strategic partner registry — per venture.</p>
       <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
         {ventures.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setFilter('all'); }} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--black)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
+          <button key={v.name} onClick={() => { setVi(i); setFilter('all'); }} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--on-brand)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
         ))}
       </div>
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
@@ -70,7 +70,7 @@ export default function PartnersPage() {
               <div>
                 <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.68rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300,marginBottom:'0.5rem' }}>{p.role}</div>
                 <div style={{ display:'flex',alignItems:'flex-start',gap:'0.4rem' }}>
-                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',color:'var(--accent)',flexShrink:0,paddingTop:'0.05rem' }}>→</span>
+                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',color:'var(--accent-text)',flexShrink:0,paddingTop:'0.05rem' }}>→</span>
                   <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.62rem',color:'var(--off-white)',lineHeight:1.6,fontWeight:300 }}>{p.nextAction}</span>
                 </div>
               </div>

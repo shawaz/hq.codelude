@@ -113,7 +113,7 @@ export default function ExpensesPage() {
                   {e.amount > 0 ? `$${e.amount.toLocaleString()}` : 'Free'}
                 </td>
                 <td>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: e.receipt ? '#5DCAA5' : '#7a7870' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: e.receipt ? '#5DCAA5' : 'var(--muted)' }}>
                     {e.receipt ? '✓' : '—'}
                   </span>
                 </td>

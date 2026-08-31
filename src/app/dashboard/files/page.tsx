@@ -18,19 +18,19 @@ const CAT_COLORS: Record<FileCategory, string> = {
   'Brand':           '#c8f53a',
   'Technical':       '#85B7EB',
   'Research':        '#FAC775',
-  'Internal':        '#7a7870',
+  'Internal':        'var(--muted)',
 };
 
 const STATUS_STYLES: Record<FileStatus, { color: string; label: string }> = {
   final:    { color: '#5DCAA5', label: 'Final'    },
   draft:    { color: '#FAC775', label: 'Draft'    },
   review:   { color: '#c8f53a', label: 'Review'   },
-  archived: { color: '#7a7870', label: 'Archived' },
+  archived: { color: 'var(--muted)', label: 'Archived' },
 };
 
 const FORMAT_COLORS: Record<string, string> = {
   HTML: '#F0997B', PDF: '#ff8080', XLSX: '#5DCAA5', PPTX: '#7F77DD',
-  DOCX: '#85B7EB', Figma: '#c8f53a', MD: '#FAC775', 'PNG/SVG': '#7a7870',
+  DOCX: '#85B7EB', Figma: '#c8f53a', MD: '#FAC775', 'PNG/SVG': 'var(--muted)',
 };
 
 export default function FilesPage() {

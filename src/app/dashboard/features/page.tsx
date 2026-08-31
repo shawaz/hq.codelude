@@ -178,7 +178,7 @@ const DATA: PlatformFeatures[] = [
 const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {
   'live':        { color: '#5DCAA5', label: 'Live' },
   'in-progress': { color: '#c8f53a', label: 'In Progress' },
-  'planned':     { color: '#7a7870', label: 'Planned' },
+  'planned':     { color: 'var(--muted)', label: 'Planned' },
 };
 
 export default function FeaturesPage() {

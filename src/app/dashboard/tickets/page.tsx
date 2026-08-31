@@ -7,7 +7,7 @@ export default function TicketsPage() {
       <p className="page-sub">Support ticket queue — bugs, feature requests, and help requests from users and partners.</p>
       {TICKETS.length === 0 ? (
         <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '2rem' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>No tickets open</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>No tickets open</div>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
             Support tickets will appear here from Dextrip users (public beta launch), Franchiseen investors, and HubCV professionals. Set up the intake channel — email or in-app form — before each venture goes live.
             <br /><br />

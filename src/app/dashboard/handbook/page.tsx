@@ -34,7 +34,7 @@ export default function HandbookPage() {
         {/* Article content */}
         {activeSection && (
           <div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.25rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.25rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
               {activeSection.icon} {activeSection.title}
             </div>
 
@@ -45,7 +45,7 @@ export default function HandbookPage() {
                 return (
                   <div key={article.title}>
                     <button onClick={() => setOpenArticle(isOpen ? null : article.title)}
-                      style={{ width: '100%', background: isOpen ? '#131311' : 'var(--card-bg)', border: 'none',
+                      style={{ width: '100%', background: isOpen ? 'var(--card-bg-alt)' : 'var(--card-bg)', border: 'none',
                         padding: '1rem 1.25rem', cursor: 'pointer', textAlign: 'left', display: 'flex',
                         justifyContent: 'space-between', alignItems: 'center', borderLeft: isOpen ? '2px solid var(--accent)' : '2px solid transparent' }}>
                       <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--off-white)' }}>{article.title}</span>

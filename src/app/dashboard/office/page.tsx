@@ -4,7 +4,7 @@ const TYPE_COLORS: Record<string, string> = { Registered: '#c8f53a', Engineering
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
   planned: { color: '#FAC775', label: 'Planned' },
-  virtual: { color: '#7a7870', label: 'Virtual' },
+  virtual: { color: 'var(--muted)', label: 'Virtual' },
 };
 
 export default function OfficePage() {

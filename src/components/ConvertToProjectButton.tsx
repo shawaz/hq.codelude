@@ -84,24 +84,24 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
     <>
       <button onClick={openModal} style={{
         fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-        padding: '0.3rem 0.7rem', border: '1px solid var(--accent)', color: 'var(--accent)',
+        padding: '0.3rem 0.7rem', border: '1px solid var(--accent)', color: 'var(--accent-text)',
         background: 'transparent', cursor: 'pointer', whiteSpace: 'nowrap',
       }}>
         Convert to project →
       </button>
 
       {open && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
           onClick={() => setOpen(false)}>
           <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', maxWidth: 480, width: '100%', padding: '2rem' }}
             onClick={e => e.stopPropagation()}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Convert lead to site project</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Convert lead to site project</div>
             <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.3rem' }}>{lead.name}</div>
             {lead.config && (
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.6, marginBottom: lead.boundary ? '0.5rem' : '1.5rem' }}>{lead.config}</div>
             )}
             {lead.boundary && (
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.06em', marginBottom: '1.5rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.06em', marginBottom: '1.5rem' }}>
                 ✓ Site boundary marked on submission — {lead.areaHectares?.toLocaleString()} ha. Will carry over to the new project.
               </div>
             )}
@@ -125,7 +125,7 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
               </div>
               {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--black)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Converting...' : 'Convert →'}
                 </button>
                 <button type="button" onClick={() => setOpen(false)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

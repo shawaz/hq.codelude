@@ -51,7 +51,7 @@ export default function ProjectsPage() {
                   <span className="ptc-label">Done</span>
                 </div>
                 <div className="ptc">
-                  <span className="ptc-num" style={{ color: 'var(--accent)' }}>{inProgress}</span>
+                  <span className="ptc-num" style={{ color: 'var(--accent-text)' }}>{inProgress}</span>
                   <span className="ptc-label">In Progress</span>
                 </div>
                 <div className="ptc">
