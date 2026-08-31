@@ -2,7 +2,16 @@
 
 import { useState } from 'react';
 import { INVESTOR_ROUNDS, type RoundStatus, type RoundType } from '@/lib/finance';
+import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+
+const TABS: VentureTab[] = [
+  { key: 'all',         label: 'All'         },
+  { key: 'planning',    label: 'Planning'    },
+  { key: 'seeking',     label: 'Seeking'     },
+  { key: 'negotiating', label: 'Negotiating' },
+  { key: 'closed',      label: 'Closed'      },
+];
 
 const STATUS_STYLES: Record<RoundStatus, { color: string; label: string }> = {
   planning:    { color: '#FAC775', label: 'Planning'    },
@@ -30,10 +39,20 @@ export default function InvestorsPage() {
   const round = selected ? INVESTOR_ROUNDS.find(r => r.id === selected) : null;
 
   return (
-    <div>
-      <h1 className="page-title">Investors</h1>
-      <p className="page-sub">Fundraising rounds, token tranches, and investor allocation across all ventures.</p>
+    <VenturePageLayout
+      title="Investors"
+      subtitle="Fundraising rounds, token tranches, and investor allocation across all ventures."
+      pageSlug="investors"
+      eyebrow={() => 'rounds'}
+      heading={v => `${v.name} Investors`}
+      tabs={TABS}
+    >
+      {({ venture, tab }) => {
+        const scoped = INVESTOR_ROUNDS.filter(r => r.venture === venture.name);
+        const rounds = tab === 'all' ? scoped : scoped.filter(r => r.status === tab);
 
+        return (
+          <>
       {/* Token structure note */}
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Structure overview</div>
@@ -42,9 +61,10 @@ export default function InvestorsPage() {
         </p>
       </div>
 
+      {rounds.length === 0 ? <NoRows>No {tab === 'all' ? '' : `${tab} `}rounds for {venture.name}.</NoRows> : (
       <div style={{ display: 'grid', gridTemplateColumns: selected ? '1fr 1fr' : '1fr', gap: '1.5rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
-          {INVESTOR_ROUNDS.map(r => {
+          {rounds.map(r => {
             const ss = STATUS_STYLES[r.status];
             const isActive = selected === r.id;
             return (
@@ -94,6 +114,10 @@ export default function InvestorsPage() {
           </div>
         )}
       </div>
-    </div>
+      )}
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }

@@ -154,6 +154,8 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
 
 export interface ShareEntry {
   entity: string;
+  /** Undefined means HoldCo-level — shown on every venture tab. See isHoldCo. */
+  venture?: string;
   shareholder: string;
   shareClass: string;
   percentage: number;
@@ -166,11 +168,11 @@ export const SHARES: ShareEntry[] = [
   { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Shawaz (Founder)',    shareClass: 'Ordinary A',  percentage: 100,  shares: '10,000,000',  vestingSchedule: 'Fully vested',               notes: 'Founder shares — sole shareholder at incorporation. Dilution expected via strategic and token rounds.' },
   { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Strategic Reserve',   shareClass: 'Token Pool',   percentage: 0,    shares: 'TBD',         vestingSchedule: 'Per token tranche schedule', notes: 'Reserved for HoldCo token issuance — exact allocation TBD on token structure finalisation.' },
   { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Employee Pool',       shareClass: 'Options',      percentage: 0,    shares: 'TBD',         vestingSchedule: '4-year / 1-year cliff',      notes: 'ESOP pool to be created before first team hire. Recommended: 10–15% of total cap table.' },
-  { entity: 'Roborns (Project Entity)', shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Roborns will be a subsidiary of Codelude HoldCo. Token holders get revenue share, not equity.' },
-  { entity: 'Franchiseen (Project)',    shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
-  { entity: 'Dextrip (Project)',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
-  { entity: 'HubCV (Project)',          shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
-  { entity: 'Llife (Project)',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
+  { entity: 'Roborns (Project Entity)', venture: 'Roborns', shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Roborns will be a subsidiary of Codelude HoldCo. Token holders get revenue share, not equity.' },
+  { entity: 'Franchiseen (Project)', venture: 'Franchiseen',    shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
+  { entity: 'Dextrip (Project)', venture: 'Dextrip',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
+  { entity: 'HubCV (Project)', venture: 'HubCV',          shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
+  { entity: 'Llife (Project)', venture: 'Llife',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
 ];
 
 // ─── WALLETS ─────────────────────────────────────────────────────────────────
@@ -180,6 +182,8 @@ export type WalletChain  = 'Ethereum' | 'Polygon' | 'Solana' | 'BNB Chain' | 'Mu
 
 export interface Wallet {
   label: string;
+  /** Undefined means HoldCo-level — shown on every venture tab. See isHoldCo. */
+  venture?: string;
   chain: WalletChain;
   address: string;
   purpose: string;
@@ -191,7 +195,7 @@ export interface Wallet {
 export const WALLETS: Wallet[] = [
   { label: 'HoldCo Treasury',      chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Primary Dubai HoldCo treasury wallet — receives token sale proceeds and distributes to project entities', status: 'pending', balance: '$0',      notes: 'Deploy after legal structure finalised. Multisig (2-of-3) recommended.' },
   { label: 'Token Issuance Wallet', chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Issues and manages Roborns token and eventually Codelude studio token',                                   status: 'pending', balance: '$0',      notes: 'Requires smart contract audit before token issuance. Budget $20–50K for audit.' },
-  { label: 'Dextrip Operations',   chain: 'Multi-chain', address: 'Exchange API accounts',   purpose: 'Operational wallet for Dextrip strategy execution — holds user API keys, not funds (non-custodial)',     status: 'active',  balance: 'N/A',     notes: 'Non-custodial — Dextrip never holds user funds. API key vault only.' },
+  { label: 'Dextrip Operations', venture: 'Dextrip',   chain: 'Multi-chain', address: 'Exchange API accounts',   purpose: 'Operational wallet for Dextrip strategy execution — holds user API keys, not funds (non-custodial)',     status: 'active',  balance: 'N/A',     notes: 'Non-custodial — Dextrip never holds user funds. API key vault only.' },
   { label: 'Investor Distributions',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Quarterly revenue distribution wallet — sends proportional payouts to token holders',                     status: 'pending', balance: '$0',      notes: 'Linked to HoldCo Treasury. Automated distribution contract to be built.' },
   { label: 'Operational Cold Store',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Cold storage for any crypto held in reserve — hardware wallet controlled by founder',                    status: 'cold',    balance: '$0',      notes: 'Ledger hardware wallet. Address generated offline.' },
 ];
@@ -203,6 +207,8 @@ export type AccountType   = 'Current' | 'Savings' | 'Escrow' | 'Exchange';
 
 export interface Account {
   entity: string;
+  /** Undefined means HoldCo-level — shown on every venture tab. See isHoldCo. */
+  venture?: string;
   bank: string;
   type: AccountType;
   currency: string;
@@ -214,9 +220,9 @@ export interface Account {
 export const ACCOUNTS: Account[] = [
   { entity: 'Codelude HoldCo (Dubai)',  bank: 'Emirates NBD / Mashreq (TBD)', type: 'Current',  currency: 'AED / USD', purpose: 'Primary operating account for Dubai HoldCo — receives investor capital, pays project entities',             status: 'planned', notes: 'Requires HoldCo incorporation to open. Target: Q3 2026.' },
   { entity: 'Codelude India',           bank: 'HDFC Bank',                    type: 'Current',  currency: 'INR',       purpose: 'Engineering operations in Mangaluru — salaries, contractors, Roborns site costs',                         status: 'planned', notes: 'Open alongside Roborns engineering engagement. FIRA compliance for inward remittances from Dubai.' },
-  { entity: 'Franchiseen (Platform)',   bank: 'TBD — escrow provider',        type: 'Escrow',   currency: 'INR / USD', purpose: 'Investor capital held in escrow before franchise deployment. Mandatory for regulatory compliance.',        status: 'planned', notes: 'Escrow account with regulated trustee is a legal requirement for holding retail investor funds.' },
-  { entity: 'Dextrip Operations',       bank: 'Binance / Bybit (Exchange)',   type: 'Exchange', currency: 'USDT / BTC',purpose: 'Exchange accounts for strategy execution — API-connected to Dextrip multi-bot',                          status: 'active',  notes: 'Not a bank account — exchange accounts for operational trading. API keys stored securely in bot.' },
-  { entity: 'Dextrip Revenue',          bank: 'Stripe (TBD)',                 type: 'Current',  currency: 'USD',       purpose: 'Subscription revenue collection for Dextrip public beta — Stripe or Paddle integration',                status: 'planned', notes: 'Apply after public beta launch. Requires business registration in a Stripe-supported country.' },
+  { entity: 'Franchiseen (Platform)', venture: 'Franchiseen',   bank: 'TBD — escrow provider',        type: 'Escrow',   currency: 'INR / USD', purpose: 'Investor capital held in escrow before franchise deployment. Mandatory for regulatory compliance.',        status: 'planned', notes: 'Escrow account with regulated trustee is a legal requirement for holding retail investor funds.' },
+  { entity: 'Dextrip Operations', venture: 'Dextrip',       bank: 'Binance / Bybit (Exchange)',   type: 'Exchange', currency: 'USDT / BTC',purpose: 'Exchange accounts for strategy execution — API-connected to Dextrip multi-bot',                          status: 'active',  notes: 'Not a bank account — exchange accounts for operational trading. API keys stored securely in bot.' },
+  { entity: 'Dextrip Revenue', venture: 'Dextrip',          bank: 'Stripe (TBD)',                 type: 'Current',  currency: 'USD',       purpose: 'Subscription revenue collection for Dextrip public beta — Stripe or Paddle integration',                status: 'planned', notes: 'Apply after public beta launch. Requires business registration in a Stripe-supported country.' },
   { entity: 'Codelude Operations (MY)', bank: 'TBD',                          type: 'Current',  currency: 'MYR / USD', purpose: 'Southeast Asia operations account — for future expansion into Malaysia / Singapore markets',              status: 'planned', notes: 'Not urgent — open when SE Asia operations begin (est. 2027).' },
 ];
 
@@ -276,3 +282,24 @@ export const PAYEES: Payee[] = [
   { name: 'Human Skill Verifiers',      type: 'Contractor',     ventures: ['HubCV'],                                amount: '$20–50/assess',currency:'USD', frequency: 'variable', status: 'pending', category: 'Operations', notes: 'Pay-per-assessment model for domain expert verifiers. Cost scales with profile volume.' },
   { name: 'Smart Contract Audit',       type: 'Professional',   ventures: ['Roborns', 'Codelude'],                  amount: '$20K–50K',   currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Legal', notes: 'Required before token issuance. Budget for Roborns token smart contract security audit.' },
 ];
+
+
+// ─── VENTURE SCOPING ─────────────────────────────────────────────────────────
+
+/**
+ * A row with no `venture` belongs to the HoldCo, not to any one venture: the
+ * Dubai treasury, the founder's cap table entry, the India operating account.
+ *
+ * The Finance strip carries the five ventures only (matching Financial Model),
+ * so HoldCo rows have no tab of their own. They appear on every venture tab
+ * instead, badged, because the HoldCo does in fact own all five ventures —
+ * showing them everywhere is truer than hiding them.
+ */
+export function isHoldCo(row: { venture?: string }): boolean {
+  return !row.venture;
+}
+
+/** Rows for one venture tab: that venture's own rows, plus HoldCo-level ones. */
+export function forVenture<T extends { venture?: string }>(rows: T[], venture: string): T[] {
+  return rows.filter(r => isHoldCo(r) || r.venture === venture);
+}

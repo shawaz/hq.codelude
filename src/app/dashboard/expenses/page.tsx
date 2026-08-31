@@ -1,9 +1,18 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { EXPENSES, type ExpenseStatus } from '@/lib/budget-data';
-import { usePageScopes } from '@/lib/use-page-scopes';
+import VenturePageLayout, { type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+
+// The venture strip now comes from VenturePageLayout; status becomes the tab row.
+const TABS: VentureTab[] = [
+  { key: 'all',        label: 'All'        },
+  { key: 'paid',       label: 'Paid'       },
+  { key: 'pending',    label: 'Pending'    },
+  { key: 'recurring',  label: 'Recurring'  },
+  { key: 'reimbursed', label: 'Reimbursed' },
+];
 
 const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
   paid:       { color: '#5DCAA5', label: 'Paid'       },
@@ -17,36 +26,36 @@ const VENTURE_COLORS: Record<string, string> = {
   HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
-const STATUSES  = ['all', 'paid', 'pending', 'recurring', 'reimbursed'] as const;
 const CATS      = ['All', 'Infrastructure', 'Engineering', 'Legal', 'Domain', 'SaaS', 'AI Infrastructure'];
 
 export default function ExpensesPage() {
-  // 'All' means all ventures *this user can see*, never the whole company.
-  const { names: allowed } = usePageScopes('expenses');
-  const VENTURES = ['All', ...allowed];
-  const [venture, setVenture] = useState('All');
-  const [status,  setStatus]  = useState<'all' | ExpenseStatus>('all');
-  const [cat,     setCat]     = useState('All');
-
-  const filtered = useMemo(() => EXPENSES.filter(e =>
-    allowed.includes(e.venture) &&
-    (venture === 'All' || e.venture === venture) &&
-    (status  === 'all' || e.status  === status) &&
-    (cat     === 'All' || e.category === cat)
-  ), [allowed, venture, status, cat]);
-
-  const paid      = EXPENSES.filter(e => e.status === 'paid').reduce((s, e) => s + e.amount, 0);
-  const pending   = EXPENSES.filter(e => e.status === 'pending').reduce((s, e) => s + e.amount, 0);
-  const recurring = EXPENSES.filter(e => e.status === 'recurring').reduce((s, e) => s + e.amount, 0);
-  const totalMtd  = EXPENSES.filter(e => e.status === 'paid' || e.status === 'recurring')
-    .filter(e => e.date.startsWith('2026-05'))
-    .reduce((s, e) => s + e.amount, 0);
+  const [cat, setCat] = useState('All');
 
   return (
-    <div>
-      <h1 className="page-title">Expenses</h1>
-      <p className="page-sub">All company expenses — paid, pending, and recurring across all ventures.</p>
+    <VenturePageLayout
+      title="Expenses"
+      subtitle="All company expenses — paid, pending, and recurring across all ventures."
+      pageSlug="expenses"
+      eyebrow={() => 'expenses'}
+      heading={v => `${v.name} Expenses`}
+      tabs={TABS}
+    >
+      {({ venture, tab }) => {
+        // Stat cards reflect the selected venture, not the whole company —
+        // otherwise the totals contradict the table underneath them.
+        const scoped = EXPENSES.filter(e => e.venture === venture.name);
+        const byStatus = tab === 'all' ? scoped : scoped.filter(e => e.status === tab);
+        const filtered = byStatus.filter(e => cat === 'All' || e.category === cat);
 
+        const paid      = scoped.filter(e => e.status === 'paid').reduce((s, e) => s + e.amount, 0);
+        const pending   = scoped.filter(e => e.status === 'pending').reduce((s, e) => s + e.amount, 0);
+        const recurring = scoped.filter(e => e.status === 'recurring').reduce((s, e) => s + e.amount, 0);
+        const totalMtd  = scoped.filter(e => e.status === 'paid' || e.status === 'recurring')
+          .filter(e => e.date.startsWith('2026-05'))
+          .reduce((s, e) => s + e.amount, 0);
+
+        return (
+          <>
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
         {[
@@ -63,20 +72,6 @@ export default function ExpensesPage() {
       </div>
 
       {/* Filters */}
-      <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-        {VENTURES.map(v => (
-          <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
-            onClick={() => setVenture(v)}>{v}</button>
-        ))}
-      </div>
-      <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-        {STATUSES.map(s => (
-          <button key={s} className={`filter-pill${status === s ? ' active' : ''}`}
-            style={status === s && s !== 'all' ? { borderColor: STATUS_STYLES[s]?.color, color: STATUS_STYLES[s]?.color } : {}}
-            onClick={() => setStatus(s)}>{s === 'all' ? 'All status' : STATUS_STYLES[s].label}</button>
-        ))}
-      </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {CATS.map(c => (
           <button key={c} className={`filter-pill${cat === c ? ' active' : ''}`} onClick={() => setCat(c)}>{c}</button>
@@ -127,6 +122,9 @@ export default function ExpensesPage() {
           )}
         </tbody>
       </table>
-    </div>
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }

@@ -2,7 +2,16 @@
 
 import { useState } from 'react';
 import { PAYEES, type PayeeStatus, type PayeeFrequency } from '@/lib/finance';
+import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+
+const TABS: VentureTab[] = [
+  { key: 'all',      label: 'All'      },
+  { key: 'monthly',  label: 'Monthly'  },
+  { key: 'annual',   label: 'Annual'   },
+  { key: 'one-time', label: 'One-time' },
+  { key: 'variable', label: 'Variable' },
+];
 
 const STATUS_STYLES: Record<PayeeStatus, { color: string; label: string }> = {
   active:    { color: '#5DCAA5', label: 'Active'    },
@@ -28,18 +37,28 @@ const CATEGORIES = ['All', 'Infrastructure', 'Legal', 'AI Infrastructure', 'Comp
 export default function PayeePage() {
   const [cat, setCat] = useState('All');
 
-  const filtered = PAYEES.filter(p => cat === 'All' || p.category === cat);
-  const active   = PAYEES.filter(p => p.status === 'active').length;
-  const monthly  = PAYEES.filter(p => p.frequency === 'monthly' && p.status === 'active');
-
   return (
-    <div>
-      <h1 className="page-title">Payee</h1>
-      <p className="page-sub">Vendor, contractor, and subscription payment registry.</p>
+    <VenturePageLayout
+      title="Payee"
+      subtitle="Vendor, contractor, and subscription payment registry."
+      pageSlug="payee"
+      eyebrow={() => 'payees'}
+      heading={v => `${v.name} Payees`}
+      tabs={TABS}
+    >
+      {({ venture, tab }) => {
+        // A payee can serve several ventures, so match on membership.
+        const scoped   = PAYEES.filter(p => p.ventures.includes(venture.name));
+        const byFreq   = tab === 'all' ? scoped : scoped.filter(p => p.frequency === tab);
+        const filtered = byFreq.filter(p => cat === 'All' || p.category === cat);
+        const active   = byFreq.filter(p => p.status === 'active').length;
+        const monthly  = byFreq.filter(p => p.frequency === 'monthly' && p.status === 'active');
 
+        return (
+          <>
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num">{PAYEES.length}</div>
+          <div className="tasks-count-num">{byFreq.length}</div>
           <div className="tasks-count-label">Total payees</div>
         </div>
         <div className="tasks-count-cell">
@@ -58,6 +77,7 @@ export default function PayeePage() {
         ))}
       </div>
 
+      {filtered.length === 0 ? <NoRows>No payees for {venture.name}{cat === 'All' ? '' : ` in ${cat}`}.</NoRows> : (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {filtered.map((p, i) => {
           const ss = STATUS_STYLES[p.status];
@@ -84,6 +104,10 @@ export default function PayeePage() {
           );
         })}
       </div>
-    </div>
+      )}
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }

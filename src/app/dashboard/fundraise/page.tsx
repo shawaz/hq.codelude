@@ -1,5 +1,6 @@
 'use client';
 
+import VenturePageLayout, { NoRows } from '@/components/VenturePageLayout';
 import { useState } from 'react';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -255,14 +256,31 @@ function InfoRow({ label, value, accent }: { label: string; value: string; accen
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 
-export default function FundraisePage() {
+export default function PlanningPage() {
   const [tab, setTab] = useState<Tab>('round');
 
   return (
-    <div>
-      <h1 className="page-title">Roborns — India Equity Fundraise</h1>
-      <p className="page-sub">₹18.1 Cr seed round plan via Compulsorily Convertible Debentures (CCDs) — Indian private limited company, equity structure.</p>
-
+    <VenturePageLayout
+      title="Planning"
+      subtitle="Raise planning per venture — round structure, investor targets, legal, and timeline."
+      pageSlug="fundraise"
+      eyebrow={() => 'raise plan'}
+      heading={v => `${v.name} Raise Plan`}
+    >
+      {({ venture }) => {
+        // Every figure on this page — ₹18.1 Cr, the CCD structure, the
+        // hyperscaler pitch — is Roborns'. Showing it under another venture's
+        // tab would be worse than showing nothing.
+        if (venture.name !== 'Roborns') {
+          return (
+            <NoRows>
+              No raise plan for {venture.name} yet. Roborns is the only venture
+              currently raising — its ₹18.1 Cr seed round is on the Roborns tab.
+            </NoRows>
+          );
+        }
+        return (
+          <>
       {/* Summary strip */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem', borderLeft: '2px solid #5DCAA5' }}>
         {[
@@ -519,6 +537,9 @@ export default function FundraisePage() {
           ))}
         </div>
       )}
-    </div>
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }
