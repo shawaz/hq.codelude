@@ -1,8 +1,10 @@
-const VENTURES = [
+import { getPageScopeNames } from '@/lib/page-scopes-server';
+const ALL_VENTURE_CARDS = [
   { num: '01', name: 'Roborns',     sector: 'Coastal AI Infrastructure', color: '#5DCAA5', status: 'In Development', desc: 'Thermal engineering engaged. Site survey underway in Mangaluru.',         metrics: [{ k: 'Phase', v: '1 — Feasibility' }, { k: 'HoldCo', v: 'Dubai, UAE' }] },
-  { num: '02', name: 'Franchiseen', sector: 'Franchise Finance OS',       color: '#7F77DD', status: 'Alpha',          desc: 'Platform architecture complete. First franchise partner onboarding.',   metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout cycle', v: 'Q3 2026' }] },
-  { num: '03', name: 'HubCV',       sector: 'AI Career Intelligence',     color: '#FAC775', status: 'In Development', desc: 'Matching engine in development. Recruiter outreach started.',           metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta target', v: 'Q4 2026' }] },
-  { num: '04', name: 'Cuestay',     sector: 'Home AI Automation',         color: '#85B7EB', status: 'Planning',       desc: 'Protocol spec complete. Hardware partner conversations underway.',      metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Launch', v: '2027' }] },
+  { num: '02', name: 'Franchiseen', sector: 'AI Business Assistant',       color: '#7F77DD', status: 'Alpha',          desc: 'Platform architecture complete. First franchise partner onboarding.',   metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout cycle', v: 'Q3 2026' }] },
+  { num: '03', name: 'HubCV',       sector: 'AI Career Assistant',     color: '#FAC775', status: 'In Development', desc: 'Matching engine in development. Recruiter outreach started.',           metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta target', v: 'Q4 2026' }] },
+  { num: '04', name: 'Dextrip',     sector: 'AI Trading Assistant',      color: '#F0997B', status: 'Closed Beta',    desc: 'Strategy engine live with paying beta subscribers. Public beta and creator marketplace next.', metrics: [{ k: 'Stage', v: 'Closed beta' }, { k: 'Public beta', v: 'Q3 2026' }] },
+  { num: '05', name: 'Llife',       sector: 'AI Life Assistant',         color: '#85B7EB', status: 'Planning',       desc: 'Five-domain model defined. HubCV, Dextrip and Franchiseen API integrations in build.',      metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Launch', v: '2027' }] },
 ];
 
 const ACTIVITY = [
@@ -14,7 +16,11 @@ const ACTIVITY = [
   { date: 'May 10', text: 'HubCV matching engine development started.' },
 ];
 
-export default function OverviewPage() {
+export default async function OverviewPage() {
+  // Server-rendered strip, filtered the same way the client ones are.
+  const allowed = await getPageScopeNames('overview');
+  const VENTURES = ALL_VENTURE_CARDS.filter(v => allowed.includes(v.name));
+
   return (
     <div>
       <div className="stats-row">

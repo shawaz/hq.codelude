@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiPage } from '@/lib/api-auth';
 import { getTaskExtra, addFile, deleteFile, uploadsDir } from '@/lib/task-data';
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -13,11 +14,15 @@ function safeName(name: string): string {
 
 export async function GET(_req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiPage('tasks');
+  if (guard instanceof NextResponse) return guard;
   return NextResponse.json(getTaskExtra(id).files);
 }
 
 export async function POST(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiPage('tasks');
+  if (guard instanceof NextResponse) return guard;
   const form = await req.formData();
   const file = form.get('file');
 
@@ -47,6 +52,8 @@ export async function POST(req: NextRequest, { params }: Ctx) {
 
 export async function DELETE(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiPage('tasks');
+  if (guard instanceof NextResponse) return guard;
   const fileId = req.nextUrl.searchParams.get('fileId');
   if (!fileId) return NextResponse.json({ error: 'fileId required' }, { status: 400 });
 

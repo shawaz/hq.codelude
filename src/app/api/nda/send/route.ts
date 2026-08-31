@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiPage } from '@/lib/api-auth';
 import { Resend } from 'resend';
 
 export async function POST(req: NextRequest) {
+  const guard = await requireApiPage('nda');
+  if (guard instanceof NextResponse) return guard;
   const resend = new Resend(process.env.RESEND_API_KEY);
   const { ndaId, party, toEmail, venture, purpose, personalNote } = await req.json();
 

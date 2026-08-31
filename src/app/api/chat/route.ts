@@ -1,4 +1,9 @@
+import { NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { requireApiUser } from '@/lib/api-auth';
+import { isUnrestricted, venturesForUser } from '@/lib/nav';
+import { ALL_SCOPE_NAMES } from '@/lib/ventures';
+import { VENTURE_CONTEXT } from '@/lib/venture-context';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -11,17 +16,17 @@ const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — the internal
 
 ## The 5 ventures
 1. **Roborns** — Coastal AI + Desalination, Mangaluru. 1-acre site, waste heat from AI compute drives seawater desalination. Seed round: ₹18.1 Cr (~$2.1M). Status: pre-seed, site survey phase.
-2. **Franchiseen** — Franchise Finance OS. Fractional ownership platform, daily payouts. Stack: Next.js, Crossmint, Solana/Jupiter, Convex. Status: building.
-3. **HubCV** — AI Career Intelligence. Dynamic verified profiles. Stack: Next.js, NextAuth, Drizzle ORM, Anthropic SDK, PostgreSQL. Status: building.
-4. **Cuestay** — Home AI Automation. Matter protocol, ambient intelligence. Status: protocol spec done, hardware partner search.
-5. **Dextrip** — Decentralised trading automation. Live with 3 paying beta subscribers ($227 MRR). Multiple bots running on the server.
+2. **Franchiseen** — AI Business Assistant. Fractional ownership platform, daily payouts. Stack: Next.js, Crossmint, Solana/Jupiter, Convex. Status: building.
+3. **HubCV** (hubcv.pro) — AI Career Assistant. Skill-verified profiles, hubs, rooms and feed. Stack: Next.js 16, React 19, Convex, Convex Auth, Capacitor. Status: live.
+4. **Llife** (llife.ai) — AI Life Assistant. Five domains (Finances, Education, Earnings, Mind, Body) on a daily time-block board, fed by the HubCV (education), Dextrip (job/crypto/stocks) and Franchiseen (franchise) APIs. Status: domain spec done, integrations in build.
+5. **Dextrip** — AI Trading Assistant. Live with 3 paying beta subscribers ($227 MRR). Multiple bots running on the server.
 
 ## Key context
 - Fundraising: India equity round for Roborns via CCDs (₹18.1 Cr target, ₹60 Cr pre-money). DPIIT registration needed.
 - Dextrip trading: Fixed a bug today — EMA Trend was only generating UP signals (now generates DOWN too). Previous 4 strategy capped at 3 steps to prevent deep losses.
 - HQ dashboard: Built at hq.codelude.com. Full company OS — Tasks, Plan, Strategy, Finance, People, Legal, Marketing, Sales, Software, Support sections.
 - Finance: Model page has 5-year financial models for all ventures. Budget, Expenses, Payroll pages live.
-- All platforms: codelude.com (public site), hq.codelude.com (internal), bot.dextrip.com, tv.dextrip.com, spot.dextrip.com, client.dextrip.com, roborns.com, franchiseen.com (building), hubcv.com (building), cuestay.com (building).
+- All platforms: codelude.com (public site), hq.codelude.com (internal), bot.dextrip.com, tv.dextrip.com, spot.dextrip.com, client.dextrip.com, roborns.com, franchiseen.com (building), hubcv.pro (live), llife.ai (building).
 
 ## Your role
 Be a sharp, direct business and technical advisor. Help Shawaz:
@@ -49,28 +54,143 @@ async function streamClaude(messages: any[], systemOverride: string | undefined,
   }
 }
 
-async function streamDeepSeek(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'deepseek/deepseek-chat-v3-0324:free',
-      max_tokens: 2048,
-      stream: true,
-      messages: [
-        { role: 'system', content: systemOverride ?? SYSTEM_PROMPT },
-        ...messages.map((m: any) => ({ role: m.role, content: m.content })),
-      ],
-    }),
+/** Providers that speak the OpenAI chat-completions dialect. */
+const OPENAI_COMPATIBLE = {
+  deepseek: {
+    url: 'https://openrouter.ai/api/v1/chat/completions',
+    keyEnv: 'OPENROUTER_API_KEY',
+    label: 'DeepSeek Flash',
+    models: ['deepseek/deepseek-chat-v3-0324:free'],
+    maxTokens: 2048,
+  },
+  opencode: {
+    // OpenCode Zen gateway — OpenAI-compatible endpoint.
+    url: 'https://opencode.ai/zen/v1/chat/completions',
+    keyEnv: 'OPENCODE_API_KEY',
+    label: 'Big Pickle',
+    // big-pickle is a free-tier model and returns 429 FreeUsageLimitError once
+    // the quota is hit. These alternates run on the same key, so we fail over
+    // rather than dead-ending the page. All verified reachable.
+    models: [
+      'big-pickle',                  // preferred default
+      'nemotron-3-ultra-free',       // healthy as of 24 Aug 2026
+      'hy3-free',
+      'nemotron-3.5-lightning-free',
+      'x-preview-f-free',            // intermittent 503s
+      'mimo-v2.5-free',              // free quota often exhausted
+    ],
+    // big-pickle is a reasoning model: it streams `reasoning_content` deltas
+    // before any `content`. Reasoning shares the max_tokens budget, so a 2048
+    // cap can be spent entirely on thinking and return an empty answer
+    // (finish_reason "length"). Give it room.
+    maxTokens: 8192,
+  },
+} as const;
+
+type OpenAIProvider = keyof typeof OPENAI_COMPATIBLE;
+
+/**
+ * A model that returns 429 has spent its free quota — that state lasts minutes
+ * to hours, not milliseconds. Re-requesting it on every message would add a
+ * guaranteed-failed round-trip to each one, so park it briefly and move on.
+ * Best-effort only: serverless instances are ephemeral, so this shrinks the
+ * wasted calls rather than eliminating them.
+ */
+const COOLDOWN_MS = 10 * 60 * 1000;
+const cooling = new Map<string, number>();
+
+const isCooling = (model: string) => {
+  const until = cooling.get(model);
+  if (until === undefined) return false;
+  if (Date.now() >= until) { cooling.delete(model); return false; }
+  return true;
+};
+
+async function streamOpenAICompatible(
+  provider: OpenAIProvider,
+  messages: any[],
+  systemOverride: string | undefined,
+  controller: ReadableStreamDefaultController,
+  encoder: TextEncoder,
+) {
+  const cfg = OPENAI_COMPATIBLE[provider];
+  const apiKey = process.env[cfg.keyEnv];
+  if (!apiKey) {
+    throw new Error(`${cfg.label} is not configured — set ${cfg.keyEnv}`);
+  }
+
+  const body = (model: string) => JSON.stringify({
+    model,
+    max_tokens: cfg.maxTokens,
+    stream: true,
+    messages: [
+      { role: 'system', content: systemOverride ?? SYSTEM_PROMPT },
+      ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+    ],
   });
 
-  if (!res.body) throw new Error('No response body from OpenRouter');
+  // Rate limits and upstream blips are worth retrying on a sibling model;
+  // 4xx auth/validation errors are not.
+  const retryable = (status: number) => status === 429 || status >= 500;
+
+  let res: Response | undefined;
+  let used: string = cfg.models[0];
+  let lastErr = '';
+
+  // Skip parked models, but never skip every option — if all are cooling,
+  // fall back to trying the full list rather than failing outright.
+  const live = cfg.models.filter((m) => !isCooling(m));
+  const chain = live.length > 0 ? live : cfg.models;
+
+  for (const candidate of chain) {
+    const attempt = await fetch(cfg.url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: body(candidate),
+    });
+    if (attempt.ok && attempt.body) {
+      cooling.delete(candidate);
+      res = attempt;
+      used = candidate;
+      break;
+    }
+    const detail = await attempt.text().catch(() => '');
+    lastErr = `${attempt.status}${detail ? ` — ${detail.slice(0, 200)}` : ''}`;
+    if (attempt.status === 429) cooling.set(candidate, Date.now() + COOLDOWN_MS);
+    if (!retryable(attempt.status)) break;
+  }
+
+  if (!res || !res.body) {
+    throw new Error(`${cfg.label} returned ${lastErr || 'no response body'}`);
+  }
+
+  // Be explicit when the answer did not come from the model that was picked.
+  if (used !== cfg.models[0]) {
+    controller.enqueue(encoder.encode(
+      `[${cfg.label} unavailable — answered by ${used} instead]\n\n`,
+    ));
+  }
+
   const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buf = '';
+  let sawContent = false;
+  let finish: string | undefined;
+
+  const flush = () => {
+    // Reasoning models can burn the whole budget thinking and return nothing.
+    // Say so rather than leaving an empty message bubble.
+    if (!sawContent) {
+      controller.enqueue(encoder.encode(
+        finish === 'length'
+          ? `[${cfg.label} used its entire token budget reasoning without producing an answer. Try a narrower question.]`
+          : `[${cfg.label} returned an empty response.]`,
+      ));
+    }
+  };
 
   while (true) {
     const { value, done } = await reader.read();
@@ -81,25 +201,93 @@ async function streamDeepSeek(messages: any[], systemOverride: string | undefine
     for (const line of lines) {
       if (!line.startsWith('data: ')) continue;
       const data = line.slice(6).trim();
-      if (data === '[DONE]') return;
+      if (data === '[DONE]') { flush(); return; }
       try {
         const json = JSON.parse(data);
-        const text = json.choices?.[0]?.delta?.content;
-        if (text) controller.enqueue(encoder.encode(text));
+        const choice = json.choices?.[0];
+        if (choice?.finish_reason) finish = choice.finish_reason;
+        // Only `content` is surfaced; `reasoning_content` deltas are internal.
+        const text = choice?.delta?.content;
+        if (text) { sawContent = true; controller.enqueue(encoder.encode(text)); }
       } catch { /* skip malformed chunks */ }
     }
   }
+  flush();
+}
+
+/**
+ * Which ventures may this user be told about? A grant on any page for a venture
+ * is enough — the AI is a lens over data they can already open.
+ */
+function allowedVentures(user: Parameters<typeof venturesForUser>[0]): string[] {
+  return venturesForUser(user);
+}
+
+/**
+ * The general (non-venture) prompt, trimmed to the ventures this user may see.
+ * SYSTEM_PROMPT names all five, so handing it to a scoped member would undo the
+ * access matrix in one request.
+ */
+function scopedSystemPrompt(allowed: string[]): string {
+  if (allowed.length === ALL_SCOPE_NAMES.length) return SYSTEM_PROMPT;
+  const lines = SYSTEM_PROMPT.split('\n');
+  const kept = lines.filter((line) => {
+    const venture = /^\d+\.\s+\*\*(\w+)\*\*/.exec(line.trim());
+    if (!venture) return true;
+    return allowed.includes(venture[1]);
+  });
+  return `${kept.join('\n')}\n\n${scopeFooter(allowed)}`;
+}
+
+function scopeFooter(allowed: string[]): string {
+  return [
+    '## Access scope',
+    `This user has access to: ${allowed.join(', ') || 'no ventures yet'}.`,
+    'Do not discuss, reference or speculate about any other Codelude venture,',
+    'its finances, cap table, or roadmap. If asked, say it is outside their access.',
+  ].join('\n');
 }
 
 export async function POST(req: Request) {
-  const { messages, systemOverride, model } = await req.json();
+  const user = await requireApiUser();
+  if (user instanceof NextResponse) return user;
+
+  const { messages, venture, liveData, systemOverride: clientSystem, model } = await req.json();
   const encoder = new TextEncoder();
+
+  const allowed = allowedVentures(user);
+
+  // The venture context lives on the server precisely so this check can exist.
+  let systemOverride: string | undefined;
+  if (typeof venture === 'string' && venture.length > 0) {
+    if (!allowed.includes(venture)) {
+      return NextResponse.json(
+        { error: `No access to ${venture}` },
+        { status: 403 },
+      );
+    }
+    const base = VENTURE_CONTEXT[venture];
+    if (base) {
+      // `liveData` is assembled client-side from queries that are themselves
+      // access-checked in Convex, so it carries nothing they cannot already see.
+      systemOverride = typeof liveData === 'string' ? `${base}\n\n${liveData}` : base;
+    }
+  } else if (typeof clientSystem === 'string' && clientSystem.length > 0) {
+    // Task-detail chat sends its own prompt built from data the client already
+    // holds, so this leaks nothing server-side — but a scoped user still gets
+    // the boundary appended so the model does not volunteer other ventures.
+    systemOverride = isUnrestricted(user)
+      ? clientSystem
+      : `${clientSystem}\n\n${scopeFooter(allowed)}`;
+  } else {
+    systemOverride = scopedSystemPrompt(allowed);
+  }
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        if (model === 'deepseek') {
-          await streamDeepSeek(messages, systemOverride, controller, encoder);
+        if (model in OPENAI_COMPATIBLE) {
+          await streamOpenAICompatible(model as OpenAIProvider, messages, systemOverride, controller, encoder);
         } else {
           await streamClaude(messages, systemOverride, controller, encoder);
         }

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiUser } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
+  const guard = await requireApiUser();
+  if (guard instanceof NextResponse) return guard;
   const q = req.nextUrl.searchParams.get('q')?.trim();
   if (!q) return NextResponse.json([]);
 

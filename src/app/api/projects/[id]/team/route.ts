@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiProject } from '@/lib/api-auth';
 import { addTeamMember, removeTeamMember } from '@/lib/site-projects';
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function POST(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const { name, role, contact } = await req.json();
   if (!name?.trim() || !role?.trim()) {
     return NextResponse.json({ error: 'name and role required' }, { status: 400 });
@@ -16,6 +19,8 @@ export async function POST(req: NextRequest, { params }: Ctx) {
 
 export async function DELETE(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const memberId = req.nextUrl.searchParams.get('memberId');
   if (!memberId) return NextResponse.json({ error: 'memberId required' }, { status: 400 });
   removeTeamMember(id, memberId);

@@ -1,10 +1,6 @@
-export const VENTURES = [
-  { name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure' },
-  { name: 'Franchiseen', color: '#7F77DD', sector: 'Franchise Finance OS' },
-  { name: 'HubCV',       color: '#FAC775', sector: 'AI Career Intelligence' },
-  { name: 'Cuestay',     color: '#85B7EB', sector: 'Home AI Automation' },
-  { name: 'Dextrip',     color: '#F0997B', sector: 'Decentralised Trading' },
-];
+// Re-exported from the canonical registry so existing importers of this module
+// (activity, partners, channel, relations, resources pages) keep working.
+export { VENTURES } from './ventures';
 
 // ─── PARTNERS ─────────────────────────────────────────────────────────────────
 export type PartnerStatus = 'active' | 'negotiating' | 'prospecting' | 'on-hold';
@@ -41,11 +37,12 @@ export const VENTURE_PARTNERS: Record<string, Partner[]> = {
     { name: 'Human Verifier Network (TBD)',   type: 'Strategic',    status: 'prospecting',  role: '20 domain experts (engineering, finance, design) — paid per assessment', nextAction: 'Recruit first 5 verifiers via LinkedIn and professional networks' },
     { name: 'University Partnership (TBD)',   type: 'Distribution', status: 'prospecting',  role: 'Verified credentials for graduates — institutional channel for profile supply', nextAction: 'Identify 3 target universities with strong engineering/tech programmes' },
   ],
-  Cuestay: [
-    { name: 'ODM Manufacturer (TBD)',         type: 'Manufacturing',status: 'negotiating',  role: 'Contract manufacturer for Cuestay Hub — Matter-certified, MOQ under $400K', nextAction: 'Request product samples and factory audit from 2 shortlisted ODMs' },
-    { name: 'Property Developer (TBD)',       type: 'Distribution', status: 'prospecting',  role: 'Pre-installation agreement for new residential builds — per-unit licence fee', nextAction: 'Approach 2 Dubai developers with Cuestay B2B pitch deck' },
-    { name: 'Matter / CSA Ecosystem',         type: 'Technology',   status: 'active',       role: 'Protocol compatibility — Apple HomeKit, Google Home, Amazon Alexa', nextAction: 'Submit for Matter 1.3 certification once firmware is ready' },
-    { name: 'IoT Device Partners (TBD)',      type: 'Strategic',    status: 'prospecting',  role: 'Compatible smart home device brands for Cuestay integration catalogue', nextAction: 'Build integration list from top 20 Matter-compatible device brands' },
+  Llife: [
+    { name: 'HubCV (internal API)',           type: 'Technology',   status: 'active',       role: 'Education domain — College, School, Certificates, Internship and Skills read from the HubCV profile graph', nextAction: 'Scope a read-only education endpoint and issue Llife a service key' },
+    { name: 'Dextrip (internal API)',         type: 'Technology',   status: 'active',       role: 'Earnings domain — Job, Crypto and Stocks positions with live P&L streamed from Dextrip', nextAction: 'Agree the portfolio read schema, refresh interval and rate limits' },
+    { name: 'Franchiseen (internal API)',     type: 'Technology',   status: 'active',       role: 'Earnings domain — franchise ownership stakes, payout schedule and AUM per investor', nextAction: 'Expose a per-investor holdings endpoint for Llife to consume' },
+    { name: 'Account Aggregator (Sahamati)',  type: 'Financial',    status: 'prospecting',  role: 'RBI Account Aggregator consent rails — bank balances, credits and net worth for the Finances domain', nextAction: 'Shortlist an AA technology service provider and review consent-flow rules' },
+    { name: 'Health Platform Partners (TBD)', type: 'Technology',   status: 'prospecting',  role: 'Body domain — Apple HealthKit and Google Health Connect sync for exercise, diet and sleep', nextAction: 'Scope read permissions and app-store privacy disclosures for health data' },
   ],
   Dextrip: [
     { name: 'Binance',                        type: 'Technology',   status: 'active',       role: 'Primary exchange — API access for multi-strategy execution, spot + derivatives', nextAction: 'Upgrade to VIP API tier to increase rate limits for public beta' },
@@ -83,9 +80,9 @@ export const VENTURE_ACTIVITIES: Record<string, VActivity[]> = {
     { date: '2026-03-10', category: 'Partnership', title: 'First bootcamp outreach sent',                 description: 'Outreach to 5 coding bootcamps for verified graduate partnership programme. Responses pending.' },
     { date: '2026-01-20', category: 'Decision',    title: 'B2B-first go-to-market confirmed',             description: 'Decision: sign recruiters before opening to professionals. Supply-side quality controls acquisition.' },
   ],
-  Cuestay: [
-    { date: '2026-04-28', category: 'Milestone',   title: 'Protocol specification published',             description: 'Internal technical specification for home automation layer complete. Matter 1.3+ integration plan finalised.' },
-    { date: '2026-03-28', category: 'Partnership', title: 'Hardware partner conversations started',       description: 'Initial outreach to 3 ODM manufacturers. Matter-certified units under evaluation.' },
+  Llife: [
+    { date: '2026-04-28', category: 'Milestone',   title: 'Five-domain model defined',                    description: 'Finances, Education, Earnings, Mind and Body fixed as the assistant\u2019s domains, each mapped to a daily time block.' },
+    { date: '2026-03-28', category: 'Partnership', title: 'Internal API integrations scoped',             description: 'HubCV, Dextrip and Franchiseen agreed as the first data sources feeding Education and Earnings.' },
     { date: '2026-02-10', category: 'Decision',    title: 'Property developer channel prioritised',       description: 'Decision: lead with property developer channel over DTC. Reduces CAC, provides volume anchor for first MOQ.' },
   ],
   Dextrip: [
@@ -130,12 +127,12 @@ export const VENTURE_CHANNELS: Record<string, VChannel[]> = {
     { name: 'University channel',               type: 'Distribution',status: 'planned', description: 'Verified credentials for graduates — institutional supply channel', metric: 'University partnerships signed' },
     { name: 'SEO — hiring content',             type: 'Marketing',status: 'planned',   description: 'Long-form content targeting "verified skills recruiter" and "AI candidate matching" searches', metric: 'Organic traffic and trial sign-ups' },
   ],
-  Cuestay: [
+  Llife: [
     { name: 'Property developer B2B',    type: 'Distribution',status: 'building', description: 'Direct B2B channel to Dubai and India developers for pre-installation in new builds', metric: 'Developer agreements signed' },
     { name: '10-home pilot programme',   type: 'Marketing', status: 'planned',   description: 'Real pilot homes in Mangaluru and Dubai — documented for testimonial content', metric: 'Pilot homes complete' },
     { name: 'Pre-order campaign',        type: 'Marketing', status: 'planned',   description: 'DTC pre-order with pilot testimonials — validates demand before production run', metric: 'Pre-orders collected (target: 200)' },
-    { name: 'Instagram + YouTube',       type: 'Marketing', status: 'planned',   description: 'Video content of smart home automation — before/after, routine learning in action', metric: 'Views and waitlist sign-ups' },
-    { name: 'Cuestay.com',              type: 'Marketing', status: 'planned',   description: 'Product website with beta waitlist, pilot stories, and property developer enquiry', metric: 'Waitlist registrations' },
+    { name: 'Instagram + YouTube',       type: 'Marketing', status: 'planned',   description: 'Short-form content on daily life tracking — net worth, streaks and routine reviews in action', metric: 'Views and waitlist sign-ups' },
+    { name: 'llife.ai',               type: 'Marketing', status: 'planned',   description: 'Product website with beta waitlist, the five-domain explainer, and daily-board demo', metric: 'Waitlist registrations' },
   ],
   Dextrip: [
     { name: 'Twitter / X community',     type: 'Community', status: 'building',  description: 'Strategy performance sharing, market commentary, creator-friendly content', metric: 'Followers and engagement' },
@@ -176,10 +173,10 @@ export const VENTURE_RELATIONS: Record<string, VRelation[]> = {
     { name: 'Angel Investors',             category: 'Investor',    health: 'target',     description: 'Bootstrap-friendly angels who back post-proof SaaS platforms', lastContact: 'Not yet', nextStep: 'Approach after 20 paying recruiter accounts are live' },
     { name: 'HR Tech Media',               category: 'Media',       health: 'target',     description: 'HR Technologist, RecruitingBrainz — target for launch coverage', lastContact: 'Not yet', nextStep: 'Prepare product announcement for beta launch' },
   ],
-  Cuestay: [
-    { name: 'Pilot Homeowners',            category: 'Customer',    health: 'target',     description: 'Tech-forward homeowners in Mangaluru and Dubai willing to host pilot installations', lastContact: 'Not yet', nextStep: 'Launch pilot waitlist on Cuestay.com' },
-    { name: 'Property Developers (Dubai)', category: 'Customer',    health: 'developing', description: 'Residential developers wanting smart home as a premium in new builds', lastContact: 'Mar 2026', nextStep: 'Request B2B meeting with 2 developers shortlisted' },
-    { name: 'Hardware Angels',             category: 'Investor',    health: 'target',     description: 'IoT / hardware-focused angels or property tech investors for pre-seed', lastContact: 'Not yet', nextStep: 'Build investor list after hardware partner is signed' },
+  Llife: [
+    { name: 'Beta Users (HubCV base)',     category: 'Customer',    health: 'target',     description: 'HubCV students whose Education domain is populated from day one — the lowest-friction beta cohort', lastContact: 'Not yet', nextStep: 'Launch beta waitlist on llife.ai' },
+    { name: 'HubCV Student Base',          category: 'Customer',    health: 'developing', description: 'Students already on HubCV are the warmest channel — Education domain works on day one', lastContact: 'Mar 2026', nextStep: 'Design the cross-sign-on flow from HubCV into Llife' },
+    { name: 'Consumer AI Angels',          category: 'Investor',    health: 'target',     description: 'Consumer subscription and personal-finance angels for the pre-seed round', lastContact: 'Not yet', nextStep: 'Build investor list once retention data exists from private beta' },
     { name: 'Smart Home Media',            category: 'Media',       health: 'target',     description: 'The Verge, TechCrunch, Wired — pilot story coverage for DTC launch', lastContact: 'Not yet', nextStep: 'Prepare pilot documentation for press kit' },
   ],
   Dextrip: [
@@ -250,18 +247,18 @@ export const VENTURE_RESOURCES: Record<string, Resource[]> = {
     // Legal
     { name: 'DPDP Act Compliance (India)',  type: 'Legal',      status: 'needed',  priority: 'high',     monthlyCost: 500,  oneTimeCost: 2000,  notes: 'Data privacy compliance — consent framework, deletion mechanism, processing policy' },
   ],
-  Cuestay: [
+  Llife: [
     // Human
-    { name: 'Hardware Product Manager',     type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 6000, oneTimeCost: 0,     notes: 'Owns ODM relationship, Matter certification, MOQ management, supply chain' },
-    { name: 'Firmware Engineer',            type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 7000, oneTimeCost: 0,     notes: 'Matter 1.3+ integration, Hub OS, device management layer, on-device AI' },
-    { name: 'Mobile App Developer',         type: 'Human',      status: 'planned', priority: 'high',     monthlyCost: 5000, oneTimeCost: 0,     notes: 'iOS and Android Cuestay app. React Native preferred. Y2 hire.' },
+    { name: 'Product Engineer (Mobile)',    type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 6000, oneTimeCost: 0,     notes: 'Owns the daily tracker UI \u2014 time-block board, streaks, offline-first sync' },
+    { name: 'Integrations Engineer',        type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 7000, oneTimeCost: 0,     notes: 'Builds and maintains the HubCV, Dextrip, Franchiseen and Account Aggregator connectors' },
+    { name: 'Mobile App Developer',         type: 'Human',      status: 'planned', priority: 'high',     monthlyCost: 5000, oneTimeCost: 0,     notes: 'iOS and Android Llife app. React Native preferred. Y2 hire.' },
     // Technology
-    { name: 'Matter SDK License',           type: 'Technology', status: 'needed',  priority: 'critical', monthlyCost: 0,    oneTimeCost: 2000,  notes: 'CSA Matter SDK for hub firmware development' },
-    { name: 'CSA Matter Certification',    type: 'Technology', status: 'planned', priority: 'critical', monthlyCost: 0,    oneTimeCost: 15000, notes: 'Required before retail sale — Matter 1.3 certification process' },
-    { name: 'AI Inference (Cloud)',         type: 'Technology', status: 'planned', priority: 'high',     monthlyCost: 200,  oneTimeCost: 0,     notes: 'Cloud fallback AI inference for Cuestay routines. Scales with active homes.' },
+    { name: 'LLM Inference Budget',         type: 'Technology', status: 'needed',  priority: 'critical', monthlyCost: 2000, oneTimeCost: 0,     notes: 'Per-user assistant reasoning \u2014 daily summaries, nudges and domain reviews' },
+    { name: 'AA Consent Integration',      type: 'Technology', status: 'planned', priority: 'critical', monthlyCost: 0,    oneTimeCost: 15000, notes: 'Account Aggregator onboarding and audit before financial data can be read' },
+    { name: 'AI Inference (Cloud)',         type: 'Technology', status: 'planned', priority: 'high',     monthlyCost: 200,  oneTimeCost: 0,     notes: 'Assistant reasoning for daily reviews and nudges. Scales with active users.' },
     { name: 'Design Tools (Figma/Fusion)', type: 'Technology', status: 'active',  priority: 'medium',   monthlyCost: 100,  oneTimeCost: 0,     notes: 'UI design and hardware CAD tooling' },
     // Physical
-    { name: 'Hardware MOQ (First Run)',     type: 'Physical',   status: 'planned', priority: 'critical', monthlyCost: 0,    oneTimeCost: 300000,notes: '1,000-unit production run — Matter-certified Hub. Triggers at manufacturer sign.' },
+    { name: 'Security & Privacy Audit',     type: 'Technology', status: 'planned', priority: 'critical', monthlyCost: 0,    oneTimeCost: 30000, notes: 'Independent audit before handling financial and health data at scale' },
     { name: '10-Home Pilot Installations', type: 'Physical',   status: 'planned', priority: 'high',     monthlyCost: 0,    oneTimeCost: 50000, notes: '$5K per pilot home including device, installation, and 6-month monitoring' },
     // Legal
     { name: 'Product Liability Insurance', type: 'Legal',      status: 'planned', priority: 'medium',   monthlyCost: 300,  oneTimeCost: 0,     notes: 'Required before retail sale of consumer electronic device' },

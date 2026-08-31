@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiPage } from '@/lib/api-auth';
 import { uploadsDir } from '@/lib/task-data';
 
 type Ctx = { params: Promise<{ id: string; file: string[] }> };
@@ -9,6 +10,8 @@ type Ctx = { params: Promise<{ id: string; file: string[] }> };
 // (e.g. the production data directory), since those aren't reachable as static assets.
 export async function GET(_req: NextRequest, { params }: Ctx) {
   const { id, file } = await params;
+  const guard = await requireApiPage('tasks');
+  if (guard instanceof NextResponse) return guard;
   const { dir } = uploadsDir(id);
   const target = path.join(dir, ...file);
 

@@ -1,17 +1,21 @@
 'use client';
 import { useState } from 'react';
 import { COMPETITORS } from '@/lib/mktg';
+import { usePageScopes } from '@/lib/use-page-scopes';
 
-const VENTURES = ['All', 'Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 const TYPE_COLORS: Record<string, string> = { Direct: '#ff8080', Indirect: '#FAC775', Adjacent: '#85B7EB' };
 
 export default function CompetitionPage() {
+  const { names: allowed } = usePageScopes('competition');
+  const VENTURES = ['All', ...allowed];
   const [venture, setVenture] = useState('All');
-  const filtered = COMPETITORS.filter(c => venture === 'All' || c.venture === venture);
+  const filtered = COMPETITORS.filter(c =>
+    allowed.includes(c.venture) && (venture === 'All' || c.venture === venture),
+  );
   return (
     <div>
       <h1 className="page-title">Competition</h1>

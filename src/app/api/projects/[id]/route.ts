@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireApiProject } from '@/lib/api-auth';
 import { getProject, updateProject, type SiteProject, type SiteProjectStatus } from '@/lib/site-projects';
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const project = getProject(id);
   if (!project) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(project);
@@ -12,6 +15,8 @@ export async function GET(_req: NextRequest, { params }: Ctx) {
 
 export async function PATCH(req: NextRequest, { params }: Ctx) {
   const { id } = await params;
+  const guard = await requireApiProject(id);
+  if (guard instanceof NextResponse) return guard;
   const { name, location, status, boundary, center, areaHectares } = await req.json();
   const patch: Partial<Pick<SiteProject, 'name' | 'location' | 'status' | 'boundary' | 'center' | 'areaHectares'>> = {};
   if (typeof name === 'string')     patch.name = name.trim();
