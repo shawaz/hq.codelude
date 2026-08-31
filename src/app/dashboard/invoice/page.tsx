@@ -1,5 +1,16 @@
+'use client';
+
 import { INVOICES, type InvoiceStatus } from '@/lib/finance';
+import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+
+const TABS: VentureTab[] = [
+  { key: 'all',     label: 'All'     },
+  { key: 'paid',    label: 'Paid'    },
+  { key: 'pending', label: 'Pending' },
+  { key: 'overdue', label: 'Overdue' },
+  { key: 'draft',   label: 'Draft'   },
+];
 
 const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
   paid:    { color: '#5DCAA5', label: 'Paid'    },
@@ -14,18 +25,27 @@ const VENTURE_COLORS: Record<string, string> = {
 };
 
 export default function InvoicePage() {
-  const paid    = INVOICES.filter(i => i.status === 'paid').reduce((s, i) => s + i.amount, 0);
-  const pending = INVOICES.filter(i => i.status === 'pending').reduce((s, i) => s + i.amount, 0);
-  const draft   = INVOICES.filter(i => i.status === 'draft').reduce((s, i) => s + i.amount, 0);
-
   return (
-    <div>
-      <h1 className="page-title">Invoice</h1>
-      <p className="page-sub">Outgoing invoices across all ventures — issued, pending, and drafted.</p>
+    <VenturePageLayout
+      title="Invoice"
+      subtitle="Outgoing invoices across all ventures — issued, pending, and drafted."
+      pageSlug="invoice"
+      eyebrow={() => 'invoices'}
+      heading={v => `${v.name} Invoices`}
+      tabs={TABS}
+    >
+      {({ venture, tab }) => {
+        const scoped = INVOICES.filter(i => i.venture === venture.name);
+        const rows = tab === 'all' ? scoped : scoped.filter(i => i.status === tab);
+        const paid    = rows.filter(i => i.status === 'paid').reduce((s, i) => s + i.amount, 0);
+        const pending = rows.filter(i => i.status === 'pending').reduce((s, i) => s + i.amount, 0);
+        const draft   = rows.filter(i => i.status === 'draft').reduce((s, i) => s + i.amount, 0);
 
+        return (
+          <>
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
         {[
-          { label: 'Total invoices',  val: INVOICES.length,         color: 'var(--off-white)', fmt: false },
+          { label: 'Total invoices',  val: rows.length,         color: 'var(--off-white)', fmt: false },
           { label: 'Collected',       val: `$${paid}`,              color: '#5DCAA5',          fmt: false },
           { label: 'Pending',         val: `$${pending}`,           color: '#FAC775',          fmt: false },
           { label: 'Draft',           val: `$${draft.toLocaleString()}`, color: 'var(--muted)',     fmt: false },
@@ -37,6 +57,7 @@ export default function InvoicePage() {
         ))}
       </div>
 
+      {rows.length === 0 ? <NoRows>No {tab === 'all' ? '' : `${tab} `}invoices for {venture.name}.</NoRows> : (
       <table className="tasks-table">
         <thead>
           <tr>
@@ -51,7 +72,7 @@ export default function InvoicePage() {
           </tr>
         </thead>
         <tbody>
-          {INVOICES.map((inv, i) => {
+          {rows.map((inv, i) => {
             const ss = STATUS_STYLES[inv.status];
             return (
               <tr key={i}>
@@ -68,6 +89,10 @@ export default function InvoicePage() {
           })}
         </tbody>
       </table>
-    </div>
+      )}
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }

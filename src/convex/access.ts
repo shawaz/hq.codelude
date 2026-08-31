@@ -120,7 +120,7 @@ export const NAV: NavSection[] = [
     title: 'Finance',
     pages: [
       { slug: 'financial-model', label: 'Model', href: '/dashboard/financial-model' },
-      page('fundraise', 'Fundraise'),
+      { slug: 'fundraise', label: 'Planning', href: '/dashboard/fundraise' },
       page('budget',    'Budget'),
       page('expenses',  'Expenses'),
       page('accounts',  'Accounts'),
