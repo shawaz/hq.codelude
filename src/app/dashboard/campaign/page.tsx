@@ -9,7 +9,7 @@ const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = 
   completed: { color: '#7a7870', label: 'Completed' },
 };
 const TYPE_COLORS: Record<string, string> = { Content: '#7F77DD', Email: '#85B7EB', Social: '#c8f53a', PR: '#5DCAA5', Community: '#F0997B', Paid: '#FAC775' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
 
 export default function CampaignPage() {
   const [status, setStatus] = useState<CampaignStatus | 'all'>('all');

@@ -21,7 +21,7 @@ const TYPE_COLORS: Record<RoundType, string> = {
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B',
+  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
 };
 
 export default function InvestorsPage() {
@@ -37,7 +37,7 @@ export default function InvestorsPage() {
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Structure overview</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
-          Codelude raises via a <strong style={{ color: 'var(--off-white)' }}>Dubai HoldCo token structure</strong>. Physical infrastructure assets (Roborns) are tokenised — token holders receive revenue share, not equity. The HoldCo studio token gives exposure across all five ventures. Equity rounds (Franchiseen, Cuestay) sit below the HoldCo and dilute at the project level only.
+          Codelude raises via a <strong style={{ color: 'var(--off-white)' }}>Dubai HoldCo token structure</strong>. Physical infrastructure assets (Roborns) are tokenised — token holders receive revenue share, not equity. The HoldCo studio token gives exposure across all five ventures. Equity rounds (Franchiseen, Llife) sit below the HoldCo and dilute at the project level only.
         </p>
       </div>
 

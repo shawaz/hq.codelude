@@ -1,6 +1,6 @@
 export type Priority = 'high' | 'medium' | 'low';
 export type Status   = 'todo' | 'in-progress' | 'done';
-export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Cuestay' | 'Dextrip';
+export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Llife' | 'Dextrip';
 
 export interface Task {
   id: string;
@@ -15,7 +15,7 @@ export const PROJECT_COLORS: Record<Project, string> = {
   Roborns:    '#5DCAA5',
   Franchiseen:'#7F77DD',
   HubCV:      '#FAC775',
-  Cuestay:    '#85B7EB',
+  Llife:    '#85B7EB',
   Dextrip:    '#F0997B',
 };
 
@@ -84,21 +84,21 @@ export const TASKS: Task[] = [
   { id: 'h14', project: 'HubCV', category: 'Business',         priority: 'high',   status: 'todo',        title: 'Revenue model finalization' },
   { id: 'h15', project: 'HubCV', category: 'Business',         priority: 'medium', status: 'todo',        title: 'University and bootcamp partnership outreach' },
 
-  // ── CUESTAY ───────────────────────────────────────────────────────────
-  { id: 'c01', project: 'Cuestay', category: 'Product',        priority: 'high',   status: 'done',        title: 'Home automation protocol specification' },
-  { id: 'c02', project: 'Cuestay', category: 'Business',       priority: 'high',   status: 'in-progress', title: 'Hardware partner identification' },
-  { id: 'c03', project: 'Cuestay', category: 'Product',        priority: 'high',   status: 'todo',        title: 'AI personal assistant core development' },
-  { id: 'c04', project: 'Cuestay', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Smart home integration — Matter protocol' },
-  { id: 'c05', project: 'Cuestay', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Routine learning algorithm' },
-  { id: 'c06', project: 'Cuestay', category: 'Product',        priority: 'medium', status: 'todo',        title: 'IoT device management system' },
-  { id: 'c07', project: 'Cuestay', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Voice command integration' },
-  { id: 'c08', project: 'Cuestay', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Mobile app development' },
-  { id: 'c09', project: 'Cuestay', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Ambient intelligence layer' },
-  { id: 'c10', project: 'Cuestay', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Hardware manufacturing partner signed' },
-  { id: 'c11', project: 'Cuestay', category: 'Business',       priority: 'high',   status: 'todo',        title: 'First pilot home installation partner' },
-  { id: 'c12', project: 'Cuestay', category: 'Business',       priority: 'medium', status: 'todo',        title: 'Pricing model definition' },
-  { id: 'c13', project: 'Cuestay', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta waitlist setup and launch' },
-  { id: 'c14', project: 'Cuestay', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'B2C go-to-market strategy' },
+  // ── LLIFE ─────────────────────────────────────────────────────────────
+  { id: 'c01', project: 'Llife', category: 'Product',        priority: 'high',   status: 'done',        title: 'Five-domain model specification' },
+  { id: 'c02', project: 'Llife', category: 'Business',       priority: 'high',   status: 'in-progress', title: 'Ecosystem API contracts with HubCV and Dextrip' },
+  { id: 'c03', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'AI personal assistant core development' },
+  { id: 'c04', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'HubCV Education API integration' },
+  { id: 'c05', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Routine learning algorithm' },
+  { id: 'c06', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Dextrip + Franchiseen Earnings integration' },
+  { id: 'c07', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Voice command integration' },
+  { id: 'c08', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Mobile app development' },
+  { id: 'c09', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Ambient intelligence layer' },
+  { id: 'c10', project: 'Llife', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Account Aggregator TSP signed' },
+  { id: 'c11', project: 'Llife', category: 'Business',       priority: 'high',   status: 'todo',        title: 'First 100 private beta users onboarded' },
+  { id: 'c12', project: 'Llife', category: 'Business',       priority: 'medium', status: 'todo',        title: 'Pricing model definition' },
+  { id: 'c13', project: 'Llife', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta waitlist setup and launch' },
+  { id: 'c14', project: 'Llife', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'B2C go-to-market strategy' },
 
   // ── DEXTRIP ───────────────────────────────────────────────────────────
   { id: 'd01', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'done',        title: 'Strategy engine — closed beta live' },

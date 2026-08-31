@@ -10,7 +10,7 @@ export default function LoginPage() {
         </div>
         <div className="login-header">
           <h1>Sign in</h1>
-          <p>Internal access only. Team credentials required.</p>
+          <p>Internal access only. Google account on the @codelude.com domain required.</p>
         </div>
         <LoginForm />
       </div>

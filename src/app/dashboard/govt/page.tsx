@@ -10,7 +10,7 @@ const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   'not-required':{ color: '#7a7870', label: 'Not Required' },
 };
 const JURIS_COLORS: Record<GovtJurisdiction, string> = { India: '#5DCAA5', UAE: '#c8f53a', International: '#85B7EB' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Cuestay: '#85B7EB', Dextrip: '#F0997B' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
 const JURISDICTIONS: (GovtJurisdiction | 'all')[] = ['all', 'India', 'UAE', 'International'];
 
 export default function GovtPage() {

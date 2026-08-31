@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TASKS, PROJECT_COLORS, type Project, type Status, type Priority } from '@/lib/tasks';
 
-const PROJECTS: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Cuestay', 'Dextrip'];
+const PROJECTS: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Llife', 'Dextrip'];
 const STATUSES: { key: Status | 'all'; label: string }[] = [
   { key: 'all',         label: 'All' },
   { key: 'in-progress', label: 'In Progress' },
