@@ -11,6 +11,7 @@ import {
 } from '@/lib/pipeline-config';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
+import PipelineContacts, { type Contact } from '@/components/PipelineContacts';
 
 const PAGE_SIZE = 50;
 const nf = new Intl.NumberFormat('en-IN');
@@ -35,13 +36,21 @@ function str(fd: FormData, key: string): string | undefined {
 type FormField = { name: string; label: string; type?: string; required?: boolean };
 
 const CORE_FIELDS: FormField[] = [
-  { name: 'name',        label: 'Name',            required: true },
-  { name: 'category',    label: 'Company / type'                  },
-  { name: 'contactName', label: 'Contact person'                  },
-  { name: 'email',       label: 'Email', type: 'email'            },
-  { name: 'phone',       label: 'Phone'                           },
+  { name: 'name',        label: 'Company name',    required: true },
+  { name: 'category',    label: 'Type'                            },
   { name: 'city',        label: 'City'                            },
   { name: 'state',       label: 'State'                           },
+];
+
+/**
+ * A prospect is the company on its own — you have identified it but not yet
+ * found anyone there. From `lead` onward the form offers a first contact;
+ * further people are added per-row from the contacts cell.
+ */
+const FIRST_CONTACT_FIELDS: FormField[] = [
+  { name: 'contactName', label: 'First contact'         },
+  { name: 'email',       label: 'Email', type: 'email'  },
+  { name: 'phone',       label: 'Phone'                 },
 ];
 
 /** Extra fields that only make sense at certain funnel positions. */
@@ -74,7 +83,12 @@ function AddForm({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const fields = [...CORE_FIELDS, ...STAGE_FIELDS[stage]];
+  // Prospects are companies with no people attached yet.
+  const fields = [
+    ...CORE_FIELDS,
+    ...(stage === 'prospect' ? [] : FIRST_CONTACT_FIELDS),
+    ...STAGE_FIELDS[stage],
+  ];
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -229,6 +243,12 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
     { initialNumItems: PAGE_SIZE },
   );
 
+  // One batched query for the whole page rather than one per row.
+  const contactsByOrg = useQuery(
+    api.contacts.listForOrgs,
+    results.length > 0 ? { orgIds: results.map(o => o._id) } : 'skip',
+  ) as Record<string, Contact[]> | undefined;
+
   const counts = useMemo(() => {
     const map: Record<string, number> = {};
     for (const row of statRows ?? []) {
@@ -354,7 +374,7 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
 
       <RecordList stage={stage} results={results as RecordRow[]} pageStatus={pageStatus}
         segment={segment} segmentTotal={segmentTotal} search={search}
-        accent={venture.color} venture={venture.name} />
+        accent={venture.color} venture={venture.name} contactsByOrg={contactsByOrg} />
 
       {pageStatus === 'CanLoadMore' && (
         <button onClick={() => loadMore(PAGE_SIZE)} style={{
@@ -379,7 +399,6 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
 type RecordRow = {
   _id: Id<'pipeline_orgs'>; name: string; code?: string; category?: string;
   state?: string; district?: string; city?: string;
-  contactName?: string; email?: string; phone?: string;
   size?: number; status: string; priority?: string; notes?: string;
   source?: string; interest?: string; message?: string;
   value?: string; meetingAt?: number; meetingNote?: string;
@@ -404,10 +423,13 @@ function toLocalInput(ms?: number) {
 
 function RecordList({
   stage, results, pageStatus, segment, segmentTotal, search, accent, venture,
+  contactsByOrg,
 }: {
   stage: Stage; results: readonly RecordRow[]; pageStatus: string;
   segment: Segment; segmentTotal: number; search: string; accent: string;
   venture: string;
+  /** Keyed by org id. Undefined while the batched query is in flight. */
+  contactsByOrg?: Record<string, Contact[]>;
 }) {
   const setStatus = useMutation(api.pipeline.setStatus);
   const setMeeting = useMutation(api.pipeline.setMeeting);
@@ -435,8 +457,8 @@ function RecordList({
       background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
       {results.map(o => (
         <div key={o._id} style={{ background: 'var(--card-bg)', padding: '1rem 1.5rem',
-          display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr auto auto', gap: '1rem',
-          alignItems: 'center' }}>
+          display: 'grid', gridTemplateColumns: '1.4fr 1fr 1.1fr auto auto', gap: '1rem',
+          alignItems: 'start' }}>
 
           <div style={{ minWidth: 0 }}>
             <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.2rem' }}>{o.name}</div>
@@ -464,12 +486,12 @@ function RecordList({
             )}
           </div>
 
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', minWidth: 0 }}>
-            {o.contactName && <div>{o.contactName}</div>}
-            {o.email && <div style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.email}</div>}
-            {o.phone && <div style={{ opacity: 0.7 }}>{o.phone}</div>}
-            {!o.contactName && !o.email && !o.phone && '—'}
-          </div>
+          <PipelineContacts
+            orgId={o._id}
+            contacts={contactsByOrg?.[o._id] ?? []}
+            stage={stage}
+            accent={accent}
+          />
 
           {/* Deals get an inline scheduler; other stages keep the column aligned. */}
           {stage === 'deal' ? (
