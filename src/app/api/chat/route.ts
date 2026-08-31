@@ -4,6 +4,7 @@ import { requireApiUser } from '@/lib/api-auth';
 import { isUnrestricted, venturesForUser } from '@/lib/nav';
 import { ALL_SCOPE_NAMES } from '@/lib/ventures';
 import { VENTURE_CONTEXT } from '@/lib/venture-context';
+import { MENTOR_PERSONA } from '@/lib/mentor-persona';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -28,16 +29,16 @@ const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — the internal
 - Finance: Model page has 5-year financial models for all ventures. Budget, Expenses, Payroll pages live.
 - All platforms: codelude.com (public site), hq.codelude.com (internal), bot.dextrip.com, tv.dextrip.com, spot.dextrip.com, client.dextrip.com, roborns.com, franchiseen.com (building), hubcv.pro (live), llife.ai (building).
 
-## Your role
-Be a sharp, direct business and technical advisor. Help Shawaz:
-- Think through decisions on any of the 5 ventures
-- Plan fundraising strategy (India equity, token structure, investor outreach)
-- Analyse Dextrip trading strategies and bot behaviour
-- Draft content, investor updates, or business plans
-- Answer questions about the code, server, or architecture
-- Work through operational challenges
+## What he brings to you
+- Decisions across any of the 5 ventures
+- Fundraising strategy (India equity, token structure, investor outreach)
+- Dextrip trading strategy and bot behaviour
+- Drafts: content, investor updates, business plans
+- Code, server and architecture questions
+- Operational problems
 
-Keep responses concise and actionable. You know the full context of the business. Don't be corporate — be direct, like a co-founder would be.`;
+You have the full context above. Use it — reference the actual numbers and
+constraints rather than talking in generalities.`;
 
 async function streamClaude(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
   const response = await client.messages.create({
@@ -229,14 +230,14 @@ function allowedVentures(user: Parameters<typeof venturesForUser>[0]): string[] 
  * access matrix in one request.
  */
 function scopedSystemPrompt(allowed: string[]): string {
-  if (allowed.length === ALL_SCOPE_NAMES.length) return SYSTEM_PROMPT;
+  if (allowed.length === ALL_SCOPE_NAMES.length) return `${MENTOR_PERSONA}\n\n${SYSTEM_PROMPT}`;
   const lines = SYSTEM_PROMPT.split('\n');
   const kept = lines.filter((line) => {
     const venture = /^\d+\.\s+\*\*(\w+)\*\*/.exec(line.trim());
     if (!venture) return true;
     return allowed.includes(venture[1]);
   });
-  return `${kept.join('\n')}\n\n${scopeFooter(allowed)}`;
+  return `${MENTOR_PERSONA}\n\n${kept.join('\n')}\n\n${scopeFooter(allowed)}`;
 }
 
 function scopeFooter(allowed: string[]): string {
@@ -268,17 +269,23 @@ export async function POST(req: Request) {
     }
     const base = VENTURE_CONTEXT[venture];
     if (base) {
+      // Persona first, then the venture's facts, then live data — so the way
+      // it engages is identical across all five, and only the subject changes.
       // `liveData` is assembled client-side from queries that are themselves
       // access-checked in Convex, so it carries nothing they cannot already see.
-      systemOverride = typeof liveData === 'string' ? `${base}\n\n${liveData}` : base;
+      systemOverride = [MENTOR_PERSONA, base, typeof liveData === 'string' ? liveData : '']
+        .filter(Boolean)
+        .join('\n\n');
     }
   } else if (typeof clientSystem === 'string' && clientSystem.length > 0) {
     // Task-detail chat sends its own prompt built from data the client already
     // holds, so this leaks nothing server-side — but a scoped user still gets
     // the boundary appended so the model does not volunteer other ventures.
-    systemOverride = isUnrestricted(user)
-      ? clientSystem
-      : `${clientSystem}\n\n${scopeFooter(allowed)}`;
+    systemOverride = [
+      MENTOR_PERSONA,
+      clientSystem,
+      isUnrestricted(user) ? '' : scopeFooter(allowed),
+    ].filter(Boolean).join('\n\n');
   } else {
     systemOverride = scopedSystemPrompt(allowed);
   }

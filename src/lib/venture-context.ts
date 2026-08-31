@@ -1,5 +1,9 @@
 /**
- * Per-venture briefing text injected into the AI assistant's system prompt.
+ * Per-venture facts injected into the AI assistant's system prompt.
+ *
+ * Facts only — how the assistant engages lives in src/lib/mentor-persona.ts and
+ * is prepended to all of these. Adding tone instructions back here would give
+ * each venture a slightly different personality.
  *
  * SERVER ONLY — imported by src/app/api/chat/route.ts and nothing else. This
  * used to live inside the "use client" dashboard page, which meant all five
@@ -26,8 +30,7 @@ CURRENT STATUS:
 - Site survey planned June 2026
 - Dubai HoldCo incorporation in progress
 - India entity (Roborns Energy & Infrastructure Pvt. Ltd.) to be incorporated
-
-Help Shawaz make progress on Roborns. Be a sharp technical and business advisor.`,
+`,
 
   Franchiseen: `You are helping Shawaz work on FRANCHISEEN — a franchise finance operating system enabling fractional ownership of franchise businesses with daily payouts.
 
@@ -40,8 +43,7 @@ KEY FACTS:
 - Code on server at /home/centos/codelude/franchiseen/software/client/
 - Needs: KYC/AML provider (Onfido/Signzy), payment processor, SEBI compliance, first franchise brand partner
 - Break-even: Year 3 at ~$11M AUM. Y5 revenue: $1.26M at 79% EBITDA
-
-Help Shawaz make progress on Franchiseen.`,
+`,
 
   HubCV: `You are helping Shawaz work on HUBCV — an AI career intelligence platform with human + AI verified dynamic professional profiles.
 
@@ -53,8 +55,7 @@ KEY FACTS:
 - Code on server at /home/centos/codelude/hubcv/
 - Needs: AI/ML engineer, 20 human skill verifiers, 5 recruiter design partners
 - Break-even: Year 3. Y5 ARR: $4.4M
-
-Help Shawaz make progress on HubCV.`,
+`,
 
   Dextrip: `You are helping Shawaz work on DEXTRIP — a non-custodial decentralised trading automation platform with a strategy marketplace.
 
@@ -82,7 +83,6 @@ KEY FACTS:
 - Protocol spec complete (published April 2026)
 - Needs: integrations engineer, mobile product engineer, Account Aggregator approval for financial data
 - Y5 revenue: $8.95M
-
-Help Shawaz make progress on Llife.`,
+`,
 
 };
