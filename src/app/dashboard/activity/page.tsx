@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VENTURES, VENTURE_ACTIVITIES } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { scBorder } from '@/lib/status-colors';
 
 const CAT_COLORS: Record<string, string> = {
   Milestone:'#c8f53a',Launch:'#5DCAA5',Decision:'#FAC775',Product:'#7F77DD',
@@ -46,7 +47,7 @@ export default function ActivityPage() {
         {items.map((a,i) => (
           <div key={i} style={{ background:'var(--card-bg)',padding:'1rem 1.5rem',display:'grid',gridTemplateColumns:'100px 110px 1fr',gap:'1rem',alignItems:'start' }}>
             <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.62rem',color:'var(--muted)',paddingTop:'0.1rem' }}>{a.date}</span>
-            <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.15rem 0.5rem',border:`1px solid ${CAT_COLORS[a.category]||'var(--card-border)'}40`,color:CAT_COLORS[a.category]||'var(--muted)',alignSelf:'flex-start' }}>{a.category}</span>
+            <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.15rem 0.5rem',border:`1px solid ${scBorder(CAT_COLORS[a.category]||'var(--card-border)')}`,color:CAT_COLORS[a.category]||'var(--muted)',alignSelf:'flex-start' }}>{a.category}</span>
             <div>
               <div style={{ fontWeight:600,fontSize:'0.78rem',marginBottom:'0.25rem' }}>{a.title}</div>
               <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.67rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300 }}>{a.description}</div>

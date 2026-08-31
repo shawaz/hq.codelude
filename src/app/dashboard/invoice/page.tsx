@@ -1,4 +1,5 @@
 import { INVOICES, type InvoiceStatus } from '@/lib/finance';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
   paid:    { color: '#5DCAA5', label: 'Paid'    },
@@ -30,7 +31,7 @@ export default function InvoicePage() {
           { label: 'Draft',           val: `$${draft.toLocaleString()}`, color: 'var(--muted)',     fmt: false },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
-            <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>
+            <div className="tasks-count-num" style={{ color: sc(c.color) }}>{c.val}</div>
             <div className="tasks-count-label">{c.label}</div>
           </div>
         ))}
@@ -55,13 +56,13 @@ export default function InvoicePage() {
             return (
               <tr key={i}>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>{inv.id}</span></td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: VENTURE_COLORS[inv.venture] }}>{inv.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc(VENTURE_COLORS[inv.venture]) }}>{inv.venture}</span></td>
                 <td><span className="category-label">{inv.client}</span></td>
                 <td><span className="category-label" style={{ fontSize: '0.67rem' }}>{inv.description}</span></td>
                 <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)' }}>{inv.currency} {inv.amount.toLocaleString()}</td>
                 <td><span className="category-label">{inv.issueDate}</span></td>
                 <td><span className="category-label">{inv.dueDate}</span></td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
               </tr>
             );
           })}

@@ -25,6 +25,7 @@ function fmtCost(n: number) {
 
 import type { Resource } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 function ResourceTable({ resources }: { resources: Resource[] }) {
   if (!resources.length) return (
@@ -49,7 +50,7 @@ function ResourceTable({ resources }: { resources: Resource[] }) {
             <tr key={i}>
               <td style={{ fontWeight: 600, fontSize: '0.78rem' }}>{r.name}</td>
               <td>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${PRIORITY_COLOR[r.priority]}40`, color: PRIORITY_COLOR[r.priority] }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(PRIORITY_COLOR[r.priority])}`, color: sc(PRIORITY_COLOR[r.priority]) }}>
                   {r.priority}
                 </span>
               </td>
@@ -60,7 +61,7 @@ function ResourceTable({ resources }: { resources: Resource[] }) {
                 {fmtCost(r.oneTimeCost)}
               </td>
               <td>
-                <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span>
+                <span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span>
               </td>
               <td>
                 <span className="category-label" style={{ fontSize: '0.62rem' }}>{r.notes}</span>
@@ -149,7 +150,7 @@ export default function ResourcesPage() {
           ].map(c => (
             <div key={c.label} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.1rem', textAlign: 'center' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{c.label}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', fontWeight: 700, color: c.color }}>{c.val}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', fontWeight: 700, color: sc(c.color) }}>{c.val}</div>
             </div>
           ))}
         </div>
@@ -183,9 +184,9 @@ export default function ResourcesPage() {
               if (!items.length) return null;
               return (
                 <div key={type} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem', borderTop: `2px solid ${TYPE_COLORS[type]}` }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: TYPE_COLORS[type], letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{type}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(TYPE_COLORS[type]), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{type}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--off-white)', marginBottom: '0.2rem' }}>{fmtCost(monthly)}/mo</div>
-                  {oneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#FAC775' }}>{fmtCost(oneTime)} one-time</div>}
+                  {oneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#FAC775') }}>{fmtCost(oneTime)} one-time</div>}
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '0.4rem' }}>{items.length} resource{items.length !== 1 ? 's' : ''}</div>
                 </div>
               );
@@ -193,7 +194,7 @@ export default function ResourcesPage() {
             <div style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem', borderTop: '2px solid var(--accent)' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Total</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-text)', marginBottom: '0.2rem' }}>{fmtCost(totalMonthly)}/mo</div>
-              {totalOneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#FAC775' }}>{fmtCost(totalOneTime)} one-time</div>}
+              {totalOneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#FAC775') }}>{fmtCost(totalOneTime)} one-time</div>}
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '0.4rem' }}>{all.length} total resources</div>
             </div>
           </div>

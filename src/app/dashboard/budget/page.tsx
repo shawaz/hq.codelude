@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { VENTURE_BUDGETS, type BudgetLine } from '@/lib/budget-data';
+import { sc } from '@/lib/status-colors';
 
 type Tab = 'planned' | 'actual' | 'variance';
 
@@ -25,9 +26,9 @@ function pct(actual: number, planned: number) {
 function StatusDot({ actual, planned }: { actual: number; planned: number }) {
   if (planned === 0 && actual === 0) return <span style={{ color: 'var(--hq-muted)', fontSize: '0.55rem' }}>—</span>;
   if (actual === 0) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>not started</span>;
-  if (actual > planned * 1.1) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#ff8080' }}>over</span>;
-  if (actual < planned * 0.8) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#FAC775' }}>under</span>;
-  return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#5DCAA5' }}>on track</span>;
+  if (actual > planned * 1.1) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#ff8080') }}>over</span>;
+  if (actual < planned * 0.8) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#FAC775') }}>under</span>;
+  return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#5DCAA5') }}>on track</span>;
 }
 
 function groupByCategory(lines: BudgetLine[]) {
@@ -115,7 +116,7 @@ export default function BudgetPage() {
         {cards[tab].map((c, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: c.color, marginBottom: '0.2rem', lineHeight: 1 }}>{c.val}</div>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: sc(c.color), marginBottom: '0.2rem', lineHeight: 1 }}>{c.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', lineHeight: 1.4 }}>{c.sub}</div>
           </div>
         ))}
@@ -134,7 +135,7 @@ export default function BudgetPage() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: vb.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{category}</span>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 {tab !== 'actual' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>planned: {fmt(catPlanned)}/mo</span>}
-                {tab !== 'planned' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#c8f53a' }}>actual: {fmt(catActual)}</span>}
+                {tab !== 'planned' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#c8f53a') }}>actual: {fmt(catActual)}</span>}
                 {tab === 'variance' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: catActual > catPlanned ? '#ff8080' : '#5DCAA5' }}>
                   {catActual - catPlanned >= 0 ? '+' : ''}{fmt(Math.abs(catActual - catPlanned))}
                 </span>}
@@ -209,7 +210,7 @@ export default function BudgetPage() {
           <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: vb.color, fontWeight: 600 }}>{fmt(totalPlanned)}/mo</div>
         )}
         {tab !== 'planned' && (
-          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#c8f53a', fontWeight: 600 }}>{fmt(totalActual)}</div>
+          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: sc('#c8f53a'), fontWeight: 600 }}>{fmt(totalActual)}</div>
         )}
         {tab === 'actual' && (
           <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>{fmt(totalYtd)}</div>

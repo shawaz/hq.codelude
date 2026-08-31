@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TASKS, PROJECT_COLORS, type Project, type Status, type Priority } from '@/lib/tasks';
+import { sc } from '@/lib/status-colors';
 
 const PROJECTS: Project[] = ['Roborns', 'Franchiseen', 'HubCV', 'Llife', 'Dextrip'];
 const STATUSES: { key: Status | 'all'; label: string }[] = [
@@ -46,7 +47,7 @@ export default function TasksPage() {
           <div className="tasks-count-label">Todo</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{done}</div>
+          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{done}</div>
           <div className="tasks-count-label">Done</div>
         </div>
       </div>
@@ -60,7 +61,7 @@ export default function TasksPage() {
           <button
             key={p}
             className={`filter-pill${project === p ? ' active' : ''}`}
-            style={project === p ? { borderColor: PROJECT_COLORS[p], color: PROJECT_COLORS[p] } : {}}
+            style={project === p ? { borderColor: PROJECT_COLORS[p], color: sc(PROJECT_COLORS[p]) } : {}}
             onClick={() => setProject(p)}
           >
             {p}

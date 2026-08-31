@@ -1,3 +1,4 @@
+import { sc } from '@/lib/status-colors';
 export default function OffboardingPage() {
   const steps = [
     { phase: 'Day of departure', items: ['Collect all company devices and access cards', 'Revoke all system access immediately (Google, GitHub, HQ, server SSH)', 'Change all shared passwords the departing member had access to', 'Transfer all open tasks in HQ → Tasks to remaining team members', 'Export and archive any files owned by the departing member from Google Drive'] },
@@ -13,7 +14,7 @@ export default function OffboardingPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {steps.map((s, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem', borderLeft: '2px solid #F0997B' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: '#F0997B', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{s.phase}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc('#F0997B'), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{s.phase}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {s.items.map((item, j) => (
                 <div key={j} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { PAYROLL, type PayrollType, type PayrollStatus } from '@/lib/budget-data';
 import { usePageScopes } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<PayrollStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
@@ -56,7 +57,7 @@ export default function PayrollPage() {
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: c.color, marginBottom: '0.15rem', lineHeight: 1 }}>{c.val}</div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: sc(c.color), marginBottom: '0.15rem', lineHeight: 1 }}>{c.val}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>{c.sub}</div>
           </div>
         ))}
@@ -66,7 +67,7 @@ export default function PayrollPage() {
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
         {VENTURES.map(v => (
           <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: VENTURE_COLORS[v] } : {}}
+            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
             onClick={() => setVenture(v)}>{v}</button>
         ))}
       </div>
@@ -93,11 +94,11 @@ export default function PayrollPage() {
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
                     <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{p.name}</div>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.12rem 0.45rem', border: `1px solid ${TYPE_COLORS[p.type]}40`, color: TYPE_COLORS[p.type] }}>{p.type}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.12rem 0.45rem', border: `1px solid ${scBorder(TYPE_COLORS[p.type])}`, color: sc(TYPE_COLORS[p.type]) }}>{p.type}</span>
                   </div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>{p.role}</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    {p.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.4rem', border: `1px solid ${VENTURE_COLORS[v]}40`, color: VENTURE_COLORS[v] }}>{v}</span>)}
+                    {p.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(VENTURE_COLORS[v])}`, color: sc(VENTURE_COLORS[v]) }}>{v}</span>)}
                   </div>
                 </div>
 
@@ -125,7 +126,7 @@ export default function PayrollPage() {
 
                 {/* Status + start */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'flex-end' }}>
-                  <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span>
+                  <span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>{p.startDate}</span>
                 </div>
               </div>

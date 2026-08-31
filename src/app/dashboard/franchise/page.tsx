@@ -1,4 +1,5 @@
 import { FRANCHISE_BRANDS } from '@/lib/ops';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   prospecting: { color: '#FAC775', label: 'Prospecting' },
@@ -14,7 +15,7 @@ export default function FranchisePage() {
       <h1 className="page-title">Franchise</h1>
       <p className="page-sub">Franchiseen brand partner registry — target brands, status, and deal parameters.</p>
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7F77DD', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Target: Q3 2026</div>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#7F77DD'), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Target: Q3 2026</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
           First franchise brand partner signed by Q3 2026. Focus on <strong style={{ color: 'var(--off-white)' }}>mid-size regional F&B or retail chains</strong> with 5–20 units and verified unit economics. The first brand defines the pilot — choose carefully.
         </p>
@@ -32,8 +33,8 @@ export default function FranchisePage() {
                 <td><span className="category-label">{b.category}</span></td>
                 <td><span className="category-label">{b.country}</span></td>
                 <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)' }}>{b.investmentMin}</td>
-                <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: '#5DCAA5' }}>{b.expectedRevenue}</td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: sc('#5DCAA5') }}>{b.expectedRevenue}</td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
                 <td><span className="category-label" style={{ fontSize: '0.62rem' }}>{b.notes}</span></td>
               </tr>
             );

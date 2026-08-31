@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VENTURES, VENTURE_PARTNERS, type PartnerStatus, type PartnerType } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<PartnerStatus, { color: string; label: string }> = {
   active:       { color: '#5DCAA5', label: 'Active'      },
@@ -64,9 +65,9 @@ export default function PartnersPage() {
             <div key={i} style={{ background:'var(--card-bg)',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'200px 110px 1fr auto',gap:'1.25rem',alignItems:'start' }}>
               <div>
                 <div style={{ fontWeight:600,fontSize:'0.82rem',marginBottom:'0.25rem' }}>{p.name}</div>
-                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${TYPE_COLORS[p.type]}40`,color:TYPE_COLORS[p.type] }}>{p.type}</span>
+                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${scBorder(TYPE_COLORS[p.type])}`,color:sc(TYPE_COLORS[p.type]) }}>{p.type}</span>
               </div>
-              <span className="status-badge" style={{ color:ss.color,borderColor:`${ss.color}40`,alignSelf:'flex-start' }}>{ss.label}</span>
+              <span className="status-badge" style={{ color:sc(ss.color),borderColor:`${scBorder(ss.color)}`,alignSelf:'flex-start' }}>{ss.label}</span>
               <div>
                 <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.68rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300,marginBottom:'0.5rem' }}>{p.role}</div>
                 <div style={{ display:'flex',alignItems:'flex-start',gap:'0.4rem' }}>

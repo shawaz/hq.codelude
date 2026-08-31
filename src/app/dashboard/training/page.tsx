@@ -1,4 +1,5 @@
 import { TRAINING } from '@/lib/people';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   completed:   { color: '#5DCAA5', label: 'Done'        },
@@ -29,7 +30,7 @@ export default function TrainingPage() {
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: CAT_COLORS[t.category] || 'var(--muted)' }}>{t.category}</span></td>
                 <td><span className="category-label">{t.assignee}</span></td>
                 <td><span className="category-label" style={{ fontSize: '0.6rem' }}>{t.resource}</span></td>
-                <td><span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span></td>
+                <td><span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span></td>
               </tr>
             );
           })}

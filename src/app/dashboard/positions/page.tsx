@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { POSITIONS } from '@/lib/people';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   open:      { color: '#c8f53a', label: 'Open'     },
@@ -26,8 +27,8 @@ export default function PositionsPage() {
       <p className="page-sub">Open roles and headcount plan across all ventures.</p>
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell"><div className="tasks-count-num">{POSITIONS.length}</div><div className="tasks-count-label">Total positions</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: '#c8f53a' }}>{open}</div><div className="tasks-count-label">Open / Hiring</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: '#ff8080' }}>{POSITIONS.filter(p => p.priority === 'critical').length}</div><div className="tasks-count-label">Critical priority</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#c8f53a') }}>{open}</div><div className="tasks-count-label">Open / Hiring</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#ff8080') }}>{POSITIONS.filter(p => p.priority === 'critical').length}</div><div className="tasks-count-label">Critical priority</div></div>
       </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {TYPES.map(t => <button key={t} className={`filter-pill${typeFilter === t ? ' active' : ''}`} onClick={() => setTypeFilter(t)}>{t === 'all' ? 'All types' : t}</button>)}
@@ -43,9 +44,9 @@ export default function PositionsPage() {
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)' }}>{p.department} · {p.location} · {p.targetStart}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${PRIORITY_COLOR[p.priority]}40`, color: PRIORITY_COLOR[p.priority] }}>{p.priority}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', padding: '0.15rem 0.5rem', border: `1px solid ${VENTURE_COLORS[p.venture]}40`, color: VENTURE_COLORS[p.venture] }}>{p.venture}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(PRIORITY_COLOR[p.priority])}`, color: sc(PRIORITY_COLOR[p.priority]) }}>{p.priority}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color) }}>{ss.label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(VENTURE_COLORS[p.venture])}`, color: sc(VENTURE_COLORS[p.venture]) }}>{p.venture}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '0.6rem' }}>

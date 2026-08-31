@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { EVENTS, type EventType, type EventStatus } from '@/lib/workspace';
 import { usePageScopes } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
@@ -190,8 +191,8 @@ export default function EventsPage() {
                     return (
                       <div key={i} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem', borderLeft: `2px solid ${VENTURE_COLORS[e.venture]}` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.12rem 0.4rem', border: `1px solid ${TYPE_COLORS[e.type]}40`, color: TYPE_COLORS[e.type] }}>{e.type}</span>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: ss.color }}>{ss.label}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.12rem 0.4rem', border: `1px solid ${scBorder(TYPE_COLORS[e.type])}`, color: sc(TYPE_COLORS[e.type]) }}>{e.type}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc(ss.color) }}>{ss.label}</span>
                         </div>
                         <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.25rem', lineHeight: 1.3 }}>{e.title}</div>
                         {e.time && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', marginBottom: '0.3rem' }}>{e.time} · {e.location}</div>}
@@ -221,17 +222,17 @@ export default function EventsPage() {
               { label: 'Completed', val: EVENTS.filter(e => e.status === 'completed').length,    color: 'var(--muted)' },
             ].map(c => (
               <div key={c.label} className="tasks-count-cell">
-                <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>
+                <div className="tasks-count-num" style={{ color: sc(c.color) }}>{c.val}</div>
                 <div className="tasks-count-label">{c.label}</div>
               </div>
             ))}
           </div>
 
           <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-            {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: VENTURE_COLORS[v] } : {}} onClick={() => setVenture(v)}>{v}</button>)}
+            {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}} onClick={() => setVenture(v)}>{v}</button>)}
           </div>
           <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
-            {TYPES.map(t => <button key={t} className={`filter-pill${type === t ? ' active' : ''}`} style={type === t && t !== 'all' ? { borderColor: TYPE_COLORS[t as EventType], color: TYPE_COLORS[t as EventType] } : {}} onClick={() => setType(t)}>{t === 'all' ? 'All types' : t}</button>)}
+            {TYPES.map(t => <button key={t} className={`filter-pill${type === t ? ' active' : ''}`} style={type === t && t !== 'all' ? { borderColor: TYPE_COLORS[t as EventType], color: sc(TYPE_COLORS[t as EventType]) } : {}} onClick={() => setType(t)}>{t === 'all' ? 'All types' : t}</button>)}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
@@ -246,10 +247,10 @@ export default function EventsPage() {
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--off-white)', fontWeight: e.status === 'today' ? 600 : 400 }}>{e.date}</div>
                       {e.time && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{e.time}</div>}
                     </div>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${TYPE_COLORS[e.type]}40`, color: TYPE_COLORS[e.type], alignSelf: 'center' }}>{e.type}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: VENTURE_COLORS[e.venture] }}>{e.venture}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[e.type])}`, color: sc(TYPE_COLORS[e.type]), alignSelf: 'center' }}>{e.type}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(VENTURE_COLORS[e.venture]) }}>{e.venture}</span>
                     <div style={{ fontWeight: 600, fontSize: '0.82rem', color: e.status === 'completed' ? 'var(--muted)' : 'var(--off-white)' }}>{e.title}</div>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${ss.color}40`, color: ss.color, whiteSpace: 'nowrap' }}>{ss.label}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color), whiteSpace: 'nowrap' }}>{ss.label}</span>
                   </div>
                   {isOpen && (
                     <div style={{ padding: '0 1.5rem 1rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }} onClick={ev => ev.stopPropagation()}>

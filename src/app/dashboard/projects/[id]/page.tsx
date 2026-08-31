@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { PROJECT_COLORS, type Status } from '@/lib/tasks';
 import type { SiteProject, BudgetLine, TeamMember, ProjectTask, Activity, SiteProjectStatus, ActivityStatus } from '@/lib/site-projects';
 import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
+import { sc, scBorder } from '@/lib/status-colors';
 
 type Tab = 'overview' | 'budget' | 'team' | 'tasks' | 'activities';
 
@@ -78,7 +79,7 @@ export default function ProjectDetailPage() {
               {project.ventureId}
             </span>
             <span className="category-label">· {project.location}</span>
-            <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span>
+            <span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span>
             {project.source === 'lead' && (
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Converted from lead
@@ -504,7 +505,7 @@ function ActivitiesPanel({ projectId, activities, onChange }: { projectId: strin
                   <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
                     <button onClick={() => cycleStatus(a)} title="Click to advance status" style={{
                       fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase',
-                      color: as.color, border: `1px solid ${as.color}40`, background: 'transparent', borderRadius: '2px',
+                      color: as.color, border: `1px solid ${scBorder(as.color)}`, background: 'transparent', borderRadius: '2px',
                       padding: '0.2rem 0.6rem', cursor: 'pointer',
                     }}>{as.label}</button>
                     <button className="icon-btn" onClick={() => remove(a.id)}>Delete</button>

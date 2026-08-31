@@ -7,6 +7,7 @@ import type { Id } from '@/convex/_generated/dataModel';
 import MemberForm, { type MemberDraft } from '@/components/MemberForm';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { ALL_SCOPES, isUnrestricted, type Grant } from '@/lib/nav';
+import { sc, scBorder } from '@/lib/status-colors';
 
 /** A row from team.getTeam — a real user, or an invite not yet redeemed. */
 interface Member {
@@ -204,13 +205,13 @@ function AgentsSection({ venture }: { venture: string }) {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: a.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{a.type}</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: '1px solid rgba(93,202,165,0.3)', color: '#5DCAA5' }}>Active</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: '1px solid rgba(93,202,165,0.3)', color: sc('#5DCAA5') }}>Active</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>{a.tf.join(' / ')}</span>
             </div>
           </div>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{a.role}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-            {a.tools.map(t => <span key={t} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.45rem', border: `1px solid ${a.color}30`, color: a.color }}>{t}</span>)}
+            {a.tools.map(t => <span key={t} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.45rem', border: `1px solid ${scBorder(a.color, 30)}`, color: a.color }}>{t}</span>)}
           </div>
           <div style={{ marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', opacity: 0.6 }}>model: {a.model}</div>
         </div>
@@ -262,7 +263,7 @@ function OrgSection({ venture, team }: { venture: string; team: Member[] | undef
           <div style={{ background: 'var(--card-bg)', border: '1px dashed var(--card-border)', padding: '1rem', textAlign: 'center' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>AI Agents ({agents.length})</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', justifyContent: 'center' }}>
-              {agents.map(a => <span key={a.name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', padding: '0.15rem 0.5rem', border: `1px solid ${a.color}40`, color: a.color }}>{a.emoji} {a.name}</span>)}
+              {agents.map(a => <span key={a.name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(a.color)}`, color: a.color }}>{a.emoji} {a.name}</span>)}
             </div>
           </div>
         </>

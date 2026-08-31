@@ -10,6 +10,7 @@ import {
   type Stage, type Segment,
 } from '@/lib/pipeline-config';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const PAGE_SIZE = 50;
 const nf = new Intl.NumberFormat('en-IN');
@@ -346,7 +347,7 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
           onClick={() => setStatus(null)}>All</button>
         {STATUSES[stage].map(s => (
           <button key={s.key} className={`filter-pill${status === s.key ? ' active' : ''}`}
-            style={status === s.key ? { borderColor: s.color, color: s.color } : {}}
+            style={status === s.key ? { borderColor: s.color, color: sc(s.color) } : {}}
             onClick={() => setStatus(s.key)}>{s.label}</button>
         ))}
       </div>
@@ -498,8 +499,8 @@ function RecordList({
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em',
                 textTransform: 'uppercase', padding: '0.2rem 0.5rem', cursor: 'pointer',
-                background: 'transparent', color: statusColor(stage, o.status),
-                border: `1px solid ${statusColor(stage, o.status)}40`,
+                background: 'transparent', color: sc(statusColor(stage, o.status)),
+                border: `1px solid ${scBorder(statusColor(stage, o.status))}`,
               }}
             >
               {STATUSES[stage].map(s => (
@@ -523,7 +524,7 @@ function RecordList({
                   fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.1em',
                   textTransform: 'uppercase', padding: '0.2rem 0.5rem', cursor: 'pointer',
                   background: 'transparent', color: accent,
-                  border: `1px solid ${accent}40`, whiteSpace: 'nowrap',
+                  border: `1px solid ${scBorder(accent)}`, whiteSpace: 'nowrap',
                 }}
               >{meta.convertLabel} →</button>
             )}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { TRIPS, type TripStatus } from '@/lib/workspace';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
   planned:     { color: '#FAC775', label: 'Planned'     },
@@ -41,8 +42,8 @@ export default function TravelsPage() {
                 <div style={{ fontWeight: 600, fontSize: '0.82rem', marginBottom: '0.25rem' }}>{t.destination}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>{t.departure} → {t.return}</div>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: VENTURE_COLORS[t.venture] }}>{t.venture}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.1rem 0.4rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc(VENTURE_COLORS[t.venture]) }}>{t.venture}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color) }}>{ss.label}</span>
                 </div>
               </div>
             );
@@ -53,7 +54,7 @@ export default function TravelsPage() {
         {trip ? (
           <div>
             <div style={{ borderLeft: `2px solid ${VENTURE_COLORS[trip.venture]}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: VENTURE_COLORS[trip.venture], letterSpacing: '0.1em', marginBottom: '0.2rem' }}>{trip.venture} — {trip.purpose}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[trip.venture]), letterSpacing: '0.1em', marginBottom: '0.2rem' }}>{trip.venture} — {trip.purpose}</div>
               <div style={{ fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.01em' }}>{trip.destination}, {trip.country}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', marginTop: '0.25rem' }}>
                 {trip.departure} → {trip.return} · {trip.traveler}

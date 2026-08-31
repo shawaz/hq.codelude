@@ -1,4 +1,5 @@
 import { ACCOUNTS, type AccountStatus, type AccountType } from '@/lib/finance';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<AccountStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
@@ -31,7 +32,7 @@ export default function AccountsPage() {
           { label: 'Planned', val: planned,           color: 'var(--muted)' },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
-            <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>
+            <div className="tasks-count-num" style={{ color: sc(c.color) }}>{c.val}</div>
             <div className="tasks-count-label">{c.label}</div>
           </div>
         ))}
@@ -46,13 +47,13 @@ export default function AccountsPage() {
                 <div style={{ fontWeight: 600, fontSize: '0.82rem', marginBottom: '0.25rem' }}>{a.entity}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>{a.bank}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${TYPE_COLORS[a.type]}40`, color: TYPE_COLORS[a.type], alignSelf: 'flex-start' }}>{a.type}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[a.type])}`, color: sc(TYPE_COLORS[a.type]), alignSelf: 'flex-start' }}>{a.type}</span>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)' }}>{a.currency}</div>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.3rem' }}>{a.purpose}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', opacity: 0.7, lineHeight: 1.5 }}>{a.notes}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color, whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>{ss.label}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color), whiteSpace: 'nowrap', alignSelf: 'flex-start' }}>{ss.label}</span>
             </div>
           );
         })}

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/legal-data';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   required:      { color: '#ff8080', label: 'Required'     },
@@ -21,7 +22,7 @@ export default function GovtPage() {
       <h1 className="page-title">Govt</h1>
       <p className="page-sub">Government filings, regulatory clearances, and compliance requirements.</p>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
-        {JURISDICTIONS.map(j => <button key={j} className={`filter-pill${juris === j ? ' active' : ''}`} style={juris === j && j !== 'all' ? { borderColor: JURIS_COLORS[j as GovtJurisdiction], color: JURIS_COLORS[j as GovtJurisdiction] } : {}} onClick={() => setJuris(j)}>{j === 'all' ? 'All jurisdictions' : j}</button>)}
+        {JURISDICTIONS.map(j => <button key={j} className={`filter-pill${juris === j ? ' active' : ''}`} style={juris === j && j !== 'all' ? { borderColor: JURIS_COLORS[j as GovtJurisdiction], color: sc(JURIS_COLORS[j as GovtJurisdiction]) } : {}} onClick={() => setJuris(j)}>{j === 'all' ? 'All jurisdictions' : j}</button>)}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {filtered.map((g, i) => {
@@ -33,13 +34,13 @@ export default function GovtPage() {
                 <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.25rem', lineHeight: 1.3 }}>{g.title}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{g.authority}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${JURIS_COLORS[g.jurisdiction]}40`, color: JURIS_COLORS[g.jurisdiction], alignSelf: 'flex-start' }}>{g.jurisdiction}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: VENTURE_COLORS[g.venture] }}>{g.venture}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(JURIS_COLORS[g.jurisdiction])}`, color: sc(JURIS_COLORS[g.jurisdiction]), alignSelf: 'flex-start' }}>{g.jurisdiction}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[g.venture]) }}>{g.venture}</span>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Deadline: {g.deadline}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{g.notes}</div>
               </div>
-              <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40`, whiteSpace: 'nowrap' }}>{ss.label}</span>
+              <span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}`, whiteSpace: 'nowrap' }}>{ss.label}</span>
             </div>
           );
         })}

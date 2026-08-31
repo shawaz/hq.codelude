@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VENTURES, VENTURE_RELATIONS, type RHealth } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { scBorder } from '@/lib/status-colors';
 
 const HEALTH_STYLES: Record<RHealth,{color:string;label:string}> = {
   strong:{color:'#5DCAA5',label:'Strong'},developing:{color:'#c8f53a',label:'Developing'},cold:{color:'var(--muted)',label:'Cold'},target:{color:'#F0997B',label:'Target'},
@@ -51,9 +52,9 @@ export default function RelationsPage() {
             <div key={i} style={{ background:'var(--card-bg)',padding:'1.25rem 1.5rem',display:'grid',gridTemplateColumns:'200px 90px 100px 1fr',gap:'1.25rem',alignItems:'start' }}>
               <div>
                 <div style={{ fontWeight:600,fontSize:'0.82rem',marginBottom:'0.3rem' }}>{r.name}</div>
-                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${CAT_COLORS[r.category]||'var(--card-border)'}40`,color:CAT_COLORS[r.category]||'var(--muted)' }}>{r.category}</span>
+                <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.58rem',letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.12rem 0.45rem',border:`1px solid ${scBorder(CAT_COLORS[r.category]||'var(--card-border)')}`,color:CAT_COLORS[r.category]||'var(--muted)' }}>{r.category}</span>
               </div>
-              <span className="status-badge" style={{ color:hs.color,borderColor:`${hs.color}40`,alignSelf:'flex-start' }}>{hs.label}</span>
+              <span className="status-badge" style={{ color:hs.color,borderColor:`${scBorder(hs.color)}`,alignSelf:'flex-start' }}>{hs.label}</span>
               <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:'var(--muted)',lineHeight:1.6 }}>
                 <div style={{ textTransform:'uppercase',fontSize:'0.52rem',letterSpacing:'0.1em',marginBottom:'0.2rem' }}>Last contact</div>
                 {r.lastContact}

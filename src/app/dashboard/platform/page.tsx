@@ -1,3 +1,4 @@
+import { sc, scBorder } from '@/lib/status-colors';
 type Status = 'live' | 'stopped' | 'static' | 'building';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static' | 'Mobile';
 
@@ -257,11 +258,11 @@ export default function PlatformPage() {
           <div className="tasks-count-label">Total platforms</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#5DCAA5' }}>{live}</div>
+          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{live}</div>
           <div className="tasks-count-label">Live</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: '#ff8080' }}>{stopped}</div>
+          <div className="tasks-count-num" style={{ color: sc('#ff8080') }}>{stopped}</div>
           <div className="tasks-count-label">Stopped</div>
         </div>
       </div>
@@ -291,7 +292,7 @@ export default function PlatformPage() {
                   <span style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
                     textTransform: 'uppercase', padding: '0.15rem 0.5rem',
-                    border: `1px solid ${KIND_COLOR[p.kind]}40`, color: KIND_COLOR[p.kind],
+                    border: `1px solid ${scBorder(KIND_COLOR[p.kind])}`, color: sc(KIND_COLOR[p.kind]),
                     display: 'inline-block', alignSelf: 'flex-start',
                   }}>{p.kind}</span>
                   {p.port && (
@@ -307,7 +308,7 @@ export default function PlatformPage() {
                 <span style={{
                   fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.12em',
                   textTransform: 'uppercase', padding: '0.15rem 0.55rem',
-                  border: `1px solid ${STATUS_COLOR[p.status]}40`, color: STATUS_COLOR[p.status],
+                  border: `1px solid ${scBorder(STATUS_COLOR[p.status])}`, color: sc(STATUS_COLOR[p.status]),
                   whiteSpace: 'nowrap',
                 }}>{p.status}</span>
               </div>

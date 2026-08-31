@@ -7,6 +7,7 @@ import { PROJECT_COLORS, type Project } from '@/lib/tasks';
 import type { SiteProject, SiteProjectStatus } from '@/lib/site-projects';
 import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
 import { usePageScopes } from '@/lib/use-page-scopes';
+import { sc, scBorder } from '@/lib/status-colors';
 
 
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
@@ -107,7 +108,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
                     <div className="project-card-name">{p.name}</div>
                     <div className="project-card-sector">{p.location}</div>
                   </div>
-                  <span className="status-badge" style={{ color: ss.color, borderColor: `${ss.color}40` }}>{ss.label}</span>
+                  <span className="status-badge" style={{ color: sc(ss.color), borderColor: `${scBorder(ss.color)}` }}>{ss.label}</span>
                 </div>
 
                 <div className="progress-bar">
@@ -175,7 +176,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
                 <label style={labelStyle}>Site boundary (optional)</label>
                 <SiteBoundaryMap editable height={320} onChange={setBoundary} />
               </div>
-              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{error}</div>}
+              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#ff8080') }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
                 <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Creating...' : 'Create project →'}

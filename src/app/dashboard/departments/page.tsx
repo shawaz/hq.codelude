@@ -1,4 +1,5 @@
 import { DEPARTMENTS } from '@/lib/ops';
+import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
@@ -27,11 +28,11 @@ export default function DepartmentsPage() {
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>Lead: {d.lead} · {d.headcount} {d.headcount === 1 ? 'person' : 'people'}</div>
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${ss.color}40`, color: ss.color }}>{ss.label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.55rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color) }}>{ss.label}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${VENTURE_COLORS[v] || 'var(--card-border)'}40`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
+                {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${scBorder(VENTURE_COLORS[v] || 'var(--card-border)')}`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {d.responsibilities.map((r, j) => <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', padding: '0.2rem 0.65rem', border: '1px solid var(--card-border)' }}>{r}</span>)}
