@@ -200,8 +200,8 @@ export default function FinancialModelPage() {
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { stacked: true, grid: { display: false }, ticks: { color: '#7a7870', font: { size: 11 } } },
-            y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7a7870', font: { size: 11 } } },
+            x: { stacked: true, grid: { display: false }, ticks: { color: 'var(--muted)', font: { size: 11 } } },
+            y: { stacked: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'var(--muted)', font: { size: 11 } } },
           },
         },
       });

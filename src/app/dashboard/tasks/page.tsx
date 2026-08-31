@@ -38,7 +38,7 @@ export default function TasksPage() {
           <div className="tasks-count-label">Total</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: 'var(--accent)' }}>{inProgress}</div>
+          <div className="tasks-count-num" style={{ color: 'var(--accent-text)' }}>{inProgress}</div>
           <div className="tasks-count-label">In Progress</div>
         </div>
         <div className="tasks-count-cell">

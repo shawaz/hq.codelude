@@ -235,7 +235,7 @@ export default function AccessMatrix({
                   gap: '0.6rem',
                   padding: '0.6rem 0.75rem',
                   cursor: 'pointer',
-                  background: isOpen ? 'rgba(255,255,255,0.02)' : 'transparent',
+                  background: isOpen ? 'var(--hover-wash)' : 'transparent',
                 }}
               >
                 <span style={{ ...mono, fontSize: '0.5rem', color: 'var(--muted)', width: 8 }}>

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import type { NavSection } from '@/lib/nav';
+import ThemeToggle from '@/components/ThemeToggle';
 
 
 function activeSection(nav: NavSection[], pathname: string): string | null {
@@ -73,7 +74,7 @@ export default function Sidebar({ user, nav }: Props) {
               >
                 <span
                   className="sidebar-section-title"
-                  style={hasActive ? { opacity: 1, color: 'var(--accent)' } : {}}
+                  style={hasActive ? { opacity: 1, color: 'var(--accent-text)' } : {}}
                 >
                   {section.title}
                 </span>
@@ -104,7 +105,10 @@ export default function Sidebar({ user, nav }: Props) {
             <span className="sidebar-user-role">{user.role}</span>
           </div>
         </div>
-        <button onClick={handleLogout} className="sidebar-logout">Sign out →</button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+          <button onClick={handleLogout} className="sidebar-logout">Sign out →</button>
+          <ThemeToggle />
+        </div>
       </div>
     </aside>
   );

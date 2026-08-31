@@ -117,7 +117,7 @@ const DATA: PlatformBugs[] = [
 const SEVERITY: Record<Severity, { color: string; label: string }> = {
   high:   { color: '#ff8080', label: 'High'   },
   medium: { color: '#FAC775', label: 'Medium' },
-  low:    { color: '#7a7870', label: 'Low'    },
+  low:    { color: 'var(--muted)', label: 'Low'    },
 };
 
 const mono = (size: string): React.CSSProperties => ({
@@ -204,12 +204,12 @@ export default function BugsPage() {
         background: 'var(--card-bg)', border: '1px solid var(--card-border)',
         borderLeft: '2px solid var(--accent)', padding: '1.5rem 1.75rem', maxWidth: 720,
       }}>
-        <div style={{ ...mono('0.6rem'), color: 'var(--accent)', letterSpacing: '0.18em',
+        <div style={{ ...mono('0.6rem'), color: 'var(--accent-text)', letterSpacing: '0.18em',
           textTransform: 'uppercase', marginBottom: '0.6rem' }}>Planned — AI Agent</div>
         <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.6rem' }}>Autonomous bug agent</h2>
         <p style={{ ...mono('0.7rem'), color: 'var(--muted)', lineHeight: 1.85, fontWeight: 300, margin: 0 }}>
           The list above is a manual snapshot reconciled from each repo&apos;s session log and
-          <code style={{ color: 'var(--accent)' }}> fix:</code> commit history. An agent will replace it —
+          <code style={{ color: 'var(--accent-text)' }}> fix:</code> commit history. An agent will replace it —
           scanning live platforms for runtime errors, broken routes and failed API calls, logging them
           here with severity and reproduction steps, then proposing fixes as reviewable diffs.
         </p>

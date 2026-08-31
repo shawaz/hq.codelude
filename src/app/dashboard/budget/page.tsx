@@ -24,7 +24,7 @@ function pct(actual: number, planned: number) {
 
 function StatusDot({ actual, planned }: { actual: number; planned: number }) {
   if (planned === 0 && actual === 0) return <span style={{ color: 'var(--hq-muted)', fontSize: '0.55rem' }}>—</span>;
-  if (actual === 0) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#7a7870' }}>not started</span>;
+  if (actual === 0) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>not started</span>;
   if (actual > planned * 1.1) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#ff8080' }}>over</span>;
   if (actual < planned * 0.8) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#FAC775' }}>under</span>;
   return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: '#5DCAA5' }}>on track</span>;
@@ -60,10 +60,10 @@ export default function BudgetPage() {
       { label: 'Period',          val: vb.period,         sub: 'Current budget period',       color: 'var(--off-white)' },
     ],
     actual: [
-      { label: 'Actual MTD',      val: fmt(totalActual),  sub: 'Spent this month to date',  color: totalActual > 0 ? '#c8f53a' : '#7a7870' },
+      { label: 'Actual MTD',      val: fmt(totalActual),  sub: 'Spent this month to date',  color: totalActual > 0 ? '#c8f53a' : 'var(--muted)' },
       { label: 'YTD actual',      val: fmt(totalYtd),     sub: 'Year to date total',         color: '#FAC775' },
       { label: 'MTD utilisation', val: pct(totalActual, totalPlanned), sub: 'Of monthly budget used', color: totalActual > totalPlanned ? '#ff8080' : '#5DCAA5' },
-      { label: 'Not started',     val: String(vb.lines.filter(l => l.actual === 0 && l.planned > 0).length), sub: 'Lines with $0 actual', color: '#7a7870' },
+      { label: 'Not started',     val: String(vb.lines.filter(l => l.actual === 0 && l.planned > 0).length), sub: 'Lines with $0 actual', color: 'var(--muted)' },
     ],
     variance: [
       { label: 'MTD variance',    val: `${variance >= 0 ? '+' : ''}${fmt(Math.abs(variance))}`, sub: variance >= 0 ? 'Over budget' : 'Under budget', color: variance > 0 ? '#ff8080' : '#5DCAA5' },

@@ -127,7 +127,7 @@ export default function MemberForm({
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.7)',
+        background: 'var(--overlay)',
         zIndex: 100,
         display: 'flex',
         alignItems: 'flex-start',

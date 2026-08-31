@@ -58,7 +58,7 @@ export default async function VenturesPage() {
               {v.holdco !== '—' && (
                 <div className="vc-metric">
                   <span className="vc-metric-key">HoldCo</span>
-                  <span className="vc-metric-val" style={{ color: 'var(--accent)' }}>{v.holdco}</span>
+                  <span className="vc-metric-val" style={{ color: 'var(--accent-text)' }}>{v.holdco}</span>
                 </div>
               )}
             </div>

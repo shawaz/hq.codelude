@@ -4,7 +4,7 @@ import { VENTURES, VENTURE_CHANNELS, type ChStatus } from '@/lib/mgmt-ventures';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 
 const STATUS_STYLES: Record<ChStatus,{color:string;label:string}> = {
-  active:{color:'#5DCAA5',label:'Active'},building:{color:'#c8f53a',label:'Building'},planned:{color:'#7a7870',label:'Planned'},
+  active:{color:'#5DCAA5',label:'Active'},building:{color:'#c8f53a',label:'Building'},planned:{color:'var(--muted)',label:'Planned'},
 };
 const TYPE_COLORS: Record<string,string> = {
   Marketing:'#c8f53a',Sales:'#F0997B',Distribution:'#7F77DD',Community:'#5DCAA5',Internal:'#85B7EB',
@@ -38,7 +38,7 @@ export default function ChannelPage() {
       <p className="page-sub">Marketing, sales, distribution, and community channels — per venture.</p>
       <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
         {ventures.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--black)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
+          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?v.color:'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--on-brand)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
         ))}
       </div>
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
@@ -58,7 +58,7 @@ export default function ChannelPage() {
               <div>
                 <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.68rem',color:'var(--muted)',lineHeight:1.7,fontWeight:300,marginBottom:'0.35rem' }}>{c.description}</div>
                 <div style={{ display:'flex',alignItems:'center',gap:'0.4rem' }}>
-                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',color:'var(--accent)' }}>metric</span>
+                  <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.56rem',color:'var(--accent-text)' }}>metric</span>
                   <span style={{ fontFamily:'var(--font-mono)',fontSize:'0.62rem',color:'var(--off-white)' }}>{c.metric}</span>
                 </div>
               </div>

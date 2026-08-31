@@ -7,7 +7,7 @@ export default function BrandPage() {
       <p className="page-sub">Codelude brand guidelines — typography, colour, venture palette, and voice.</p>
 
       {/* Typography */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Typography</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Typography</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '2rem' }}>
         {BRAND.fonts.map((f, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', padding: '1.75rem' }}>
@@ -15,14 +15,14 @@ export default function BrandPage() {
               {f.name}
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', marginBottom: '0.35rem' }}>Weight: {f.weight}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', marginBottom: '0.35rem' }}>{f.role}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', marginBottom: '0.35rem' }}>{f.role}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.6 }}>{f.usage}</div>
           </div>
         ))}
       </div>
 
       {/* Colours */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Colour system</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Colour system</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '2rem' }}>
         {BRAND.colors.map((c, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', padding: '0.9rem 1.25rem', display: 'grid', gridTemplateColumns: '32px 120px 120px 1fr', gap: '1rem', alignItems: 'center' }}>
@@ -35,7 +35,7 @@ export default function BrandPage() {
       </div>
 
       {/* Venture colours */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Venture palette</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Venture palette</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '2rem' }}>
         {BRAND.ventureColors.map((v, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', padding: '1.5rem 1.25rem' }}>
@@ -48,7 +48,7 @@ export default function BrandPage() {
       </div>
 
       {/* Voice */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Brand voice</div>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Brand voice</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {BRAND.voice.map((v, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', padding: '1.5rem' }}>

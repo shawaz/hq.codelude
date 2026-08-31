@@ -6,7 +6,7 @@ const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = 
   live:      { color: '#5DCAA5', label: 'Live'      },
   planned:   { color: '#c8f53a', label: 'Planned'   },
   draft:     { color: '#FAC775', label: 'Draft'     },
-  completed: { color: '#7a7870', label: 'Completed' },
+  completed: { color: 'var(--muted)', label: 'Completed' },
 };
 const TYPE_COLORS: Record<string, string> = { Content: '#7F77DD', Email: '#85B7EB', Social: '#c8f53a', PR: '#5DCAA5', Community: '#F0997B', Paid: '#FAC775' };
 const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };

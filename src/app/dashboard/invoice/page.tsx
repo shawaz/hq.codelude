@@ -4,7 +4,7 @@ const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
   paid:    { color: '#5DCAA5', label: 'Paid'    },
   pending: { color: '#FAC775', label: 'Pending' },
   overdue: { color: '#ff8080', label: 'Overdue' },
-  draft:   { color: '#7a7870', label: 'Draft'   },
+  draft:   { color: 'var(--muted)', label: 'Draft'   },
 };
 
 const VENTURE_COLORS: Record<string, string> = {
@@ -27,7 +27,7 @@ export default function InvoicePage() {
           { label: 'Total invoices',  val: INVOICES.length,         color: 'var(--off-white)', fmt: false },
           { label: 'Collected',       val: `$${paid}`,              color: '#5DCAA5',          fmt: false },
           { label: 'Pending',         val: `$${pending}`,           color: '#FAC775',          fmt: false },
-          { label: 'Draft',           val: `$${draft.toLocaleString()}`, color: '#7a7870',     fmt: false },
+          { label: 'Draft',           val: `$${draft.toLocaleString()}`, color: 'var(--muted)',     fmt: false },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
             <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>

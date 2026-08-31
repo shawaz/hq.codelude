@@ -85,7 +85,7 @@ const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
       { name: 'Bart',      emoji: '🟠', color: '#F0997B', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Momentum Break hunter. Enters when price breaks out of recent range with directional force.', tools: ['Momentum Break', 'Volume Surge', 'Liquidity Sweep Reversal'] },
       { name: 'Marge',     emoji: '🔵', color: '#7F77DD', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'VWAP Reclaim trader. Buys or sells when price reclaims VWAP with supporting volume.',       tools: ['VWAP Reclaim', 'RSI Reversal'] },
       { name: 'Homer',     emoji: '🟡', color: '#FAC775', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'RSI Reversal fader. Looks for overstretched moves and fades them at RSI extremes.',           tools: ['RSI Reversal'] },
-      { name: 'Mr Burns',  emoji: '⚫', color: '#7a7870', type: 'Strategy Agent', model: 'Rules-based', tf: ['1h', '4h'],  role: 'Trend Ride player. Follows sustained directional moves using MA slope and higher highs/lows.',  tools: ['Trend Ride', 'Trend Pullback', 'Volume Surge'] },
+      { name: 'Mr Burns',  emoji: '⚫', color: 'var(--muted)', type: 'Strategy Agent', model: 'Rules-based', tf: ['1h', '4h'],  role: 'Trend Ride player. Follows sustained directional moves using MA slope and higher highs/lows.',  tools: ['Trend Ride', 'Trend Pullback', 'Volume Surge'] },
       { name: 'Nelson',    emoji: '🔴', color: '#ff8080', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Aggressive downside hunter. Best at sharp downside continuation and trap reversals.',         tools: ['Liquidity Sweep Reversal', 'Momentum Break', 'RSI Reversal'] },
       { name: 'Maggie',    emoji: '🟣', color: '#c8f53a', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'AntiRekt Trend Oscillator — SMMA jaw/lips crossover. Avoids breakout and chaos regimes.',     tools: ['AntiRekt Trend Oscillator'] },
       { name: 'Milhouse',  emoji: '🔵', color: '#85B7EB', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Cautious trend follower. Reliable in clean trends, timid after failures.',                   tools: ['Trend Ride', 'VWAP Reclaim'] },
@@ -131,7 +131,7 @@ function HumansSection({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-            <div style={{ width: 36, height: 36, background: m.pending ? 'var(--card-border)' : color, color: m.pending ? 'var(--muted)' : 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.85rem', flexShrink: 0 }}>
+            <div style={{ width: 36, height: 36, background: m.pending ? 'var(--card-border)' : color, color: m.pending ? 'var(--muted)' : 'var(--on-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.85rem', flexShrink: 0 }}>
               {(m.name || m.email || '?')[0].toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -246,7 +246,7 @@ function OrgSection({ venture, team }: { venture: string; team: Member[] | undef
           <div style={{ display: 'flex', justifyContent: 'center', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: 0 }}>
             {activeHumans.map(m => (
               <div key={m._id} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.5rem', textAlign: 'center', flex: 1 }}>
-                <div style={{ width: 30, height: 30, background: color, color: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, margin: '0 auto 0.3rem' }}>{(m.name || m.email || '?')[0].toUpperCase()}</div>
+                <div style={{ width: 30, height: 30, background: color, color: 'var(--on-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, margin: '0 auto 0.3rem' }}>{(m.name || m.email || '?')[0].toUpperCase()}</div>
                 <div style={{ fontWeight: 600, fontSize: '0.78rem' }}>{m.name || m.email}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)' }}>{roleLabel(m, venture)}</div>
               </div>
@@ -277,7 +277,7 @@ function OrgSection({ venture, team }: { venture: string; team: Member[] | undef
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
               {openRoles.map(r => (
                 <div key={r} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ color: 'var(--accent)' }}>+</span>{r}
+                  <span style={{ color: 'var(--accent-text)' }}>+</span>{r}
                 </div>
               ))}
             </div>
@@ -375,7 +375,7 @@ export default function TeamPage() {
             background: index === i ? v.color : 'var(--card-bg)',
             border: 'none', cursor: 'pointer',
             fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: index === i ? 'var(--black)' : 'var(--muted)',
+            color: index === i ? 'var(--on-brand)' : 'var(--muted)',
             fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
           }}>{v.name}</button>
         ))}

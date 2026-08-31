@@ -3,7 +3,7 @@ import { TRAINING } from '@/lib/people';
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   completed:   { color: '#5DCAA5', label: 'Done'        },
   'in-progress':{ color: '#c8f53a', label: 'In Progress' },
-  planned:     { color: '#7a7870', label: 'Planned'     },
+  planned:     { color: 'var(--muted)', label: 'Planned'     },
 };
 
 const CAT_COLORS: Record<string, string> = {

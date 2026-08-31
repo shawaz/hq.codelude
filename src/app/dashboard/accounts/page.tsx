@@ -3,7 +3,7 @@ import { ACCOUNTS, type AccountStatus, type AccountType } from '@/lib/finance';
 const STATUS_STYLES: Record<AccountStatus, { color: string; label: string }> = {
   active:  { color: '#5DCAA5', label: 'Active'  },
   pending: { color: '#c8f53a', label: 'Pending' },
-  planned: { color: '#7a7870', label: 'Planned' },
+  planned: { color: 'var(--muted)', label: 'Planned' },
 };
 
 const TYPE_COLORS: Record<AccountType, string> = {
@@ -28,7 +28,7 @@ export default function AccountsPage() {
           { label: 'Total',   val: ACCOUNTS.length, color: 'var(--off-white)' },
           { label: 'Active',  val: active,           color: '#5DCAA5' },
           { label: 'Pending', val: pending,           color: '#c8f53a' },
-          { label: 'Planned', val: planned,           color: '#7a7870' },
+          { label: 'Planned', val: planned,           color: 'var(--muted)' },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
             <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>

@@ -1,11 +1,11 @@
 import { CONTRACTS, type ContractStatus } from '@/lib/legal-data';
 
 const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = {
-  draft:      { color: '#7a7870', label: 'Draft'      },
+  draft:      { color: 'var(--muted)', label: 'Draft'      },
   review:     { color: '#FAC775', label: 'Review'     },
   signed:     { color: '#c8f53a', label: 'Signed'     },
   active:     { color: '#5DCAA5', label: 'Active'     },
-  expired:    { color: '#7a7870', label: 'Expired'    },
+  expired:    { color: 'var(--muted)', label: 'Expired'    },
   terminated: { color: '#ff8080', label: 'Terminated' },
 };
 const TYPE_COLORS: Record<string, string> = { Service: '#7F77DD', Employment: '#5DCAA5', Partnership: '#c8f53a', Investment: '#FAC775', Lease: '#85B7EB', SaaS: '#F0997B', Advisory: '#FAC775' };

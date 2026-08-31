@@ -22,7 +22,7 @@ function Row({ label, value }: { label: string; value: string }) {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', marginTop: '2rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
+    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', marginTop: '2rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
       {children}
     </div>
   );
@@ -77,7 +77,7 @@ function ModelTab({ plan }: { plan: VenturePlan }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {m.costStructure.map((c, i) => (
               <div key={i} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', flexShrink: 0, paddingTop: '0.1rem' }}>—</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', flexShrink: 0, paddingTop: '0.1rem' }}>—</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{c}</span>
               </div>
             ))}
@@ -89,7 +89,7 @@ function ModelTab({ plan }: { plan: VenturePlan }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {m.keyPartners.map((p, i) => (
               <div key={i} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.1rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', flexShrink: 0, paddingTop: '0.1rem' }}>—</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', flexShrink: 0, paddingTop: '0.1rem' }}>—</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{p}</span>
               </div>
             ))}
@@ -138,7 +138,7 @@ function PlanTab({ plan }: { plan: VenturePlan }) {
           <SectionTitle>Milestones — {done}/{b.milestones.length} complete</SectionTitle>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {b.milestones.map((m, i) => (
-              <div key={i} style={{ background: m.done ? '#131311' : 'var(--card-bg)', padding: '0.8rem 1.1rem', display: 'grid', gridTemplateColumns: '80px 1fr auto', gap: '1rem', alignItems: 'center' }}>
+              <div key={i} style={{ background: m.done ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '0.8rem 1.1rem', display: 'grid', gridTemplateColumns: '80px 1fr auto', gap: '1rem', alignItems: 'center' }}>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: m.done ? 'var(--accent)' : 'var(--muted)', letterSpacing: '0.08em' }}>{m.date}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: m.done ? 'var(--off-white)' : 'var(--muted)', fontWeight: 300 }}>{m.title}</span>
                 <span style={{ fontSize: '0.7rem', color: m.done ? '#5DCAA5' : 'var(--card-border)' }}>{m.done ? '✓' : '○'}</span>
@@ -163,7 +163,7 @@ function FinanceTab({ plan }: { plan: VenturePlan }) {
         ].map(item => (
           <div key={item.label} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{item.label}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--accent)', lineHeight: 1.5, fontWeight: 400 }}>{item.value}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--accent-text)', lineHeight: 1.5, fontWeight: 400 }}>{item.value}</div>
           </div>
         ))}
       </div>

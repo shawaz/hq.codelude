@@ -12,7 +12,7 @@ const VENTURE_COLORS: Record<string, string> = {
 const STATUS_STYLES: Record<EventStatus, { color: string; label: string }> = {
   today:     { color: '#c8f53a', label: 'Today'     },
   upcoming:  { color: '#5DCAA5', label: 'Upcoming'  },
-  completed: { color: '#7a7870', label: 'Completed' },
+  completed: { color: 'var(--muted)', label: 'Completed' },
   cancelled: { color: '#ff8080', label: 'Cancelled' },
 };
 
@@ -138,7 +138,7 @@ export default function EventsPage() {
                 return (
                   <div key={i} onClick={() => hasEvents && setSelected(isSelected ? null : ds)}
                     style={{
-                      background: isSelected ? '#1a1a18' : isToday ? '#131311' : 'var(--card-bg)',
+                      background: isSelected ? '#1a1a18' : isToday ? 'var(--card-bg-alt)' : 'var(--card-bg)',
                       minHeight: 72, padding: '0.5rem 0.5rem 0.4rem',
                       cursor: hasEvents ? 'pointer' : 'default',
                       borderTop: isSelected ? '2px solid var(--accent)' : isToday ? '2px solid rgba(200,245,58,0.3)' : '2px solid transparent',
@@ -181,7 +181,7 @@ export default function EventsPage() {
           <div style={{ position: 'sticky', top: '2rem' }}>
             {selected && selectedEvents.length > 0 ? (
               <>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>
                   {selected}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
@@ -218,7 +218,7 @@ export default function EventsPage() {
               { label: 'Total',     val: EVENTS.length,                                          color: 'var(--off-white)' },
               { label: 'Today',     val: EVENTS.filter(e => e.status === 'today').length,        color: '#c8f53a' },
               { label: 'Upcoming',  val: EVENTS.filter(e => e.status === 'upcoming').length,     color: '#5DCAA5' },
-              { label: 'Completed', val: EVENTS.filter(e => e.status === 'completed').length,    color: '#7a7870' },
+              { label: 'Completed', val: EVENTS.filter(e => e.status === 'completed').length,    color: 'var(--muted)' },
             ].map(c => (
               <div key={c.label} className="tasks-count-cell">
                 <div className="tasks-count-num" style={{ color: c.color }}>{c.val}</div>
@@ -240,7 +240,7 @@ export default function EventsPage() {
               const isOpen = expanded === e.id;
               return (
                 <div key={e.id} onClick={() => setExpanded(isOpen ? null : e.id)}
-                  style={{ background: e.status === 'today' ? '#131311' : 'var(--card-bg)', cursor: 'pointer', borderLeft: e.status === 'today' ? '2px solid var(--accent)' : '2px solid transparent' }}>
+                  style={{ background: e.status === 'today' ? 'var(--card-bg-alt)' : 'var(--card-bg)', cursor: 'pointer', borderLeft: e.status === 'today' ? '2px solid var(--accent)' : '2px solid transparent' }}>
                   <div style={{ padding: '1rem 1.5rem', display: 'grid', gridTemplateColumns: '130px 100px 100px 1fr auto', gap: '1rem', alignItems: 'center' }}>
                     <div>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--off-white)', fontWeight: e.status === 'today' ? 600 : 400 }}>{e.date}</div>

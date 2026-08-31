@@ -3,7 +3,7 @@ import { DEPARTMENTS } from '@/lib/ops';
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
   forming:  { color: '#c8f53a', label: 'Forming'  },
-  planned:  { color: '#7a7870', label: 'Planned'  },
+  planned:  { color: 'var(--muted)', label: 'Planned'  },
 };
 
 const VENTURE_COLORS: Record<string, string> = {

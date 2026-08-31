@@ -5,7 +5,7 @@ import { NDAS, type NDAStatus } from '@/lib/legal-data';
 
 const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
   active:   { color: '#5DCAA5', label: 'Active'   },
-  expired:  { color: '#7a7870', label: 'Expired'  },
+  expired:  { color: 'var(--muted)', label: 'Expired'  },
   pending:  { color: '#FAC775', label: 'Pending'  },
   unsigned: { color: '#ff8080', label: 'Unsigned' },
 };
@@ -92,7 +92,7 @@ export default function NDAPage() {
                 <button onClick={() => openModal(n)} style={{
                   fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em',
                   textTransform: 'uppercase', padding: '0.25rem 0.7rem', border: '1px solid var(--accent)',
-                  color: 'var(--accent)', background: 'transparent', cursor: 'pointer', whiteSpace: 'nowrap',
+                  color: 'var(--accent-text)', background: 'transparent', cursor: 'pointer', whiteSpace: 'nowrap',
                   transition: 'all 0.15s',
                 }}>
                   Request signature →
@@ -105,12 +105,12 @@ export default function NDAPage() {
 
       {/* ── Send modal ───────────────────────────────────────────────── */}
       {modal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
           onClick={() => setModal(null)}>
           <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', maxWidth: 500, width: '100%', padding: '2rem' }}
             onClick={e => e.stopPropagation()}>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Request NDA signature</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Request NDA signature</div>
             <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '0.3rem' }}>{modal.id}</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', marginBottom: '1.5rem' }}>{modal.party} · {modal.venture}</div>
 
@@ -135,7 +135,7 @@ export default function NDAPage() {
                 </div>
                 {sendState.error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{sendState.error}</div>}
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                  <button type="submit" disabled={sendState.sending} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--black)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                  <button type="submit" disabled={sendState.sending} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                     {sendState.sending ? 'Sending...' : 'Send →'}
                   </button>
                   <button type="button" onClick={() => setModal(null)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

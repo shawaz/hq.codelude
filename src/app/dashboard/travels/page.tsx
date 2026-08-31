@@ -7,7 +7,7 @@ const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
   planned:     { color: '#FAC775', label: 'Planned'     },
   booked:      { color: '#c8f53a', label: 'Booked'      },
   'in-progress':{ color: '#5DCAA5', label: 'In Progress' },
-  completed:   { color: '#7a7870', label: 'Completed'   },
+  completed:   { color: 'var(--muted)', label: 'Completed'   },
   cancelled:   { color: '#ff8080', label: 'Cancelled'   },
 };
 
@@ -36,7 +36,7 @@ export default function TravelsPage() {
             const isActive = selected === t.id;
             return (
               <div key={t.id} onClick={() => setSelected(t.id)}
-                style={{ background: isActive ? '#131311' : 'var(--card-bg)', padding: '1rem 1.25rem', cursor: 'pointer',
+                style={{ background: isActive ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '1rem 1.25rem', cursor: 'pointer',
                   borderLeft: isActive ? `2px solid ${VENTURE_COLORS[t.venture]}` : '2px solid transparent', transition: 'background 0.15s' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.82rem', marginBottom: '0.25rem' }}>{t.destination}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>{t.departure} → {t.return}</div>
@@ -60,17 +60,17 @@ export default function TravelsPage() {
               </div>
             </div>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Objectives</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Objectives</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
               {trip.objectives.map((obj, i) => (
                 <div key={i} style={{ background: 'var(--card-bg)', padding: '0.8rem 1.1rem', display: 'grid', gridTemplateColumns: '1.5rem 1fr', gap: '0.75rem', alignItems: 'start' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', paddingTop: '0.05rem' }}>{String(i + 1).padStart(2, '0')}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', paddingTop: '0.05rem' }}>{String(i + 1).padStart(2, '0')}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)', lineHeight: 1.6, fontWeight: 300 }}>{obj}</span>
                 </div>
               ))}
             </div>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Budget</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Budget</div>
             <table className="tasks-table" style={{ marginBottom: '1rem' }}>
               <thead>
                 <tr>
@@ -105,7 +105,7 @@ export default function TravelsPage() {
 
             {trip.notes && (
               <>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Notes</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Notes</div>
                 <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1rem 1.25rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300 }}>{trip.notes}</div>
               </>
             )}

@@ -67,7 +67,7 @@ export default async function PlaceholderPage({
   return (
     <div style={{ maxWidth: 560 }}>
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent)',
+        fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)',
         letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1.5rem',
         display: 'flex', alignItems: 'center', gap: '1rem',
       }}>

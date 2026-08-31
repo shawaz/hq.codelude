@@ -1,33 +1,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap');
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/*
+ * THEME
+ *
+ * --black and --off-white are an inverse pair, not literal colours. They are
+ * used together to invert a surface (an active tab is --off-white filled with
+ * --black text), so both flip between themes: --black is "the recessed/page
+ * ground", --off-white is "the high-contrast ink". Names kept because ~1500
+ * inline styles reference them.
+ *
+ * Two tokens deliberately do NOT flip:
+ *   --on-brand   text sitting on a brand-coloured fill (accent, venture colour).
+ *                Those fills stay bright in both themes, so their text stays dark.
+ *   --accent     the lime brand fill. Unreadable as text on white, so anything
+ *                using accent as a *text* colour uses --accent-text instead.
+ */
 :root{
   --black:#0a0a08;--off-white:#f5f3ee;--muted:#7a7870;
-  --accent:#c8f53a;--accent-dark:#9bbf1e;
-  --card-bg:#111110;--card-border:#252522;
+  --accent:#c8f53a;--accent-dark:#9bbf1e;--accent-text:#c8f53a;
+  --card-bg:#111110;--card-border:#252522;--card-bg-alt:#131311;
+  --on-brand:#0a0a08;
+  --hover-wash:rgba(255,255,255,0.02);
+  --overlay:rgba(0,0,0,0.7);
+  --accent-glow:rgba(200,245,58,0.05);
   --sidebar-w:220px;
   --font-head:'Outfit',sans-serif;--font-mono:'DM Mono',monospace;
+  color-scheme:dark;
+}
+
+:root[data-theme="light"]{
+  --black:#faf9f6;--off-white:#16160f;--muted:#6e6c63;
+  --accent:#c8f53a;--accent-dark:#b2dd28;--accent-text:#5c7a00;
+  --card-bg:#ffffff;--card-border:#e3e0d6;--card-bg-alt:#f4f2ec;
+  --on-brand:#0a0a08;
+  --hover-wash:rgba(0,0,0,0.03);
+  --overlay:rgba(30,30,25,0.45);
+  --accent-glow:rgba(200,245,58,0.18);
+  color-scheme:light;
 }
 html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--off-white);font-family:var(--font-head);overflow-x:hidden;min-height:100vh}
 
 /* ── SHARED ── */
-.section-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
+.section-label{font-family:var(--font-mono);font-size:0.62rem;color:var(--accent-text);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem}
 .section-label::after{content:'';flex:1;height:1px;background:var(--card-border)}
-.btn-primary{background:var(--accent);color:var(--black);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;padding:0.75rem 1.8rem;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;text-decoration:none;font-weight:400}
+.btn-primary{background:var(--accent);color:var(--on-brand);font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.1em;padding:0.75rem 1.8rem;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;text-decoration:none;font-weight:400}
 .btn-primary:hover{background:var(--accent-dark)}
 .btn-primary:disabled{opacity:0.5;cursor:not-allowed}
 .form-group{display:flex;flex-direction:column;gap:0.4rem}
 .form-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase}
 .form-input{background:var(--card-bg);border:1px solid var(--card-border);color:var(--off-white);font-family:var(--font-mono);font-size:0.78rem;padding:0.8rem 1rem;outline:none;transition:border-color 0.2s;width:100%}
-.form-input:focus{border-color:var(--accent)}
+.form-input:focus{border-color:var(--accent-text)}
 .logo-text{font-size:1rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--off-white)}
-.logo-text span{color:var(--accent)}
-.hq-badge{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;padding:0.2rem 0.55rem;border:1px solid var(--accent);color:var(--accent);text-transform:uppercase}
+.logo-text span{color:var(--accent-text)}
+.hq-badge{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;padding:0.2rem 0.55rem;border:1px solid var(--accent);color:var(--accent-text);text-transform:uppercase}
 
 /* ── LOGIN PAGE ── */
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--black);position:relative}
-.login-page::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(200,245,58,0.05) 0%,transparent 60%);pointer-events:none}
+.login-page::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
 .login-card{width:100%;max-width:400px;padding:2.5rem;background:var(--card-bg);border:1px solid var(--card-border);position:relative;z-index:1}
 .login-logo{display:flex;align-items:center;gap:0.75rem;margin-bottom:2.5rem}
 .login-header{margin-bottom:2rem}
@@ -52,14 +83,14 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .sidebar-section-items.open{max-height:400px}
 .sidebar-link{display:block;padding:0.55rem 1.25rem;font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.03em;color:var(--muted);text-decoration:none;transition:color 0.15s;border-left:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sidebar-link:hover{color:var(--off-white)}
-.sidebar-link.active{color:var(--off-white);border-left-color:var(--accent)}
+.sidebar-link.active{color:var(--off-white);border-left-color:var(--accent-text)}
 .sidebar-footer{padding:1.25rem;border-top:1px solid var(--card-border)}
 .sidebar-logout{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.1em;color:var(--muted);background:none;border:none;cursor:pointer;transition:color 0.15s;padding:0}
 .sidebar-logout:hover{color:var(--off-white)}
 .hq-main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .hq-content{padding:2rem 2.5rem;flex:1}
 .sidebar-user{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.75rem}
-.sidebar-user-avatar{width:28px;height:28px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
+.sidebar-user-avatar{width:28px;height:28px;background:var(--accent);color:var(--on-brand);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;flex-shrink:0}
 .sidebar-user-info{display:flex;flex-direction:column;gap:0.1rem;overflow:hidden}
 .sidebar-user-name{font-size:0.82rem;font-weight:600;color:var(--off-white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sidebar-user-role{font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
@@ -68,7 +99,7 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--card-border);border:1px solid var(--card-border);margin-bottom:2rem}
 .stat-box{background:var(--card-bg);padding:1.5rem}
 .stat-box-num{font-size:2rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.3rem}
-.stat-box-num.hi{color:var(--accent)}
+.stat-box-num.hi{color:var(--accent-text)}
 .stat-box-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
 .dashboard-grid{display:grid;grid-template-columns:1fr 280px;gap:1.5rem}
 .venture-cards{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
@@ -86,23 +117,23 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .activity-section{display:flex;flex-direction:column}
 .activity-list{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
 .activity-item{background:var(--card-bg);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.3rem}
-.activity-date{font-family:var(--font-mono);font-size:0.58rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase}
+.activity-date{font-family:var(--font-mono);font-size:0.58rem;color:var(--accent-text);letter-spacing:0.12em;text-transform:uppercase}
 .activity-text{font-family:var(--font-mono);font-size:0.68rem;color:var(--off-white);font-weight:300;line-height:1.5}
 
 /* ── TEAM PAGE ── */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
 .team-card{background:var(--card-bg);padding:1.75rem}
-.team-avatar{width:44px;height:44px;background:var(--accent);color:var(--black);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem}
+.team-avatar{width:44px;height:44px;background:var(--accent);color:var(--on-brand);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;margin-bottom:1rem}
 .team-name{font-size:1rem;font-weight:700;margin-bottom:0.25rem}
-.team-title{font-family:var(--font-mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
+.team-title{font-family:var(--font-mono);font-size:0.65rem;color:var(--accent-text);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem}
 .team-email{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted)}
 .team-role-badge{display:inline-block;margin-top:0.75rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;border:1px solid var(--card-border);color:var(--muted)}
-.team-role-badge.admin{border-color:var(--accent);color:var(--accent)}
+.team-role-badge.admin{border-color:var(--accent-text);color:var(--accent-text)}
 
 /* ── NEWS PAGE ── */
 .news-list{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
 .news-item{background:var(--card-bg);padding:1.5rem 1.75rem;display:grid;grid-template-columns:140px 1fr;gap:2rem;align-items:start}
-.news-date{font-family:var(--font-mono);font-size:0.6rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;padding-top:0.15rem}
+.news-date{font-family:var(--font-mono);font-size:0.6rem;color:var(--accent-text);letter-spacing:0.12em;text-transform:uppercase;padding-top:0.15rem}
 .news-content h4{font-size:0.9rem;font-weight:700;margin-bottom:0.5rem}
 .news-content p{font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);line-height:1.7;font-weight:300}
 
@@ -112,13 +143,13 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .filter-bar{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .filter-pill{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.35rem 0.9rem;border:1px solid var(--card-border);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.15s}
 .filter-pill:hover{border-color:var(--off-white);color:var(--off-white)}
-.filter-pill.active{border-color:var(--accent);color:var(--accent)}
+.filter-pill.active{border-color:var(--accent-text);color:var(--accent-text)}
 .filter-divider{width:1px;background:var(--card-border);margin:0 0.25rem}
 .tasks-table{width:100%;border:1px solid var(--card-border);border-collapse:collapse}
 .tasks-table th{background:var(--card-bg);padding:0.65rem 1rem;text-align:left;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--card-border);font-weight:400}
 .tasks-table td{padding:0.7rem 1rem;border-bottom:1px solid var(--card-border);vertical-align:middle}
 .tasks-table tr:last-child td{border-bottom:none}
-.tasks-table tr:hover td{background:rgba(255,255,255,0.02)}
+.tasks-table tr:hover td{background:var(--hover-wash)}
 .task-title{font-size:0.78rem;color:var(--off-white)}
 .task-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
 .project-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.08em;display:flex;align-items:center;gap:0.4rem}
@@ -129,7 +160,7 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .priority-badge.low{color:var(--muted);border-color:var(--card-border)}
 .status-badge{font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.15rem 0.55rem;border:1px solid}
 .status-badge.done{color:#5DCAA5;border-color:rgba(93,202,165,0.3)}
-.status-badge.in-progress{color:var(--accent);border-color:rgba(200,245,58,0.3)}
+.status-badge.in-progress{color:var(--accent-text);border-color:rgba(200,245,58,0.3)}
 .status-badge.todo{color:var(--muted);border-color:var(--card-border)}
 .tasks-count-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--card-border);border:1px solid var(--card-border);margin-bottom:1.5rem}
 .tasks-count-cell{background:var(--card-bg);padding:1rem 1.25rem}
@@ -158,7 +189,7 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .task-tabs{display:flex;gap:0.4rem;border-bottom:1px solid var(--card-border);margin-bottom:1.5rem}
 .task-tab{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);background:transparent;border:none;border-bottom:2px solid transparent;padding:0.7rem 0.2rem;margin-right:1.5rem;cursor:pointer;transition:all 0.15s}
 .task-tab:hover{color:var(--off-white)}
-.task-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.task-tab.active{color:var(--accent-text);border-bottom-color:var(--accent-text)}
 .note-form{display:flex;gap:0.6rem;margin-bottom:1.25rem}
 .note-list{display:flex;flex-direction:column;gap:1px;background:var(--card-border);border:1px solid var(--card-border)}
 .note-item{background:var(--card-bg);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:0.4rem}
@@ -173,7 +204,7 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .file-icon{width:30px;height:30px;flex-shrink:0;background:var(--card-border);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.5rem;letter-spacing:0.05em;color:var(--muted);text-transform:uppercase}
 .file-name{font-family:var(--font-mono);font-size:0.7rem;color:var(--off-white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .file-name a{color:inherit;text-decoration:none}
-.file-name a:hover{color:var(--accent)}
+.file-name a:hover{color:var(--accent-text)}
 .file-meta{font-family:var(--font-mono);font-size:0.56rem;color:var(--muted);letter-spacing:0.06em;margin-top:0.15rem}
 .file-actions{display:flex;align-items:center;gap:0.9rem;flex-shrink:0}
 .upload-zone{border:1px dashed var(--card-border);padding:1.5rem;text-align:center;margin-bottom:1.25rem;transition:border-color 0.15s}

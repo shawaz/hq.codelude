@@ -17,7 +17,7 @@ export default function HelpDeskPage() {
           return (
             <div key={i}>
               <button onClick={() => setOpen(isOpen ? null : a.title)}
-                style={{ width: '100%', background: isOpen ? '#131311' : 'var(--card-bg)', border: 'none', padding: '1rem 1.5rem', cursor: 'pointer', textAlign: 'left', display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '1rem', alignItems: 'center', borderLeft: isOpen ? `2px solid ${cc}` : '2px solid transparent' }}>
+                style={{ width: '100%', background: isOpen ? 'var(--card-bg-alt)' : 'var(--card-bg)', border: 'none', padding: '1rem 1.5rem', cursor: 'pointer', textAlign: 'left', display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '1rem', alignItems: 'center', borderLeft: isOpen ? `2px solid ${cc}` : '2px solid transparent' }}>
                 <span style={{ fontWeight: 600, fontSize: '0.82rem', color: 'var(--off-white)' }}>{a.title}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', padding: '0.12rem 0.5rem', border: `1px solid ${cc}40`, color: cc }}>{a.category}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }}>▼</span>

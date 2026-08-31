@@ -34,11 +34,11 @@ const ALL_VENTURE_CARDS = [
   },
 ];
 
-const PRIORITY_COLOR: Record<string, string> = { high: '#ff8080', medium: '#FAC775', low: '#7a7870' };
+const PRIORITY_COLOR: Record<string, string> = { high: '#ff8080', medium: '#FAC775', low: 'var(--muted)' };
 const STATUS_STYLES: Record<string, { color: string; dot: string }> = {
   'done':        { color: '#5DCAA5', dot: '✓' },
   'in-progress': { color: '#c8f53a', dot: '●' },
-  'todo':        { color: '#7a7870', dot: '○' },
+  'todo':        { color: 'var(--muted)', dot: '○' },
 };
 
 type AIModel = 'opencode' | 'claude' | 'deepseek';
@@ -205,7 +205,7 @@ ${tasksSection(tasks)}`,
               onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
             />
             <button onClick={send} disabled={loading || !input.trim()} style={{
-              background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--black)' : 'var(--muted)',
+              background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--on-brand)' : 'var(--muted)',
               border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
             }}>
               {loading ? '...' : 'Send'}
@@ -233,7 +233,7 @@ ${tasksSection(tasks)}`,
             Tasks — {tasks.length} total
           </div>
           <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem' }}>
-            {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: '#7a7870' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
+            {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: 'var(--muted)' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
               <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: s.color }}>{s.count} {s.label}</span>
             ))}
           </div>

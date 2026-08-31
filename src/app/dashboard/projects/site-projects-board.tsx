@@ -12,7 +12,7 @@ import { usePageScopes } from '@/lib/use-page-scopes';
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
   planning:  { color: '#FAC775', label: 'Planning'  },
   active:    { color: '#5DCAA5', label: 'Active'    },
-  paused:    { color: '#7a7870', label: 'Paused'    },
+  paused:    { color: 'var(--muted)', label: 'Paused'    },
   completed: { color: '#85B7EB', label: 'Completed' },
 };
 
@@ -78,7 +78,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
         <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Site Projects</h2>
         <button onClick={openModal} style={{
           fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.12em', textTransform: 'uppercase',
-          padding: '0.55rem 1.1rem', border: '1px solid var(--accent)', color: 'var(--accent)',
+          padding: '0.55rem 1.1rem', border: '1px solid var(--accent)', color: 'var(--accent-text)',
           background: 'transparent', cursor: 'pointer',
         }}>
           + New Project
@@ -120,7 +120,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
                     <span className="ptc-label">Venture</span>
                   </div>
                   <div className="ptc">
-                    <span className="ptc-num" style={{ color: 'var(--accent)' }}>{p.budget.length}</span>
+                    <span className="ptc-num" style={{ color: 'var(--accent-text)' }}>{p.budget.length}</span>
                     <span className="ptc-label">Budget lines</span>
                   </div>
                   <div className="ptc">
@@ -141,11 +141,11 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
       )}
 
       {open && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
           onClick={() => setOpen(false)}>
           <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', maxWidth: 640, width: '100%', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}
             onClick={e => e.stopPropagation()}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>New site project</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>New site project</div>
             <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '1.5rem' }}>Plan a new location-based project</div>
 
             <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -177,7 +177,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
               </div>
               {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#ff8080' }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--black)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Creating...' : 'Create project →'}
                 </button>
                 <button type="button" onClick={() => setOpen(false)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

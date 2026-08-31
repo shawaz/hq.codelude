@@ -6,7 +6,7 @@ const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   published:   { color: '#5DCAA5', label: 'Published'   },
   'in-progress':{ color: '#c8f53a', label: 'In Progress' },
   planned:     { color: '#FAC775', label: 'Planned'     },
-  idea:        { color: '#7a7870', label: 'Idea'        },
+  idea:        { color: 'var(--muted)', label: 'Idea'        },
 };
 const TYPE_COLORS: Record<string, string> = { Article: '#7F77DD', 'Social Post': '#c8f53a', Video: '#F0997B', 'Case Study': '#5DCAA5', 'Press Release': '#85B7EB', Newsletter: '#FAC775' };
 const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };

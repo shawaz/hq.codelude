@@ -40,7 +40,7 @@ export default function CompetitionPage() {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{c.weakness}</div>
             </div>
             <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Our edge</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--accent-text)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Our edge</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)', lineHeight: 1.6, fontWeight: 300 }}>{c.ourEdge}</div>
             </div>
           </div>
