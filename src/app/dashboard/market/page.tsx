@@ -1,38 +1,79 @@
-import { MARKETS } from '@/lib/mktg';
+'use client';
 
-export default function MarketPage() {
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
+import PipelineMap, { type MapPoint } from '@/components/PipelineMap';
+
+// Stage becomes the tab row, matching every other venture-tabbed page.
+const TABS: VentureTab[] = [
+  { key: 'all',      label: 'All'       },
+  { key: 'prospect', label: 'Prospects' },
+  { key: 'lead',     label: 'Leads'     },
+  { key: 'deal',     label: 'Deals'     },
+  { key: 'client',   label: 'Clients'   },
+];
+
+const STAGE_LABEL: Record<string, string> = {
+  prospect: 'prospects', lead: 'leads', deal: 'deals', client: 'clients',
+};
+
+export default function MapPage() {
+  const points = useQuery(api.pipeline.mapPoints, {}) as MapPoint[] | undefined;
+
   return (
-    <div>
-      <h1 className="page-title">Market</h1>
-      <p className="page-sub">Market sizing and key trends per venture — TAM, SAM, SOM, and strategic insight.</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-        {MARKETS.map((m, i) => (
-          <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: `2px solid ${m.color}`, padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: m.color, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>{m.venture}</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>{m.cagr}</div>
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1rem' }}>
-              {[{ label: 'TAM', val: m.tam }, { label: 'SAM', val: m.sam }, { label: 'SOM (5yr target)', val: m.som }].map(cell => (
-                <div key={cell.label} style={{ background: 'var(--black)', padding: '1rem 1.25rem' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>{cell.label}</div>
-                  <div style={{ fontSize: '1.15rem', fontWeight: 700, color: m.color, letterSpacing: '-0.01em' }}>{cell.val}</div>
+    <VenturePageLayout
+      title="Map"
+      subtitle="Where the pipeline is — prospects, leads, deals and clients by location."
+      pageSlug="market"
+      eyebrow={() => 'pipeline geography'}
+      heading={v => `${v.name} Map`}
+      tabs={TABS}
+    >
+      {({ venture, tab }) => {
+        // Plain filters, deliberately not memoised. VenturePageLayout early
+        // returns before invoking this callback, so a hook here would be a
+        // conditional hook call — React would throw on the first render where
+        // the layout bailed out. The set is small once geocoded anyway.
+        const scoped = (points ?? []).filter(p => p.venture === venture.name);
+        const shown = tab === 'all' ? scoped : scoped.filter(p => p.stage === tab);
+
+        const countFor = (k: string) => scoped.filter(p => p.stage === k).length;
+
+        return (
+          <>
+            <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
+              {(['prospect', 'lead', 'deal', 'client'] as const).map(k => (
+                <div key={k} className="tasks-count-cell">
+                  <div className="tasks-count-num">{countFor(k)}</div>
+                  <div className="tasks-count-label">{STAGE_LABEL[k]}</div>
                 </div>
               ))}
             </div>
-            <div style={{ marginBottom: '0.75rem' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Key trend</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)', lineHeight: 1.7, fontWeight: 300 }}>{m.keyTrend}</div>
-            </div>
-            <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Our insight</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300 }}>{m.insight}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+
+            {points === undefined ? (
+              <NoRows>Loading map…</NoRows>
+            ) : shown.length === 0 ? (
+              <NoRows>
+                {scoped.length === 0 ? (
+                  <>
+                    No mapped records for {venture.name} yet.
+                    <br /><br />
+                    Pipeline records store city and state as text — only the public
+                    site-enquiry form captures coordinates. Run{' '}
+                    <code style={{ color: 'var(--off-white)' }}>node scripts/geocode-pipeline.mjs --prod</code>{' '}
+                    to resolve the existing ones and they will appear here.
+                  </>
+                ) : (
+                  <>No {STAGE_LABEL[tab] ?? tab} on the map for {venture.name}. {scoped.length} other records are mapped.</>
+                )}
+              </NoRows>
+            ) : (
+              <PipelineMap points={shown} />
+            )}
+          </>
+        );
+      }}
+    </VenturePageLayout>
   );
 }

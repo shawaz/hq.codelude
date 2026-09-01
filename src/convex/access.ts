@@ -155,7 +155,7 @@ export const NAV: NavSection[] = [
     title: 'Marketing',
     pages: [
       page('brand',       'Brand'),
-      page('market',      'Market'),
+      { slug: 'market', label: 'Map', href: '/dashboard/market' },
       page('competition', 'Competition'),
       page('campaign',    'Campaign'),
       page('content',     'Content'),

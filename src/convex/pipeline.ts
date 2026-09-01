@@ -4,6 +4,7 @@ import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import {
   internalMutation,
+  internalQuery,
   mutation,
   query,
   type MutationCtx,
@@ -288,6 +289,74 @@ export const ventureBriefing = query({
     }
 
     return { venture: args.venture, stages };
+  },
+});
+
+/**
+ * Records with coordinates, for the map. Spans every stage, so it filters to
+ * what the caller may see rather than asserting on one page — same shape as
+ * upcomingMeetings.
+ *
+ * Only rows with a `center` are returned. Most records arrive with city/state
+ * text and no coordinates; scripts/geocode-pipeline.mjs backfills them.
+ */
+export const mapPoints = query({
+  args: { venture: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const user = await requireUser(ctx);
+
+    const allowed = new Map<string, Set<string>>();
+    for (const [stage, page] of Object.entries(STAGE_PAGE)) {
+      allowed.set(stage, new Set(await scopesForPage(ctx, page)));
+    }
+
+    // Bounded: a map cannot usefully draw more than this, and the table is
+    // sized for millions of rows.
+    const rows = await ctx.db.query("pipeline_orgs").take(4000);
+
+    return rows
+      .filter((r) => Array.isArray(r.center) && r.center.length === 2)
+      .filter((r) => allowed.get(r.stage)?.has(r.venture))
+      .filter((r) => !args.venture || r.venture === args.venture)
+      .map((r) => ({
+        _id: r._id,
+        name: r.name,
+        stage: r.stage,
+        venture: r.venture,
+        segment: r.segment,
+        status: r.status,
+        city: r.city,
+        state: r.state,
+        value: r.value,
+        center: r.center as number[],
+      }));
+  },
+});
+
+/** Rows still lacking coordinates but carrying enough text to geocode. */
+export const needsGeocode = internalQuery({
+  args: { limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const rows = await ctx.db.query("pipeline_orgs").take(2000);
+    return rows
+      .filter((r) => !r.center && (r.city || r.district || r.state))
+      .slice(0, args.limit ?? 100)
+      .map((r) => ({
+        _id: r._id,
+        name: r.name,
+        query: [r.city, r.district, r.state, "India"].filter(Boolean).join(", "),
+      }));
+  },
+});
+
+/**
+ * Write a geocoded position back. Internal — this is only ever called by the
+ * backfill script, which owns the rate limiting Nominatim requires.
+ */
+export const setCenter = internalMutation({
+  args: { id: v.id("pipeline_orgs"), center: v.array(v.number()) },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id, { center: args.center, updatedAt: Date.now() });
   },
 });
 
