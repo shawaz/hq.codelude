@@ -86,7 +86,7 @@ export default function TasksPage() {
                 <div className="tasks-count-label">Todo</div>
               </div>
               <div className="tasks-count-cell">
-                <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{done}</div>
+                <div className="tasks-count-num" style={{ color: sc('#dbdbdb') }}>{done}</div>
                 <div className="tasks-count-label">Done</div>
               </div>
             </div>

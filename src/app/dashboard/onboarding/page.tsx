@@ -1,7 +1,7 @@
 import { ONBOARDING_TEMPLATE } from '@/lib/people';
 import { scBorder } from '@/lib/status-colors';
 
-const CAT_COLORS: Record<string, string> = { Admin: '#7F77DD', Culture: '#c8f53a', Work: '#5DCAA5' };
+const CAT_COLORS: Record<string, string> = { Admin: '#c8c8c8', Culture: '#eeeeee', Work: '#dbdbdb' };
 
 export default function OnboardingPage() {
   return (

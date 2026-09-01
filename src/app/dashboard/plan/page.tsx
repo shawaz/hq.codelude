@@ -141,7 +141,7 @@ function PlanTab({ plan }: { plan: VenturePlan }) {
               <div key={i} style={{ background: m.done ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '0.8rem 1.1rem', display: 'grid', gridTemplateColumns: '80px 1fr auto', gap: '1rem', alignItems: 'center' }}>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: m.done ? 'var(--accent)' : 'var(--muted)', letterSpacing: '0.08em' }}>{m.date}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: m.done ? 'var(--off-white)' : 'var(--muted)', fontWeight: 300 }}>{m.title}</span>
-                <span style={{ fontSize: '0.7rem', color: m.done ? '#5DCAA5' : 'var(--card-border)' }}>{m.done ? '✓' : '○'}</span>
+                <span style={{ fontSize: '0.7rem', color: m.done ? '#dbdbdb' : 'var(--card-border)' }}>{m.done ? '✓' : '○'}</span>
               </div>
             ))}
           </div>

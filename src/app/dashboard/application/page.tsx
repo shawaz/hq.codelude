@@ -9,12 +9,12 @@ import { VENTURES } from '@/lib/ventures';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STAGES = [
-  { key: 'new',       label: 'New',       color: '#85B7EB' },
-  { key: 'screening', label: 'Screening', color: '#FAC775' },
-  { key: 'interview', label: 'Interview', color: '#c8f53a' },
-  { key: 'offer',     label: 'Offer',     color: '#7F77DD' },
-  { key: 'hired',     label: 'Hired',     color: '#5DCAA5' },
-  { key: 'rejected',  label: 'Rejected',  color: '#ff8080' },
+  { key: 'new',       label: 'New',       color: '#a5a5a5' },
+  { key: 'screening', label: 'Screening', color: '#b5b5b5' },
+  { key: 'interview', label: 'Interview', color: '#eeeeee' },
+  { key: 'offer',     label: 'Offer',     color: '#c8c8c8' },
+  { key: 'hired',     label: 'Hired',     color: '#dbdbdb' },
+  { key: 'rejected',  label: 'Rejected',  color: '#9d9d9d' },
 ] as const;
 
 type Stage = typeof STAGES[number]['key'];
@@ -122,7 +122,7 @@ export default function ApplicationPage() {
               flexShrink: 0, fontFamily: 'var(--font-mono)', fontSize: '0.62rem',
               letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.45rem 1rem',
               cursor: 'pointer', background: 'var(--accent)', border: '1px solid var(--accent)',
-              color: 'var(--on-brand)', fontWeight: 700,
+              color: 'var(--on-accent)', fontWeight: 700,
             }}
           >+ Add candidate</button>
         )}
@@ -180,7 +180,7 @@ export default function ApplicationPage() {
             <button type="submit" disabled={busy} style={{
               fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em',
               textTransform: 'uppercase', padding: '0.45rem 1.1rem', cursor: busy ? 'wait' : 'pointer',
-              background: 'var(--accent)', border: '1px solid var(--accent)', color: 'var(--on-brand)', fontWeight: 700,
+              background: 'var(--accent)', border: '1px solid var(--accent)', color: 'var(--on-accent)', fontWeight: 700,
             }}>{busy ? 'Uploading…' : 'Save candidate'}</button>
             <button type="button" onClick={() => { setAdding(false); setError(null); }} style={{
               fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em',

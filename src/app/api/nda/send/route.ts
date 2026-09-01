@@ -22,14 +22,14 @@ export async function POST(req: NextRequest) {
       subject: `NDA signature requested — Codelude × ${party}`,
       html: `
         <div style="font-family:monospace;background:#0a0a08;color:#f5f3ee;padding:40px;max-width:600px;margin:0 auto;">
-          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#c8f53a;margin-bottom:8px;">Non-Disclosure Agreement</div>
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#eeeeee;margin-bottom:8px;">Non-Disclosure Agreement</div>
           <div style="font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-0.02em;">Signature requested</div>
 
           <p style="font-family:monospace;font-size:13px;color:#7a7870;line-height:1.8;font-weight:300;margin-bottom:24px;">
             Codelude is requesting your signature on a mutual Non-Disclosure Agreement (NDA) for the following purpose:
           </p>
 
-          <div style="background:#111110;border:1px solid #252522;border-left:2px solid #c8f53a;padding:16px 20px;margin-bottom:24px;">
+          <div style="background:#111110;border:1px solid #252522;border-left:2px solid #eeeeee;padding:16px 20px;margin-bottom:24px;">
             <div style="font-size:11px;color:#7a7870;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Reference</div>
             <div style="font-size:13px;margin-bottom:6px;"><strong style="color:#f5f3ee;">${ndaId}</strong></div>
             <div style="font-size:13px;color:#7a7870;margin-bottom:4px;">Venture: ${venture}</div>
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
             <p style="font-size:13px;color:#7a7870;line-height:1.8;font-weight:300;margin-bottom:12px;">
               Reply to this email confirming your agreement to the terms, or use the template below. Once both parties have signed, a copy will be shared with you.
             </p>
-            <a href="${NDA_TEMPLATE_URL}" style="display:inline-block;background:#c8f53a;color:#0a0a08;font-family:monospace;font-size:12px;letter-spacing:1px;padding:10px 20px;text-decoration:none;font-weight:600;">View NDA template →</a>
+            <a href="${NDA_TEMPLATE_URL}" style="display:inline-block;background:#eeeeee;color:#0a0a08;font-family:monospace;font-size:12px;letter-spacing:1px;padding:10px 20px;text-decoration:none;font-weight:600;">View NDA template →</a>
           </div>
 
           <div style="border-top:1px solid #252522;padding-top:16px;font-size:11px;color:#7a7870;">

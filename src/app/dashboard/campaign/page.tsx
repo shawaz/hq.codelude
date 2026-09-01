@@ -4,13 +4,13 @@ import { CAMPAIGNS, type CampaignStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = {
-  live:      { color: '#5DCAA5', label: 'Live'      },
-  planned:   { color: '#c8f53a', label: 'Planned'   },
-  draft:     { color: '#FAC775', label: 'Draft'     },
+  live:      { color: '#dbdbdb', label: 'Live'      },
+  planned:   { color: '#eeeeee', label: 'Planned'   },
+  draft:     { color: '#b5b5b5', label: 'Draft'     },
   completed: { color: 'var(--muted)', label: 'Completed' },
 };
-const TYPE_COLORS: Record<string, string> = { Content: '#7F77DD', Email: '#85B7EB', Social: '#c8f53a', PR: '#5DCAA5', Community: '#F0997B', Paid: '#FAC775' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
+const TYPE_COLORS: Record<string, string> = { Content: '#c8c8c8', Email: '#a5a5a5', Social: '#eeeeee', PR: '#dbdbdb', Community: '#adadad', Paid: '#b5b5b5' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
 
 export default function CampaignPage() {
   const [status, setStatus] = useState<CampaignStatus | 'all'>('all');

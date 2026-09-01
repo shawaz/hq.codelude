@@ -5,8 +5,8 @@ import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { scBorder } from '@/lib/status-colors';
 
 const CAT_COLORS: Record<string, string> = {
-  Milestone:'#c8f53a',Launch:'#5DCAA5',Decision:'#FAC775',Product:'#7F77DD',
-  Engineering:'#85B7EB',Partnership:'#F0997B',Finance:'#5DCAA5',Legal:'#FAC775',Marketing:'#c8f53a',Meeting:'var(--muted)',
+  Milestone:'#eeeeee',Launch:'#dbdbdb',Decision:'#b5b5b5',Product:'#c8c8c8',
+  Engineering:'#a5a5a5',Partnership:'#adadad',Finance:'#dbdbdb',Legal:'#b5b5b5',Marketing:'#eeeeee',Meeting:'var(--muted)',
 };
 
 export default function ActivityPage() {

@@ -5,10 +5,10 @@ import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
-const TYPE_COLORS: Record<string, string> = { Direct: '#ff8080', Indirect: '#FAC775', Adjacent: '#85B7EB' };
+const TYPE_COLORS: Record<string, string> = { Direct: '#9d9d9d', Indirect: '#b5b5b5', Adjacent: '#a5a5a5' };
 
 export default function CompetitionPage() {
   const { names: allowed } = usePageScopes('competition');
@@ -33,11 +33,11 @@ export default function CompetitionPage() {
             </div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[c.type])}`, color: sc(TYPE_COLORS[c.type]), alignSelf: 'flex-start' }}>{c.type}</span>
             <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc('#5DCAA5'), letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Strength</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc('#dbdbdb'), letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Strength</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{c.strength}</div>
             </div>
             <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc('#ff8080'), letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Weakness</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc('#9d9d9d'), letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Weakness</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{c.weakness}</div>
             </div>
             <div>

@@ -12,11 +12,11 @@ export interface MarketData {
 }
 
 export const MARKETS: MarketData[] = [
-  { venture: 'Roborns', color: '#5DCAA5', tam: '$115B', sam: '$8B (coastal + ESG compute)', som: '$50M (Phase 1–2 target)', cagr: '32% AI infra CAGR', keyTrend: 'Hyperscalers moving to coastal and offshore compute to solve cooling. ESG mandates forcing sustainable DC design.', insight: 'India has 7,500km of coastline and growing AI demand with no sustainable coastal compute infrastructure. First-mover advantage is real.' },
-  { venture: 'Franchiseen', color: '#7F77DD', tam: '$3T (global franchise revenue)', sam: '$180B (India + SE Asia franchise market)', som: '$500M (fractional franchise AUM target 5yr)', cagr: '12% franchise market CAGR', keyTrend: 'Retail investors seeking yield alternatives beyond stock market. Franchise businesses have predictable cash flows ideal for yield products.', insight: 'No platform currently offers daily payout franchise investment in India. The gap between franchise capital demand and retail investor appetite is enormous.' },
-  { venture: 'HubCV', color: '#FAC775', tam: '$10.4B (India ed-tech by 2027)', sam: '$1.8B (assessment + career guidance)', som: '$19M (Karnataka + 3 states, 5yr GMV)', cagr: '16% India ed-tech CAGR', keyTrend: 'Skills-based admission and hiring is arriving in India faster than the transcript can adapt, and NEP 2020 explicitly pushes competency records over marks. Faculty are already generating the evidence and discarding it.', insight: 'Everyone sells content to students. Nobody monetises the assessment faculty already run. Capturing the grade book is what makes the skill graph proprietary — and the faculty who runs it brings the whole class at zero CAC.' },
-  { venture: 'Dextrip', color: '#F0997B', tam: '$18B (algorithmic trading software)', sam: '$4B (retail algo + DeFi tools)', som: '$20M (subscription + API 5yr)', cagr: '22% DeFi tooling CAGR', keyTrend: 'Non-custodial trading gaining trust as exchange hacks continue. Strategy marketplaces creating network effects around trading tools.', insight: 'Most retail traders want automation but don\'t code. Dextrip removes that barrier without taking custody — the trust model that others can\'t match.' },
-  { venture: 'Llife', color: '#85B7EB', tam: '$15B (personal AI assistants)', sam: '$1.5B (India personal finance + productivity)', som: '$25M (India + Gulf 5yr)', cagr: '22% personal AI CAGR', keyTrend: 'Account Aggregator rails making consented financial data available in India, and LLMs cheap enough to review a user\u2019s day individually.', insight: 'Every life tracker dies on the empty state \u2014 users abandon apps they must fill in by hand. Llife starts populated because HubCV, Dextrip and Franchiseen already hold the data.' },
+  { venture: 'Roborns', color: '#dbdbdb', tam: '$115B', sam: '$8B (coastal + ESG compute)', som: '$50M (Phase 1–2 target)', cagr: '32% AI infra CAGR', keyTrend: 'Hyperscalers moving to coastal and offshore compute to solve cooling. ESG mandates forcing sustainable DC design.', insight: 'India has 7,500km of coastline and growing AI demand with no sustainable coastal compute infrastructure. First-mover advantage is real.' },
+  { venture: 'Franchiseen', color: '#c8c8c8', tam: '$3T (global franchise revenue)', sam: '$180B (India + SE Asia franchise market)', som: '$500M (fractional franchise AUM target 5yr)', cagr: '12% franchise market CAGR', keyTrend: 'Retail investors seeking yield alternatives beyond stock market. Franchise businesses have predictable cash flows ideal for yield products.', insight: 'No platform currently offers daily payout franchise investment in India. The gap between franchise capital demand and retail investor appetite is enormous.' },
+  { venture: 'HubCV', color: '#b5b5b5', tam: '$10.4B (India ed-tech by 2027)', sam: '$1.8B (assessment + career guidance)', som: '$19M (Karnataka + 3 states, 5yr GMV)', cagr: '16% India ed-tech CAGR', keyTrend: 'Skills-based admission and hiring is arriving in India faster than the transcript can adapt, and NEP 2020 explicitly pushes competency records over marks. Faculty are already generating the evidence and discarding it.', insight: 'Everyone sells content to students. Nobody monetises the assessment faculty already run. Capturing the grade book is what makes the skill graph proprietary — and the faculty who runs it brings the whole class at zero CAC.' },
+  { venture: 'Dextrip', color: '#adadad', tam: '$18B (algorithmic trading software)', sam: '$4B (retail algo + DeFi tools)', som: '$20M (subscription + API 5yr)', cagr: '22% DeFi tooling CAGR', keyTrend: 'Non-custodial trading gaining trust as exchange hacks continue. Strategy marketplaces creating network effects around trading tools.', insight: 'Most retail traders want automation but don\'t code. Dextrip removes that barrier without taking custody — the trust model that others can\'t match.' },
+  { venture: 'Llife', color: '#a5a5a5', tam: '$15B (personal AI assistants)', sam: '$1.5B (India personal finance + productivity)', som: '$25M (India + Gulf 5yr)', cagr: '22% personal AI CAGR', keyTrend: 'Account Aggregator rails making consented financial data available in India, and LLMs cheap enough to review a user\u2019s day individually.', insight: 'Every life tracker dies on the empty state \u2014 users abandon apps they must fill in by hand. Llife starts populated because HubCV, Dextrip and Franchiseen already hold the data.' },
 ];
 
 // ─── COMPETITION ─────────────────────────────────────────────────────────────
@@ -117,17 +117,17 @@ export const BRAND = {
     { name: 'Black',       value: '#0a0a08', usage: 'Background — primary surface' },
     { name: 'Off-white',   value: '#f5f3ee', usage: 'Primary text, headings' },
     { name: 'Muted',       value: '#7a7870', usage: 'Secondary text, labels, metadata' },
-    { name: 'Accent',      value: '#c8f53a', usage: 'Active states, highlights, CTAs, section labels' },
-    { name: 'Accent Dark', value: '#9bbf1e', usage: 'Hover state for accent elements' },
+    { name: 'Accent',      value: '#eeeeee', usage: 'Active states, highlights, CTAs, section labels' },
+    { name: 'Accent Dark', value: '#d6d6d6', usage: 'Hover state for accent elements' },
     { name: 'Card BG',     value: '#111110', usage: 'Card and panel backgrounds' },
     { name: 'Card Border', value: '#252522', usage: 'All borders, dividers, table lines' },
   ],
   ventureColors: [
-    { venture: 'Roborns',     color: '#5DCAA5', type: 'Green — coastal, natural, sustainable' },
-    { venture: 'Franchiseen', color: '#7F77DD', type: 'Purple — finance, ownership, wealth' },
-    { venture: 'HubCV',       color: '#FAC775', type: 'Amber — human, intelligence, growth' },
-    { venture: 'Llife',     color: '#85B7EB', type: 'Blue — calm, personal, daily' },
-    { venture: 'Dextrip',     color: '#F0997B', type: 'Orange — trading, momentum, energy' },
+    { venture: 'Roborns',     color: '#dbdbdb', type: 'Green — coastal, natural, sustainable' },
+    { venture: 'Franchiseen', color: '#c8c8c8', type: 'Purple — finance, ownership, wealth' },
+    { venture: 'HubCV',       color: '#b5b5b5', type: 'Amber — human, intelligence, growth' },
+    { venture: 'Llife',     color: '#a5a5a5', type: 'Blue — calm, personal, daily' },
+    { venture: 'Dextrip',     color: '#adadad', type: 'Orange — trading, momentum, energy' },
   ],
   voice: [
     { principle: 'Direct, not blunt', description: 'We say what we mean. No hedging, no corporate filler. But we are not harsh — directness is confidence, not aggression.' },

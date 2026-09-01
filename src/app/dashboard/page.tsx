@@ -11,33 +11,33 @@ import { sc, scBorder } from '@/lib/status-colors';
 
 const ALL_VENTURE_CARDS = [
   {
-    name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure',
-    status: 'In Development', statusColor: '#5DCAA5',
+    name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure',
+    status: 'In Development', statusColor: '#dbdbdb',
     metrics: [{ k: 'Raise', v: '₹18.1 Cr' }, { k: 'Phase', v: 'Feasibility' }, { k: 'HoldCo', v: 'Dubai' }],
   },
   {
-    name: 'Franchiseen', color: '#7F77DD', sector: 'AI Business Assistant',
-    status: 'Alpha', statusColor: '#c8f53a',
+    name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant',
+    status: 'Alpha', statusColor: '#eeeeee',
     metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout', v: 'Daily + monthly' }, { k: 'Target AUM', v: '$60M Y5' }],
   },
   {
-    name: 'HubCV',       color: '#FAC775', sector: 'AI Career Assistant',
-    status: 'In Development', statusColor: '#5DCAA5',
+    name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant',
+    status: 'In Development', statusColor: '#dbdbdb',
     metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
   },
   {
-    name: 'Dextrip',     color: '#F0997B', sector: 'AI Trading Assistant',
-    status: 'Live — Beta', statusColor: '#5DCAA5',
+    name: 'Dextrip',     color: '#adadad', sector: 'AI Trading Assistant',
+    status: 'Live — Beta', statusColor: '#dbdbdb',
     metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
   },
   {
-    name: 'Llife',     color: '#85B7EB', sector: 'AI Life Assistant',
-    status: 'Planning', statusColor: '#FAC775',
+    name: 'Llife',     color: '#a5a5a5', sector: 'AI Life Assistant',
+    status: 'Planning', statusColor: '#b5b5b5',
     metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
   },
 ];
 
-const PRIORITY_COLOR: Record<string, string> = { high: '#ff8080', medium: '#FAC775', low: 'var(--muted)' };
+const PRIORITY_COLOR: Record<string, string> = { high: '#9d9d9d', medium: '#b5b5b5', low: 'var(--muted)' };
 type AIModel = 'opencode' | 'claude' | 'deepseek';
 
 

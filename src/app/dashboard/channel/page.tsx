@@ -5,10 +5,10 @@ import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ChStatus,{color:string;label:string}> = {
-  active:{color:'#5DCAA5',label:'Active'},building:{color:'#c8f53a',label:'Building'},planned:{color:'var(--muted)',label:'Planned'},
+  active:{color:'#dbdbdb',label:'Active'},building:{color:'#eeeeee',label:'Building'},planned:{color:'var(--muted)',label:'Planned'},
 };
 const TYPE_COLORS: Record<string,string> = {
-  Marketing:'#c8f53a',Sales:'#F0997B',Distribution:'#7F77DD',Community:'#5DCAA5',Internal:'#85B7EB',
+  Marketing:'#eeeeee',Sales:'#adadad',Distribution:'#c8c8c8',Community:'#dbdbdb',Internal:'#a5a5a5',
 };
 
 export default function ChannelPage() {

@@ -221,7 +221,7 @@ export default function PipelineContacts({
       )}
 
       {error && (
-        <div style={{ ...mono, fontSize: '0.56rem', color: '#ff8080', marginTop: '0.3rem' }}>{error}</div>
+        <div style={{ ...mono, fontSize: '0.56rem', color: '#9d9d9d', marginTop: '0.3rem' }}>{error}</div>
       )}
     </div>
   );

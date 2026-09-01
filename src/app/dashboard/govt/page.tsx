@@ -4,14 +4,14 @@ import { GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/lega
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
-  required:      { color: '#ff8080', label: 'Required'     },
-  'in-progress': { color: '#c8f53a', label: 'In Progress'  },
-  submitted:     { color: '#FAC775', label: 'Submitted'    },
-  approved:      { color: '#5DCAA5', label: 'Approved'     },
+  required:      { color: '#9d9d9d', label: 'Required'     },
+  'in-progress': { color: '#eeeeee', label: 'In Progress'  },
+  submitted:     { color: '#b5b5b5', label: 'Submitted'    },
+  approved:      { color: '#dbdbdb', label: 'Approved'     },
   'not-required':{ color: 'var(--muted)', label: 'Not Required' },
 };
-const JURIS_COLORS: Record<GovtJurisdiction, string> = { India: '#5DCAA5', UAE: '#c8f53a', International: '#85B7EB' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
+const JURIS_COLORS: Record<GovtJurisdiction, string> = { India: '#dbdbdb', UAE: '#eeeeee', International: '#a5a5a5' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
 const JURISDICTIONS: (GovtJurisdiction | 'all')[] = ['all', 'India', 'UAE', 'International'];
 
 export default function GovtPage() {
@@ -28,7 +28,7 @@ export default function GovtPage() {
         {filtered.map((g, i) => {
           const ss = STATUS_STYLES[g.status];
           return (
-            <div key={i} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: '220px 80px 80px 1fr auto', gap: '1.25rem', alignItems: 'start', borderLeft: g.status === 'required' ? '2px solid #ff8080' : '2px solid transparent' }}>
+            <div key={i} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: '220px 80px 80px 1fr auto', gap: '1.25rem', alignItems: 'start', borderLeft: g.status === 'required' ? '2px solid #9d9d9d' : '2px solid transparent' }}>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', marginBottom: '0.2rem' }}>{g.id}</div>
                 <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.25rem', lineHeight: 1.3 }}>{g.title}</div>

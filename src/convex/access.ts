@@ -32,7 +32,7 @@ export interface Scope {
 export const HOLDCO: Scope = {
   id: 'codelude',
   name: 'Codelude',
-  color: '#c8f53a',
+  color: '#eeeeee',
   sector: 'HoldCo',
   holdco: true,
 };
@@ -42,11 +42,11 @@ export const HOLDCO: Scope = {
  * keys off these exact strings, so they must not be renamed casually.
  */
 export const VENTURES: Scope[] = [
-  { id: 'roborns',     name: 'Roborns',     color: '#5DCAA5', sector: 'Coastal AI Infrastructure' },
-  { id: 'franchiseen', name: 'Franchiseen', color: '#7F77DD', sector: 'AI Business Assistant' },
-  { id: 'hubcv',       name: 'HubCV',       color: '#FAC775', sector: 'AI Career Assistant' },
-  { id: 'dextrip',     name: 'Dextrip',     color: '#F0997B', sector: 'AI Trading Assistant' },
-  { id: 'llife',       name: 'Llife',       color: '#85B7EB', sector: 'AI Life Assistant' },
+  { id: 'roborns',     name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure' },
+  { id: 'franchiseen', name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant' },
+  { id: 'hubcv',       name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant' },
+  { id: 'dextrip',     name: 'Dextrip',     color: '#adadad', sector: 'AI Trading Assistant' },
+  { id: 'llife',       name: 'Llife',       color: '#a5a5a5', sector: 'AI Life Assistant' },
 ];
 
 /** Everything grantable: HoldCo first, then the ventures. */

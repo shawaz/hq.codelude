@@ -15,15 +15,15 @@ const TABS: VentureTab[] = [
 ];
 
 const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
-  paid:       { color: '#5DCAA5', label: 'Paid'       },
-  pending:    { color: '#FAC775', label: 'Pending'    },
-  reimbursed: { color: '#7F77DD', label: 'Reimbursed' },
-  recurring:  { color: '#85B7EB', label: 'Recurring'  },
+  paid:       { color: '#dbdbdb', label: 'Paid'       },
+  pending:    { color: '#b5b5b5', label: 'Pending'    },
+  reimbursed: { color: '#c8c8c8', label: 'Reimbursed' },
+  recurring:  { color: '#a5a5a5', label: 'Recurring'  },
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 const CATS      = ['All', 'Infrastructure', 'Engineering', 'Legal', 'Domain', 'SaaS', 'AI Infrastructure'];
@@ -59,10 +59,10 @@ export default function ExpensesPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
         {[
-          { label: 'Paid (May)',      val: `$${paid.toLocaleString()}`,       color: '#5DCAA5' },
-          { label: 'Pending',        val: `$${pending.toLocaleString()}`,     color: '#FAC775' },
-          { label: 'Recurring / mo', val: `$${recurring.toLocaleString()}`,   color: '#85B7EB' },
-          { label: 'MTD total',      val: `$${totalMtd.toLocaleString()}`,    color: '#c8f53a' },
+          { label: 'Paid (May)',      val: `$${paid.toLocaleString()}`,       color: '#dbdbdb' },
+          { label: 'Pending',        val: `$${pending.toLocaleString()}`,     color: '#b5b5b5' },
+          { label: 'Recurring / mo', val: `$${recurring.toLocaleString()}`,   color: '#a5a5a5' },
+          { label: 'MTD total',      val: `$${totalMtd.toLocaleString()}`,    color: '#eeeeee' },
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
@@ -109,7 +109,7 @@ export default function ExpensesPage() {
                   {e.amount > 0 ? `$${e.amount.toLocaleString()}` : 'Free'}
                 </td>
                 <td>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: e.receipt ? '#5DCAA5' : 'var(--muted)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: e.receipt ? '#dbdbdb' : 'var(--muted)' }}>
                     {e.receipt ? '✓' : '—'}
                   </span>
                 </td>

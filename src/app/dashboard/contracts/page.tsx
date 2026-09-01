@@ -3,14 +3,14 @@ import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = {
   draft:      { color: 'var(--muted)', label: 'Draft'      },
-  review:     { color: '#FAC775', label: 'Review'     },
-  signed:     { color: '#c8f53a', label: 'Signed'     },
-  active:     { color: '#5DCAA5', label: 'Active'     },
+  review:     { color: '#b5b5b5', label: 'Review'     },
+  signed:     { color: '#eeeeee', label: 'Signed'     },
+  active:     { color: '#dbdbdb', label: 'Active'     },
   expired:    { color: 'var(--muted)', label: 'Expired'    },
-  terminated: { color: '#ff8080', label: 'Terminated' },
+  terminated: { color: '#9d9d9d', label: 'Terminated' },
 };
-const TYPE_COLORS: Record<string, string> = { Service: '#7F77DD', Employment: '#5DCAA5', Partnership: '#c8f53a', Investment: '#FAC775', Lease: '#85B7EB', SaaS: '#F0997B', Advisory: '#FAC775' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
+const TYPE_COLORS: Record<string, string> = { Service: '#c8c8c8', Employment: '#dbdbdb', Partnership: '#eeeeee', Investment: '#b5b5b5', Lease: '#a5a5a5', SaaS: '#adadad', Advisory: '#b5b5b5' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
 
 export default function ContractsPage() {
   const active = CONTRACTS.filter(c => c.status === 'active').length;
@@ -20,8 +20,8 @@ export default function ContractsPage() {
       <p className="page-sub">Contract registry — all vendor, service, SaaS, and partnership agreements.</p>
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell"><div className="tasks-count-num">{CONTRACTS.length}</div><div className="tasks-count-label">Total contracts</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{active}</div><div className="tasks-count-label">Active</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#FAC775') }}>{CONTRACTS.filter(c => c.status === 'draft').length}</div><div className="tasks-count-label">Draft</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#dbdbdb') }}>{active}</div><div className="tasks-count-label">Active</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#b5b5b5') }}>{CONTRACTS.filter(c => c.status === 'draft').length}</div><div className="tasks-count-label">Draft</div></div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {CONTRACTS.map((c, i) => {

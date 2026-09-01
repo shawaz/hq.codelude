@@ -8,30 +8,30 @@ import { sc, scBorder } from '@/lib/status-colors';
 const CATEGORIES: (FileCategory | 'all')[] = ['all', 'Financial Model', 'Pitch Deck', 'Legal', 'Brand', 'Technical', 'Research', 'Internal'];
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 const CAT_COLORS: Record<FileCategory, string> = {
-  'Financial Model': '#5DCAA5',
-  'Pitch Deck':      '#7F77DD',
-  'Legal':           '#F0997B',
-  'Brand':           '#c8f53a',
-  'Technical':       '#85B7EB',
-  'Research':        '#FAC775',
+  'Financial Model': '#dbdbdb',
+  'Pitch Deck':      '#c8c8c8',
+  'Legal':           '#adadad',
+  'Brand':           '#eeeeee',
+  'Technical':       '#a5a5a5',
+  'Research':        '#b5b5b5',
   'Internal':        'var(--muted)',
 };
 
 const STATUS_STYLES: Record<FileStatus, { color: string; label: string }> = {
-  final:    { color: '#5DCAA5', label: 'Final'    },
-  draft:    { color: '#FAC775', label: 'Draft'    },
-  review:   { color: '#c8f53a', label: 'Review'   },
+  final:    { color: '#dbdbdb', label: 'Final'    },
+  draft:    { color: '#b5b5b5', label: 'Draft'    },
+  review:   { color: '#eeeeee', label: 'Review'   },
   archived: { color: 'var(--muted)', label: 'Archived' },
 };
 
 const FORMAT_COLORS: Record<string, string> = {
-  HTML: '#F0997B', PDF: '#ff8080', XLSX: '#5DCAA5', PPTX: '#7F77DD',
-  DOCX: '#85B7EB', Figma: '#c8f53a', MD: '#FAC775', 'PNG/SVG': 'var(--muted)',
+  HTML: '#adadad', PDF: '#9d9d9d', XLSX: '#dbdbdb', PPTX: '#c8c8c8',
+  DOCX: '#a5a5a5', Figma: '#eeeeee', MD: '#b5b5b5', 'PNG/SVG': 'var(--muted)',
 };
 
 export default function FilesPage() {
@@ -54,9 +54,9 @@ export default function FilesPage() {
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
         {[
           { label: 'Total',   val: FILES.length,                                        color: 'var(--off-white)' },
-          { label: 'Final',   val: FILES.filter(f => f.status === 'final').length,      color: '#5DCAA5' },
-          { label: 'Draft',   val: FILES.filter(f => f.status === 'draft').length,      color: '#FAC775' },
-          { label: 'Review',  val: FILES.filter(f => f.status === 'review').length,     color: '#c8f53a' },
+          { label: 'Final',   val: FILES.filter(f => f.status === 'final').length,      color: '#dbdbdb' },
+          { label: 'Draft',   val: FILES.filter(f => f.status === 'draft').length,      color: '#b5b5b5' },
+          { label: 'Review',  val: FILES.filter(f => f.status === 'review').length,     color: '#eeeeee' },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">
             <div className="tasks-count-num" style={{ color: sc(c.color) }}>{c.val}</div>

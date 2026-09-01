@@ -4,13 +4,13 @@ import { CONTENT, type ContentStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
-  published:   { color: '#5DCAA5', label: 'Published'   },
-  'in-progress':{ color: '#c8f53a', label: 'In Progress' },
-  planned:     { color: '#FAC775', label: 'Planned'     },
+  published:   { color: '#dbdbdb', label: 'Published'   },
+  'in-progress':{ color: '#eeeeee', label: 'In Progress' },
+  planned:     { color: '#b5b5b5', label: 'Planned'     },
   idea:        { color: 'var(--muted)', label: 'Idea'        },
 };
-const TYPE_COLORS: Record<string, string> = { Article: '#7F77DD', 'Social Post': '#c8f53a', Video: '#F0997B', 'Case Study': '#5DCAA5', 'Press Release': '#85B7EB', Newsletter: '#FAC775' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD', HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B' };
+const TYPE_COLORS: Record<string, string> = { Article: '#c8c8c8', 'Social Post': '#eeeeee', Video: '#adadad', 'Case Study': '#dbdbdb', 'Press Release': '#a5a5a5', Newsletter: '#b5b5b5' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
 
 export default function ContentPage() {
   const [status, setStatus] = useState<ContentStatus | 'all'>('all');

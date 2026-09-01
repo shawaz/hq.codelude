@@ -41,7 +41,7 @@ export interface VenturePlan {
 export const PLANS: VenturePlan[] = [
   {
     name: 'Roborns',
-    color: '#5DCAA5',
+    color: '#dbdbdb',
     sector: 'Coastal AI Infrastructure',
     businessModel: {
       valueProp: 'Closed-loop AI infrastructure — waste heat from compute drives seawater desalination, eliminating water costs and enabling carbon-negative compute. Tokenised via Dubai HoldCo for participatory ownership.',
@@ -109,7 +109,7 @@ export const PLANS: VenturePlan[] = [
 
   {
     name: 'Franchiseen',
-    color: '#7F77DD',
+    color: '#c8c8c8',
     sector: 'AI Business Assistant',
     businessModel: {
       valueProp: 'Democratise franchise ownership. Retail investors buy fractional stakes in franchise businesses from $100, receiving daily and monthly payouts. Franchise operators get working capital without traditional bank lending.',
@@ -175,7 +175,7 @@ export const PLANS: VenturePlan[] = [
 
   {
     name: 'HubCV',
-    color: '#FAC775',
+    color: '#b5b5b5',
     sector: 'AI Career Assistant',
     businessModel: {
       valueProp: 'A resume that builds itself out of verified coursework. A school claims its hub, puts its faculty on the Assessment Program, and every test, task and attendance log gets tagged to a skill. Students leave with a dynamic, evidence-backed profile and AI guidance on which skill to deepen and which job, course, project or event to go after next — and the school gets an outcomes record it can show parents and boards.',
@@ -243,7 +243,7 @@ export const PLANS: VenturePlan[] = [
   },
   {
     name: 'Dextrip',
-    color: '#F0997B',
+    color: '#adadad',
     sector: 'AI Trading Assistant',
     businessModel: {
       valueProp: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies, let Dextrip execute on your behalf across exchanges — your keys, your funds, automated.',
@@ -309,7 +309,7 @@ export const PLANS: VenturePlan[] = [
 
   {
     name: 'Llife',
-    color: '#85B7EB',
+    color: '#a5a5a5',
     sector: 'AI Life Assistant',
     businessModel: {
       valueProp: 'One assistant for your whole life. Five domains \u2014 Finances, Education, Earnings, Mind and Body \u2014 tracked daily against your own time blocks, with the numbers pulled straight from the platforms you already use.',

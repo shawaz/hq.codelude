@@ -11,10 +11,10 @@ import { sc, scBorder } from '@/lib/status-colors';
 
 
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
-  planning:  { color: '#FAC775', label: 'Planning'  },
-  active:    { color: '#5DCAA5', label: 'Active'    },
+  planning:  { color: '#b5b5b5', label: 'Planning'  },
+  active:    { color: '#dbdbdb', label: 'Active'    },
   paused:    { color: 'var(--muted)', label: 'Paused'    },
-  completed: { color: '#85B7EB', label: 'Completed' },
+  completed: { color: '#a5a5a5', label: 'Completed' },
 };
 
 const inputStyle: React.CSSProperties = {
@@ -176,9 +176,9 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
                 <label style={labelStyle}>Site boundary (optional)</label>
                 <SiteBoundaryMap editable height={320} onChange={setBoundary} />
               </div>
-              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#ff8080') }}>{error}</div>}
+              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#9d9d9d') }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-accent)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Creating...' : 'Create project →'}
                 </button>
                 <button type="button" onClick={() => setOpen(false)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

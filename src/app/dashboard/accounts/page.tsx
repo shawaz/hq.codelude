@@ -5,16 +5,16 @@ import VenturePageLayout, { NoRows, HoldCoTag, type VentureTab } from '@/compone
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<AccountStatus, { color: string; label: string }> = {
-  active:  { color: '#5DCAA5', label: 'Active'  },
-  pending: { color: '#c8f53a', label: 'Pending' },
+  active:  { color: '#dbdbdb', label: 'Active'  },
+  pending: { color: '#eeeeee', label: 'Pending' },
   planned: { color: 'var(--muted)', label: 'Planned' },
 };
 
 const TYPE_COLORS: Record<AccountType, string> = {
-  Current:  '#c8f53a',
-  Savings:  '#5DCAA5',
-  Escrow:   '#F0997B',
-  Exchange: '#7F77DD',
+  Current:  '#eeeeee',
+  Savings:  '#dbdbdb',
+  Escrow:   '#adadad',
+  Exchange: '#c8c8c8',
 };
 
 // Accounts have no natural second view, so the tab row splits by account type.
@@ -48,8 +48,8 @@ export default function AccountsPage() {
             <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
               {[
                 { label: 'Total',   val: rows.length, color: 'var(--off-white)' },
-                { label: 'Active',  val: active,      color: '#5DCAA5' },
-                { label: 'Pending', val: pending,     color: '#c8f53a' },
+                { label: 'Active',  val: active,      color: '#dbdbdb' },
+                { label: 'Pending', val: pending,     color: '#eeeeee' },
                 { label: 'Planned', val: planned,     color: 'var(--muted)' },
               ].map(c => (
                 <div key={c.label} className="tasks-count-cell">

@@ -5,14 +5,14 @@ import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<PartnerStatus, { color: string; label: string }> = {
-  active:       { color: '#5DCAA5', label: 'Active'      },
-  negotiating:  { color: '#c8f53a', label: 'Negotiating' },
-  prospecting:  { color: '#FAC775', label: 'Prospecting' },
+  active:       { color: '#dbdbdb', label: 'Active'      },
+  negotiating:  { color: '#eeeeee', label: 'Negotiating' },
+  prospecting:  { color: '#b5b5b5', label: 'Prospecting' },
   'on-hold':    { color: 'var(--muted)', label: 'On Hold'     },
 };
 const TYPE_COLORS: Record<PartnerType, string> = {
-  Technology: '#7F77DD', Distribution: '#85B7EB', Financial: '#5DCAA5',
-  Strategic: '#c8f53a', Government: '#F0997B', Manufacturing: '#FAC775', Legal: '#ff8080',
+  Technology: '#c8c8c8', Distribution: '#a5a5a5', Financial: '#dbdbdb',
+  Strategic: '#eeeeee', Government: '#adadad', Manufacturing: '#b5b5b5', Legal: '#9d9d9d',
 };
 
 export default function PartnersPage() {

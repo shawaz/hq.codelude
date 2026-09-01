@@ -13,9 +13,9 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'vision',       label: '3-Year Vision' },
 ];
 
-const PRIORITY_COLOR = { critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)' };
-const STATUS_COLOR   = { active: '#5DCAA5',  planned: '#c8f53a', 'on-hold': 'var(--muted)' };
-const SEVERITY_COLOR = { high: '#ff8080', medium: '#FAC775', low: 'var(--muted)' };
+const PRIORITY_COLOR = { critical: '#9d9d9d', high: '#b5b5b5', medium: 'var(--muted)' };
+const STATUS_COLOR   = { active: '#dbdbdb',  planned: '#eeeeee', 'on-hold': 'var(--muted)' };
+const SEVERITY_COLOR = { high: '#9d9d9d', medium: '#b5b5b5', low: 'var(--muted)' };
 
 export default function StrategyPage() {
   const [vi, setVi] = useState(0);

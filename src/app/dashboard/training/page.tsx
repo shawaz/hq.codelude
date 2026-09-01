@@ -2,13 +2,13 @@ import { TRAINING } from '@/lib/people';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
-  completed:   { color: '#5DCAA5', label: 'Done'        },
-  'in-progress':{ color: '#c8f53a', label: 'In Progress' },
+  completed:   { color: '#dbdbdb', label: 'Done'        },
+  'in-progress':{ color: '#eeeeee', label: 'In Progress' },
   planned:     { color: 'var(--muted)', label: 'Planned'     },
 };
 
 const CAT_COLORS: Record<string, string> = {
-  Legal: '#F0997B', Engineering: '#85B7EB', Business: '#FAC775', Technical: '#85B7EB',
+  Legal: '#adadad', Engineering: '#a5a5a5', Business: '#b5b5b5', Technical: '#a5a5a5',
 };
 
 export default function TrainingPage() {

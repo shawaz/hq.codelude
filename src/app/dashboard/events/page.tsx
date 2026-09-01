@@ -6,21 +6,21 @@ import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 const STATUS_STYLES: Record<EventStatus, { color: string; label: string }> = {
-  today:     { color: '#c8f53a', label: 'Today'     },
-  upcoming:  { color: '#5DCAA5', label: 'Upcoming'  },
+  today:     { color: '#eeeeee', label: 'Today'     },
+  upcoming:  { color: '#dbdbdb', label: 'Upcoming'  },
   completed: { color: 'var(--muted)', label: 'Completed' },
-  cancelled: { color: '#ff8080', label: 'Cancelled' },
+  cancelled: { color: '#9d9d9d', label: 'Cancelled' },
 };
 
 const TYPE_COLORS: Record<EventType, string> = {
-  Meeting:     '#7F77DD', Call: '#85B7EB', 'Site Visit': '#5DCAA5',
-  Legal:       '#F0997B', Milestone: '#c8f53a', Deadline: '#ff8080',
-  Launch:      '#5DCAA5', Travel: '#FAC775',
+  Meeting:     '#c8c8c8', Call: '#a5a5a5', 'Site Visit': '#dbdbdb',
+  Legal:       '#adadad', Milestone: '#eeeeee', Deadline: '#9d9d9d',
+  Launch:      '#dbdbdb', Travel: '#b5b5b5',
 };
 
 const TYPES: (EventType | 'all')[] = ['all', 'Meeting', 'Call', 'Site Visit', 'Legal', 'Milestone', 'Deadline', 'Launch', 'Travel'];
@@ -217,8 +217,8 @@ export default function EventsPage() {
           <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
             {[
               { label: 'Total',     val: EVENTS.length,                                          color: 'var(--off-white)' },
-              { label: 'Today',     val: EVENTS.filter(e => e.status === 'today').length,        color: '#c8f53a' },
-              { label: 'Upcoming',  val: EVENTS.filter(e => e.status === 'upcoming').length,     color: '#5DCAA5' },
+              { label: 'Today',     val: EVENTS.filter(e => e.status === 'today').length,        color: '#eeeeee' },
+              { label: 'Upcoming',  val: EVENTS.filter(e => e.status === 'upcoming').length,     color: '#dbdbdb' },
               { label: 'Completed', val: EVENTS.filter(e => e.status === 'completed').length,    color: 'var(--muted)' },
             ].map(c => (
               <div key={c.label} className="tasks-count-cell">

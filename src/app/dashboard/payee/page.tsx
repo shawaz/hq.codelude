@@ -14,22 +14,22 @@ const TABS: VentureTab[] = [
 ];
 
 const STATUS_STYLES: Record<PayeeStatus, { color: string; label: string }> = {
-  active:    { color: '#5DCAA5', label: 'Active'    },
-  pending:   { color: '#FAC775', label: 'Pending'   },
+  active:    { color: '#dbdbdb', label: 'Active'    },
+  pending:   { color: '#b5b5b5', label: 'Pending'   },
   paused:    { color: 'var(--muted)', label: 'Paused'    },
-  cancelled: { color: '#ff8080', label: 'Cancelled' },
+  cancelled: { color: '#9d9d9d', label: 'Cancelled' },
 };
 
 const FREQ_COLORS: Record<PayeeFrequency, string> = {
-  monthly:   '#c8f53a',
-  annual:    '#7F77DD',
-  'one-time':'#F0997B',
-  variable:  '#85B7EB',
+  monthly:   '#eeeeee',
+  annual:    '#c8c8c8',
+  'one-time':'#adadad',
+  variable:  '#a5a5a5',
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 const CATEGORIES = ['All', 'Infrastructure', 'Legal', 'AI Infrastructure', 'Compliance', 'Payments', 'Engineering', 'Manufacturing', 'Operations', 'SaaS'];
@@ -62,7 +62,7 @@ export default function PayeePage() {
           <div className="tasks-count-label">Total payees</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{active}</div>
+          <div className="tasks-count-num" style={{ color: sc('#dbdbdb') }}>{active}</div>
           <div className="tasks-count-label">Active</div>
         </div>
         <div className="tasks-count-cell">

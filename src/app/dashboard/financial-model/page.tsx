@@ -14,9 +14,9 @@ const TABS: { key: Tab; label: string }[] = [
 const YEARS = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'];
 
 const CARD_COLORS = {
-  green:   '#5DCAA5',
+  green:   '#dbdbdb',
   blue:    '#4a9ee8',
-  amber:   '#FAC775',
+  amber:   '#b5b5b5',
   default: 'var(--off-white)',
 };
 
@@ -46,8 +46,8 @@ function PnLTab({ model, chartRef }: { model: VentureModel; chartRef: React.RefO
   };
 
   const rowColor = (type: string) => {
-    if (type === 'total-rev') return '#5DCAA5';
-    if (type === 'total-cost') return '#F0997B';
+    if (type === 'total-rev') return '#dbdbdb';
+    if (type === 'total-cost') return '#adadad';
     if (type === 'ebitda') return model.color;
     if (type === 'margin') return model.color;
     return 'var(--off-white)';
@@ -85,7 +85,7 @@ function PnLTab({ model, chartRef }: { model: VentureModel; chartRef: React.RefO
                   {row.note && <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '1px' }}>{row.note}</span>}
                 </td>
                 {row.values.map((v, j) => (
-                  <td key={j} style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: v !== null && v < 0 ? '#ff8080' : rowColor(row.type) }}>
+                  <td key={j} style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: v !== null && v < 0 ? '#9d9d9d' : rowColor(row.type) }}>
                     {fmt(v, row.type)}
                   </td>
                 ))}
@@ -101,8 +101,8 @@ function PnLTab({ model, chartRef }: { model: VentureModel; chartRef: React.RefO
 // ─── CAPEX TAB ────────────────────────────────────────────────────────────────
 function CapexTab({ model }: { model: VentureModel }) {
   const phaseColor: Record<string, string> = {
-    'Seed': '#c8f53a', 'Series A': '#FAC775', 'Pre-seed': '#c8f53a',
-    'Y1': '#c8f53a', 'Y2': '#FAC775', 'Y1–Y2': '#5DCAA5',
+    'Seed': '#eeeeee', 'Series A': '#b5b5b5', 'Pre-seed': '#eeeeee',
+    'Y1': '#eeeeee', 'Y2': '#b5b5b5', 'Y1–Y2': '#dbdbdb',
   };
   return (
     <table className="tasks-table">
@@ -134,7 +134,7 @@ function CapexTab({ model }: { model: VentureModel }) {
 
 // ─── UNIT ECONOMICS TAB ───────────────────────────────────────────────────────
 function UnitTab({ model }: { model: VentureModel }) {
-  const typeColor = { pos: '#5DCAA5', neg: '#ff8080', neutral: 'var(--muted)' };
+  const typeColor = { pos: '#dbdbdb', neg: '#9d9d9d', neutral: 'var(--muted)' };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
       {model.unitRows.map((row, i) => (

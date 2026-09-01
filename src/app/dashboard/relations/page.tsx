@@ -5,10 +5,10 @@ import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { scBorder } from '@/lib/status-colors';
 
 const HEALTH_STYLES: Record<RHealth,{color:string;label:string}> = {
-  strong:{color:'#5DCAA5',label:'Strong'},developing:{color:'#c8f53a',label:'Developing'},cold:{color:'var(--muted)',label:'Cold'},target:{color:'#F0997B',label:'Target'},
+  strong:{color:'#dbdbdb',label:'Strong'},developing:{color:'#eeeeee',label:'Developing'},cold:{color:'var(--muted)',label:'Cold'},target:{color:'#adadad',label:'Target'},
 };
 const CAT_COLORS: Record<string,string> = {
-  Investor:'#5DCAA5',Government:'#F0997B',Media:'#c8f53a',Community:'#7F77DD',Advisor:'#FAC775',Customer:'#85B7EB',
+  Investor:'#dbdbdb',Government:'#adadad',Media:'#eeeeee',Community:'#c8c8c8',Advisor:'#b5b5b5',Customer:'#a5a5a5',
 };
 
 export default function RelationsPage() {

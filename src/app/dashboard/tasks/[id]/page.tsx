@@ -241,7 +241,7 @@ function FilesPanel({ taskId }: { taskId: string }) {
         <button className="btn-primary" onClick={() => inputRef.current?.click()} disabled={uploading}>
           {uploading ? 'Uploading…' : 'Choose files'}
         </button>
-        {error && <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc('#ff8080'), marginTop: '0.75rem' }}>{error}</p>}
+        {error && <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc('#9d9d9d'), marginTop: '0.75rem' }}>{error}</p>}
       </div>
 
       {loading ? (

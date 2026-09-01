@@ -108,8 +108,8 @@ export default function SiteBoundaryMap({ boundary, center, editable, height = 3
       if (!boundary) return;
       if (map.getLayer(`${VIEW_SOURCE_ID}-fill`)) return;
       map.addSource(VIEW_SOURCE_ID, { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: boundary } });
-      map.addLayer({ id: `${VIEW_SOURCE_ID}-fill`, type: 'fill', source: VIEW_SOURCE_ID, paint: { 'fill-color': '#5DCAA5', 'fill-opacity': 0.18 } });
-      map.addLayer({ id: `${VIEW_SOURCE_ID}-line`, type: 'line', source: VIEW_SOURCE_ID, paint: { 'line-color': '#5DCAA5', 'line-width': 2 } });
+      map.addLayer({ id: `${VIEW_SOURCE_ID}-fill`, type: 'fill', source: VIEW_SOURCE_ID, paint: { 'fill-color': '#dbdbdb', 'fill-opacity': 0.18 } });
+      map.addLayer({ id: `${VIEW_SOURCE_ID}-line`, type: 'line', source: VIEW_SOURCE_ID, paint: { 'line-color': '#dbdbdb', 'line-width': 2 } });
       setHasShape(true);
     }
 
