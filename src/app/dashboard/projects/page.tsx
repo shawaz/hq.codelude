@@ -1,5 +1,8 @@
 import Link from 'next/link';
-import { TASKS, PROJECT_COLORS, type Project } from '@/lib/tasks';
+import { convexAuthNextjsToken } from '@convex-dev/auth/nextjs/server';
+import { fetchQuery } from 'convex/nextjs';
+import { api } from '@/convex/_generated/api';
+import { PROJECT_COLORS, type Project } from '@/lib/tasks';
 import { getAllProjects } from '@/lib/site-projects';
 import SiteProjectsBoard from './site-projects-board';
 
@@ -11,8 +14,11 @@ const PROJECTS: { name: Project; sector: string }[] = [
   { name: 'Llife',       sector: 'AI Life Assistant' },
 ];
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
   const siteProjects = getAllProjects();
+  // Server component, so this fetches rather than subscribes.
+  const token = await convexAuthNextjsToken();
+  const TASKS = await fetchQuery(api.tasks.list, {}, { token });
 
   return (
     <div>

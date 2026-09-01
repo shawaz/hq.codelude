@@ -262,6 +262,57 @@ const schema = defineSchema({
     .index("by_org", ["orgId"])
     .index("by_org_primary", ["orgId", "isPrimary"]),
 
+  // ─── Tasks ──────────────────────────────────────────────────────────
+  // Migrated out of src/lib/tasks.ts, which was 87 hardcoded literals with no
+  // way to create, edit or complete anything. That file is now a seed source
+  // (SEED_TASKS) read once by the migration; this table is the source of truth.
+  //
+  // `seedId` carries the original 'r01' / 'h07' identifier so the migration can
+  // be re-run without duplicating, and so task_today rows written before the
+  // migration still resolve.
+  tasks: defineTable({
+    seedId: v.optional(v.string()),
+    title: v.string(),
+    project: v.string(),        // venture name — 'Roborns', 'HubCV', …
+    category: v.string(),
+    priority: v.union(v.literal("high"), v.literal("medium"), v.literal("low")),
+    status: v.union(v.literal("todo"), v.literal("in-progress"), v.literal("done")),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+  })
+    .index("by_project", ["project"])
+    .index("by_seedId", ["seedId"])
+    .index("by_project_status", ["project", "status"]),
+
+  // ─── Applications ───────────────────────────────────────────────────
+  // Candidate pipeline. `resumeId` is a Convex storage id — the first real
+  // file upload in the app. The existing task-file upload writes to the local
+  // filesystem, which cannot work on Vercel; this does not repeat that.
+  applications: defineTable({
+    name: v.string(),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    position: v.string(),       // free text, or a Position id from src/lib/people.ts
+    venture: v.optional(v.string()),
+    source: v.string(),         // 'LinkedIn', 'Referral', 'Direct', …
+    status: v.union(
+      v.literal("new"),
+      v.literal("screening"),
+      v.literal("interview"),
+      v.literal("offer"),
+      v.literal("hired"),
+      v.literal("rejected"),
+    ),
+    notes: v.optional(v.string()),
+    resumeId: v.optional(v.id("_storage")),
+    resumeName: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status"])
+    .index("by_position", ["position"]),
+
   // ─── Today list ─────────────────────────────────────────────────────
   // The 87 tasks in src/lib/tasks.ts carry no dates, so "today" cannot be
   // derived from them. Instead you pick what you are working on by clicking,

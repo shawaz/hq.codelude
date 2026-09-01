@@ -19,7 +19,13 @@ export const PROJECT_COLORS: Record<Project, string> = {
   Dextrip:    '#F0997B',
 };
 
-export const TASKS: Task[] = [
+/**
+ * Seed data only. The source of truth is the Convex `tasks` table — these rows
+ * were migrated once via tasks:seedFromStatic and are kept so the migration can
+ * be re-run against a fresh deployment. Editing this array does not change what
+ * the app shows.
+ */
+export const SEED_TASKS: Task[] = [
   // ── ROBORNS ──────────────────────────────────────────────────────────
   { id: 'r01', project: 'Roborns', category: 'Engineering',    priority: 'high',   status: 'in-progress', title: 'Engage thermal engineering partner' },
   { id: 'r02', project: 'Roborns', category: 'Engineering',    priority: 'high',   status: 'in-progress', title: 'Coastal site survey — Mangaluru' },
