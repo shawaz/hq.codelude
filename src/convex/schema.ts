@@ -285,6 +285,34 @@ const schema = defineSchema({
     .index("by_seedId", ["seedId"])
     .index("by_project_status", ["project", "status"]),
 
+  // ─── Offices ────────────────────────────────────────────────────────
+  // Locations, with headcount recorded on the row. Open roles are NOT stored
+  // here — they are derived by matching a position's location against the
+  // office city, so a role opened on the Positions page shows up without
+  // anything being kept in sync by hand.
+  offices: defineTable({
+    seedId: v.optional(v.string()),
+    name: v.string(),
+    type: v.union(
+      v.literal("Registered"),
+      v.literal("Engineering"),
+      v.literal("Remote"),
+      v.literal("Server"),
+    ),
+    city: v.string(),
+    country: v.string(),
+    status: v.union(v.literal("active"), v.literal("planned"), v.literal("virtual")),
+    purpose: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    // Manual: the users table carries no location, so headcount per office
+    // cannot be derived from the team the way open roles can.
+    headcount: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status"])
+    .index("by_seedId", ["seedId"]),
+
   // ─── Positions ──────────────────────────────────────────────────────
   // Migrated out of src/lib/people.ts for the same reason tasks were: nine
   // hardcoded literals with no way to open a role, move it through hiring, or
