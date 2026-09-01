@@ -105,6 +105,7 @@ export default function TasksPage() {
                   <tr>
                     <th style={{ width: '45%' }}>Task</th>
                     <th>Category</th>
+                    <th>Due</th>
                     <th>Priority</th>
                     <th>Status</th>
                   </tr>
@@ -118,6 +119,16 @@ export default function TasksPage() {
                       >{task.title}</td>
                       <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
                         <span className="category-label">{task.category}</span>
+                      </td>
+                      <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
+                        {task.dueDate ? (
+                          <span style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '0.62rem',
+                            // Overdue only means something while the task is open.
+                            color: task.status !== 'done' && task.dueDate < new Date().toISOString().slice(0, 10)
+                              ? 'var(--st-red)' : 'var(--muted)',
+                          }}>{task.dueDate}</span>
+                        ) : <span className="category-label">—</span>}
                       </td>
                       <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
                         <span className={`priority-badge ${task.priority}`}>{task.priority}</span>

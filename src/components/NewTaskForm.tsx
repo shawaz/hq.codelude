@@ -63,7 +63,13 @@ export default function NewTaskForm({
     setBusy(true);
     setError(null);
     try {
-      await create({ title, project: proj, category, priority });
+      const startDate = String(new FormData(form).get('startDate') ?? '');
+      const dueDate   = String(new FormData(form).get('dueDate') ?? '');
+      await create({
+        title, project: proj, category, priority,
+        startDate: startDate || undefined,
+        dueDate: dueDate || undefined,
+      });
       form.reset();
       onClose();
     } catch (err) {
@@ -114,6 +120,25 @@ export default function NewTaskForm({
           <option value="medium">Medium</option>
           <option value="low">Low</option>
         </select>
+      </div>
+
+      {/* Dates are optional — most tasks never get one, and forcing a date on
+          every capture would make the quick-add slower than writing it down. */}
+      <div style={{ display: 'flex', gap: '0.4rem' }}>
+        <label style={{ flex: 1, display: 'block' }}>
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.12em',
+            textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.2rem',
+          }}>Start</span>
+          <input name="startDate" type="date" style={field} />
+        </label>
+        <label style={{ flex: 1, display: 'block' }}>
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.5rem', letterSpacing: '0.12em',
+            textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: '0.2rem',
+          }}>Due</span>
+          <input name="dueDate" type="date" style={field} />
+        </label>
       </div>
 
       <div style={{ display: 'flex', gap: '0.35rem' }}>
