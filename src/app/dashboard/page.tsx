@@ -200,7 +200,7 @@ ${tasksSection(tasks)}`,
     <div style={{ display: 'flex', flex: 1, minHeight: 0, gap: 0 }}>
 
       {/* ── Chat panel ──────────────────────────────────────── */}
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, borderRight: '1px solid var(--card-border)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0, borderRight: '1px solid var(--card-border)', background: 'var(--card-bg)' }}>
         {/* Messages */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem', scrollbarWidth: 'none' }}>
           {messages.length === 0 && (
@@ -271,8 +271,7 @@ ${tasksSection(tasks)}`,
       {/* ── Right rail: Tasks | History ──────────────────────── */}
       <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflowY: 'auto', scrollbarWidth: 'none' }}>
         <div style={{ flexShrink: 0, position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1, borderBottom: '1px solid var(--card-border)' }}>
-          {/* The tabs sat flush against the top edge with nothing above them. */}
-          <div style={{ display: 'flex', paddingTop: '0.75rem' }}>
+          <div style={{ display: 'flex' }}>
             {([['tasks', `Tasks (${tasks.length})`], ['history', 'History']] as const).map(([key, label]) => (
               <button
                 key={key}
@@ -289,7 +288,7 @@ ${tasksSection(tasks)}`,
             ))}
           </div>
           {rail === 'tasks' && (
-            <div style={{ display: 'flex', gap: '0.25rem', padding: '0 0.75rem 0.6rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.25rem', padding: '0.6rem 0.75rem 0.6rem', flexWrap: 'wrap' }}>
               {TASK_FILTERS.map(f => {
                 const active = taskFilter === f.key;
                 return (
@@ -360,6 +359,13 @@ ${tasksSection(tasks)}`,
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>
                       {task.priority} · {task.category}
                     </span>
+                    {task.dueDate && (
+                      <span style={{
+                        fontFamily: 'var(--font-mono)', fontSize: '0.52rem',
+                        color: !isDone && task.dueDate < new Date().toISOString().slice(0, 10)
+                          ? 'var(--st-red)' : 'var(--muted)',
+                      }}>· {task.dueDate.slice(5)}</span>
+                    )}
                   </div>
                 </Link>
               </div>
@@ -409,9 +415,9 @@ export default function AIPage() {
             background: index === i ? 'var(--accent)' : 'var(--card-bg)', border: 'none', cursor: 'pointer',
             padding: '1rem 0.75rem', textAlign: 'left', transition: 'background 0.15s',
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: index === i ? 'rgba(0,0,0,0.55)' : v.color, marginBottom: '0.25rem' }}>0{i + 1}</div>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: index === i ? 'var(--black)' : 'var(--off-white)', marginBottom: '0.15rem' }}>{v.name}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: index === i ? 'rgba(0,0,0,0.5)' : 'var(--muted)', letterSpacing: '0.04em' }}>{v.sector}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: index === i ? 'var(--on-accent)' : v.color, opacity: index === i ? 0.6 : 1, marginBottom: '0.25rem' }}>0{i + 1}</div>
+            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: index === i ? 'var(--on-accent)' : 'var(--off-white)', marginBottom: '0.15rem' }}>{v.name}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: index === i ? 'var(--on-accent)' : 'var(--muted)', opacity: index === i ? 0.75 : 1, letterSpacing: '0.04em' }}>{v.sector}</div>
           </button>
         ))}
       </div>

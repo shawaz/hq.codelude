@@ -277,6 +277,10 @@ const schema = defineSchema({
     category: v.string(),
     priority: v.union(v.literal("high"), v.literal("medium"), v.literal("low")),
     status: v.union(v.literal("todo"), v.literal("in-progress"), v.literal("done")),
+    // ISO calendar dates (YYYY-MM-DD), not timestamps — a task is due on a day,
+    // not at an instant, and storing a moment would drag timezone into it.
+    startDate: v.optional(v.string()),
+    dueDate: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
     completedAt: v.optional(v.number()),

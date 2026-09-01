@@ -85,7 +85,6 @@ export const NAV: NavSection[] = [
   {
     title: 'Home',
     pages: [
-      page('overview', 'Overview'),
       page('tasks',    'Tasks'),
       page('events',   'Events'),
       page('news',     'News'),
@@ -196,7 +195,7 @@ export const TOTAL_PAGES = ALL_PAGE_SLUGS.length;
  * Without this a zero-access member would bounce between the route guard and
  * its own redirect target forever.
  */
-export const ALWAYS_ALLOWED_PAGES = ['overview'] as const;
+export const ALWAYS_ALLOWED_PAGES = ['tasks'] as const;
 
 /** Section titles, in sidebar order. */
 export const SECTION_TITLES: string[] = NAV.map((s) => s.title);

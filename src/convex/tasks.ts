@@ -82,11 +82,16 @@ export const create = mutation({
     category: v.optional(v.string()),
     priority: v.optional(priority),
     status: v.optional(status),
+    startDate: v.optional(v.string()),
+    dueDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await requireUser(ctx);
     const title = args.title.trim();
     if (!title) throw new Error("Title is required");
+    if (args.startDate && args.dueDate && args.dueDate < args.startDate) {
+      throw new Error("Due date cannot be before the start date");
+    }
 
     return await ctx.db.insert("tasks", {
       title: title.slice(0, 500),
@@ -94,6 +99,8 @@ export const create = mutation({
       category: args.category?.trim() || "General",
       priority: args.priority ?? "medium",
       status: args.status ?? "todo",
+      startDate: args.startDate || undefined,
+      dueDate: args.dueDate || undefined,
       createdAt: Date.now(),
     });
   },
@@ -106,6 +113,8 @@ export const update = mutation({
     project: v.optional(v.string()),
     category: v.optional(v.string()),
     priority: v.optional(priority),
+    startDate: v.optional(v.string()),
+    dueDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await requireUser(ctx);

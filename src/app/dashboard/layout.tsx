@@ -22,12 +22,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const page = pageForPath(pathname);
 
   if (page) {
-    if (!canSeePage(user, page.slug)) redirect('/dashboard/overview');
+    if (!canSeePage(user, page.slug)) redirect('/dashboard/tasks');
   } else if (pathname.startsWith('/dashboard/') && !isUnrestricted(user)) {
     // An unregistered dashboard route (e.g. /dashboard/ventures, which is not
     // in the nav) has no grant to check, so it cannot be scoped. Fail closed
     // and leave it to admins. /dashboard itself stays open to everyone.
-    redirect('/dashboard/overview');
+    redirect('/dashboard/tasks');
   }
 
   return (
