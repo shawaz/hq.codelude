@@ -262,6 +262,25 @@ const schema = defineSchema({
     .index("by_org", ["orgId"])
     .index("by_org_primary", ["orgId", "isPrimary"]),
 
+  // ─── Today list ─────────────────────────────────────────────────────
+  // The 87 tasks in src/lib/tasks.ts carry no dates, so "today" cannot be
+  // derived from them. Instead you pick what you are working on by clicking,
+  // and the choice is stored here.
+  //
+  // Rows are keyed by an IST calendar date, which is what makes the list clear
+  // itself: tomorrow's query simply does not match today's rows, so there is no
+  // cleanup job to run or forget. Same day key as ai_messages — see istDay().
+  //
+  // Private per user. Your day is yours.
+  task_today: defineTable({
+    userId: v.id("users"),
+    taskId: v.string(),   // matches Task.id in src/lib/tasks.ts — 'r01', 'h07', …
+    day: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_user_day", ["userId", "day"])
+    .index("by_user_day_task", ["userId", "day", "taskId"]),
+
   // ─── AI assistant history ───────────────────────────────────────────
   // The dashboard assistant keeps one day of conversation, then rolls it up
   // into a summary. Private per (user, venture) — this is someone's working

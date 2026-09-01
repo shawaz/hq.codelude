@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { TASKS } from '@/lib/tasks';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -37,12 +38,6 @@ const ALL_VENTURE_CARDS = [
 ];
 
 const PRIORITY_COLOR: Record<string, string> = { high: '#ff8080', medium: '#FAC775', low: 'var(--muted)' };
-const STATUS_STYLES: Record<string, { color: string; dot: string }> = {
-  'done':        { color: '#5DCAA5', dot: '✓' },
-  'in-progress': { color: '#c8f53a', dot: '●' },
-  'todo':        { color: 'var(--muted)', dot: '○' },
-};
-
 type AIModel = 'opencode' | 'claude' | 'deepseek';
 
 
@@ -102,6 +97,11 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const [loading,   setLoading]   = useState(false);
   const [model,     setModel]     = useState<AIModel>('opencode');
   const [rail,      setRail]      = useState<'tasks' | 'history'>('tasks');
+  const [taskFilter, setTaskFilter] = useState<'today' | 'todo' | 'done' | 'all'>('today');
+  // Task ids the user has put on today. Per-user and cross-venture — you have
+  // one day, not five — so this rail shows the intersection with this venture.
+  const todayIds    = useQuery(api.tasks.today);
+  const toggleToday = useMutation(api.tasks.toggle);
   // Roll up any finished day the moment the assistant is opened, so the
   // summary exists before anyone goes looking for it.
   useLazySummarise(venture.name);
@@ -118,6 +118,20 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const inProgress  = tasks.filter(t => t.status === 'in-progress');
   const todo        = tasks.filter(t => t.status === 'todo');
   const done        = tasks.filter(t => t.status === 'done');
+
+  // Today is stored per user across all ventures, so intersect it with this
+  // venture's tasks. `undefined` means the query is still in flight — treat it
+  // as empty rather than flashing every task in as "on today".
+  const onTodayIds  = new Set(todayIds ?? []);
+  // In-progress first, then todo, then done — the order the rail always used.
+  const ordered     = [...inProgress, ...todo, ...done];
+  const TASK_FILTERS = [
+    { key: 'today' as const, label: 'Today', rows: ordered.filter(t => onTodayIds.has(t.id)) },
+    { key: 'todo'  as const, label: 'Todo',  rows: ordered.filter(t => t.status !== 'done') },
+    { key: 'done'  as const, label: 'Done',  rows: done },
+    { key: 'all'   as const, label: 'All',   rows: ordered },
+  ];
+  const visibleTasks = TASK_FILTERS.find(f => f.key === taskFilter)?.rows ?? ordered;
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
   useEffect(() => { setPending([]); setInput(''); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
@@ -273,10 +287,20 @@ ${tasksSection(tasks)}`,
             ))}
           </div>
           {rail === 'tasks' && (
-            <div style={{ display: 'flex', gap: '0.6rem', padding: '0 1rem 0.6rem' }}>
-              {[{ label: 'Active', count: inProgress.length, color: '#c8f53a' }, { label: 'Todo', count: todo.length, color: 'var(--muted)' }, { label: 'Done', count: done.length, color: '#5DCAA5' }].map(s => (
-                <span key={s.label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: sc(s.color) }}>{s.count} {s.label}</span>
-              ))}
+            <div style={{ display: 'flex', gap: '0.25rem', padding: '0 0.75rem 0.6rem', flexWrap: 'wrap' }}>
+              {TASK_FILTERS.map(f => {
+                const active = taskFilter === f.key;
+                return (
+                  <button key={f.key} onClick={() => setTaskFilter(f.key)} style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.08em',
+                    textTransform: 'uppercase', padding: '0.2rem 0.45rem', cursor: 'pointer',
+                    background: active ? venture.color : 'transparent',
+                    border: `1px solid ${active ? venture.color : 'var(--card-border)'}`,
+                    color: active ? 'var(--on-brand)' : 'var(--muted)',
+                    transition: 'all 0.12s',
+                  }}>{f.label} {f.rows.length}</button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -285,26 +309,50 @@ ${tasksSection(tasks)}`,
 
         {rail === 'tasks' && (
         <div style={{ flex: 1, padding: '0.5rem 0' }}>
-          {/* In progress first */}
-          {[...inProgress, ...todo, ...done].map(task => {
-            const ss = STATUS_STYLES[task.status];
+          {visibleTasks.map(task => {
+            const isToday = onTodayIds.has(task.id);
+            const isDone  = task.status === 'done';
             return (
-              <div key={task.id} style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--card-border)', display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-                <span style={{ color: sc(ss.color), fontSize: '0.6rem', marginTop: '0.12rem', flexShrink: 0 }}>{ss.dot}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: task.status === 'done' ? 'var(--muted)' : 'var(--off-white)', lineHeight: 1.4, fontWeight: 300, textDecoration: task.status === 'done' ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {task.title}
+              <div key={task.id} className="rail-task">
+                <button
+                  onClick={() => void toggleToday({ taskId: task.id })}
+                  aria-label={isToday ? `Remove "${task.title}" from today` : `Add "${task.title}" to today`}
+                  title={isToday ? 'On today — click to remove' : 'Add to today'}
+                  style={{
+                    width: 12, height: 12, marginTop: '0.2rem', flexShrink: 0, padding: 0,
+                    cursor: 'pointer',
+                    background: isToday ? venture.color : 'transparent',
+                    border: `1px solid ${isToday ? venture.color : 'var(--card-border)'}`,
+                    transition: 'background 0.12s, border-color 0.12s',
+                  }}
+                />
+                <Link href={`/dashboard/tasks/${task.id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}>
+                  {/* Two lines, not an ellipsis — a 280px rail cut most of these mid-word. */}
+                  <div style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '0.64rem', lineHeight: 1.45, fontWeight: 300,
+                    color: isDone ? 'var(--muted)' : 'var(--off-white)',
+                    textDecoration: isDone ? 'line-through' : 'none',
+                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                  }}>{task.title}</div>
+                  {/* Priority as a marker, not shouted text — the title is what you read. */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.25rem' }}>
+                    <span style={{ width: 5, height: 5, flexShrink: 0, background: sc(PRIORITY_COLOR[task.priority]) }} />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>
+                      {task.priority} · {task.category}
+                    </span>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.2rem', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: sc(PRIORITY_COLOR[task.priority]) }}>{task.priority}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>· {task.category}</span>
-                  </div>
-                </div>
+                </Link>
               </div>
             );
           })}
-          {tasks.length === 0 && (
-            <div style={{ padding: '1.5rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', textAlign: 'center' }}>No tasks yet.</div>
+          {visibleTasks.length === 0 && (
+            <div style={{ padding: '1.5rem 1rem', fontFamily: 'var(--font-mono)', fontSize: '0.64rem', color: 'var(--muted)', lineHeight: 1.7 }}>
+              {taskFilter === 'today'
+                ? `Nothing planned for ${venture.name} today. Open Todo and click a square to add it.`
+                : taskFilter === 'done'
+                  ? `Nothing finished on ${venture.name} yet.`
+                  : `No tasks for ${venture.name}.`}
+            </div>
           )}
         </div>
         )}
