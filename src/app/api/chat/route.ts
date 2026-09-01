@@ -5,6 +5,8 @@ import { isUnrestricted, venturesForUser } from '@/lib/nav';
 import { ALL_SCOPE_NAMES } from '@/lib/ventures';
 import { VENTURE_CONTEXT } from '@/lib/venture-context';
 import { MENTOR_PERSONA } from '@/lib/mentor-persona';
+import { convexAuthNextjsToken } from '@convex-dev/auth/nextjs/server';
+import { TOOL_SPECS, TOOL_PROMPT, executeTool } from '@/lib/ai-tools';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -107,12 +109,89 @@ const isCooling = (model: string) => {
   return true;
 };
 
+/**
+ * Model used when tools are in play.
+ *
+ * The gateway's default, big-pickle, is a free-tier model that returns
+ * FreeUsageLimitError under load — and a tool loop costs three to five requests
+ * per answer rather than one, so it exhausts that quota far faster than plain
+ * chat does. nemotron-3-ultra-free is the sibling verified to return
+ * tool_calls, so tool turns run there and fall back to the normal chain if it
+ * refuses.
+ */
+const TOOL_MODEL = 'nemotron-3-ultra-free';
+
+/** A tool loop that never terminates is a bill. Four rounds is plenty. */
+const MAX_TOOL_ROUNDS = 4;
+
+interface ToolCall { id: string; function: { name: string; arguments: string } }
+
+/**
+ * Let the model pull HQ data (and make the changes it is asked to) before it
+ * answers.
+ *
+ * Runs non-streaming, because a tool call has to complete before the next turn
+ * can start. The final answer is streamed by the normal path afterwards, so the
+ * client interface is unchanged — it still just reads text.
+ *
+ * Returns the message list to hand to the streaming call, with tool results
+ * appended, or null if the model asked for no tools at all.
+ */
+async function runToolLoop(
+  url: string,
+  apiKey: string,
+  system: string,
+  messages: any[],
+  token: string | undefined,
+): Promise<{ messages: any[]; wrote: string[] } | null> {
+  const convo: any[] = [
+    { role: 'system', content: `${system}\n\n${TOOL_PROMPT}` },
+    ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+  ];
+  const wrote: string[] = [];
+  let usedAnyTool = false;
+
+  for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: TOOL_MODEL,
+        max_tokens: 4096,
+        messages: convo,
+        tools: TOOL_SPECS,
+      }),
+    });
+
+    // Rate limit or refusal: fall through to plain chat rather than dead-ending.
+    if (!res.ok) return usedAnyTool ? { messages: convo, wrote } : null;
+
+    const json = await res.json().catch(() => null);
+    const msg = json?.choices?.[0]?.message;
+    const calls: ToolCall[] | undefined = msg?.tool_calls;
+    if (!calls?.length) return usedAnyTool ? { messages: convo, wrote } : null;
+
+    usedAnyTool = true;
+    convo.push(msg);
+
+    for (const call of calls) {
+      const result = await executeTool(call.function.name, call.function.arguments, token);
+      if (result.wrote) wrote.push(result.content);
+      convo.push({ role: 'tool', tool_call_id: call.id, name: result.name, content: result.content });
+    }
+  }
+
+  return { messages: convo, wrote };
+}
+
 async function streamOpenAICompatible(
   provider: OpenAIProvider,
   messages: any[],
   systemOverride: string | undefined,
   controller: ReadableStreamDefaultController,
   encoder: TextEncoder,
+  /** Conversation from the tool loop, already carrying its system turn and tool results. */
+  prepared?: any[],
 ) {
   const cfg = OPENAI_COMPATIBLE[provider];
   const apiKey = process.env[cfg.keyEnv];
@@ -124,7 +203,7 @@ async function streamOpenAICompatible(
     model,
     max_tokens: cfg.maxTokens,
     stream: true,
-    messages: [
+    messages: prepared ?? [
       { role: 'system', content: systemOverride ?? SYSTEM_PROMPT },
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ],
@@ -290,11 +369,31 @@ export async function POST(req: Request) {
     systemOverride = scopedSystemPrompt(allowed);
   }
 
+  // Read once here rather than inside the stream: the tools authorise as the
+  // caller, and this is the last point where request context is available.
+  const toolToken = await convexAuthNextjsToken().catch(() => undefined);
+
   const stream = new ReadableStream({
     async start(controller) {
       try {
         if (model in OPENAI_COMPATIBLE) {
-          await streamOpenAICompatible(model as OpenAIProvider, messages, systemOverride, controller, encoder);
+          const cfg = OPENAI_COMPATIBLE[model as OpenAIProvider];
+          const apiKey = process.env[cfg.keyEnv];
+
+          // Let the model fetch what it needs from HQ first. It runs under the
+          // caller's own token, so Convex's access checks decide what comes
+          // back — there is no second copy of the permission rules here.
+          let prepared: any[] | undefined;
+          if (apiKey) {
+            const loop = await runToolLoop(
+              cfg.url, apiKey, systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
+            ).catch(() => null);
+            prepared = loop?.messages;
+          }
+
+          await streamOpenAICompatible(
+            model as OpenAIProvider, messages, systemOverride, controller, encoder, prepared,
+          );
         } else {
           await streamClaude(messages, systemOverride, controller, encoder);
         }
