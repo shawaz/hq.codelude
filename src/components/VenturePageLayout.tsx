@@ -82,10 +82,10 @@ export default function VenturePageLayout({
             onClick={() => { setVi(i); setTab(tabs?.[0]?.key ?? ''); }}
             style={{
               flex: 1, padding: '0.8rem 0.5rem',
-              background: index === i ? v.color : 'var(--card-bg)',
+              background: index === i ? 'var(--accent)' : 'var(--card-bg)',
               border: 'none', cursor: 'pointer',
               fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-              color: index === i ? 'var(--on-brand)' : 'var(--muted)',
+              color: index === i ? 'var(--on-accent)' : 'var(--muted)',
               fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
             }}
           >{v.name}</button>

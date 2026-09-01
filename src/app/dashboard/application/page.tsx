@@ -4,7 +4,6 @@ import { useRef, useState, type FormEvent } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
-import { POSITIONS } from '@/lib/people';
 import { VENTURES } from '@/lib/ventures';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -48,6 +47,9 @@ export default function ApplicationPage() {
   const updateApp    = useMutation(api.applications.update);
   const removeApp    = useMutation(api.applications.remove);
   const getUploadUrl = useMutation(api.applications.generateUploadUrl);
+  // Read from Convex, not the static seed — a position opened on the Positions
+  // page has to appear here immediately or the two screens disagree.
+  const positions    = useQuery(api.positions.list);
 
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState<Stage | 'all'>('all');
@@ -144,7 +146,7 @@ export default function ApplicationPage() {
               <label style={label}>Position</label>
               <select name="position" style={field} defaultValue="">
                 <option value="">Unspecified</option>
-                {POSITIONS.map(p => <option key={p.id} value={p.title}>{p.title}</option>)}
+                {(positions ?? []).map(p => <option key={p._id} value={p.title}>{p.title}</option>)}
               </select>
             </div>
             <div>

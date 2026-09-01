@@ -17,7 +17,13 @@ export interface Position {
   notes:       string;
 }
 
-export const POSITIONS: Position[] = [
+/**
+ * Seed data only. The source of truth is the Convex `positions` table — these
+ * were migrated once via positions:seedFromStatic and are kept so the migration
+ * can be re-run against a fresh deployment. Editing this array changes nothing
+ * in the app.
+ */
+export const SEED_POSITIONS: Position[] = [
   { id: 'P01', title: 'Thermal / Coastal Engineer', department: 'Roborns Engineering', venture: 'Roborns', type: 'Contract', status: 'hiring', priority: 'critical', targetStart: 'Q3 2026', location: 'Mangaluru / Remote', keySkills: ['Heat exchange systems', 'Coastal industrial construction', 'Desalination', 'Marine engineering', 'MED / MSF systems'], notes: 'First hire. Validates the entire Roborns technical model. Must have coastal heat exchange experience.' },
   { id: 'P02', title: 'Investment Platform Legal Counsel', department: 'Legal & Compliance', venture: 'Franchiseen', type: 'Contract', status: 'hiring', priority: 'critical', targetStart: 'Q3 2026', location: 'Remote / Delhi / Mumbai', keySkills: ['SEBI regulations', 'Investment platform compliance', 'Revenue-sharing structures', 'KYC/AML frameworks', 'Investor agreement drafting'], notes: 'External counsel for Franchiseen regulatory pathway. SEBI-familiar mandatory.' },
   { id: 'P03', title: 'Dubai HoldCo Legal Counsel', department: 'Legal & Compliance', venture: 'Codelude', type: 'Contract', status: 'hiring', priority: 'critical', targetStart: 'Q3 2026', location: 'Dubai (DIFC)', keySkills: ['DIFC / ADGM incorporation', 'Token structure and digital assets', 'UAE company law', 'Investment vehicle structuring', 'Smart contract legal review'], notes: 'DIFC-registered firm for HoldCo incorporation and token structure. Critical path for seed round.' },

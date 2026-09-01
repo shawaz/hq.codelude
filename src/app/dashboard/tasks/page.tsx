@@ -56,8 +56,8 @@ export default function TasksPage() {
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.62rem', letterSpacing: '0.1em',
                     textTransform: 'uppercase', padding: '0.45rem 1rem', cursor: 'pointer',
-                    background: venture.color, border: `1px solid ${venture.color}`,
-                    color: 'var(--on-brand)', fontWeight: 700,
+                    background: 'var(--accent)', border: '1px solid var(--accent)',
+                    color: 'var(--on-accent)', fontWeight: 700,
                   }}
                 >+ New task</button>
               )}

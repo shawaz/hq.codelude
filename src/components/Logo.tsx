@@ -1,21 +1,26 @@
 /**
  * The Codelude mark.
  *
- * The source SVG on disk has a hardcoded white background rect and a black
- * fill, which would render as a white tile in the dark sidebar and never
- * invert. The rect is dropped and the path set to currentColor, so the mark
- * takes whatever colour its container has and flips with the theme on its own.
+ * The source SVG is a 546 square with the mark occupying only the middle —
+ * roughly x 118-428, y 164-381 — so at any given size most of the box was
+ * empty and the mark read small. The viewBox is cropped to its bounds, centred
+ * on (273, 273) to stay square, which makes it render substantially larger for
+ * the same size prop.
  *
- * src/app/icon.svg keeps the original white ground on purpose — a favicon sits
- * on the browser's chrome, not ours, and a transparent mark disappears against
- * a light tab bar.
+ * The source also hardcodes a white background rect and a black fill, which
+ * would render as a white tile in the dark sidebar and never invert. The rect
+ * is dropped here and the path set to currentColor, so the mark takes its
+ * container's colour and flips with the theme.
+ *
+ * src/app/icon.svg keeps a white ground on purpose — a favicon sits on the
+ * browser's chrome, not ours, and a transparent mark vanishes on a light tab bar.
  */
-export default function Logo({ size = 20 }: { size?: number }) {
+export default function Logo({ size = 30 }: { size?: number }) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 546 546"
+      viewBox="108 108 330 330"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
