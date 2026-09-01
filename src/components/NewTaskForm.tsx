@@ -123,7 +123,7 @@ export default function NewTaskForm({
           style={{
             fontFamily: 'var(--font-mono)', fontSize: '0.56rem', letterSpacing: '0.1em',
             textTransform: 'uppercase', padding: '0.3rem 0.7rem', cursor: busy ? 'wait' : 'pointer',
-            background: accent, border: `1px solid ${accent}`, color: 'var(--on-brand)', fontWeight: 700,
+            background: 'var(--accent)', border: '1px solid var(--accent)', color: 'var(--on-accent)', fontWeight: 700,
           }}
         >{busy ? 'Adding…' : 'Add task'}</button>
         <button

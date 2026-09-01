@@ -6,9 +6,8 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-logo">
-          <Logo size={26} />
+          <Logo size={38} />
           <span className="logo-text">Code<span>lude</span></span>
-          <span className="hq-badge">HQ</span>
         </div>
         <div className="login-header">
           <h1>Sign in</h1>

@@ -50,9 +50,8 @@ export default function Sidebar({ user, nav }: Props) {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <Logo size={22} />
+        <Logo size={32} />
         <span className="logo-text">Code<span>lude</span></span>
-        <span className="hq-badge">HQ</span>
       </div>
 
       <nav className="sidebar-nav">

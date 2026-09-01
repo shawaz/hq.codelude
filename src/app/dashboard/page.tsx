@@ -296,9 +296,9 @@ ${tasksSection(tasks)}`,
                   <button key={f.key} onClick={() => setTaskFilter(f.key)} style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.08em',
                     textTransform: 'uppercase', padding: '0.2rem 0.45rem', cursor: 'pointer',
-                    background: active ? venture.color : 'transparent',
-                    border: `1px solid ${active ? venture.color : 'var(--card-border)'}`,
-                    color: active ? 'var(--on-brand)' : 'var(--muted)',
+                    background: active ? 'var(--accent)' : 'transparent',
+                    border: `1px solid ${active ? 'var(--accent)' : 'var(--card-border)'}`,
+                    color: active ? 'var(--on-accent)' : 'var(--muted)',
                     transition: 'all 0.12s',
                   }}>{f.label} {f.rows.length}</button>
                 );
@@ -406,7 +406,7 @@ export default function AIPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
         {VENTURES.map((v, i) => (
           <button key={v.name} onClick={() => setSelected(i)} style={{
-            background: index === i ? v.color : 'var(--card-bg)', border: 'none', cursor: 'pointer',
+            background: index === i ? 'var(--accent)' : 'var(--card-bg)', border: 'none', cursor: 'pointer',
             padding: '1rem 0.75rem', textAlign: 'left', transition: 'background 0.15s',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: index === i ? 'rgba(0,0,0,0.55)' : v.color, marginBottom: '0.25rem' }}>0{i + 1}</div>

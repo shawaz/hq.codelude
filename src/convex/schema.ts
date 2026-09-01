@@ -285,6 +285,47 @@ const schema = defineSchema({
     .index("by_seedId", ["seedId"])
     .index("by_project_status", ["project", "status"]),
 
+  // ─── Positions ──────────────────────────────────────────────────────
+  // Migrated out of src/lib/people.ts for the same reason tasks were: nine
+  // hardcoded literals with no way to open a role, move it through hiring, or
+  // close it once someone is hired. `seedId` ('P01'…) keeps the migration
+  // idempotent and lets Applications keep referencing a role by title.
+  //
+  // Closing is a status change, not a delete — a filled role is a record of
+  // what you hired for. `remove` exists separately for one raised in error.
+  positions: defineTable({
+    seedId: v.optional(v.string()),
+    title: v.string(),
+    department: v.string(),
+    venture: v.string(),
+    type: v.union(
+      v.literal("Full-time"),
+      v.literal("Contract"),
+      v.literal("Part-time"),
+      v.literal("Advisory"),
+    ),
+    status: v.union(
+      v.literal("open"),
+      v.literal("hiring"),
+      v.literal("filled"),
+      v.literal("on-hold"),
+      v.literal("closed"),
+    ),
+    priority: v.union(v.literal("critical"), v.literal("high"), v.literal("medium")),
+    targetStart: v.optional(v.string()),
+    location: v.optional(v.string()),
+    keySkills: v.array(v.string()),
+    notes: v.optional(v.string()),
+    // Who was hired, once the role is filled.
+    hiredName: v.optional(v.string()),
+    filledAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_status", ["status"])
+    .index("by_venture", ["venture"])
+    .index("by_seedId", ["seedId"]),
+
   // ─── Applications ───────────────────────────────────────────────────
   // Candidate pipeline. `resumeId` is a Convex storage id — the first real
   // file upload in the app. The existing task-file upload writes to the local
