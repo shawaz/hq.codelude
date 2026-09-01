@@ -109,7 +109,6 @@ export const NAV: NavSection[] = [
   {
     title: 'Operations',
     pages: [
-      page('projects',    'Projects'),
       page('office',      'Office'),
       page('departments', 'Departments'),
       page('franchise',   'Franchise'),
