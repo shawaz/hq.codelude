@@ -12,11 +12,11 @@ export interface Task {
 }
 
 export const PROJECT_COLORS: Record<Project, string> = {
-  Roborns:    '#5DCAA5',
-  Franchiseen:'#7F77DD',
-  HubCV:      '#FAC775',
-  Llife:    '#85B7EB',
-  Dextrip:    '#F0997B',
+  Roborns:    '#dbdbdb',
+  Franchiseen:'#c8c8c8',
+  HubCV:      '#b5b5b5',
+  Llife:    '#a5a5a5',
+  Dextrip:    '#adadad',
 };
 
 /**

@@ -5,16 +5,16 @@ import { TRIPS, type TripStatus } from '@/lib/workspace';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
-  planned:     { color: '#FAC775', label: 'Planned'     },
-  booked:      { color: '#c8f53a', label: 'Booked'      },
-  'in-progress':{ color: '#5DCAA5', label: 'In Progress' },
+  planned:     { color: '#b5b5b5', label: 'Planned'     },
+  booked:      { color: '#eeeeee', label: 'Booked'      },
+  'in-progress':{ color: '#dbdbdb', label: 'In Progress' },
   completed:   { color: 'var(--muted)', label: 'Completed'   },
-  cancelled:   { color: '#ff8080', label: 'Cancelled'   },
+  cancelled:   { color: '#9d9d9d', label: 'Cancelled'   },
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 export default function TravelsPage() {
@@ -89,7 +89,7 @@ export default function TravelsPage() {
                       <td><span className="category-label">{exp.category}</span></td>
                       <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)' }}>${exp.budgeted}</td>
                       <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: exp.actual === 0 ? 'var(--muted)' : 'var(--off-white)' }}>{exp.actual === 0 ? '—' : `$${exp.actual}`}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: variance > 0 ? '#ff8080' : variance < 0 ? '#5DCAA5' : 'var(--muted)' }}>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: variance > 0 ? '#9d9d9d' : variance < 0 ? '#dbdbdb' : 'var(--muted)' }}>
                         {exp.actual === 0 ? '—' : variance === 0 ? '0' : `${variance > 0 ? '+' : ''}$${variance}`}
                       </td>
                     </tr>

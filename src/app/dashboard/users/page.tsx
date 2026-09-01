@@ -56,7 +56,7 @@ const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
   HubCV: {
     agents: [
       {
-        name: 'HubCV Matcher', emoji: '🔍', color: '#FAC775',
+        name: 'HubCV Matcher', emoji: '🔍', color: '#b5b5b5',
         type: 'Claude Agent', model: 'claude-3-5-haiku',
         tf: ['async'],
         role: 'Analyzes professional profiles against recruiter requirements using Anthropic SDK. Scores match quality, identifies skill gaps, and surfaces upskilling recommendations.',
@@ -68,7 +68,7 @@ const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
   Llife: {
     agents: [
       {
-        name: 'Llife Daily', emoji: '🗓️', color: '#85B7EB',
+        name: 'Llife Daily', emoji: '🗓️', color: '#a5a5a5',
         type: 'Claude Agent', model: 'claude-3-5-haiku',
         tf: ['daily'],
         role: 'Personal life agent — reviews the day across Finances, Education, Earnings, Mind and Body, flags what slipped, and prepares tomorrow\u2019s time blocks.',
@@ -79,21 +79,21 @@ const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
   },
   Dextrip: {
     agents: [
-      { name: 'Alpha', emoji: '🔴', color: '#ff8080', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Aggressive UP-biased trader. Strong in breakout and bullish continuation regimes.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
-      { name: 'Sigma', emoji: '🔵', color: '#85B7EB', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Balanced risk manager. Reads regime before committing direction. Holds more than most.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
-      { name: 'Delta', emoji: '🟢', color: '#5DCAA5', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Contrarian fade specialist. Hunts overextended moves and fades them with RSI + VWAP.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
-      { name: 'Lisa',      emoji: '🟡', color: '#FAC775', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Volume Surge specialist. Trades breakout candles when volume spikes above baseline.',         tools: ['Volume Surge', 'VWAP Reclaim'] },
-      { name: 'Bart',      emoji: '🟠', color: '#F0997B', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Momentum Break hunter. Enters when price breaks out of recent range with directional force.', tools: ['Momentum Break', 'Volume Surge', 'Liquidity Sweep Reversal'] },
-      { name: 'Marge',     emoji: '🔵', color: '#7F77DD', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'VWAP Reclaim trader. Buys or sells when price reclaims VWAP with supporting volume.',       tools: ['VWAP Reclaim', 'RSI Reversal'] },
-      { name: 'Homer',     emoji: '🟡', color: '#FAC775', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'RSI Reversal fader. Looks for overstretched moves and fades them at RSI extremes.',           tools: ['RSI Reversal'] },
+      { name: 'Alpha', emoji: '🔴', color: '#9d9d9d', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Aggressive UP-biased trader. Strong in breakout and bullish continuation regimes.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
+      { name: 'Sigma', emoji: '🔵', color: '#a5a5a5', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Balanced risk manager. Reads regime before committing direction. Holds more than most.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
+      { name: 'Delta', emoji: '🟢', color: '#dbdbdb', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Contrarian fade specialist. Hunts overextended moves and fades them with RSI + VWAP.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
+      { name: 'Lisa',      emoji: '🟡', color: '#b5b5b5', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Volume Surge specialist. Trades breakout candles when volume spikes above baseline.',         tools: ['Volume Surge', 'VWAP Reclaim'] },
+      { name: 'Bart',      emoji: '🟠', color: '#adadad', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Momentum Break hunter. Enters when price breaks out of recent range with directional force.', tools: ['Momentum Break', 'Volume Surge', 'Liquidity Sweep Reversal'] },
+      { name: 'Marge',     emoji: '🔵', color: '#c8c8c8', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'VWAP Reclaim trader. Buys or sells when price reclaims VWAP with supporting volume.',       tools: ['VWAP Reclaim', 'RSI Reversal'] },
+      { name: 'Homer',     emoji: '🟡', color: '#b5b5b5', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'RSI Reversal fader. Looks for overstretched moves and fades them at RSI extremes.',           tools: ['RSI Reversal'] },
       { name: 'Mr Burns',  emoji: '⚫', color: 'var(--muted)', type: 'Strategy Agent', model: 'Rules-based', tf: ['1h', '4h'],  role: 'Trend Ride player. Follows sustained directional moves using MA slope and higher highs/lows.',  tools: ['Trend Ride', 'Trend Pullback', 'Volume Surge'] },
-      { name: 'Nelson',    emoji: '🔴', color: '#ff8080', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Aggressive downside hunter. Best at sharp downside continuation and trap reversals.',         tools: ['Liquidity Sweep Reversal', 'Momentum Break', 'RSI Reversal'] },
-      { name: 'Maggie',    emoji: '🟣', color: '#c8f53a', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'AntiRekt Trend Oscillator — SMMA jaw/lips crossover. Avoids breakout and chaos regimes.',     tools: ['AntiRekt Trend Oscillator'] },
-      { name: 'Milhouse',  emoji: '🔵', color: '#85B7EB', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Cautious trend follower. Reliable in clean trends, timid after failures.',                   tools: ['Trend Ride', 'VWAP Reclaim'] },
-      { name: 'Apu',       emoji: '🟢', color: '#5DCAA5', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Multi-strategy opportunist. Avoids chaos regimes. Picks the strongest signal available.',    tools: ['Volume Surge', 'Momentum Break', 'VWAP Reclaim'] },
-      { name: 'Multi-Bot', emoji: '⚙️', color: '#c8f53a', type: 'Execution Bot',  model: 'Node.js',     tf: ['5m', '15m'], role: 'Core multi-exchange execution engine. Routes orders across Binance, Bybit, OKX.',           tools: ['Order execution', 'Balance management', 'Multi-exchange routing'] },
-      { name: 'TV Bot',    emoji: '📺', color: '#F0997B', type: 'Feed Bot',       model: 'Python 3',    tf: ['5m', '15m'], role: 'Processes live market signals and pushes to TV dashboard via /webhook/5m and /webhook/15m.', tools: ['Webhook ingestion', 'Signal broadcast', 'TV feed'] },
-      { name: 'Spot Bot',  emoji: '🎯', color: '#FAC775', type: 'Execution Bot',  model: 'Python 3',    tf: ['live'],      role: 'Automated spot trade execution. Monitors signals and places spot orders autonomously.',        tools: ['Spot execution', 'Balance tracking', 'Signal monitoring'] },
+      { name: 'Nelson',    emoji: '🔴', color: '#9d9d9d', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Aggressive downside hunter. Best at sharp downside continuation and trap reversals.',         tools: ['Liquidity Sweep Reversal', 'Momentum Break', 'RSI Reversal'] },
+      { name: 'Maggie',    emoji: '🟣', color: '#eeeeee', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'AntiRekt Trend Oscillator — SMMA jaw/lips crossover. Avoids breakout and chaos regimes.',     tools: ['AntiRekt Trend Oscillator'] },
+      { name: 'Milhouse',  emoji: '🔵', color: '#a5a5a5', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Cautious trend follower. Reliable in clean trends, timid after failures.',                   tools: ['Trend Ride', 'VWAP Reclaim'] },
+      { name: 'Apu',       emoji: '🟢', color: '#dbdbdb', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Multi-strategy opportunist. Avoids chaos regimes. Picks the strongest signal available.',    tools: ['Volume Surge', 'Momentum Break', 'VWAP Reclaim'] },
+      { name: 'Multi-Bot', emoji: '⚙️', color: '#eeeeee', type: 'Execution Bot',  model: 'Node.js',     tf: ['5m', '15m'], role: 'Core multi-exchange execution engine. Routes orders across Binance, Bybit, OKX.',           tools: ['Order execution', 'Balance management', 'Multi-exchange routing'] },
+      { name: 'TV Bot',    emoji: '📺', color: '#adadad', type: 'Feed Bot',       model: 'Python 3',    tf: ['5m', '15m'], role: 'Processes live market signals and pushes to TV dashboard via /webhook/5m and /webhook/15m.', tools: ['Webhook ingestion', 'Signal broadcast', 'TV feed'] },
+      { name: 'Spot Bot',  emoji: '🎯', color: '#b5b5b5', type: 'Execution Bot',  model: 'Python 3',    tf: ['live'],      role: 'Automated spot trade execution. Monitors signals and places spot orders autonomously.',        tools: ['Spot execution', 'Balance tracking', 'Signal monitoring'] },
     ],
     openRoles: ['Strategy Creator Programme Lead'],
   },
@@ -139,7 +139,7 @@ function HumansSection({
               <div style={{ fontWeight: 600, fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || m.email}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: m.pending ? 'var(--muted)' : color, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{roleLabel(m, venture)}</div>
             </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${m.pending ? 'var(--card-border)' : 'rgba(93,202,165,0.3)'}`, color: m.pending ? 'var(--muted)' : '#5DCAA5', flexShrink: 0 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${m.pending ? 'var(--card-border)' : 'rgba(93,202,165,0.3)'}`, color: m.pending ? 'var(--muted)' : '#dbdbdb', flexShrink: 0 }}>
               {m.pending ? 'Invited' : 'Active'}
             </span>
           </div>
@@ -205,7 +205,7 @@ function AgentsSection({ venture }: { venture: string }) {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: a.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{a.type}</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: '1px solid rgba(93,202,165,0.3)', color: sc('#5DCAA5') }}>Active</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: '1px solid rgba(93,202,165,0.3)', color: sc('#dbdbdb') }}>Active</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>{a.tf.join(' / ')}</span>
             </div>
           </div>

@@ -6,21 +6,21 @@ import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<PayrollStatus, { color: string; label: string }> = {
-  active:  { color: '#5DCAA5', label: 'Active'  },
-  planned: { color: '#FAC775', label: 'Planned' },
-  open:    { color: '#c8f53a', label: 'Hiring'  },
+  active:  { color: '#dbdbdb', label: 'Active'  },
+  planned: { color: '#b5b5b5', label: 'Planned' },
+  open:    { color: '#eeeeee', label: 'Hiring'  },
 };
 
 const TYPE_COLORS: Record<PayrollType, string> = {
-  founder:    '#c8f53a',
-  employee:   '#5DCAA5',
-  contractor: '#85B7EB',
-  advisor:    '#FAC775',
+  founder:    '#eeeeee',
+  employee:   '#dbdbdb',
+  contractor: '#a5a5a5',
+  advisor:    '#b5b5b5',
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 
@@ -50,10 +50,10 @@ export default function PayrollPage() {
       {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
         {[
-          { label: 'Active headcount', val: String(headcount),             color: '#5DCAA5', sub: 'Current team' },
-          { label: 'Active monthly',   val: `$${activeMonthly}/mo`,        color: '#c8f53a', sub: 'Current payroll burn' },
-          { label: 'Planned monthly',  val: `$${plannedMonthly.toLocaleString()}/mo`, color: '#FAC775', sub: 'When all hires made' },
-          { label: 'One-time costs',   val: `$${oneTimePlanned.toLocaleString()}`, color: '#F0997B', sub: 'Signing, setup, audit' },
+          { label: 'Active headcount', val: String(headcount),             color: '#dbdbdb', sub: 'Current team' },
+          { label: 'Active monthly',   val: `$${activeMonthly}/mo`,        color: '#eeeeee', sub: 'Current payroll burn' },
+          { label: 'Planned monthly',  val: `$${plannedMonthly.toLocaleString()}/mo`, color: '#b5b5b5', sub: 'When all hires made' },
+          { label: 'One-time costs',   val: `$${oneTimePlanned.toLocaleString()}`, color: '#adadad', sub: 'Signing, setup, audit' },
         ].map(c => (
           <div key={c.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.4rem' }}>{c.label}</div>
@@ -105,7 +105,7 @@ export default function PayrollPage() {
                 {/* Monthly cost */}
                 <div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Monthly</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: p.monthlyCost > 0 ? '#c8f53a' : 'var(--muted)' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: 700, color: p.monthlyCost > 0 ? '#eeeeee' : 'var(--muted)' }}>
                     {p.monthlyCost > 0 ? `$${p.monthlyCost.toLocaleString()}` : p.type === 'founder' ? 'Equity' : '—'}
                   </div>
                 </div>
@@ -113,7 +113,7 @@ export default function PayrollPage() {
                 {/* One-time */}
                 <div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>One-time</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: p.oneTimeCost > 0 ? '#FAC775' : 'var(--muted)' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: p.oneTimeCost > 0 ? '#b5b5b5' : 'var(--muted)' }}>
                     {p.oneTimeCost > 0 ? `$${p.oneTimeCost.toLocaleString()}` : '—'}
                   </div>
                 </div>

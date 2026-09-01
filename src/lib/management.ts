@@ -26,7 +26,7 @@ export interface VentureStrategy {
 export const STRATEGIES: VentureStrategy[] = [
   {
     name: 'Roborns',
-    color: '#5DCAA5',
+    color: '#dbdbdb',
     positioning: 'First-mover in closed-loop coastal AI infrastructure. We are not a datacenter company or a desalination company — we are a resource-loop company that happens to generate all three revenue streams from one site. This is impossible to replicate without the physical asset.',
     competitiveAdvantages: [
       'Physical asset moat — a built coastal facility cannot be copied overnight',
@@ -53,7 +53,7 @@ export const STRATEGIES: VentureStrategy[] = [
   },
   {
     name: 'Franchiseen',
-    color: '#7F77DD',
+    color: '#c8c8c8',
     positioning: 'The franchise ownership operating system — not a marketplace, not a crowdfunding platform. Franchiseen is infrastructure. We handle capital pooling, compliance, payouts, and reporting so operators and investors never have to. The moat is in the payout infrastructure and regulatory compliance layer.',
     competitiveAdvantages: [
       'Daily payout infrastructure — no competitor offers daily yield distribution at this scale',
@@ -80,7 +80,7 @@ export const STRATEGIES: VentureStrategy[] = [
   },
   {
     name: 'HubCV',
-    color: '#FAC775',
+    color: '#b5b5b5',
     positioning: 'Institution-led, not recruiter-led. We do not ask students to write a better resume — we put the assessment itself on the platform and let the resume fall out of it. The school is the customer: it claims its hub under KYB, licenses seats for its year groups, and its faculty run the grading. That gate is deliberate. Because every hub is verified before it goes live, the skill record carries institutional weight rather than self-reported noise — which is the whole moat, and the reason an open sign-up model would destroy it.',
     competitiveAdvantages: [
       'KYB-verified hubs — every institution is approved before it issues a record, so the skill graph carries real weight',
@@ -115,7 +115,7 @@ export const STRATEGIES: VentureStrategy[] = [
   },
   {
     name: 'Dextrip',
-    color: '#F0997B',
+    color: '#adadad',
     positioning: 'The non-custodial strategy marketplace. We are not a trading bot — we are a distribution platform for trading strategies. Creators publish, users subscribe, Dextrip earns the spread. Every strategy creator is a distribution channel. The more strategies, the more users. The more users, the more creators.',
     competitiveAdvantages: [
       'Non-custodial — users keep their keys, Dextrip never touches funds. Trust = lower CAC',
@@ -142,7 +142,7 @@ export const STRATEGIES: VentureStrategy[] = [
   },
   {
     name: 'Llife',
-    color: '#85B7EB',
+    color: '#a5a5a5',
     positioning: 'A life operating system, not another tracker. Llife wins because the data arrives already populated \u2014 Education from HubCV, Earnings from Dextrip and Franchiseen \u2014 so the user never faces an empty board. The moat is the ecosystem: no standalone competitor can pre-fill those domains.',
     competitiveAdvantages: [
       'Protocol-agnostic — works with Apple HomeKit, Google Home, Amazon Alexa simultaneously',

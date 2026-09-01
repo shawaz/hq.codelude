@@ -3,16 +3,16 @@ import { useState } from 'react';
 import { PROPERTIES, type PropertyType } from '@/lib/ops';
 import { sc, scBorder } from '@/lib/status-colors';
 
-const TYPE_COLORS: Record<PropertyType, string> = { Digital: '#7F77DD', Physical: '#5DCAA5', IP: '#c8f53a', Domain: '#85B7EB' };
+const TYPE_COLORS: Record<PropertyType, string> = { Digital: '#c8c8c8', Physical: '#dbdbdb', IP: '#eeeeee', Domain: '#a5a5a5' };
 const STATUS_STYLES: Record<string, { color: string }> = {
-  active:           { color: '#5DCAA5' },
-  pending:          { color: '#FAC775' },
+  active:           { color: '#dbdbdb' },
+  pending:          { color: '#b5b5b5' },
   planned:          { color: 'var(--muted)' },
-  'in-development': { color: '#c8f53a' },
+  'in-development': { color: '#eeeeee' },
 };
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 const TYPES: (PropertyType | 'all')[] = ['all', 'Digital', 'Domain', 'Physical', 'IP'];
 

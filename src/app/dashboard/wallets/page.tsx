@@ -13,17 +13,17 @@ const TABS: VentureTab[] = [
 ];
 
 const STATUS_STYLES: Record<WalletStatus, { color: string; label: string }> = {
-  active:  { color: '#5DCAA5', label: 'Active'  },
-  pending: { color: '#FAC775', label: 'Pending' },
-  cold:    { color: '#85B7EB', label: 'Cold'    },
+  active:  { color: '#dbdbdb', label: 'Active'  },
+  pending: { color: '#b5b5b5', label: 'Pending' },
+  cold:    { color: '#a5a5a5', label: 'Cold'    },
 };
 
 const CHAIN_COLORS: Record<string, string> = {
-  Ethereum:    '#7F77DD',
+  Ethereum:    '#c8c8c8',
   Polygon:     '#8b5cf6',
   Solana:      '#14F195',
   'BNB Chain': '#F0B90B',
-  'Multi-chain': '#c8f53a',
+  'Multi-chain': '#eeeeee',
 };
 
 export default function WalletsPage() {
@@ -41,8 +41,8 @@ export default function WalletsPage() {
         const rows = tab === 'all' ? scoped : scoped.filter(w => w.status === tab);
         return (
           <>
-      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #7F77DD', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#7F77DD'), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Treasury policy</div>
+      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #c8c8c8', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#c8c8c8'), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Treasury policy</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
           All HoldCo wallets require <strong style={{ color: 'var(--off-white)' }}>multisig (2-of-3)</strong> before deployment. Treasury wallet deploys only after Dubai HoldCo is legally incorporated. Token issuance wallet requires a smart contract audit before any token is issued. Cold storage holds on a hardware wallet controlled by the founder only.
         </p>
@@ -62,7 +62,7 @@ export default function WalletsPage() {
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Balance</div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: w.balance !== '$0' && w.balance !== 'N/A' ? '#5DCAA5' : 'var(--muted)' }}>{w.balance}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: w.balance !== '$0' && w.balance !== 'N/A' ? '#dbdbdb' : 'var(--muted)' }}>{w.balance}</div>
               </div>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Address</div>

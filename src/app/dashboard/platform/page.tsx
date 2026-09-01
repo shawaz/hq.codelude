@@ -16,7 +16,7 @@ interface Platform {
 const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   {
     title: 'Codelude',
-    color: '#c8f53a',
+    color: '#eeeeee',
     platforms: [
       {
         name: 'Codelude Web',
@@ -42,7 +42,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   },
   {
     title: 'Franchiseen',
-    color: '#7F77DD',
+    color: '#c8c8c8',
     platforms: [
       {
         name: 'Franchiseen',
@@ -56,7 +56,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   },
   {
     title: 'HubCV',
-    color: '#FAC775',
+    color: '#b5b5b5',
     platforms: [
       {
         name: 'HubCV Web',
@@ -94,7 +94,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   },
   {
     title: 'Llife',
-    color: '#85B7EB',
+    color: '#a5a5a5',
     platforms: [
       {
         name: 'Llife',
@@ -108,7 +108,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   },
   {
     title: 'Roborns',
-    color: '#5DCAA5',
+    color: '#dbdbdb',
     platforms: [
       {
         name: 'Roborns Web',
@@ -122,7 +122,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   },
   {
     title: 'Dextrip',
-    color: '#F0997B',
+    color: '#adadad',
     platforms: [
       {
         name: 'Dextrip Web',
@@ -228,18 +228,18 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
 ];
 
 const STATUS_COLOR: Record<Status, string> = {
-  live:     '#5DCAA5',
-  stopped:  '#ff8080',
-  static:   '#FAC775',
-  building: '#c8f53a',
+  live:     '#dbdbdb',
+  stopped:  '#9d9d9d',
+  static:   '#b5b5b5',
+  building: '#eeeeee',
 };
 
 const KIND_COLOR: Record<Kind, string> = {
-  Web:    '#7F77DD',
-  Bot:    '#F0997B',
-  API:    '#c8f53a',
-  Static: '#85B7EB',
-  Mobile: '#FAC775',
+  Web:    '#c8c8c8',
+  Bot:    '#adadad',
+  API:    '#eeeeee',
+  Static: '#a5a5a5',
+  Mobile: '#b5b5b5',
 };
 
 export default function PlatformPage() {
@@ -258,11 +258,11 @@ export default function PlatformPage() {
           <div className="tasks-count-label">Total platforms</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{live}</div>
+          <div className="tasks-count-num" style={{ color: sc('#dbdbdb') }}>{live}</div>
           <div className="tasks-count-label">Live</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: sc('#ff8080') }}>{stopped}</div>
+          <div className="tasks-count-num" style={{ color: sc('#9d9d9d') }}>{stopped}</div>
           <div className="tasks-count-label">Stopped</div>
         </div>
       </div>

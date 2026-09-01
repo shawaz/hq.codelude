@@ -13,15 +13,15 @@ const TABS: VentureTab[] = [
 ];
 
 const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
-  paid:    { color: '#5DCAA5', label: 'Paid'    },
-  pending: { color: '#FAC775', label: 'Pending' },
-  overdue: { color: '#ff8080', label: 'Overdue' },
+  paid:    { color: '#dbdbdb', label: 'Paid'    },
+  pending: { color: '#b5b5b5', label: 'Pending' },
+  overdue: { color: '#9d9d9d', label: 'Overdue' },
   draft:   { color: 'var(--muted)', label: 'Draft'   },
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 export default function InvoicePage() {
@@ -46,8 +46,8 @@ export default function InvoicePage() {
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '1.5rem' }}>
         {[
           { label: 'Total invoices',  val: rows.length,         color: 'var(--off-white)', fmt: false },
-          { label: 'Collected',       val: `$${paid}`,              color: '#5DCAA5',          fmt: false },
-          { label: 'Pending',         val: `$${pending}`,           color: '#FAC775',          fmt: false },
+          { label: 'Collected',       val: `$${paid}`,              color: '#dbdbdb',          fmt: false },
+          { label: 'Pending',         val: `$${pending}`,           color: '#b5b5b5',          fmt: false },
           { label: 'Draft',           val: `$${draft.toLocaleString()}`, color: 'var(--muted)',     fmt: false },
         ].map(c => (
           <div key={c.label} className="tasks-count-cell">

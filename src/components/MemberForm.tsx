@@ -284,7 +284,7 @@ export default function MemberForm({
               marginTop: '1rem',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.65rem',
-              color: '#ff8080',
+              color: '#9d9d9d',
             }}
           >
             {error}

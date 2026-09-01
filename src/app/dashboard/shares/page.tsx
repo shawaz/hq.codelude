@@ -4,12 +4,12 @@ import { SHARES, forVenture, isHoldCo } from '@/lib/finance';
 import VenturePageLayout, { NoRows, HoldCoTag, type VentureTab } from '@/components/VenturePageLayout';
 
 const ENTITY_COLORS: Record<string, string> = {
-  'Codelude HoldCo (Dubai)':  '#c8f53a',
-  'Roborns (Project Entity)': '#5DCAA5',
-  'Franchiseen (Project)':    '#7F77DD',
-  'Dextrip (Project)':        '#F0997B',
-  'HubCV (Project)':          '#FAC775',
-  'Llife (Project)':        '#85B7EB',
+  'Codelude HoldCo (Dubai)':  '#eeeeee',
+  'Roborns (Project Entity)': '#dbdbdb',
+  'Franchiseen (Project)':    '#c8c8c8',
+  'Dextrip (Project)':        '#adadad',
+  'HubCV (Project)':          '#b5b5b5',
+  'Llife (Project)':        '#a5a5a5',
 };
 
 // The cap table's own second dimension is share class.
@@ -73,7 +73,7 @@ export default function SharesPage() {
                         <tr key={i}>
                           <td style={{ fontWeight: 600, fontSize: '0.78rem' }}>{r.shareholder}</td>
                           <td><span className="category-label">{r.shareClass}</span></td>
-                          <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.percentage === 100 ? '#5DCAA5' : r.percentage === 0 ? 'var(--muted)' : 'var(--off-white)' }}>
+                          <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.percentage === 100 ? '#dbdbdb' : r.percentage === 0 ? 'var(--muted)' : 'var(--off-white)' }}>
                             {r.percentage > 0 ? `${r.percentage}%` : '—'}
                           </td>
                           <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)' }}>{r.shares}</td>

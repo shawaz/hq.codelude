@@ -13,8 +13,8 @@ export default function OffboardingPage() {
       <p className="page-sub">Standard offboarding process — access revocation, knowledge transfer, and exit documentation.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {steps.map((s, i) => (
-          <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem', borderLeft: '2px solid #F0997B' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc('#F0997B'), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{s.phase}</div>
+          <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem', borderLeft: '2px solid #adadad' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc('#adadad'), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>{s.phase}</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {s.items.map((item, j) => (
                 <div key={j} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>

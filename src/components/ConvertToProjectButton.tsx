@@ -124,9 +124,9 @@ export default function ConvertToProjectButton({ lead }: { lead: LeadForConversi
                   </select>
                 </div>
               </div>
-              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#ff8080') }}>{error}</div>}
+              {error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#9d9d9d') }}>{error}</div>}
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                <button type="submit" disabled={saving} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-accent)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   {saving ? 'Converting...' : 'Convert →'}
                 </button>
                 <button type="button" onClick={() => setOpen(false)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

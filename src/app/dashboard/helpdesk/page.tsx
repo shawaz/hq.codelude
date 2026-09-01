@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { HELP_ARTICLES } from '@/lib/support';
 import { scBorder } from '@/lib/status-colors';
 
-const CAT_COLORS: Record<string, string> = { Infrastructure: '#7F77DD', Admin: '#85B7EB', Platform: '#F0997B' };
+const CAT_COLORS: Record<string, string> = { Infrastructure: '#c8c8c8', Admin: '#a5a5a5', Platform: '#adadad' };
 
 export default function HelpDeskPage() {
   const [open, setOpen] = useState<string | null>(null);

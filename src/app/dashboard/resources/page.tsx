@@ -5,15 +5,15 @@ import { VENTURES, VENTURE_RESOURCES, type ResType, type ResStatus, type ResPrio
 type Tab = 'human' | 'technology' | 'legal' | 'summary';
 
 const STATUS_STYLES: Record<ResStatus, { color: string; label: string }> = {
-  active:  { color: '#5DCAA5', label: 'Active'  },
-  needed:  { color: '#FAC775', label: 'Needed'  },
+  active:  { color: '#dbdbdb', label: 'Active'  },
+  needed:  { color: '#b5b5b5', label: 'Needed'  },
   planned: { color: 'var(--muted)', label: 'Planned' },
 };
 const PRIORITY_COLOR: Record<ResPriority, string> = {
-  critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)', low: '#4a4845',
+  critical: '#9d9d9d', high: '#b5b5b5', medium: 'var(--muted)', low: '#4a4845',
 };
 const TYPE_COLORS: Record<ResType, string> = {
-  Human: '#c8f53a', Technology: '#7F77DD', Legal: '#F0997B', Physical: '#5DCAA5', Financial: '#FAC775',
+  Human: '#eeeeee', Technology: '#c8c8c8', Legal: '#adadad', Physical: '#dbdbdb', Financial: '#b5b5b5',
 };
 
 function fmtCost(n: number) {
@@ -57,7 +57,7 @@ function ResourceTable({ resources }: { resources: Resource[] }) {
               <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.monthlyCost > 0 ? 'var(--off-white)' : 'var(--muted)' }}>
                 {fmtCost(r.monthlyCost)}{r.monthlyCost > 0 ? '/mo' : ''}
               </td>
-              <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.oneTimeCost > 0 ? '#FAC775' : 'var(--muted)' }}>
+              <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.oneTimeCost > 0 ? '#b5b5b5' : 'var(--muted)' }}>
                 {fmtCost(r.oneTimeCost)}
               </td>
               <td>
@@ -144,9 +144,9 @@ export default function ResourcesPage() {
         </div>
         <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
           {[
-            { label: 'Active monthly',     val: fmtCost(activeMonthly), color: '#5DCAA5' },
-            { label: 'Full monthly (needed)', val: fmtCost(totalMonthly), color: '#FAC775' },
-            { label: 'One-time capex',     val: fmtCost(totalOneTime),  color: '#F0997B' },
+            { label: 'Active monthly',     val: fmtCost(activeMonthly), color: '#dbdbdb' },
+            { label: 'Full monthly (needed)', val: fmtCost(totalMonthly), color: '#b5b5b5' },
+            { label: 'One-time capex',     val: fmtCost(totalOneTime),  color: '#adadad' },
           ].map(c => (
             <div key={c.label} style={{ background: 'var(--card-bg)', padding: '0.75rem 1.1rem', textAlign: 'center' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{c.label}</div>
@@ -186,7 +186,7 @@ export default function ResourcesPage() {
                 <div key={type} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem', borderTop: `2px solid ${TYPE_COLORS[type]}` }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(TYPE_COLORS[type]), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>{type}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--off-white)', marginBottom: '0.2rem' }}>{fmtCost(monthly)}/mo</div>
-                  {oneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#FAC775') }}>{fmtCost(oneTime)} one-time</div>}
+                  {oneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#b5b5b5') }}>{fmtCost(oneTime)} one-time</div>}
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '0.4rem' }}>{items.length} resource{items.length !== 1 ? 's' : ''}</div>
                 </div>
               );
@@ -194,7 +194,7 @@ export default function ResourcesPage() {
             <div style={{ background: 'var(--card-bg)', padding: '1.1rem 1.25rem', borderTop: '2px solid var(--accent)' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Total</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', fontWeight: 700, color: 'var(--accent-text)', marginBottom: '0.2rem' }}>{fmtCost(totalMonthly)}/mo</div>
-              {totalOneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#FAC775') }}>{fmtCost(totalOneTime)} one-time</div>}
+              {totalOneTime > 0 && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: sc('#b5b5b5') }}>{fmtCost(totalOneTime)} one-time</div>}
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginTop: '0.4rem' }}>{all.length} total resources</div>
             </div>
           </div>

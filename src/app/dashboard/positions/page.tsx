@@ -4,15 +4,15 @@ import { POSITIONS } from '@/lib/people';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
-  open:      { color: '#c8f53a', label: 'Open'     },
-  hiring:    { color: '#5DCAA5', label: 'Hiring'   },
+  open:      { color: '#eeeeee', label: 'Open'     },
+  hiring:    { color: '#dbdbdb', label: 'Hiring'   },
   filled:    { color: 'var(--muted)', label: 'Filled'   },
-  'on-hold': { color: '#FAC775', label: 'On Hold'  },
+  'on-hold': { color: '#b5b5b5', label: 'On Hold'  },
 };
-const PRIORITY_COLOR: Record<string, string> = { critical: '#ff8080', high: '#FAC775', medium: 'var(--muted)' };
+const PRIORITY_COLOR: Record<string, string> = { critical: '#9d9d9d', high: '#b5b5b5', medium: 'var(--muted)' };
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 const TYPES = ['all', 'Full-time', 'Contract', 'Advisory'];
 
@@ -27,8 +27,8 @@ export default function PositionsPage() {
       <p className="page-sub">Open roles and headcount plan across all ventures.</p>
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '1.5rem' }}>
         <div className="tasks-count-cell"><div className="tasks-count-num">{POSITIONS.length}</div><div className="tasks-count-label">Total positions</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#c8f53a') }}>{open}</div><div className="tasks-count-label">Open / Hiring</div></div>
-        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#ff8080') }}>{POSITIONS.filter(p => p.priority === 'critical').length}</div><div className="tasks-count-label">Critical priority</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#eeeeee') }}>{open}</div><div className="tasks-count-label">Open / Hiring</div></div>
+        <div className="tasks-count-cell"><div className="tasks-count-num" style={{ color: sc('#9d9d9d') }}>{POSITIONS.filter(p => p.priority === 'critical').length}</div><div className="tasks-count-label">Critical priority</div></div>
       </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {TYPES.map(t => <button key={t} className={`filter-pill${typeFilter === t ? ' active' : ''}`} onClick={() => setTypeFilter(t)}>{t === 'all' ? 'All types' : t}</button>)}
@@ -37,7 +37,7 @@ export default function PositionsPage() {
         {filtered.map(p => {
           const ss = STATUS_STYLES[p.status];
           return (
-            <div key={p.id} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', borderLeft: p.priority === 'critical' ? '2px solid #ff8080' : p.priority === 'high' ? '2px solid #FAC775' : '2px solid transparent' }}>
+            <div key={p.id} style={{ background: 'var(--card-bg)', padding: '1.25rem 1.5rem', borderLeft: p.priority === 'critical' ? '2px solid #9d9d9d' : p.priority === 'high' ? '2px solid #b5b5b5' : '2px solid transparent' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.3rem' }}>{p.title}</div>

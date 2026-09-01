@@ -171,7 +171,7 @@ function AddForm({
 
       {error && (
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem',
-          color: '#ff8080', marginTop: '0.75rem' }}>{error}</div>
+          color: '#9d9d9d', marginTop: '0.75rem' }}>{error}</div>
       )}
 
       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
@@ -507,7 +507,7 @@ function RecordList({
               />
               {o.meetingAt != null && (
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem',
-                  color: o.meetingAt < Date.now() ? '#ff8080' : '#5DCAA5' }}>
+                  color: o.meetingAt < Date.now() ? '#9d9d9d' : '#dbdbdb' }}>
                   {o.meetingAt < Date.now() ? 'past · ' : 'upcoming · '}{fmtMeeting(o.meetingAt)}
                 </span>
               )}

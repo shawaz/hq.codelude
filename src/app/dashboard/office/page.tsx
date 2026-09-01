@@ -1,10 +1,10 @@
 import { OFFICES } from '@/lib/ops';
 import { sc, scBorder } from '@/lib/status-colors';
 
-const TYPE_COLORS: Record<string, string> = { Registered: '#c8f53a', Engineering: '#5DCAA5', Remote: '#85B7EB', Server: '#7F77DD' };
+const TYPE_COLORS: Record<string, string> = { Registered: '#eeeeee', Engineering: '#dbdbdb', Remote: '#a5a5a5', Server: '#c8c8c8' };
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
-  active:  { color: '#5DCAA5', label: 'Active'  },
-  planned: { color: '#FAC775', label: 'Planned' },
+  active:  { color: '#dbdbdb', label: 'Active'  },
+  planned: { color: '#b5b5b5', label: 'Planned' },
   virtual: { color: 'var(--muted)', label: 'Virtual' },
 };
 

@@ -36,7 +36,7 @@ const Y = ['Y1', 'Y2', 'Y3', 'Y4', 'Y5'];
 export const MODELS: VentureModel[] = [
   // ─────────────────────────────────────────────────────────── ROBORNS ────────
   {
-    name: 'Roborns', color: '#5DCAA5', currency: 'INR', currencySymbol: '₹',
+    name: 'Roborns', color: '#dbdbdb', currency: 'INR', currencySymbol: '₹',
     pnlCards: [
       { label: 'Year 5 revenue',   value: '₹142 Cr', sub: '3 streams at full scale',     color: 'green' },
       { label: 'EBITDA margin Y5', value: '80%',       sub: 'Power is only COGS at PUE <1.03', color: 'blue' },
@@ -111,7 +111,7 @@ export const MODELS: VentureModel[] = [
 
   // ────────────────────────────────────────────────────────── FRANCHISEEN ────
   {
-    name: 'Franchiseen', color: '#7F77DD', currency: 'USD', currencySymbol: '$',
+    name: 'Franchiseen', color: '#c8c8c8', currency: 'USD', currencySymbol: '$',
     pnlCards: [
       { label: 'Year 5 revenue',    value: '$1.26M',  sub: 'Platform fees + mgmt + spread',  color: 'green' },
       { label: 'EBITDA margin Y5',  value: '79%',      sub: 'Asset-light, low fixed cost',    color: 'blue' },
@@ -144,7 +144,7 @@ export const MODELS: VentureModel[] = [
       { label: 'EBITDA margin (%)',     note: '',                       values: [-710, -193, -3, 57, 78],   type: 'margin' },
     ],
     chartDatasets: [
-      { label: 'Platform fees', data: [7.5, 30, 112, 337, 810],  color: '#7F77DD' },
+      { label: 'Platform fees', data: [7.5, 30, 112, 337, 810],  color: '#c8c8c8' },
       { label: 'Mgmt fees',     data: [2.5, 10, 40, 125, 300],   color: '#a09ae0' },
       { label: 'Spread',        data: [0.5, 2, 8, 25, 60],       color: '#c5c1f0' },
       { label: 'Opex',          data: [85, 123, 165, 210, 260],  color: '#A32D2D', type: 'line' },
@@ -175,7 +175,7 @@ export const MODELS: VentureModel[] = [
 
   // ──────────────────────────────────────────────────────────────── HUBCV ────
   {
-    name: 'HubCV', color: '#FAC775', currency: 'USD', currencySymbol: '$',
+    name: 'HubCV', color: '#b5b5b5', currency: 'USD', currencySymbol: '$',
     pnlCards: [
       { label: 'Year 5 revenue',    value: '$52.3M',   sub: 'Seats + per-subject + AI credits',      color: 'green' },
       { label: 'EBITDA margin Y5',  value: '61%',       sub: 'Software margin on an India cost base', color: 'blue' },
@@ -217,7 +217,7 @@ export const MODELS: VentureModel[] = [
       { label: 'EBITDA margin (%)',       note: '',                                        values: [-40, 34, 58, 59, 61],                   type: 'margin' },
     ],
     chartDatasets: [
-      { label: 'Seat subscriptions', data: [88, 997, 5988, 17017, 41580], color: '#FAC775' },
+      { label: 'Seat subscriptions', data: [88, 997, 5988, 17017, 41580], color: '#b5b5b5' },
       { label: 'Per-subject',        data: [9, 54, 190, 420, 700],        color: '#e8960a' },
       { label: 'AI credits',         data: [7.2, 90, 665, 2888, 9979],    color: '#f7b84b' },
       { label: 'Opex',               data: [146, 750, 2842, 8331, 20583], color: '#A32D2D', type: 'line' },
@@ -252,7 +252,7 @@ export const MODELS: VentureModel[] = [
   },
   // ──────────────────────────────────────────────────────────────── LLIFE ────
   {
-    name: 'Dextrip', color: '#F0997B', currency: 'USD', currencySymbol: '$',
+    name: 'Dextrip', color: '#adadad', currency: 'USD', currencySymbol: '$',
     pnlCards: [
       { label: 'Year 5 ARR',       value: '$7.1M',    sub: 'Subscriptions + performance + API',  color: 'green' },
       { label: 'EBITDA margin Y5', value: '90%',       sub: 'Pure SaaS — minimal COGS',           color: 'blue' },
@@ -287,7 +287,7 @@ export const MODELS: VentureModel[] = [
       { label: 'EBITDA margin (%)',        note: '',                                 values: [-50, -19, 54, 76, 87],  type: 'margin' },
     ],
     chartDatasets: [
-      { label: 'Base subs',  data: [7, 42, 167, 522, 1740],  color: '#F0997B' },
+      { label: 'Base subs',  data: [7, 42, 167, 522, 1740],  color: '#adadad' },
       { label: 'Pro subs',   data: [12, 95, 380, 1188, 3564], color: '#e06535' },
       { label: 'Perf + API', data: [1, 14, 133, 406, 1022],  color: '#c43e00' },
       { label: 'Opex',       data: [30, 130, 240, 395, 580], color: '#A32D2D', type: 'line' },
@@ -318,7 +318,7 @@ export const MODELS: VentureModel[] = [
 
   // ─────────────────────────────────────────────────────────── DEXTRIP ────
   {
-    name: 'Llife', color: '#85B7EB', currency: 'USD', currencySymbol: '$',
+    name: 'Llife', color: '#a5a5a5', currency: 'USD', currencySymbol: '$',
     pnlCards: [
       { label: 'Year 5 revenue',    value: '$8.95M',  sub: 'Hardware + subscription + install',  color: 'green' },
       { label: 'EBITDA margin Y5',  value: '54%',      sub: 'Subscription margin offsets hardware COGS', color: 'blue' },
@@ -352,7 +352,7 @@ export const MODELS: VentureModel[] = [
       { label: 'EBITDA margin (%)',   note: '',                                values: [-45, -48, 11, 41, 54],   type: 'margin' },
     ],
     chartDatasets: [
-      { label: 'Hardware',      data: [25, 100, 399, 1497, 4990],  color: '#85B7EB' },
+      { label: 'Hardware',      data: [25, 100, 399, 1497, 4990],  color: '#a5a5a5' },
       { label: 'Subscriptions', data: [12, 52, 226, 870, 2962],    color: '#5a9fd4' },
       { label: 'Installation',  data: [5, 20, 80, 300, 1000],      color: '#2d7ab8' },
       { label: 'Opex',          data: [61, 255, 624, 1583, 4134],  color: '#A32D2D', type: 'line' },

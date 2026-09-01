@@ -20,7 +20,7 @@ export interface VentureBudget {
 
 export const VENTURE_BUDGETS: VentureBudget[] = [
   {
-    venture: 'Roborns', color: '#5DCAA5', sector: 'Coastal AI Infrastructure',
+    venture: 'Roborns', color: '#dbdbdb', sector: 'Coastal AI Infrastructure',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Engineering',   subcategory: 'Thermal feasibility',   planned: 5000, actual: 0,    ytdActual: 0,    note: 'Thermal engineering partner — pending engagement' },
@@ -32,7 +32,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Franchiseen', color: '#7F77DD', sector: 'AI Business Assistant',
+    venture: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Legal',         subcategory: 'Platform compliance',   planned: 2500, actual: 0,    ytdActual: 0,    note: 'SEBI pathway + investor agreements — pending engagement' },
@@ -44,7 +44,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'HubCV', color: '#FAC775', sector: 'AI Career Assistant',
+    venture: 'HubCV', color: '#b5b5b5', sector: 'AI Career Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'AI Infrastructure', subcategory: 'Anthropic API',     planned: 400,  actual: 0,    ytdActual: 0,    note: 'Claude API for matching engine — starts at platform launch' },
@@ -55,7 +55,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Dextrip', color: '#F0997B', sector: 'AI Trading Assistant',
+    venture: 'Dextrip', color: '#adadad', sector: 'AI Trading Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Infrastructure',subcategory: 'Binance API (VIP)',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'Exchange API — VIP tier for rate limits' },
@@ -66,7 +66,7 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Llife', color: '#85B7EB', sector: 'AI Life Assistant',
+    venture: 'Llife', color: '#a5a5a5', sector: 'AI Life Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Technology',    subcategory: 'Design tools (Figma)',   planned: 100,  actual: 0,    ytdActual: 0,    note: 'UI design and hardware CAD tooling' },

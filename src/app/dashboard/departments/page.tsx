@@ -2,14 +2,14 @@ import { DEPARTMENTS } from '@/lib/ops';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
-  active:   { color: '#5DCAA5', label: 'Active'   },
-  forming:  { color: '#c8f53a', label: 'Forming'  },
+  active:   { color: '#dbdbdb', label: 'Active'   },
+  forming:  { color: '#eeeeee', label: 'Forming'  },
   planned:  { color: 'var(--muted)', label: 'Planned'  },
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 export default function DepartmentsPage() {

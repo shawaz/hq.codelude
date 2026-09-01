@@ -5,14 +5,14 @@ import { NDAS, type NDAStatus } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
-  active:   { color: '#5DCAA5', label: 'Active'   },
+  active:   { color: '#dbdbdb', label: 'Active'   },
   expired:  { color: 'var(--muted)', label: 'Expired'  },
-  pending:  { color: '#FAC775', label: 'Pending'  },
-  unsigned: { color: '#ff8080', label: 'Unsigned' },
+  pending:  { color: '#b5b5b5', label: 'Pending'  },
+  unsigned: { color: '#9d9d9d', label: 'Unsigned' },
 };
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 interface SendState { sending: boolean; sent: boolean; error: string }
@@ -63,8 +63,8 @@ export default function NDAPage() {
       <h1 className="page-title">NDA</h1>
       <p className="page-sub">Non-disclosure agreement registry — send, track, and file all NDAs.</p>
 
-      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #F0997B', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#F0997B'), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Policy reminder</div>
+      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid #adadad', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#adadad'), letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Policy reminder</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
           An NDA must be signed before sharing financial models, technical specs, investor terms, or unannounced roadmaps. Template in <strong style={{ color: 'var(--off-white)' }}>Google Drive / Legal / Templates</strong>. Click <strong style={{ color: 'var(--off-white)' }}>Request signature</strong> to send via email.
         </p>
@@ -117,7 +117,7 @@ export default function NDAPage() {
 
             {sendState.sent ? (
               <div style={{ background: 'rgba(93,202,165,0.08)', border: '1px solid rgba(93,202,165,0.3)', padding: '1.25rem', marginBottom: '1rem' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc('#5DCAA5'), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Sent</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc('#dbdbdb'), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Sent</div>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
                   NDA signature request sent to <strong style={{ color: 'var(--off-white)' }}>{toEmail}</strong>. Update the status below once signed and file the document in Google Drive.
                 </p>
@@ -134,9 +134,9 @@ export default function NDAPage() {
                   <textarea style={{ background: 'var(--black)', border: '1px solid var(--card-border)', color: 'var(--off-white)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', padding: '0.75rem 1rem', outline: 'none', resize: 'vertical' }}
                     rows={3} value={note} onChange={e => setNote(e.target.value)} placeholder="Add context about why you're sharing and what they'll see..." />
                 </div>
-                {sendState.error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#ff8080') }}>{sendState.error}</div>}
+                {sendState.error && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#9d9d9d') }}>{sendState.error}</div>}
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                  <button type="submit" disabled={sendState.sending} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-brand)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
+                  <button type="submit" disabled={sendState.sending} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'var(--accent)', color: 'var(--on-accent)', border: 'none', padding: '0.75rem 1.5rem', cursor: 'pointer', fontWeight: 600 }}>
                     {sendState.sending ? 'Sending...' : 'Send →'}
                   </button>
                   <button type="button" onClick={() => setModal(null)} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.1em', background: 'transparent', color: 'var(--muted)', border: '1px solid var(--card-border)', padding: '0.75rem 1.5rem', cursor: 'pointer' }}>

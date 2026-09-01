@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import type { NavSection } from '@/lib/nav';
 import ThemeToggle from '@/components/ThemeToggle';
+import Logo from '@/components/Logo';
 
 
 function activeSection(nav: NavSection[], pathname: string): string | null {
@@ -49,6 +50,7 @@ export default function Sidebar({ user, nav }: Props) {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
+        <Logo size={22} />
         <span className="logo-text">Code<span>lude</span></span>
         <span className="hq-badge">HQ</span>
       </div>

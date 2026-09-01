@@ -14,24 +14,24 @@ const TABS: VentureTab[] = [
 ];
 
 const STATUS_STYLES: Record<RoundStatus, { color: string; label: string }> = {
-  planning:    { color: '#FAC775', label: 'Planning'    },
-  seeking:     { color: '#F0997B', label: 'Seeking'     },
-  negotiating: { color: '#c8f53a', label: 'Negotiating' },
-  closed:      { color: '#5DCAA5', label: 'Closed'      },
-  active:      { color: '#5DCAA5', label: 'Active'      },
+  planning:    { color: '#b5b5b5', label: 'Planning'    },
+  seeking:     { color: '#adadad', label: 'Seeking'     },
+  negotiating: { color: '#eeeeee', label: 'Negotiating' },
+  closed:      { color: '#dbdbdb', label: 'Closed'      },
+  active:      { color: '#dbdbdb', label: 'Active'      },
 };
 
 const TYPE_COLORS: Record<RoundType, string> = {
-  token:     '#c8f53a',
-  equity:    '#7F77DD',
-  bootstrap: '#85B7EB',
-  grant:     '#5DCAA5',
-  revenue:   '#F0997B',
+  token:     '#eeeeee',
+  equity:    '#c8c8c8',
+  bootstrap: '#a5a5a5',
+  grant:     '#dbdbdb',
+  revenue:   '#adadad',
 };
 
 const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#c8f53a', Roborns: '#5DCAA5', Franchiseen: '#7F77DD',
-  HubCV: '#FAC775', Llife: '#85B7EB', Dextrip: '#F0997B',
+  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
 };
 
 export default function InvestorsPage() {
@@ -84,7 +84,7 @@ export default function InvestorsPage() {
                   <div><div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Target</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)' }}>{r.targetAmount}</div></div>
                   <div><div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Raised</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.raisedAmount !== '$0' ? '#5DCAA5' : 'var(--muted)' }}>{r.raisedAmount}</div></div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: r.raisedAmount !== '$0' ? '#dbdbdb' : 'var(--muted)' }}>{r.raisedAmount}</div></div>
                   <div><div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Target close</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)' }}>{r.targetClose}</div></div>
                 </div>

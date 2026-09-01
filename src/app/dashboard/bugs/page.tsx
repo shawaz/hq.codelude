@@ -28,7 +28,7 @@ const DATA: PlatformBugs[] = [
   {
     platform: 'HubCV',
     domain: 'hubcv.pro',
-    color: '#FAC775',
+    color: '#b5b5b5',
     bugs: [
       {
         title: 'campusOrgs / toCampus scan the whole organizations table',
@@ -116,8 +116,8 @@ const DATA: PlatformBugs[] = [
 ];
 
 const SEVERITY: Record<Severity, { color: string; label: string }> = {
-  high:   { color: '#ff8080', label: 'High'   },
-  medium: { color: '#FAC775', label: 'Medium' },
+  high:   { color: '#9d9d9d', label: 'High'   },
+  medium: { color: '#b5b5b5', label: 'Medium' },
   low:    { color: 'var(--muted)', label: 'Low'    },
 };
 
@@ -140,9 +140,9 @@ export default function BugsPage() {
       <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
         border: '1px solid var(--card-border)', marginBottom: '2rem' }}>
         {[
-          { label: 'Open',        value: open.length,  color: '#FAC775' },
-          { label: 'High / open', value: highOpen,     color: highOpen > 0 ? '#ff8080' : '#5DCAA5' },
-          { label: 'Fixed',       value: fixed.length, color: '#5DCAA5' },
+          { label: 'Open',        value: open.length,  color: '#b5b5b5' },
+          { label: 'High / open', value: highOpen,     color: highOpen > 0 ? '#9d9d9d' : '#dbdbdb' },
+          { label: 'Fixed',       value: fixed.length, color: '#dbdbdb' },
         ].map(s => (
           <div key={s.label} style={{ background: 'var(--card-bg)', padding: '1.1rem 1.5rem', flex: 1 }}>
             <div style={{ ...mono('0.58rem'), color: 'var(--muted)', letterSpacing: '0.14em',
@@ -183,8 +183,8 @@ export default function BugsPage() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', alignItems: 'flex-end' }}>
                     <span style={{ ...mono('0.54rem'), letterSpacing: '0.12em', textTransform: 'uppercase',
                       padding: '0.15rem 0.5rem', whiteSpace: 'nowrap',
-                      border: `1px solid ${scBorder(isFixed ? '#5DCAA5' : '#FAC775')}`,
-                      color: isFixed ? '#5DCAA5' : '#FAC775' }}>
+                      border: `1px solid ${scBorder(isFixed ? '#dbdbdb' : '#b5b5b5')}`,
+                      color: isFixed ? '#dbdbdb' : '#b5b5b5' }}>
                       {isFixed ? 'Fixed' : 'Open'}
                     </span>
                     <span style={{ ...mono('0.54rem'), letterSpacing: '0.12em', textTransform: 'uppercase',

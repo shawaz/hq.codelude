@@ -26,9 +26,9 @@ function pct(actual: number, planned: number) {
 function StatusDot({ actual, planned }: { actual: number; planned: number }) {
   if (planned === 0 && actual === 0) return <span style={{ color: 'var(--hq-muted)', fontSize: '0.55rem' }}>—</span>;
   if (actual === 0) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)' }}>not started</span>;
-  if (actual > planned * 1.1) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#ff8080') }}>over</span>;
-  if (actual < planned * 0.8) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#FAC775') }}>under</span>;
-  return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#5DCAA5') }}>on track</span>;
+  if (actual > planned * 1.1) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#9d9d9d') }}>over</span>;
+  if (actual < planned * 0.8) return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#b5b5b5') }}>under</span>;
+  return <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc('#dbdbdb') }}>on track</span>;
 }
 
 function groupByCategory(lines: BudgetLine[]) {
@@ -61,16 +61,16 @@ export default function BudgetPage() {
       { label: 'Period',          val: vb.period,         sub: 'Current budget period',       color: 'var(--off-white)' },
     ],
     actual: [
-      { label: 'Actual MTD',      val: fmt(totalActual),  sub: 'Spent this month to date',  color: totalActual > 0 ? '#c8f53a' : 'var(--muted)' },
-      { label: 'YTD actual',      val: fmt(totalYtd),     sub: 'Year to date total',         color: '#FAC775' },
-      { label: 'MTD utilisation', val: pct(totalActual, totalPlanned), sub: 'Of monthly budget used', color: totalActual > totalPlanned ? '#ff8080' : '#5DCAA5' },
+      { label: 'Actual MTD',      val: fmt(totalActual),  sub: 'Spent this month to date',  color: totalActual > 0 ? '#eeeeee' : 'var(--muted)' },
+      { label: 'YTD actual',      val: fmt(totalYtd),     sub: 'Year to date total',         color: '#b5b5b5' },
+      { label: 'MTD utilisation', val: pct(totalActual, totalPlanned), sub: 'Of monthly budget used', color: totalActual > totalPlanned ? '#9d9d9d' : '#dbdbdb' },
       { label: 'Not started',     val: String(vb.lines.filter(l => l.actual === 0 && l.planned > 0).length), sub: 'Lines with $0 actual', color: 'var(--muted)' },
     ],
     variance: [
-      { label: 'MTD variance',    val: `${variance >= 0 ? '+' : ''}${fmt(Math.abs(variance))}`, sub: variance >= 0 ? 'Over budget' : 'Under budget', color: variance > 0 ? '#ff8080' : '#5DCAA5' },
+      { label: 'MTD variance',    val: `${variance >= 0 ? '+' : ''}${fmt(Math.abs(variance))}`, sub: variance >= 0 ? 'Over budget' : 'Under budget', color: variance > 0 ? '#9d9d9d' : '#dbdbdb' },
       { label: 'Planned',         val: fmt(totalPlanned), sub: 'Monthly budget',               color: 'var(--off-white)' },
-      { label: 'Actual',          val: fmt(totalActual),  sub: 'Spent MTD',                    color: '#c8f53a' },
-      { label: 'Remaining',       val: fmt(Math.max(0, totalPlanned - totalActual)), sub: 'Budget headroom', color: '#5DCAA5' },
+      { label: 'Actual',          val: fmt(totalActual),  sub: 'Spent MTD',                    color: '#eeeeee' },
+      { label: 'Remaining',       val: fmt(Math.max(0, totalPlanned - totalActual)), sub: 'Budget headroom', color: '#dbdbdb' },
     ],
   };
 
@@ -135,8 +135,8 @@ export default function BudgetPage() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: vb.color, letterSpacing: '0.2em', textTransform: 'uppercase' }}>{category}</span>
               <div style={{ display: 'flex', gap: '1.5rem' }}>
                 {tab !== 'actual' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>planned: {fmt(catPlanned)}/mo</span>}
-                {tab !== 'planned' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#c8f53a') }}>actual: {fmt(catActual)}</span>}
-                {tab === 'variance' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: catActual > catPlanned ? '#ff8080' : '#5DCAA5' }}>
+                {tab !== 'planned' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc('#eeeeee') }}>actual: {fmt(catActual)}</span>}
+                {tab === 'variance' && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: catActual > catPlanned ? '#9d9d9d' : '#dbdbdb' }}>
                   {catActual - catPlanned >= 0 ? '+' : ''}{fmt(Math.abs(catActual - catPlanned))}
                 </span>}
               </div>
@@ -166,7 +166,7 @@ export default function BudgetPage() {
                     {tab !== 'planned' && (
                       <>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.15rem' }}>actual MTD</div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: line.actual > 0 ? '#c8f53a' : 'var(--muted)' }}>{fmt(line.actual)}</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: line.actual > 0 ? '#eeeeee' : 'var(--muted)' }}>{fmt(line.actual)}</div>
                       </>
                     )}
                   </div>
@@ -182,7 +182,7 @@ export default function BudgetPage() {
                     {tab === 'variance' && (
                       <>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.15rem' }}>variance</div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: (line.actual - line.planned) > 0 ? '#ff8080' : '#5DCAA5' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: (line.actual - line.planned) > 0 ? '#9d9d9d' : '#dbdbdb' }}>
                           {line.actual - line.planned === 0 ? '—' : `${line.actual - line.planned > 0 ? '+' : ''}${fmt(Math.abs(line.actual - line.planned))}`}
                         </div>
                       </>
@@ -210,13 +210,13 @@ export default function BudgetPage() {
           <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: vb.color, fontWeight: 600 }}>{fmt(totalPlanned)}/mo</div>
         )}
         {tab !== 'planned' && (
-          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: sc('#c8f53a'), fontWeight: 600 }}>{fmt(totalActual)}</div>
+          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: sc('#eeeeee'), fontWeight: 600 }}>{fmt(totalActual)}</div>
         )}
         {tab === 'actual' && (
           <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>{fmt(totalYtd)}</div>
         )}
         {tab === 'variance' && (
-          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: variance >= 0 ? '#ff8080' : '#5DCAA5', fontWeight: 600 }}>
+          <div style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: variance >= 0 ? '#9d9d9d' : '#dbdbdb', fontWeight: 600 }}>
             {variance >= 0 ? '+' : ''}{fmt(Math.abs(variance))}
           </div>
         )}

@@ -11,16 +11,16 @@ import { sc, scBorder } from '@/lib/status-colors';
 type Tab = 'overview' | 'budget' | 'team' | 'tasks' | 'activities';
 
 const STATUS_STYLES: Record<SiteProjectStatus, { color: string; label: string }> = {
-  planning:  { color: '#FAC775', label: 'Planning'  },
-  active:    { color: '#5DCAA5', label: 'Active'    },
+  planning:  { color: '#b5b5b5', label: 'Planning'  },
+  active:    { color: '#dbdbdb', label: 'Active'    },
   paused:    { color: 'var(--muted)', label: 'Paused'    },
-  completed: { color: '#85B7EB', label: 'Completed' },
+  completed: { color: '#a5a5a5', label: 'Completed' },
 };
 
 const ACTIVITY_STYLES: Record<ActivityStatus, { color: string; label: string }> = {
   planned:      { color: 'var(--muted)', label: 'Planned'     },
-  'in-progress':{ color: '#FAC775',      label: 'In Progress' },
-  done:         { color: '#5DCAA5',      label: 'Done'        },
+  'in-progress':{ color: '#b5b5b5',      label: 'In Progress' },
+  done:         { color: '#dbdbdb',      label: 'Done'        },
 };
 
 function fmtDate(iso: string): string {
@@ -211,7 +211,7 @@ function OverviewPanel({ project, color, onStatusChange }: { project: SiteProjec
             <div style={{ display: 'flex', gap: '0.6rem' }}>
               <button onClick={saveBoundary} disabled={savingBoundary} style={{
                 fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase',
-                padding: '0.4rem 0.9rem', border: 'none', color: 'var(--on-brand)', background: 'var(--accent)', cursor: 'pointer', fontWeight: 600,
+                padding: '0.4rem 0.9rem', border: 'none', color: 'var(--on-accent)', background: 'var(--accent)', cursor: 'pointer', fontWeight: 600,
               }}>
                 {savingBoundary ? 'Saving…' : 'Save boundary'}
               </button>

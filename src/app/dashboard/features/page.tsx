@@ -18,7 +18,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Codelude Web',
     domain: 'codelude.com',
-    color: '#c8f53a',
+    color: '#eeeeee',
     features: [
       { name: 'Venture pages',         description: 'Individual deep-dive pages for Roborns, Franchiseen, HubCV, and Llife',                status: 'live' },
       { name: 'Token / thesis page',   description: 'Dubai HoldCo tokenization structure and investment thesis',                               status: 'live' },
@@ -36,7 +36,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Codelude HQ',
     domain: 'hq.codelude.com',
-    color: '#c8f53a',
+    color: '#eeeeee',
     features: [
       { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @codelude.com accounts',                     status: 'live' },
       { name: 'Protected routes',      description: 'Middleware-level auth guard — all /dashboard/* routes require an active session',        status: 'live' },
@@ -59,7 +59,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Dextrip Web',
     domain: 'bot.dextrip.com',
-    color: '#F0997B',
+    color: '#adadad',
     features: [
       { name: 'Strategy dashboard',    description: 'View and manage active trading strategies across exchanges',                             status: 'live' },
       { name: 'Account management',    description: 'Exchange API key management and account overview',                                       status: 'live' },
@@ -73,7 +73,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Dextrip TV',
     domain: 'tv.dextrip.com',
-    color: '#F0997B',
+    color: '#adadad',
     features: [
       { name: 'Live market dashboard', description: 'Real-time price charts and market data display optimised for large screens',            status: 'live' },
       { name: '5m / 15m signal feed',  description: 'Automated signal updates pushed via TV bot Python service on port 8787',               status: 'live' },
@@ -83,7 +83,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Spot Dashboard',
     domain: 'spot.dextrip.com',
-    color: '#F0997B',
+    color: '#adadad',
     features: [
       { name: 'Spot trade dashboard',  description: 'Real-time spot trading interface backed by spot-bot Python service on port 8788',       status: 'live' },
       { name: 'Automated execution',   description: 'Spot bot handles trade execution automatically based on configured strategy',           status: 'live' },
@@ -92,7 +92,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Roborns',
     domain: 'roborns.com',
-    color: '#5DCAA5',
+    color: '#dbdbdb',
     features: [
       { name: 'Public venture page',   description: 'Company website explaining the coastal AI + desalination concept',                      status: 'live' },
       { name: 'Investor section',      description: 'Information for potential investors and strategic partners',                            status: 'in-progress' },
@@ -102,7 +102,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Dextrip Client Portal',
     domain: 'client.dextrip.com',
-    color: '#F0997B',
+    color: '#adadad',
     features: [
       { name: 'Client dashboard',      description: 'Investor-facing portal to manage Dextrip investment — track trades, deposits, and profits', status: 'live' },
       { name: 'Trade history',         description: 'Full trade log with P&L per trade and aggregate performance',                            status: 'live' },
@@ -114,7 +114,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Franchiseen',
     domain: 'franchiseen.com',
-    color: '#7F77DD',
+    color: '#c8c8c8',
     features: [
       { name: 'Fractional ownership engine', description: 'Core platform for fractional franchise investment — built with Crossmint and Solana', status: 'in-progress' },
       { name: 'Jupiter / Solana integration',description: 'On-chain settlement via Jupiter aggregator on Solana for token-based ownership',  status: 'in-progress' },
@@ -127,7 +127,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'HubCV',
     domain: 'hubcv.pro',
-    color: '#FAC775',
+    color: '#b5b5b5',
     features: [
       { name: 'Convex Auth + OTP',        description: 'Email OTP via Resend, plus a separate student credential/OTP path for under-18 accounts',        status: 'live' },
       { name: 'Two-step onboarding',      description: 'Profile basics (avatar, username, stage, lead source) then grouped skill multiselect',            status: 'live' },
@@ -160,7 +160,7 @@ const DATA: PlatformFeatures[] = [
   {
     platform: 'Llife',
     domain: 'llife.ai',
-    color: '#85B7EB',
+    color: '#a5a5a5',
     features: [
       { name: 'Five-domain model',         description: 'Finances, Education, Earnings, Mind and Body — each mapped to a daily time block. Spec complete.', status: 'live' },
       { name: 'Daily tracker board',       description: 'Time-blocked board (6\u20138AM, 8\u20139AM, 9AM\u20134PM, 5PM, weekend) with per-item status and streaks', status: 'in-progress' },
@@ -177,8 +177,8 @@ const DATA: PlatformFeatures[] = [
 ];
 
 const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {
-  'live':        { color: '#5DCAA5', label: 'Live' },
-  'in-progress': { color: '#c8f53a', label: 'In Progress' },
+  'live':        { color: '#dbdbdb', label: 'Live' },
+  'in-progress': { color: '#eeeeee', label: 'In Progress' },
   'planned':     { color: 'var(--muted)', label: 'Planned' },
 };
 
@@ -199,11 +199,11 @@ export default function FeaturesPage() {
           <div className="tasks-count-label">Total features</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: sc('#5DCAA5') }}>{live}</div>
+          <div className="tasks-count-num" style={{ color: sc('#dbdbdb') }}>{live}</div>
           <div className="tasks-count-label">Live</div>
         </div>
         <div className="tasks-count-cell">
-          <div className="tasks-count-num" style={{ color: sc('#c8f53a') }}>{inProgress}</div>
+          <div className="tasks-count-num" style={{ color: sc('#eeeeee') }}>{inProgress}</div>
           <div className="tasks-count-label">In Progress</div>
         </div>
         <div className="tasks-count-cell">
