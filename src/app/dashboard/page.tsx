@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { TASKS } from '@/lib/tasks';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import ChatHistory, { useLazySummarise } from '@/components/ChatHistory';
+import NewTaskForm from '@/components/NewTaskForm';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -72,7 +72,7 @@ function pipelineSection(briefing: any): string {
 }
 
 /** Renders the venture's task board into prompt text. */
-function tasksSection(tasks: typeof TASKS): string {
+function tasksSection(tasks: { title: string; status: string; priority: string; category: string }[]): string {
   if (!tasks.length) return 'No tasks recorded for this venture.';
   const line = (t: any) => `  - [${t.status}] ${t.title} (${t.priority} · ${t.category})`;
   return tasks.map(line).join('\n');
@@ -97,7 +97,8 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const [loading,   setLoading]   = useState(false);
   const [model,     setModel]     = useState<AIModel>('opencode');
   const [rail,      setRail]      = useState<'tasks' | 'history'>('tasks');
-  const [taskFilter, setTaskFilter] = useState<'today' | 'todo' | 'done' | 'all'>('today');
+  const [taskFilter, setTaskFilter] = useState<'today' | 'todo' | 'done'>('today');
+  const [newTaskOpen, setNewTaskOpen] = useState(false);
   // Task ids the user has put on today. Per-user and cross-venture — you have
   // one day, not five — so this rail shows the intersection with this venture.
   const todayIds    = useQuery(api.tasks.today);
@@ -114,7 +115,8 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
     ...(stored ?? []).map(m => ({ role: m.role, content: m.content })),
     ...pending,
   ];
-  const tasks       = TASKS.filter(t => t.project === venture.name);
+  const allTasks    = useQuery(api.tasks.list, { project: venture.name });
+  const tasks       = allTasks ?? [];
   const inProgress  = tasks.filter(t => t.status === 'in-progress');
   const todo        = tasks.filter(t => t.status === 'todo');
   const done        = tasks.filter(t => t.status === 'done');
@@ -126,10 +128,9 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   // In-progress first, then todo, then done — the order the rail always used.
   const ordered     = [...inProgress, ...todo, ...done];
   const TASK_FILTERS = [
-    { key: 'today' as const, label: 'Today', rows: ordered.filter(t => onTodayIds.has(t.id)) },
+    { key: 'today' as const, label: 'Today', rows: ordered.filter(t => onTodayIds.has(t._id)) },
     { key: 'todo'  as const, label: 'Todo',  rows: ordered.filter(t => t.status !== 'done') },
     { key: 'done'  as const, label: 'Done',  rows: done },
-    { key: 'all'   as const, label: 'All',   rows: ordered },
   ];
   const visibleTasks = TASK_FILTERS.find(f => f.key === taskFilter)?.rows ?? ordered;
 
@@ -270,7 +271,8 @@ ${tasksSection(tasks)}`,
       {/* ── Right rail: Tasks | History ──────────────────────── */}
       <div style={{ width: 280, flexShrink: 0, display: 'flex', flexDirection: 'column', overflowY: 'auto', scrollbarWidth: 'none' }}>
         <div style={{ flexShrink: 0, position: 'sticky', top: 0, background: 'var(--card-bg)', zIndex: 1, borderBottom: '1px solid var(--card-border)' }}>
-          <div style={{ display: 'flex' }}>
+          {/* The tabs sat flush against the top edge with nothing above them. */}
+          <div style={{ display: 'flex', paddingTop: '0.75rem' }}>
             {([['tasks', `Tasks (${tasks.length})`], ['history', 'History']] as const).map(([key, label]) => (
               <button
                 key={key}
@@ -301,21 +303,39 @@ ${tasksSection(tasks)}`,
                   }}>{f.label} {f.rows.length}</button>
                 );
               })}
+              <button
+                onClick={() => setNewTaskOpen(true)}
+                title="Create a task"
+                style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.08em',
+                  textTransform: 'uppercase', padding: '0.2rem 0.45rem', cursor: 'pointer',
+                  background: 'transparent', border: '1px dashed var(--card-border)',
+                  color: 'var(--muted)', transition: 'all 0.12s',
+                }}
+              >+ New</button>
             </div>
           )}
         </div>
 
         {rail === 'history' && <ChatHistory venture={venture.name} accent={venture.color} />}
 
+        {rail === 'tasks' && newTaskOpen && (
+          <NewTaskForm
+            project={venture.name}
+            accent={venture.color}
+            onClose={() => setNewTaskOpen(false)}
+          />
+        )}
+
         {rail === 'tasks' && (
         <div style={{ flex: 1, padding: '0.5rem 0' }}>
           {visibleTasks.map(task => {
-            const isToday = onTodayIds.has(task.id);
+            const isToday = onTodayIds.has(task._id);
             const isDone  = task.status === 'done';
             return (
-              <div key={task.id} className="rail-task">
+              <div key={task._id} className="rail-task">
                 <button
-                  onClick={() => void toggleToday({ taskId: task.id })}
+                  onClick={() => void toggleToday({ taskId: task._id })}
                   aria-label={isToday ? `Remove "${task.title}" from today` : `Add "${task.title}" to today`}
                   title={isToday ? 'On today — click to remove' : 'Add to today'}
                   style={{
@@ -326,7 +346,7 @@ ${tasksSection(tasks)}`,
                     transition: 'background 0.12s, border-color 0.12s',
                   }}
                 />
-                <Link href={`/dashboard/tasks/${task.id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}>
+                <Link href={`/dashboard/tasks/${task._id}`} style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}>
                   {/* Two lines, not an ellipsis — a 280px rail cut most of these mid-word. */}
                   <div style={{
                     fontFamily: 'var(--font-mono)', fontSize: '0.64rem', lineHeight: 1.45, fontWeight: 300,

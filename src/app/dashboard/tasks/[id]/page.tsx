@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { TASKS, PROJECT_COLORS } from '@/lib/tasks';
+import { PROJECT_COLORS, type Project } from '@/lib/tasks';
 import { sc, scBorder } from '@/lib/status-colors';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 interface Note { id: string; text: string; createdAt: string; }
 interface FileRec { id: string; name: string; url: string; size: number; type: string; uploadedAt: string; }
@@ -32,9 +34,20 @@ function ext(name: string): string {
 export default function TaskDetailPage() {
   const params = useParams<{ id: string }>();
   const taskId = params.id;
-  const task = TASKS.find(t => t.id === taskId);
+  // Accepts a Convex id or an original seedId, so links minted before the
+  // migration still resolve.
+  const task = useQuery(api.tasks.get, { key: taskId });
 
   const [tab, setTab] = useState<Tab>('notes');
+
+  if (task === undefined) {
+    return (
+      <div>
+        <Link href="/dashboard/tasks" className="task-back">← Back to tasks</Link>
+        <p className="page-sub">Loading…</p>
+      </div>
+    );
+  }
 
   if (!task) {
     return (
@@ -46,7 +59,7 @@ export default function TaskDetailPage() {
     );
   }
 
-  const color = PROJECT_COLORS[task.project];
+  const color = PROJECT_COLORS[task.project as Project] ?? 'var(--muted)';
 
   return (
     <div style={{ maxWidth: 880 }}>
@@ -75,8 +88,8 @@ export default function TaskDetailPage() {
         <button className={`task-tab${tab === 'ai' ? ' active' : ''}`} onClick={() => setTab('ai')}>Ask AI</button>
       </div>
 
-      {tab === 'notes' && <NotesPanel taskId={task.id} />}
-      {tab === 'files' && <FilesPanel taskId={task.id} />}
+      {tab === 'notes' && <NotesPanel taskId={task.seedId ?? task._id} />}
+      {tab === 'files' && <FilesPanel taskId={task.seedId ?? task._id} />}
       {tab === 'ai'    && <TaskChat task={task} color={color} />}
     </div>
   );
@@ -265,7 +278,7 @@ function FilesPanel({ taskId }: { taskId: string }) {
 // ─────────────────────────────────────────────────────────────────────
 // Ask AI — scoped to this task
 // ─────────────────────────────────────────────────────────────────────
-function TaskChat({ task, color }: { task: typeof TASKS[number]; color: string }) {
+function TaskChat({ task, color }: { task: { title: string; project: string; category: string; status: string; priority: string }; color: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput]       = useState('');
   const [loading, setLoading]   = useState(false);
