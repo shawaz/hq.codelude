@@ -244,10 +244,18 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
   );
 
   // One batched query for the whole page rather than one per row.
-  const contactsByOrg = useQuery(
-    api.contacts.listForOrgs,
-    results.length > 0 ? { orgIds: results.map(o => o._id) } : 'skip',
-  ) as Record<string, Contact[]> | undefined;
+  // Memoised on the id list, not the array identity. `results` is a fresh array
+  // on every render, so passing results.map(...) straight in gave useQuery a new
+  // argument each time — it re-subscribed, which produced a new `results`, which
+  // re-rendered, which built another new array. That loop crashed the renderer
+  // on all four Sales pages ("This page couldn't load").
+  const orgIdKey = results.map(o => o._id).join(',');
+  const orgIdsArg = useMemo(
+    () => (orgIdKey ? { orgIds: orgIdKey.split(',') as Id<'pipeline_orgs'>[] } : 'skip' as const),
+    [orgIdKey],
+  );
+  const contactsByOrg = useQuery(api.contacts.listForOrgs, orgIdsArg) as
+    Record<string, Contact[]> | undefined;
 
   const counts = useMemo(() => {
     const map: Record<string, number> = {};
