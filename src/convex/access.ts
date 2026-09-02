@@ -45,7 +45,7 @@ export const VENTURES: Scope[] = [
   { id: 'roborns',     name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure' },
   { id: 'franchiseen', name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant' },
   { id: 'hubcv',       name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant' },
-  { id: 'dextrip',     name: 'Dextrip',     color: '#adadad', sector: 'AI Trading Assistant' },
+  { id: 'nanotrade',     name: 'Nanotrade',     color: '#adadad', sector: 'AI Trading Assistant' },
   { id: 'llife',       name: 'Llife',       color: '#a5a5a5', sector: 'AI Life Assistant' },
 ];
 

@@ -34,7 +34,7 @@ const TOTAL = "*"; // sentinel status holding the per-segment grand total
 
 /**
  * The pipeline pages this data belongs to. Access is checked per (venture,
- * page), so a member granted Dextrip on `deals` but not `leads` can read one
+ * page), so a member granted Nanotrade on `deals` but not `leads` can read one
  * and not the other.
  */
 const STAGE_PAGE: Record<string, string> = {
@@ -704,19 +704,19 @@ export const seedSamples = internalMutation({
       // ── Other ventures, prospects
       { stage: "prospect", venture: "Franchiseen", segment: "brand", name: "Wow! Momo", category: "F&B", state: "West Bengal", city: "Kolkata", status: "identified" },
       { stage: "prospect", venture: "Llife", segment: "education", name: "HubCV (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
-      { stage: "prospect", venture: "Llife", segment: "earnings", name: "Dextrip (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
+      { stage: "prospect", venture: "Llife", segment: "earnings", name: "Nanotrade (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
       { stage: "prospect", venture: "Llife", segment: "earnings", name: "Franchiseen (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
       { stage: "prospect", venture: "Llife", segment: "finances", name: "Sahamati (Account Aggregator)", category: "Financial rails", state: "Karnataka", city: "Bengaluru", priority: "high", status: "researching" },
       { stage: "prospect", venture: "Llife", segment: "body", name: "Apple HealthKit / Google Health Connect", category: "Health data", city: "—", status: "identified" },
       { stage: "lead", venture: "Llife", segment: "education", name: "HubCV student beta enquiry", category: "Student", city: "Mangaluru", interest: "Daily tracker beta", source: "web-form", status: "new", priority: "high" },
-      { stage: "prospect", venture: "Dextrip", segment: "exchange", name: "CoinDCX", category: "Exchange", state: "Maharashtra", city: "Mumbai", status: "identified" },
+      { stage: "prospect", venture: "Nanotrade", segment: "exchange", name: "CoinDCX", category: "Exchange", state: "Maharashtra", city: "Mumbai", status: "identified" },
 
       // ── Leads (inbound: forms + social)
       { stage: "lead", venture: "Roborns", segment: "compute", name: "Anonymous GPU enquiry", category: "AI startup", city: "Bengaluru", interest: "2 MW inference colocation", source: "web-form", status: "new", priority: "high" },
       { stage: "lead", venture: "Roborns", segment: "water", name: "Coastal resort enquiry", category: "Hospitality", city: "Udupi", interest: "Industrial water offtake", source: "linkedin", status: "qualified" },
       { stage: "lead", venture: "HubCV", segment: "college", name: "Placement cell enquiry", category: "Private college", city: "Hubballi", interest: "Placement analytics pilot", source: "instagram", status: "new" },
       { stage: "lead", venture: "HubCV", segment: "school", name: "CBSE school enquiry", category: "Private school", city: "Mysuru", interest: "Career guidance for class 11–12", source: "web-form", status: "new" },
-      { stage: "lead", venture: "Dextrip", segment: "creator", name: "Strategy creator applicant", category: "Individual", city: "Pune", interest: "Creator programme", source: "twitter", status: "qualified" },
+      { stage: "lead", venture: "Nanotrade", segment: "creator", name: "Strategy creator applicant", category: "Individual", city: "Pune", interest: "Creator programme", source: "twitter", status: "qualified" },
 
       // ── Deals (calls & appointments in progress)
       { stage: "deal", venture: "Roborns", segment: "investor", name: "Roborns seed infrastructure round", category: "Strategic investors", value: "₹18 Cr ($2.1M)", closeDate: "Q4 2026", status: "discovery", priority: "high" },
@@ -724,9 +724,9 @@ export const seedSamples = internalMutation({
       { stage: "deal", venture: "HubCV", segment: "business", name: "Recruiter design partner ×5", category: "Recruitment agencies", value: "$0 (design partner)", closeDate: "Q4 2026", status: "proposal" },
 
       // ── Clients (converted)
-      { stage: "client", venture: "Dextrip", segment: "creator", name: "Dextrip Beta Subscriber #1", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
-      { stage: "client", venture: "Dextrip", segment: "creator", name: "Dextrip Beta Subscriber #2", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
-      { stage: "client", venture: "Dextrip", segment: "creator", name: "Dextrip Beta Subscriber #3", category: "Individual trader", value: "$29/month", since: "2026-05-01", status: "at-risk" },
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #1", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #2", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #3", category: "Individual trader", value: "$29/month", since: "2026-05-01", status: "at-risk" },
     ];
 
     let inserted = 0;

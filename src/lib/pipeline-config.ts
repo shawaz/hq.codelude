@@ -31,13 +31,13 @@ export const SEGMENTS: Record<string, Segment[]> = {
     { key: 'college',  label: 'College',  unit: 'colleges'   },
     { key: 'business', label: 'Business', unit: 'businesses' },
   ],
-  Dextrip: [
+  Nanotrade: [
     { key: 'creator',   label: 'Creators',    unit: 'creators'    },
     { key: 'exchange',  label: 'Exchanges',   unit: 'exchanges'   },
     { key: 'community', label: 'Communities', unit: 'communities' },
   ],
   // Llife's five life domains. Education is fed by the HubCV API, Earnings by
-  // the Dextrip (job/crypto/stocks) and Franchiseen (franchise) APIs.
+  // the Nanotrade (job/crypto/stocks) and Franchiseen (franchise) APIs.
   Llife: [
     { key: 'finances',  label: 'Finances',  unit: 'institutions' },
     { key: 'education', label: 'Education', unit: 'providers'    },

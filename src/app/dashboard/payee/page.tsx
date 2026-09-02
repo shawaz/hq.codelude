@@ -29,7 +29,7 @@ const FREQ_COLORS: Record<PayeeFrequency, string> = {
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
 };
 
 const CATEGORIES = ['All', 'Infrastructure', 'Legal', 'AI Infrastructure', 'Compliance', 'Payments', 'Engineering', 'Manufacturing', 'Operations', 'SaaS'];

@@ -28,7 +28,7 @@ const schema = defineSchema({
         }),
       ),
     ),
-    // Display-only label per venture, e.g. { venture: "Dextrip", role: "Co-founder" }.
+    // Display-only label per venture, e.g. { venture: "Nanotrade", role: "Co-founder" }.
     // Carries no permissions — `access` is the only thing that grants anything.
     ventureRoles: v.optional(
       v.array(v.object({ venture: v.string(), role: v.string() })),

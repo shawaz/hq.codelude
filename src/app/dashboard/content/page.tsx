@@ -10,7 +10,7 @@ const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   idea:        { color: 'var(--muted)', label: 'Idea'        },
 };
 const TYPE_COLORS: Record<string, string> = { Article: '#c8c8c8', 'Social Post': '#eeeeee', Video: '#adadad', 'Case Study': '#dbdbdb', 'Press Release': '#a5a5a5', Newsletter: '#b5b5b5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
 
 export default function ContentPage() {
   const [status, setStatus] = useState<ContentStatus | 'all'>('all');

@@ -34,13 +34,13 @@ export const BUDGET: BudgetLine[] = [
   { venture: 'HubCV',    category: 'AI Infrastructure',monthlyBudget: 400,   spentToDate: 0,      currency: 'USD', note: 'LLM API costs for matching engine — OpenAI / Anthropic',   status: 'not-started' },
   { venture: 'HubCV',    category: 'Verifier Network', monthlyBudget: 1000,  spentToDate: 0,      currency: 'USD', note: 'Pay-per-assessment for human skill verifiers',              status: 'not-started' },
 
-  // Dextrip
-  { venture: 'Dextrip',  category: 'Infrastructure',  monthlyBudget: 200,    spentToDate: 180,    currency: 'USD', note: 'Exchange API costs, bot hosting, strategy engine compute',  status: 'on-track' },
-  { venture: 'Dextrip',  category: 'Marketing',       monthlyBudget: 500,    spentToDate: 0,      currency: 'USD', note: 'Creator acquisition and public beta launch campaign',       status: 'not-started' },
+  // Nanotrade
+  { venture: 'Nanotrade',  category: 'Infrastructure',  monthlyBudget: 200,    spentToDate: 180,    currency: 'USD', note: 'Exchange API costs, bot hosting, strategy engine compute',  status: 'on-track' },
+  { venture: 'Nanotrade',  category: 'Marketing',       monthlyBudget: 500,    spentToDate: 0,      currency: 'USD', note: 'Creator acquisition and public beta launch campaign',       status: 'not-started' },
 
   // Llife
   { venture: 'Llife',  category: 'Product Dev',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: 'In-house — no external dev cost yet',                      status: 'on-track' },
-  { venture: 'Llife',  category: 'Integrations',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: '$120K build — HubCV, Dextrip, Franchiseen and AA connectors', status: 'not-started' },
+  { venture: 'Llife',  category: 'Integrations',     monthlyBudget: 0,      spentToDate: 0,      currency: 'USD', note: '$120K build — HubCV, Nanotrade, Franchiseen and AA connectors', status: 'not-started' },
 ];
 
 // ─── INVESTORS ────────────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
   },
   {
     id: 'R4',
-    venture: 'Dextrip',
+    venture: 'Nanotrade',
     roundName: 'Revenue Reinvestment',
     type: 'revenue',
     targetAmount: 'Self-funded',
@@ -118,7 +118,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
     keyTerms: 'N/A — founder-funded.',
     leadInvestor: 'Shawaz (Founder)',
     targetClose: 'Ongoing',
-    notes: 'Dextrip is the most capital-efficient venture. Consider strategic round at $500K MRR to accelerate institutional API tier and DeFi integrations.',
+    notes: 'Nanotrade is the most capital-efficient venture. Consider strategic round at $500K MRR to accelerate institutional API tier and DeFi integrations.',
   },
   {
     id: 'R5',
@@ -170,7 +170,7 @@ export const SHARES: ShareEntry[] = [
   { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Employee Pool',       shareClass: 'Options',      percentage: 0,    shares: 'TBD',         vestingSchedule: '4-year / 1-year cliff',      notes: 'ESOP pool to be created before first team hire. Recommended: 10–15% of total cap table.' },
   { entity: 'Roborns (Project Entity)', venture: 'Roborns', shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Roborns will be a subsidiary of Codelude HoldCo. Token holders get revenue share, not equity.' },
   { entity: 'Franchiseen (Project)', venture: 'Franchiseen',    shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
-  { entity: 'Dextrip (Project)', venture: 'Dextrip',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
+  { entity: 'Nanotrade (Project)', venture: 'Nanotrade',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
   { entity: 'HubCV (Project)', venture: 'HubCV',          shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
   { entity: 'Llife (Project)', venture: 'Llife',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
 ];
@@ -195,7 +195,7 @@ export interface Wallet {
 export const WALLETS: Wallet[] = [
   { label: 'HoldCo Treasury',      chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Primary Dubai HoldCo treasury wallet — receives token sale proceeds and distributes to project entities', status: 'pending', balance: '$0',      notes: 'Deploy after legal structure finalised. Multisig (2-of-3) recommended.' },
   { label: 'Token Issuance Wallet', chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Issues and manages Roborns token and eventually Codelude studio token',                                   status: 'pending', balance: '$0',      notes: 'Requires smart contract audit before token issuance. Budget $20–50K for audit.' },
-  { label: 'Dextrip Operations', venture: 'Dextrip',   chain: 'Multi-chain', address: 'Exchange API accounts',   purpose: 'Operational wallet for Dextrip strategy execution — holds user API keys, not funds (non-custodial)',     status: 'active',  balance: 'N/A',     notes: 'Non-custodial — Dextrip never holds user funds. API key vault only.' },
+  { label: 'Nanotrade Operations', venture: 'Nanotrade',   chain: 'Multi-chain', address: 'Exchange API accounts',   purpose: 'Operational wallet for Nanotrade strategy execution — holds user API keys, not funds (non-custodial)',     status: 'active',  balance: 'N/A',     notes: 'Non-custodial — Nanotrade never holds user funds. API key vault only.' },
   { label: 'Investor Distributions',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Quarterly revenue distribution wallet — sends proportional payouts to token holders',                     status: 'pending', balance: '$0',      notes: 'Linked to HoldCo Treasury. Automated distribution contract to be built.' },
   { label: 'Operational Cold Store',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Cold storage for any crypto held in reserve — hardware wallet controlled by founder',                    status: 'cold',    balance: '$0',      notes: 'Ledger hardware wallet. Address generated offline.' },
 ];
@@ -221,8 +221,8 @@ export const ACCOUNTS: Account[] = [
   { entity: 'Codelude HoldCo (Dubai)',  bank: 'Emirates NBD / Mashreq (TBD)', type: 'Current',  currency: 'AED / USD', purpose: 'Primary operating account for Dubai HoldCo — receives investor capital, pays project entities',             status: 'planned', notes: 'Requires HoldCo incorporation to open. Target: Q3 2026.' },
   { entity: 'Codelude India',           bank: 'HDFC Bank',                    type: 'Current',  currency: 'INR',       purpose: 'Engineering operations in Mangaluru — salaries, contractors, Roborns site costs',                         status: 'planned', notes: 'Open alongside Roborns engineering engagement. FIRA compliance for inward remittances from Dubai.' },
   { entity: 'Franchiseen (Platform)', venture: 'Franchiseen',   bank: 'TBD — escrow provider',        type: 'Escrow',   currency: 'INR / USD', purpose: 'Investor capital held in escrow before franchise deployment. Mandatory for regulatory compliance.',        status: 'planned', notes: 'Escrow account with regulated trustee is a legal requirement for holding retail investor funds.' },
-  { entity: 'Dextrip Operations', venture: 'Dextrip',       bank: 'Binance / Bybit (Exchange)',   type: 'Exchange', currency: 'USDT / BTC',purpose: 'Exchange accounts for strategy execution — API-connected to Dextrip multi-bot',                          status: 'active',  notes: 'Not a bank account — exchange accounts for operational trading. API keys stored securely in bot.' },
-  { entity: 'Dextrip Revenue', venture: 'Dextrip',          bank: 'Stripe (TBD)',                 type: 'Current',  currency: 'USD',       purpose: 'Subscription revenue collection for Dextrip public beta — Stripe or Paddle integration',                status: 'planned', notes: 'Apply after public beta launch. Requires business registration in a Stripe-supported country.' },
+  { entity: 'Nanotrade Operations', venture: 'Nanotrade',       bank: 'Binance / Bybit (Exchange)',   type: 'Exchange', currency: 'USDT / BTC',purpose: 'Exchange accounts for strategy execution — API-connected to Nanotrade multi-bot',                          status: 'active',  notes: 'Not a bank account — exchange accounts for operational trading. API keys stored securely in bot.' },
+  { entity: 'Nanotrade Revenue', venture: 'Nanotrade',          bank: 'Stripe (TBD)',                 type: 'Current',  currency: 'USD',       purpose: 'Subscription revenue collection for Nanotrade public beta — Stripe or Paddle integration',                status: 'planned', notes: 'Apply after public beta launch. Requires business registration in a Stripe-supported country.' },
   { entity: 'Codelude Operations (MY)', bank: 'TBD',                          type: 'Current',  currency: 'MYR / USD', purpose: 'Southeast Asia operations account — for future expansion into Malaysia / Singapore markets',              status: 'planned', notes: 'Not urgent — open when SE Asia operations begin (est. 2027).' },
 ];
 
@@ -244,9 +244,9 @@ export interface Invoice {
 }
 
 export const INVOICES: Invoice[] = [
-  { id: 'INV-001', venture: 'Dextrip', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 99,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'First closed beta subscription payment confirmed.' },
-  { id: 'INV-002', venture: 'Dextrip', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 99,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Second beta subscriber.' },
-  { id: 'INV-003', venture: 'Dextrip', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 29,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Base tier beta subscriber.' },
+  { id: 'INV-001', venture: 'Nanotrade', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 99,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'First closed beta subscription payment confirmed.' },
+  { id: 'INV-002', venture: 'Nanotrade', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 99,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Second beta subscriber.' },
+  { id: 'INV-003', venture: 'Nanotrade', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 29,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Base tier beta subscriber.' },
   { id: 'INV-004', venture: 'Roborns', client: 'Internal (HoldCo)',      description: 'Thermal engineering consultation — feasibility phase', amount: 5000, currency: 'USD', issueDate: '2026-06-01', dueDate: '2026-06-15', status: 'draft',   notes: 'Placeholder — to be issued when engineering partner is engaged.' },
   { id: 'INV-005', venture: 'Codelude',client: 'Internal (Operations)',  description: 'Server infrastructure — May 2026',                    amount: 120,  currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-05', status: 'paid',    notes: 'Monthly VPS cost — auto-renewing.' },
 ];
@@ -270,14 +270,14 @@ export interface Payee {
 
 export const PAYEES: Payee[] = [
   { name: 'VPS Provider (Server)',        type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$120',      currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: '64.227.160.224 — 2C/8G/160G CentOS 9 server hosting all platforms.' },
-  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'codelude.com, roborns.com, franchiseen.com, hubcv.com, llife.ai, dextrip.com.' },
+  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'codelude.com, roborns.com, franchiseen.com, hubcv.com, llife.ai, nanotrade.com.' },
   { name: 'AI API (Anthropic/OpenAI)',   type: 'SaaS',           ventures: ['HubCV', 'Codelude'],                    amount: '$50–400',    currency: 'USD', frequency: 'variable', status: 'pending', category: 'AI Infrastructure', notes: 'LLM API usage for HubCV matching engine and internal tools. Cost scales with usage.' },
   { name: 'Thermal Engineering Firm',    type: 'Contractor',     ventures: ['Roborns'],                              amount: '$5,000–10K', currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Engineering', notes: 'Feasibility study and technical validation of closed-loop heat exchange system.' },
   { name: 'Dubai Legal Counsel',         type: 'Legal',          ventures: ['Codelude', 'Roborns'],                  amount: '$1,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'HoldCo incorporation, token structure, and ongoing compliance. DIFC-registered firm.' },
   { name: 'Investment Platform Legal',   type: 'Legal',          ventures: ['Franchiseen'],                          amount: '$2,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'KYC/AML compliance, investor agreement templates, and regulatory pathway.' },
   { name: 'KYC / AML Provider',         type: 'SaaS',           ventures: ['Franchiseen'],                          amount: '$200–500',   currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Compliance', notes: 'Per-verification pricing model. Cost scales with investor onboarding volume.' },
-  { name: 'Stripe / Payment Processor', type: 'SaaS',           ventures: ['Franchiseen', 'Dextrip'],               amount: '2.9% + $0.30',currency:'USD', frequency: 'variable', status: 'pending', category: 'Payments', notes: 'Per-transaction fee. Apply to Stripe after business entity registration.' },
-  { name: 'Binance API (VIP tier)',      type: 'Infrastructure', ventures: ['Dextrip'],                              amount: 'Volume-based',currency:'USD', frequency: 'variable', status: 'active',  category: 'Infrastructure', notes: 'Exchange API access. VIP tier needed for higher rate limits at public beta scale.' },
+  { name: 'Stripe / Payment Processor', type: 'SaaS',           ventures: ['Franchiseen', 'Nanotrade'],               amount: '2.9% + $0.30',currency:'USD', frequency: 'variable', status: 'pending', category: 'Payments', notes: 'Per-transaction fee. Apply to Stripe after business entity registration.' },
+  { name: 'Binance API (VIP tier)',      type: 'Infrastructure', ventures: ['Nanotrade'],                              amount: 'Volume-based',currency:'USD', frequency: 'variable', status: 'active',  category: 'Infrastructure', notes: 'Exchange API access. VIP tier needed for higher rate limits at public beta scale.' },
   { name: 'LLM Inference (Llife)',      type: 'Supplier',       ventures: ['Llife'],                              amount: '$2K/month',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Technology',    notes: 'Per-user assistant reasoning — daily summaries, nudges and domain reviews. Scales with active users.' },
   { name: 'Human Skill Verifiers',      type: 'Contractor',     ventures: ['HubCV'],                                amount: '$20–50/assess',currency:'USD', frequency: 'variable', status: 'pending', category: 'Operations', notes: 'Pay-per-assessment model for domain expert verifiers. Cost scales with profile volume.' },
   { name: 'Smart Contract Audit',       type: 'Professional',   ventures: ['Roborns', 'Codelude'],                  amount: '$20K–50K',   currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Legal', notes: 'Required before token issuance. Budget for Roborns token smart contract security audit.' },

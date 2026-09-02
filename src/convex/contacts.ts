@@ -9,7 +9,7 @@
  *
  * Access is always resolved from the org, never from a client-supplied venture:
  * a contact inherits whatever (venture, page) grant its org sits behind, so a
- * member who cannot open Dextrip leads cannot read Dextrip lead contacts either.
+ * member who cannot open Nanotrade leads cannot read Nanotrade lead contacts either.
  */
 
 import { v } from "convex/values";

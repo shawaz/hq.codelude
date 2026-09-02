@@ -12,7 +12,7 @@ const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
 };
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
 };
 
 interface SendState { sending: boolean; sent: boolean; error: string }

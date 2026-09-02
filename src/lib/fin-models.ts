@@ -252,7 +252,7 @@ export const MODELS: VentureModel[] = [
   },
   // ──────────────────────────────────────────────────────────────── LLIFE ────
   {
-    name: 'Dextrip', color: '#adadad', currency: 'USD', currencySymbol: '$',
+    name: 'Nanotrade', color: '#adadad', currency: 'USD', currencySymbol: '$',
     pnlCards: [
       { label: 'Year 5 ARR',       value: '$7.1M',    sub: 'Subscriptions + performance + API',  color: 'green' },
       { label: 'EBITDA margin Y5', value: '90%',       sub: 'Pure SaaS — minimal COGS',           color: 'blue' },
@@ -316,7 +316,7 @@ export const MODELS: VentureModel[] = [
     ],
   },
 
-  // ─────────────────────────────────────────────────────────── DEXTRIP ────
+  // ─────────────────────────────────────────────────────────── NANOTRADE ────
   {
     name: 'Llife', color: '#a5a5a5', currency: 'USD', currencySymbol: '$',
     pnlCards: [
@@ -327,7 +327,7 @@ export const MODELS: VentureModel[] = [
     ],
     capexCards: [
       { label: 'Total capex',       value: '$500K',    sub: 'Hardware MOQ + firmware + pilot',    color: 'green' },
-      { label: 'Integration build', value: '$120K',    sub: 'HubCV, Dextrip, Franchiseen and AA connectors', color: 'blue' },
+      { label: 'Integration build', value: '$120K',    sub: 'HubCV, Nanotrade, Franchiseen and AA connectors', color: 'blue' },
       { label: 'Payback period',    value: '~24 mo',   sub: 'Hardware + subscription combined',  color: 'amber' },
       { label: 'Funding needed',    value: '$200–400K',sub: 'Pre-seed or property dev pre-order', color: 'default' },
     ],
@@ -358,7 +358,7 @@ export const MODELS: VentureModel[] = [
       { label: 'Opex',          data: [61, 255, 624, 1583, 4134],  color: '#A32D2D', type: 'line' },
     ],
     capexRows: [
-      { item: 'Integration engineering',   note: 'HubCV, Dextrip, Franchiseen connectors',   phase: 'Pre-seed', amount: '$120K' },
+      { item: 'Integration engineering',   note: 'HubCV, Nanotrade, Franchiseen connectors',   phase: 'Pre-seed', amount: '$120K' },
       { item: 'Mobile + web build',        note: 'Daily board, reviews, offline-first sync', phase: 'Pre-seed', amount: '$100K' },
       { item: 'Security & privacy audit',  note: 'Required before financial + health data',   phase: 'Pre-seed', amount: '$30K' },
       { item: '10-home pilot programme',   note: 'Mangaluru + Dubai pilot installs',          phase: 'Pre-seed', amount: '$50K' },

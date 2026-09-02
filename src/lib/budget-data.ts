@@ -55,14 +55,14 @@ export const VENTURE_BUDGETS: VentureBudget[] = [
     ],
   },
   {
-    venture: 'Dextrip', color: '#adadad', sector: 'AI Trading Assistant',
+    venture: 'Nanotrade', color: '#adadad', sector: 'AI Trading Assistant',
     currency: 'USD', period: 'May 2026',
     lines: [
       { category: 'Infrastructure',subcategory: 'Binance API (VIP)',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'Exchange API — VIP tier for rate limits' },
       { category: 'Infrastructure',subcategory: 'Bybit API',              planned: 100,  actual: 80,   ytdActual: 400,  note: 'Secondary exchange connector' },
-      { category: 'Infrastructure',subcategory: 'Server allocation',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'VPS shared allocation for all Dextrip apps' },
+      { category: 'Infrastructure',subcategory: 'Server allocation',      planned: 200,  actual: 200,  ytdActual: 1000, note: 'VPS shared allocation for all Nanotrade apps' },
       { category: 'Legal',         subcategory: 'Terms of service',       planned: 0,    actual: 0,    ytdActual: 0,    note: 'Non-custodial ToS drafting — pending engagement' },
-      { category: 'Domain',        subcategory: 'dextrip.com + subdomains',planned: 5,   actual: 5,    ytdActual: 25,   note: 'dextrip.com, bot, tv, spot, client subdomains' },
+      { category: 'Domain',        subcategory: 'nanotrade.com + subdomains',planned: 5,   actual: 5,    ytdActual: 25,   note: 'nanotrade.com, bot, tv, spot, client subdomains' },
     ],
   },
   {
@@ -97,11 +97,11 @@ export interface Expense {
 export const EXPENSES: Expense[] = [
   { id: 'EXP-001', date: '2026-05-01', description: 'VPS server — May 2026',          venture: 'Codelude', category: 'Infrastructure', amount: 120,  currency: 'USD', status: 'paid',      receipt: true,  notes: '64.227.160.224 — 2C/8G/160G CentOS 9. Auto-renewed.' },
   { id: 'EXP-002', date: '2026-05-01', description: 'Domain renewals — May allocation', venture: 'Codelude', category: 'Domain',        amount: 13,   currency: 'USD', status: 'paid',      receipt: true,  notes: 'Monthly allocation across codelude.com + all venture domains.' },
-  { id: 'EXP-003', date: '2026-05-01', description: 'Binance API — May 2026',          venture: 'Dextrip',  category: 'Infrastructure', amount: 200,  currency: 'USD', status: 'paid',      receipt: true,  notes: 'VIP tier API access for strategy execution.' },
-  { id: 'EXP-004', date: '2026-05-01', description: 'Bybit API — May 2026',            venture: 'Dextrip',  category: 'Infrastructure', amount: 80,   currency: 'USD', status: 'paid',      receipt: true,  notes: 'Secondary exchange API — partial month usage.' },
+  { id: 'EXP-003', date: '2026-05-01', description: 'Binance API — May 2026',          venture: 'Nanotrade',  category: 'Infrastructure', amount: 200,  currency: 'USD', status: 'paid',      receipt: true,  notes: 'VIP tier API access for strategy execution.' },
+  { id: 'EXP-004', date: '2026-05-01', description: 'Bybit API — May 2026',            venture: 'Nanotrade',  category: 'Infrastructure', amount: 80,   currency: 'USD', status: 'paid',      receipt: true,  notes: 'Secondary exchange API — partial month usage.' },
   { id: 'EXP-005', date: '2026-05-20', description: 'Resend email service',            venture: 'Codelude', category: 'SaaS',           amount: 0,    currency: 'USD', status: 'paid',      receipt: true,  notes: 'Free tier currently — contact form + NDA emails.' },
   { id: 'EXP-006', date: '2026-06-01', description: 'VPS server — June 2026',          venture: 'Codelude', category: 'Infrastructure', amount: 120,  currency: 'USD', status: 'recurring', receipt: false, notes: 'Recurring monthly. Due 2026-06-01.' },
-  { id: 'EXP-007', date: '2026-06-01', description: 'Binance API — June 2026',         venture: 'Dextrip',  category: 'Infrastructure', amount: 200,  currency: 'USD', status: 'recurring', receipt: false, notes: 'Recurring monthly.' },
+  { id: 'EXP-007', date: '2026-06-01', description: 'Binance API — June 2026',         venture: 'Nanotrade',  category: 'Infrastructure', amount: 200,  currency: 'USD', status: 'recurring', receipt: false, notes: 'Recurring monthly.' },
   { id: 'EXP-008', date: '2026-06-01', description: 'Roborns site survey',             venture: 'Roborns',  category: 'Engineering',    amount: 3000, currency: 'USD', status: 'pending',   receipt: false, notes: 'Mangaluru coastal site survey — planned June 2026. Pending vendor.' },
   { id: 'EXP-009', date: '2026-06-15', description: 'Thermal engineering — feasibility', venture: 'Roborns', category: 'Engineering',  amount: 5000, currency: 'USD', status: 'pending',   receipt: false, notes: 'Phase 1 feasibility study. Pending partner engagement.' },
   { id: 'EXP-010', date: '2026-06-30', description: 'Dubai HoldCo legal — initial retainer', venture: 'Codelude', category: 'Legal',  amount: 6500, currency: 'USD', status: 'pending',   receipt: false, notes: 'DIFC incorporation one-time ($5K) + first month retainer ($1.5K).' },
@@ -130,7 +130,7 @@ export interface PayrollEntry {
 export const PAYROLL: PayrollEntry[] = [
   {
     id: 'PAY-001', name: 'Shawaz', role: 'Founder & CEO', type: 'founder',
-    ventures: ['Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Llife', 'Dextrip'],
+    ventures: ['Codelude', 'Roborns', 'Franchiseen', 'HubCV', 'Llife', 'Nanotrade'],
     status: 'active', monthlyCost: 0, oneTimeCost: 0, currency: 'USD',
     startDate: '2025-01-01', equityNote: '100% HoldCo — fully vested',
     notes: 'Founder is not drawing a salary at this stage. Compensation via equity and future distributions.',
@@ -175,7 +175,7 @@ export const PAYROLL: PayrollEntry[] = [
     ventures: ['Llife'],
     status: 'open', monthlyCost: 6000, oneTimeCost: 0, currency: 'USD',
     startDate: 'Q4 2026', equityNote: 'ESOP — 0.75–1.25%',
-    notes: 'Owns the HubCV, Dextrip, Franchiseen and Account Aggregator connectors that populate the five domains.',
+    notes: 'Owns the HubCV, Nanotrade, Franchiseen and Account Aggregator connectors that populate the five domains.',
   },
   {
     id: 'PAY-008', name: 'Dubai HoldCo Legal Counsel (TBD)', role: 'DIFC Incorporation & Token Structure', type: 'contractor',
@@ -186,7 +186,7 @@ export const PAYROLL: PayrollEntry[] = [
   },
   {
     id: 'PAY-009', name: 'Strategy Creator Lead (TBD)', role: 'Community & Creator Programme', type: 'employee',
-    ventures: ['Dextrip'],
+    ventures: ['Nanotrade'],
     status: 'open', monthlyCost: 3500, oneTimeCost: 0, currency: 'USD',
     startDate: 'Q3 2026', equityNote: 'ESOP — 0.25–0.5%',
     notes: 'Owns creator recruitment and marketplace growth. Crypto-native community experience required.',

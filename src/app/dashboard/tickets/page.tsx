@@ -9,9 +9,9 @@ export default function TicketsPage() {
         <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '2rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>No tickets open</div>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
-            Support tickets will appear here from Dextrip users (public beta launch), Franchiseen investors, and HubCV professionals. Set up the intake channel — email or in-app form — before each venture goes live.
+            Support tickets will appear here from Nanotrade users (public beta launch), Franchiseen investors, and HubCV professionals. Set up the intake channel — email or in-app form — before each venture goes live.
             <br /><br />
-            <strong style={{ color: 'var(--off-white)' }}>Priority:</strong> Dextrip support channel should be ready before public beta (July 10). Franchiseen investor support channel before pilot (July 15).
+            <strong style={{ color: 'var(--off-white)' }}>Priority:</strong> Nanotrade support channel should be ready before public beta (July 10). Franchiseen investor support channel before pilot (July 15).
           </p>
         </div>
       ) : null}

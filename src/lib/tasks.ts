@@ -1,6 +1,6 @@
 export type Priority = 'high' | 'medium' | 'low';
 export type Status   = 'todo' | 'in-progress' | 'done';
-export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Llife' | 'Dextrip';
+export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Llife' | 'Nanotrade';
 
 export interface Task {
   id: string;
@@ -16,7 +16,7 @@ export const PROJECT_COLORS: Record<Project, string> = {
   Franchiseen:'#c8c8c8',
   HubCV:      '#b5b5b5',
   Llife:    '#a5a5a5',
-  Dextrip:    '#adadad',
+  Nanotrade:    '#adadad',
 };
 
 /**
@@ -92,11 +92,11 @@ export const SEED_TASKS: Task[] = [
 
   // ── LLIFE ─────────────────────────────────────────────────────────────
   { id: 'c01', project: 'Llife', category: 'Product',        priority: 'high',   status: 'done',        title: 'Five-domain model specification' },
-  { id: 'c02', project: 'Llife', category: 'Business',       priority: 'high',   status: 'in-progress', title: 'Ecosystem API contracts with HubCV and Dextrip' },
+  { id: 'c02', project: 'Llife', category: 'Business',       priority: 'high',   status: 'in-progress', title: 'Ecosystem API contracts with HubCV and Nanotrade' },
   { id: 'c03', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'AI personal assistant core development' },
   { id: 'c04', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'HubCV Education API integration' },
   { id: 'c05', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Routine learning algorithm' },
-  { id: 'c06', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Dextrip + Franchiseen Earnings integration' },
+  { id: 'c06', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Nanotrade + Franchiseen Earnings integration' },
   { id: 'c07', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Voice command integration' },
   { id: 'c08', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Mobile app development' },
   { id: 'c09', project: 'Llife', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Ambient intelligence layer' },
@@ -106,20 +106,20 @@ export const SEED_TASKS: Task[] = [
   { id: 'c13', project: 'Llife', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta waitlist setup and launch' },
   { id: 'c14', project: 'Llife', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'B2C go-to-market strategy' },
 
-  // ── DEXTRIP ───────────────────────────────────────────────────────────
-  { id: 'd01', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'done',        title: 'Strategy engine — closed beta live' },
-  { id: 'd02', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'in-progress', title: 'Multi-exchange connector' },
-  { id: 'd03', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'in-progress', title: 'Live trading dashboard' },
-  { id: 'd04', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Backtesting engine' },
-  { id: 'd05', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Strategy marketplace' },
-  { id: 'd06', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Risk management system' },
-  { id: 'd07', project: 'Dextrip', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Non-custodial wallet integration' },
-  { id: 'd08', project: 'Dextrip', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Portfolio analytics dashboard' },
-  { id: 'd09', project: 'Dextrip', category: 'Product',        priority: 'medium', status: 'todo',        title: 'DeFi protocol integrations' },
-  { id: 'd10', project: 'Dextrip', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Mobile trading alerts' },
-  { id: 'd11', project: 'Dextrip', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Public beta launch' },
-  { id: 'd12', project: 'Dextrip', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Subscription payment processing' },
-  { id: 'd13', project: 'Dextrip', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Go-to-market strategy' },
-  { id: 'd14', project: 'Dextrip', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Community and Discord setup' },
-  { id: 'd15', project: 'Dextrip', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta user acquisition plan' },
+  // ── NANOTRADE ───────────────────────────────────────────────────────────
+  { id: 'd01', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'done',        title: 'Strategy engine — closed beta live' },
+  { id: 'd02', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'in-progress', title: 'Multi-exchange connector' },
+  { id: 'd03', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'in-progress', title: 'Live trading dashboard' },
+  { id: 'd04', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Backtesting engine' },
+  { id: 'd05', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Strategy marketplace' },
+  { id: 'd06', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Risk management system' },
+  { id: 'd07', project: 'Nanotrade', category: 'Product',        priority: 'high',   status: 'todo',        title: 'Non-custodial wallet integration' },
+  { id: 'd08', project: 'Nanotrade', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Portfolio analytics dashboard' },
+  { id: 'd09', project: 'Nanotrade', category: 'Product',        priority: 'medium', status: 'todo',        title: 'DeFi protocol integrations' },
+  { id: 'd10', project: 'Nanotrade', category: 'Product',        priority: 'medium', status: 'todo',        title: 'Mobile trading alerts' },
+  { id: 'd11', project: 'Nanotrade', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Public beta launch' },
+  { id: 'd12', project: 'Nanotrade', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Subscription payment processing' },
+  { id: 'd13', project: 'Nanotrade', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Go-to-market strategy' },
+  { id: 'd14', project: 'Nanotrade', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Community and Discord setup' },
+  { id: 'd15', project: 'Nanotrade', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta user acquisition plan' },
 ];
