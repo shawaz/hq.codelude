@@ -10,7 +10,7 @@ const PROJECTS: { name: Project; sector: string }[] = [
   { name: 'Roborns',     sector: 'Coastal AI Infrastructure' },
   { name: 'Franchiseen', sector: 'AI Business Assistant' },
   { name: 'HubCV',       sector: 'AI Career Assistant' },
-  { name: 'Dextrip',     sector: 'AI Trading Assistant' },
+  { name: 'Nanotrade',     sector: 'AI Trading Assistant' },
   { name: 'Llife',       sector: 'AI Life Assistant' },
 ];
 

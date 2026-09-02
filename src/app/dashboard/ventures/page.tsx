@@ -19,16 +19,16 @@ const ALL_VENTURE_CARDS = [
     milestones: ['Matching engine in development', 'Recruiter partnership outreach started', 'Beta target Q4 2026', 'Full launch 2027'],
   },
   {
-    num: '04', name: 'Dextrip', sector: 'AI Trading Assistant', color: '#adadad',
-    url: 'dextrip.com', holdco: '—', status: 'Closed Beta',
-    desc: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies and let Dextrip execute across exchanges — your keys, your funds, automated.',
+    num: '04', name: 'Nanotrade', sector: 'AI Trading Assistant', color: '#adadad',
+    url: 'nanotrade.com', holdco: '—', status: 'Closed Beta',
+    desc: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies and let Nanotrade execute across exchanges — your keys, your funds, automated.',
     milestones: ['Strategy engine — closed beta live', 'Multi-exchange connector in build', 'Public beta Q3 2026', 'Strategy marketplace opens to creators'],
   },
   {
     num: '05', name: 'Llife', sector: 'AI Life Assistant', color: '#a5a5a5',
     url: 'llife.ai', holdco: '—', status: 'Planning',
-    desc: 'An AI personal assistant for day-to-day life across five domains — Finances, Education, Earnings, Mind and Body — on a daily time-block board. Education is fed by the HubCV API, Earnings by the Dextrip (job, crypto, stocks) and Franchiseen (franchise) APIs, so the board arrives already populated.',
-    milestones: ['Five-domain model defined', 'HubCV Education API integration in build', 'Dextrip + Franchiseen Earnings integration Q4 2026', 'Private beta Q4 2026'],
+    desc: 'An AI personal assistant for day-to-day life across five domains — Finances, Education, Earnings, Mind and Body — on a daily time-block board. Education is fed by the HubCV API, Earnings by the Nanotrade (job, crypto, stocks) and Franchiseen (franchise) APIs, so the board arrives already populated.',
+    milestones: ['Five-domain model defined', 'HubCV Education API integration in build', 'Nanotrade + Franchiseen Earnings integration Q4 2026', 'Private beta Q4 2026'],
   },
 ];
 

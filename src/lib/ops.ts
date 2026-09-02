@@ -29,7 +29,7 @@ export interface Department {
 }
 
 export const DEPARTMENTS: Department[] = [
-  { name: 'Engineering', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['Codelude', 'Roborns', 'Dextrip', 'HubCV', 'Llife', 'Franchiseen'], status: 'active', responsibilities: ['Platform development', 'Infrastructure management', 'Llife protocol', 'HubCV matching engine', 'Dextrip automation engine'] },
+  { name: 'Engineering', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['Codelude', 'Roborns', 'Nanotrade', 'HubCV', 'Llife', 'Franchiseen'], status: 'active', responsibilities: ['Platform development', 'Infrastructure management', 'Llife protocol', 'HubCV matching engine', 'Nanotrade automation engine'] },
   { name: 'Strategy & Finance', lead: 'Shawaz', headcount: 1, ventures: ['Codelude'], status: 'active', responsibilities: ['Venture strategy', 'Financial modelling', 'Investor relations', 'HoldCo token structure', 'Budget management'] },
   { name: 'Operations', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['Codelude'], status: 'active', responsibilities: ['Company OS (HQ)', 'Legal coordination', 'Partner management', 'Procurement', 'Team administration'] },
   { name: 'Roborns Engineering', lead: 'TBH — Thermal Engineer', headcount: 0, ventures: ['Roborns'], status: 'forming', responsibilities: ['Site engineering', 'Thermal system design', 'Desalination unit', 'Coastal infrastructure', 'Govt permit liaison'] },
@@ -80,10 +80,10 @@ export const PROPERTIES: Property[] = [
   { name: 'roborns.com', type: 'Domain', venture: 'Roborns', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Venture website live.' },
   { name: 'franchiseen.com', type: 'Domain', venture: 'Franchiseen', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Platform domain. Website pending.' },
   { name: 'hubcv.pro', type: 'Domain', venture: 'HubCV', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Platform domain. Website pending.' },
-  { name: 'dextrip.com', type: 'Domain', venture: 'Dextrip', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Live trading platform domain.' },
+  { name: 'nanotrade.com', type: 'Domain', venture: 'Nanotrade', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Live trading platform domain.' },
   { name: 'llife.ai', type: 'Domain', venture: 'Llife', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Platform domain. Website pending.' },
   { name: 'Roborns Coastal Site — Mangaluru', type: 'Physical', venture: 'Roborns', status: 'planned', value: 'Land lease TBD', location: 'Uchila Thalapady, Mangaluru', notes: '1-acre coastal site for Phase 1 facility. Lease pending site survey and permits.' },
   { name: 'Llife Five-Domain Model', type: 'IP', venture: 'Llife', status: 'in-development', value: 'Proprietary', location: 'GitHub / llife / docs', notes: 'Domain taxonomy, time-block schema and the scoring model behind the daily review. Internal IP.' },
-  { name: 'Dextrip Strategy Engine', type: 'IP', venture: 'Dextrip', status: 'active', value: 'Proprietary', location: 'GitHub / dextrip', notes: 'Multi-exchange trading automation engine. Core IP of the Dextrip platform.' },
+  { name: 'Nanotrade Strategy Engine', type: 'IP', venture: 'Nanotrade', status: 'active', value: 'Proprietary', location: 'GitHub / nanotrade', notes: 'Multi-exchange trading automation engine. Core IP of the Nanotrade platform.' },
   { name: 'HubCV Matching Algorithm', type: 'IP', venture: 'HubCV', status: 'in-development', value: 'Proprietary', location: 'GitHub / hubcv', notes: 'AI-driven candidate-to-opportunity matching. In development.' },
 ];

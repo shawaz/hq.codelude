@@ -26,7 +26,7 @@ const ALL_VENTURE_CARDS = [
     metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
   },
   {
-    name: 'Dextrip',     color: '#adadad', sector: 'AI Trading Assistant',
+    name: 'Nanotrade',     color: '#adadad', sector: 'AI Trading Assistant',
     status: 'Live — Beta', statusColor: '#dbdbdb',
     metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
   },
@@ -193,7 +193,7 @@ ${tasksSection(tasks)}`,
     Franchiseen: ['Which KYC provider should I choose?', 'How do I find the first franchise brand partner?', 'Draft an outreach email to a franchise brand', 'What are the SEBI compliance steps?'],
     HubCV:       ['How do I get the first 5 recruiter design partners?', 'Draft outreach to a bootcamp', 'What should the matching engine prioritise?', 'How do I recruit human skill verifiers?'],
     Llife:     ['How should Llife pull Education data from HubCV?', 'Design the daily time-block board', 'What does Account Aggregator onboarding require?', 'How do I keep daily retention above 40%?'],
-    Dextrip:     ['Why is EMA Trend performing this way?', 'How should I recruit the first strategy creators?', 'Draft a tweet for the public beta launch', 'What DeFi integrations should I prioritise?'],
+    Nanotrade:     ['Why is EMA Trend performing this way?', 'How should I recruit the first strategy creators?', 'Draft a tweet for the public beta launch', 'What DeFi integrations should I prioritise?'],
   };
 
   return (

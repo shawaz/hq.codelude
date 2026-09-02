@@ -57,22 +57,22 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Dextrip Web',
-    domain: 'bot.dextrip.com',
+    platform: 'Nanotrade Web',
+    domain: 'bot.nanotrade.com',
     color: '#adadad',
     features: [
       { name: 'Strategy dashboard',    description: 'View and manage active trading strategies across exchanges',                             status: 'live' },
       { name: 'Account management',    description: 'Exchange API key management and account overview',                                       status: 'live' },
       { name: 'Live P&L tracking',     description: 'Real-time profit and loss across all active strategies',                                status: 'live' },
-      { name: 'Multi-exchange support',description: 'Supports multiple exchanges via the dextrip-multi-bot engine',                          status: 'live' },
+      { name: 'Multi-exchange support',description: 'Supports multiple exchanges via the nanotrade-multi-bot engine',                          status: 'live' },
       { name: 'Webhook integration',   description: 'External signal ingestion via /webhook/5m and /webhook/15m endpoints',                  status: 'live' },
       { name: 'Strategy marketplace',  description: 'Shareable strategy library for team and eventually public users',                       status: 'planned' },
       { name: 'Public beta',           description: 'Open registration and onboarding for paying users',                                     status: 'planned' },
     ],
   },
   {
-    platform: 'Dextrip TV',
-    domain: 'tv.dextrip.com',
+    platform: 'Nanotrade TV',
+    domain: 'tv.nanotrade.com',
     color: '#adadad',
     features: [
       { name: 'Live market dashboard', description: 'Real-time price charts and market data display optimised for large screens',            status: 'live' },
@@ -82,7 +82,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Spot Dashboard',
-    domain: 'spot.dextrip.com',
+    domain: 'spot.nanotrade.com',
     color: '#adadad',
     features: [
       { name: 'Spot trade dashboard',  description: 'Real-time spot trading interface backed by spot-bot Python service on port 8788',       status: 'live' },
@@ -100,11 +100,11 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Dextrip Client Portal',
-    domain: 'client.dextrip.com',
+    platform: 'Nanotrade Client Portal',
+    domain: 'client.nanotrade.com',
     color: '#adadad',
     features: [
-      { name: 'Client dashboard',      description: 'Investor-facing portal to manage Dextrip investment — track trades, deposits, and profits', status: 'live' },
+      { name: 'Client dashboard',      description: 'Investor-facing portal to manage Nanotrade investment — track trades, deposits, and profits', status: 'live' },
       { name: 'Trade history',         description: 'Full trade log with P&L per trade and aggregate performance',                            status: 'live' },
       { name: 'Deposit / withdrawal',  description: 'Capital management flows for client accounts',                                          status: 'live' },
       { name: 'Authentication',        description: 'Secure client login and session management',                                            status: 'live' },
@@ -166,7 +166,7 @@ const DATA: PlatformFeatures[] = [
       { name: 'Daily tracker board',       description: 'Time-blocked board (6\u20138AM, 8\u20139AM, 9AM\u20134PM, 5PM, weekend) with per-item status and streaks', status: 'in-progress' },
       { name: 'AI personal assistant core',description: 'Routine learning algorithm — home learns behaviour and acts proactively before being asked',    status: 'planned' },
       { name: 'HubCV Education API',        description: 'College, School, Certificates, Internship and Skills pulled from the HubCV profile graph',    status: 'in-progress' },
-      { name: 'Dextrip Earnings API',       description: 'Job, Crypto and Stocks positions with live P&L streamed from Dextrip',                        status: 'planned' },
+      { name: 'Nanotrade Earnings API',       description: 'Job, Crypto and Stocks positions with live P&L streamed from Nanotrade',                        status: 'planned' },
       { name: 'Franchiseen Earnings API',   description: 'Franchise ownership stakes, payout schedule and AUM per investor',                            status: 'planned' },
       { name: 'Finances domain',            description: 'Net Worth, Credits, Investments, Assets and Charity via RBI Account Aggregator consent rails', status: 'planned' },
       { name: 'Mind + Body domains',        description: 'Family, Exercise, Diet, Prayers, Social and Memories \u2014 tracked routines with health sync',    status: 'planned' },

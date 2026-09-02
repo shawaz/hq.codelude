@@ -10,7 +10,7 @@ const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = 
   terminated: { color: '#9d9d9d', label: 'Terminated' },
 };
 const TYPE_COLORS: Record<string, string> = { Service: '#c8c8c8', Employment: '#dbdbdb', Partnership: '#eeeeee', Investment: '#b5b5b5', Lease: '#a5a5a5', SaaS: '#adadad', Advisory: '#b5b5b5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad' };
+const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
 
 export default function ContractsPage() {
   const active = CONTRACTS.filter(c => c.status === 'active').length;

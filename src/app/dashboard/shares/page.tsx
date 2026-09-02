@@ -7,7 +7,7 @@ const ENTITY_COLORS: Record<string, string> = {
   'Codelude HoldCo (Dubai)':  '#eeeeee',
   'Roborns (Project Entity)': '#dbdbdb',
   'Franchiseen (Project)':    '#c8c8c8',
-  'Dextrip (Project)':        '#adadad',
+  'Nanotrade (Project)':        '#adadad',
   'HubCV (Project)':          '#b5b5b5',
   'Llife (Project)':        '#a5a5a5',
 };

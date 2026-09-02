@@ -242,11 +242,11 @@ export const PLANS: VenturePlan[] = [
     },
   },
   {
-    name: 'Dextrip',
+    name: 'Nanotrade',
     color: '#adadad',
     sector: 'AI Trading Assistant',
     businessModel: {
-      valueProp: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies, let Dextrip execute on your behalf across exchanges — your keys, your funds, automated.',
+      valueProp: 'Algorithmic trading without coding or custodial risk. Build or subscribe to strategies, let Nanotrade execute on your behalf across exchanges — your keys, your funds, automated.',
       revenueStreams: [
         { stream: 'Strategy subscription',   description: 'Access to the strategy marketplace — $29–99/month per user' },
         { stream: 'Performance fee',         description: '5–10% of net profits on managed strategy tiers (optional)' },
@@ -275,7 +275,7 @@ export const PLANS: VenturePlan[] = [
     },
     businessPlan: {
       problem: 'Retail traders cannot compete with algorithmic speed and discipline. Existing bots either require coding, custody funds (custodial risk), or are black-box with no transparency. The market needs non-custodial, composable, strategy-shareable automation.',
-      solution: 'A non-custodial trading automation platform. Users connect their exchange API keys or DeFi wallets. They subscribe to or build strategies. Dextrip executes on their behalf with full transparency. Strategy marketplace creates a flywheel — creators publish, users subscribe, platform earns.',
+      solution: 'A non-custodial trading automation platform. Users connect their exchange API keys or DeFi wallets. They subscribe to or build strategies. Nanotrade executes on their behalf with full transparency. Strategy marketplace creates a flywheel — creators publish, users subscribe, platform earns.',
       market: [
         { label: 'Algorithmic trading market', size: '$18B+ globally' },
         { label: 'Crypto retail trading',      size: '$50B+ daily volume on major exchanges' },
@@ -317,7 +317,7 @@ export const PLANS: VenturePlan[] = [
         { stream: 'Personal subscription',  description: 'Full assistant across all five domains \u2014 $9\u201319/month per user' },
         { stream: 'Family plan',            description: 'Shared household view with per-member privacy \u2014 $29/month' },
         { stream: 'Premium insights',       description: 'Deeper net-worth, tax and goal planning on top of the base tier' },
-        { stream: 'Ecosystem referral',     description: 'Qualified referrals into HubCV, Dextrip and Franchiseen from the domains they power' },
+        { stream: 'Ecosystem referral',     description: 'Qualified referrals into HubCV, Nanotrade and Franchiseen from the domains they power' },
       ],
       customerSegments: [
         { segment: 'Students',                description: 'Education domain works on day one via HubCV \u2014 the warmest acquisition channel' },
@@ -334,7 +334,7 @@ export const PLANS: VenturePlan[] = [
       ],
       keyPartners: [
         'HubCV (Education domain API \u2014 internal)',
-        'Dextrip (Job, Crypto and Stocks API \u2014 internal)',
+        'Nanotrade (Job, Crypto and Stocks API \u2014 internal)',
         'Franchiseen (Franchise ownership API \u2014 internal)',
         'RBI Account Aggregator network (bank and credit data)',
         'Apple HealthKit / Google Health Connect (Body domain)',
@@ -342,17 +342,17 @@ export const PLANS: VenturePlan[] = [
     },
     businessPlan: {
       problem: 'A person\u2019s life is scattered across a dozen apps \u2014 one for the bank, one for stocks, one for crypto, one for coursework, one for the gym. Nobody sees the whole picture, so nothing gets reviewed and nothing compounds.',
-      solution: 'An AI assistant that unifies five life domains into one daily board. Education pulls from HubCV, Earnings from Dextrip and Franchiseen, Finances from the Account Aggregator rails, and Mind and Body from tracked routines \u2014 each mapped to a time block so the day has a shape, and the assistant reviews it with you.',
+      solution: 'An AI assistant that unifies five life domains into one daily board. Education pulls from HubCV, Earnings from Nanotrade and Franchiseen, Finances from the Account Aggregator rails, and Mind and Body from tracked routines \u2014 each mapped to a time block so the day has a shape, and the assistant reviews it with you.',
       market: [
         { label: 'Personal finance apps',     size: '$1.5B+ India, growing with UPI and AA adoption' },
         { label: 'Personal AI assistants',    size: '$15B+ and growing' },
         { label: 'Habit and productivity',    size: '$12B globally' },
       ],
-      gtm: 'Launch inside the existing ecosystem first \u2014 HubCV students get Llife with their Education domain already populated, which removes the empty-state problem that kills most trackers. Expand to Earnings via Dextrip and Franchiseen users, then open the Finances domain once Account Aggregator consent is live.',
+      gtm: 'Launch inside the existing ecosystem first \u2014 HubCV students get Llife with their Education domain already populated, which removes the empty-state problem that kills most trackers. Expand to Earnings via Nanotrade and Franchiseen users, then open the Finances domain once Account Aggregator consent is live.',
       milestones: [
         { date: 'Q2 2026', title: 'Five-domain model defined',                  done: true  },
         { date: 'Q3 2026', title: 'HubCV Education API integration',            done: false },
-        { date: 'Q4 2026', title: 'Dextrip + Franchiseen Earnings integration', done: false },
+        { date: 'Q4 2026', title: 'Nanotrade + Franchiseen Earnings integration', done: false },
         { date: 'Q4 2026', title: 'Daily tracker board in private beta',        done: false },
         { date: 'Q1 2027', title: 'Account Aggregator consent live',            done: false },
         { date: 'Q2 2027', title: 'Public launch with subscription tier',       done: false },
@@ -365,7 +365,7 @@ export const PLANS: VenturePlan[] = [
       revenueModel: [
         { label: 'Personal subscription', value: '$9\u201319/month \u2014 85%+ gross margin after inference' },
         { label: 'Family plan',           value: '$29/month \u2014 higher retention, lower churn' },
-        { label: 'Ecosystem referral',    value: 'Qualified leads into HubCV, Dextrip and Franchiseen' },
+        { label: 'Ecosystem referral',    value: 'Qualified leads into HubCV, Nanotrade and Franchiseen' },
       ],
       year1Target:   '$40K\u2013120K revenue (500\u20131,000 subscribers post-launch)',
       breakEven:     '15\u201320 months \u2014 software margins, so volume rather than unit cost is the constraint',

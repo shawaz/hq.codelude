@@ -39,12 +39,12 @@ export const VENTURE_PARTNERS: Record<string, Partner[]> = {
   ],
   Llife: [
     { name: 'HubCV (internal API)',           type: 'Technology',   status: 'active',       role: 'Education domain — College, School, Certificates, Internship and Skills read from the HubCV profile graph', nextAction: 'Scope a read-only education endpoint and issue Llife a service key' },
-    { name: 'Dextrip (internal API)',         type: 'Technology',   status: 'active',       role: 'Earnings domain — Job, Crypto and Stocks positions with live P&L streamed from Dextrip', nextAction: 'Agree the portfolio read schema, refresh interval and rate limits' },
+    { name: 'Nanotrade (internal API)',         type: 'Technology',   status: 'active',       role: 'Earnings domain — Job, Crypto and Stocks positions with live P&L streamed from Nanotrade', nextAction: 'Agree the portfolio read schema, refresh interval and rate limits' },
     { name: 'Franchiseen (internal API)',     type: 'Technology',   status: 'active',       role: 'Earnings domain — franchise ownership stakes, payout schedule and AUM per investor', nextAction: 'Expose a per-investor holdings endpoint for Llife to consume' },
     { name: 'Account Aggregator (Sahamati)',  type: 'Financial',    status: 'prospecting',  role: 'RBI Account Aggregator consent rails — bank balances, credits and net worth for the Finances domain', nextAction: 'Shortlist an AA technology service provider and review consent-flow rules' },
     { name: 'Health Platform Partners (TBD)', type: 'Technology',   status: 'prospecting',  role: 'Body domain — Apple HealthKit and Google Health Connect sync for exercise, diet and sleep', nextAction: 'Scope read permissions and app-store privacy disclosures for health data' },
   ],
-  Dextrip: [
+  Nanotrade: [
     { name: 'Binance',                        type: 'Technology',   status: 'active',       role: 'Primary exchange — API access for multi-strategy execution, spot + derivatives', nextAction: 'Upgrade to VIP API tier to increase rate limits for public beta' },
     { name: 'Bybit',                          type: 'Technology',   status: 'active',       role: 'Secondary exchange — derivatives and spot execution', nextAction: 'Complete Bybit connector for multi-exchange beta launch' },
     { name: 'OKX',                            type: 'Technology',   status: 'prospecting',  role: 'Third exchange — DeFi chain access via OKX Web3 wallet', nextAction: 'Begin OKX API integration post Bybit connector completion' },
@@ -82,13 +82,13 @@ export const VENTURE_ACTIVITIES: Record<string, VActivity[]> = {
   ],
   Llife: [
     { date: '2026-04-28', category: 'Milestone',   title: 'Five-domain model defined',                    description: 'Finances, Education, Earnings, Mind and Body fixed as the assistant\u2019s domains, each mapped to a daily time block.' },
-    { date: '2026-03-28', category: 'Partnership', title: 'Internal API integrations scoped',             description: 'HubCV, Dextrip and Franchiseen agreed as the first data sources feeding Education and Earnings.' },
+    { date: '2026-03-28', category: 'Partnership', title: 'Internal API integrations scoped',             description: 'HubCV, Nanotrade and Franchiseen agreed as the first data sources feeding Education and Earnings.' },
     { date: '2026-02-10', category: 'Decision',    title: 'Property developer channel prioritised',       description: 'Decision: lead with property developer channel over DTC. Reduces CAC, provides volume anchor for first MOQ.' },
   ],
-  Dextrip: [
+  Nanotrade: [
     { date: '2026-05-21', category: 'Product',     title: 'Entry timing updated — dual window',          description: 'Bot now enters within 60s of event start AND 60s before next event. Price filter set to < $0.55.' },
     { date: '2026-05-18', category: 'Milestone',   title: 'Strategy engine closed beta live',             description: '3 paying beta users. Multi-exchange connector in development. Live P&L tracking confirmed.' },
-    { date: '2026-05-20', category: 'Launch',      title: 'client.dextrip.com launched',                 description: 'Client investment portal live at client.dextrip.com — trades, deposits, profits.' },
+    { date: '2026-05-20', category: 'Launch',      title: 'client.nanotrade.com launched',                 description: 'Client investment portal live at client.nanotrade.com — trades, deposits, profits.' },
     { date: '2026-03-20', category: 'Finance',     title: 'First closed beta revenue collected',          description: 'First subscription payments from closed beta users confirmed. Model validated at small scale.' },
     { date: '2026-02-20', category: 'Decision',    title: 'Strategy marketplace model approved',          description: 'Decision: creator marketplace with 30% revenue share. Each creator = distribution channel.' },
   ],
@@ -134,12 +134,12 @@ export const VENTURE_CHANNELS: Record<string, VChannel[]> = {
     { name: 'Instagram + YouTube',       type: 'Marketing', status: 'planned',   description: 'Short-form content on daily life tracking — net worth, streaks and routine reviews in action', metric: 'Views and waitlist sign-ups' },
     { name: 'llife.ai',               type: 'Marketing', status: 'planned',   description: 'Product website with beta waitlist, the five-domain explainer, and daily-board demo', metric: 'Waitlist registrations' },
   ],
-  Dextrip: [
+  Nanotrade: [
     { name: 'Twitter / X community',     type: 'Community', status: 'building',  description: 'Strategy performance sharing, market commentary, creator-friendly content', metric: 'Followers and engagement' },
     { name: 'Strategy creator programme',type: 'Distribution',status: 'planned', description: '20 creators recruited pre-beta — 30% rev-share, co-marketing, early access', metric: 'Active strategy creators' },
     { name: 'Discord',                   type: 'Community', status: 'planned',   description: 'Strategy marketplace community — bug reports, feature requests, alpha signals', metric: 'Active members per week' },
-    { name: 'Dextrip.com',             type: 'Marketing', status: 'active',    description: 'Main platform — strategy dashboard, public beta registration', metric: 'Beta sign-ups' },
-    { name: 'bot.dextrip.com',         type: 'Marketing', status: 'active',    description: 'Bot dashboard — strategies, account management, P&L', metric: 'Active strategy count' },
+    { name: 'Nanotrade.com',             type: 'Marketing', status: 'active',    description: 'Main platform — strategy dashboard, public beta registration', metric: 'Beta sign-ups' },
+    { name: 'bot.nanotrade.com',         type: 'Marketing', status: 'active',    description: 'Bot dashboard — strategies, account management, P&L', metric: 'Active strategy count' },
     { name: 'Crypto media outreach',    type: 'Marketing', status: 'planned',   description: 'CoinDesk, The Block, Decrypt — after public beta launch', metric: 'Articles and media mentions' },
   ],
 };
@@ -179,8 +179,8 @@ export const VENTURE_RELATIONS: Record<string, VRelation[]> = {
     { name: 'Consumer AI Angels',          category: 'Investor',    health: 'target',     description: 'Consumer subscription and personal-finance angels for the pre-seed round', lastContact: 'Not yet', nextStep: 'Build investor list once retention data exists from private beta' },
     { name: 'Smart Home Media',            category: 'Media',       health: 'target',     description: 'The Verge, TechCrunch, Wired — pilot story coverage for DTC launch', lastContact: 'Not yet', nextStep: 'Prepare pilot documentation for press kit' },
   ],
-  Dextrip: [
-    { name: 'Dextrip Beta Users (3)',      category: 'Customer',    health: 'strong',     description: '3 paying closed beta subscribers — validating model and retention', lastContact: 'May 2026', nextStep: 'Gather testimonials and onboard as first marketplace contributors' },
+  Nanotrade: [
+    { name: 'Nanotrade Beta Users (3)',      category: 'Customer',    health: 'strong',     description: '3 paying closed beta subscribers — validating model and retention', lastContact: 'May 2026', nextStep: 'Gather testimonials and onboard as first marketplace contributors' },
     { name: 'Crypto Trading Community',    category: 'Community',   health: 'developing', description: 'Retail and semi-professional traders active on Crypto Twitter and Discord', lastContact: 'May 2026', nextStep: 'Engage 10 strategy creators with marketplace invite and rev-share offer' },
     { name: 'Quant / Strategy Creators',  category: 'Customer',    health: 'target',     description: 'Developers and quants who want to monetise their strategies', lastContact: 'Not yet', nextStep: 'Launch creator outreach programme targeting quant Twitter' },
     { name: 'Crypto / DeFi Media',        category: 'Media',       health: 'target',     description: 'CoinDesk, The Block, Decrypt — after public beta and marketplace launch', lastContact: 'Not yet', nextStep: 'Prepare public beta press release for July 2026 launch' },
@@ -250,7 +250,7 @@ export const VENTURE_RESOURCES: Record<string, Resource[]> = {
   Llife: [
     // Human
     { name: 'Product Engineer (Mobile)',    type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 6000, oneTimeCost: 0,     notes: 'Owns the daily tracker UI \u2014 time-block board, streaks, offline-first sync' },
-    { name: 'Integrations Engineer',        type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 7000, oneTimeCost: 0,     notes: 'Builds and maintains the HubCV, Dextrip, Franchiseen and Account Aggregator connectors' },
+    { name: 'Integrations Engineer',        type: 'Human',      status: 'needed',  priority: 'critical', monthlyCost: 7000, oneTimeCost: 0,     notes: 'Builds and maintains the HubCV, Nanotrade, Franchiseen and Account Aggregator connectors' },
     { name: 'Mobile App Developer',         type: 'Human',      status: 'planned', priority: 'high',     monthlyCost: 5000, oneTimeCost: 0,     notes: 'iOS and Android Llife app. React Native preferred. Y2 hire.' },
     // Technology
     { name: 'LLM Inference Budget',         type: 'Technology', status: 'needed',  priority: 'critical', monthlyCost: 2000, oneTimeCost: 0,     notes: 'Per-user assistant reasoning \u2014 daily summaries, nudges and domain reviews' },
@@ -263,14 +263,14 @@ export const VENTURE_RESOURCES: Record<string, Resource[]> = {
     // Legal
     { name: 'Product Liability Insurance', type: 'Legal',      status: 'planned', priority: 'medium',   monthlyCost: 300,  oneTimeCost: 0,     notes: 'Required before retail sale of consumer electronic device' },
   ],
-  Dextrip: [
+  Nanotrade: [
     // Human
     { name: 'Creator Programme Lead',      type: 'Human',      status: 'needed',  priority: 'high',     monthlyCost: 3500, oneTimeCost: 0,     notes: 'Recruits and manages strategy creators. Crypto-native, community experience required.' },
     { name: 'Platform Engineer',           type: 'Human',      status: 'planned', priority: 'high',     monthlyCost: 6000, oneTimeCost: 0,     notes: 'Y2 hire: owns strategy marketplace, institutional API, DeFi integrations.' },
     // Technology
     { name: 'Binance API (VIP tier)',      type: 'Technology', status: 'active',  priority: 'critical', monthlyCost: 200,  oneTimeCost: 0,     notes: 'Higher rate limits for public beta scale. Volume-based pricing.' },
     { name: 'Bybit API',                  type: 'Technology', status: 'active',  priority: 'high',     monthlyCost: 100,  oneTimeCost: 0,     notes: 'Secondary exchange connector for derivatives and spot' },
-    { name: 'Server Infrastructure',      type: 'Technology', status: 'active',  priority: 'high',     monthlyCost: 200,  oneTimeCost: 0,     notes: 'VPS hosting all Dextrip apps — bot.dextrip.com, tv, spot, client portal' },
+    { name: 'Server Infrastructure',      type: 'Technology', status: 'active',  priority: 'high',     monthlyCost: 200,  oneTimeCost: 0,     notes: 'VPS hosting all Nanotrade apps — bot.nanotrade.com, tv, spot, client portal' },
     { name: 'OKX API',                    type: 'Technology', status: 'planned', priority: 'medium',   monthlyCost: 100,  oneTimeCost: 0,     notes: 'Third exchange — DeFi chain access. Planned post-Bybit completion.' },
     { name: 'GMX / dYdX Integration',     type: 'Technology', status: 'planned', priority: 'medium',   monthlyCost: 50,   oneTimeCost: 2000,  notes: 'DeFi protocol integration — on-chain execution. Development cost one-time.' },
     // Legal

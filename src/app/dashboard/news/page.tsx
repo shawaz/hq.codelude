@@ -4,7 +4,7 @@ const NEWS = [
   { date: 'May 19, 2026', title: 'Franchiseen payout architecture finalized.', body: 'Revenue-sharing and investor payout structure locked. First franchise partner onboarding begins next quarter.' },
   { date: 'May 15, 2026', title: 'Roborns thermal feasibility study commissioned.', body: 'Engagement with coastal infrastructure specialists begins. Site survey for the Mangaluru pilot facility underway.' },
   { date: 'May 10, 2026', title: 'HubCV matching engine in development.', body: 'AI-driven candidate-to-opportunity matching core in active development. First recruiter partnerships being established ahead of beta.' },
-  { date: 'Mar 2026', title: 'Llife five-domain model published.', body: 'Finances, Education, Earnings, Mind and Body fixed as the assistant\'s domains, each mapped to a daily time block. HubCV, Dextrip and Franchiseen agreed as the first data sources.' },
+  { date: 'Mar 2026', title: 'Llife five-domain model published.', body: 'Finances, Education, Earnings, Mind and Body fixed as the assistant\'s domains, each mapped to a daily time block. HubCV, Nanotrade and Franchiseen agreed as the first data sources.' },
 ];
 
 export default function NewsPage() {

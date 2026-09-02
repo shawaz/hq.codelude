@@ -11,7 +11,7 @@
  * bank accounts) have no tab of their own — see `isHoldCo` in src/lib/finance.ts
  * for how those surface instead.
  *
- * Ventures are filtered by the caller's access, so a member scoped to Dextrip
+ * Ventures are filtered by the caller's access, so a member scoped to Nanotrade
  * sees one tab here, not five.
  */
 

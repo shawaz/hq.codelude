@@ -6,7 +6,7 @@ import { sc, scBorder } from '@/lib/status-colors';
 
 const VENTURE_COLORS: Record<string, string> = {
   Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Dextrip: '#adadad',
+  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
 };
 const TYPE_COLORS: Record<string, string> = { Direct: '#9d9d9d', Indirect: '#b5b5b5', Adjacent: '#a5a5a5' };
 
