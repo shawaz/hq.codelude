@@ -53,6 +53,14 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         status: 'building',
         note: 'AI Business Assistant — fractional ownership platform. Code on server, deployment in progress.',
       },
+      {
+        name: 'Franchiseen Mobile',
+        pm2: 'EAS build — com.franchiseen.app',
+        stack: 'Expo 54 · React Native 0.81 · Clerk · Supabase · Stripe · NativeWind',
+        kind: 'Mobile',
+        status: 'building',
+        note: 'iOS + Android app — brand onboarding, property listing, franchise creation, payments and an admin console. Beta builds shipping via EAS; App Store submit not yet wired (eas.json submit block still has FILL_IN placeholders). Separate stack from the web platform: Supabase/Clerk, not Convex/Solana.',
+      },
     ],
   },
   {
