@@ -151,6 +151,29 @@ export const remove = mutation({
 });
 
 /** One-time seed from src/lib/people.ts. Idempotent on seedId. */
+/**
+ * Move every position from one venture name to another.
+ *
+ * The other half of a venture rename. seedFromStatic skips any seedId that
+ * already exists, so stored rows keep the old name and silently drift from the
+ * registry — and a row whose venture has left the registry is filtered out of
+ * `list`, so the drift shows up as records vanishing rather than as an error.
+ * Renaming the Codelude HoldCo to LLIFE hid three positions this way.
+ *
+ * Internal: maintenance only.
+ */
+export const renameVenture = internalMutation({
+  args: { from: v.string(), to: v.string() },
+  handler: async (ctx, args) => {
+    const rows = (await ctx.db.query("positions").collect())
+      .filter((r) => r.venture === args.from);
+    for (const r of rows) {
+      await ctx.db.patch(r._id, { venture: args.to });
+    }
+    return { renamed: rows.length, from: args.from, to: args.to };
+  },
+});
+
 export const seedFromStatic = internalMutation({
   args: {
     rows: v.array(
