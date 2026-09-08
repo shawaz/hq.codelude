@@ -1,4 +1,5 @@
 import { sc, scBorder } from '@/lib/status-colors';
+import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type Status = 'live' | 'stopped' | 'static' | 'building';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static' | 'Mobile';
 
@@ -15,24 +16,24 @@ interface Platform {
 
 const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   {
-    title: 'Codelude',
+    title: 'LLIFE',
     color: '#eeeeee',
     platforms: [
       {
-        name: 'Codelude Web',
-        domain: 'codelude.com',
+        name: 'Llife Web',
+        domain: APP_DOMAIN,
         port: 3004,
-        pm2: 'codelude-web',
+        pm2: 'llife-web',
         stack: 'Next.js 16 · Outfit + DM Mono',
         kind: 'Web',
         status: 'live',
         note: 'Public company website — ventures, token, news, contact',
       },
       {
-        name: 'Codelude HQ',
-        domain: 'hq.codelude.com',
+        name: 'Llife HQ',
+        domain: HQ_DOMAIN,
         port: 3005,
-        pm2: 'hq-codelude',
+        pm2: 'hq-llife',
         stack: 'Next.js 16 · Convex Auth (Google OAuth)',
         kind: 'Web',
         status: 'live',
@@ -98,7 +99,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
     platforms: [
       {
         name: 'Llife',
-        domain: 'llife.ai',
+        domain: APP_DOMAIN,
         stack: 'Next.js · Convex · LLM assistant · Ecosystem APIs',
         kind: 'Web',
         status: 'building',

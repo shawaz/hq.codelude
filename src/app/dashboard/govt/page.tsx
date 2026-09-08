@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   required:      { color: '#9d9d9d', label: 'Required'     },
@@ -11,8 +12,8 @@ const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   'not-required':{ color: 'var(--muted)', label: 'Not Required' },
 };
 const JURIS_COLORS: Record<GovtJurisdiction, string> = { India: '#dbdbdb', UAE: '#eeeeee', International: '#a5a5a5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
 const JURISDICTIONS: (GovtJurisdiction | 'all')[] = ['all', 'India', 'UAE', 'International'];
+
 
 export default function GovtPage() {
   const [juris, setJuris] = useState<GovtJurisdiction | 'all'>('all');
@@ -35,7 +36,7 @@ export default function GovtPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{g.authority}</div>
               </div>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(JURIS_COLORS[g.jurisdiction])}`, color: sc(JURIS_COLORS[g.jurisdiction]), alignSelf: 'flex-start' }}>{g.jurisdiction}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[g.venture]) }}>{g.venture}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(scopeColor(g.venture)) }}>{g.venture}</span>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Deadline: {g.deadline}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.6, fontWeight: 300 }}>{g.notes}</div>

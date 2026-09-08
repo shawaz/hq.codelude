@@ -7,11 +7,11 @@ export default function LoginPage() {
       <div className="login-card">
         <div className="login-logo">
           <Logo size={38} />
-          <span className="logo-text">Code<span>lude</span></span>
+          <span className="logo-text">LL<span>IFE</span></span>
         </div>
         <div className="login-header">
           <h1>Sign in</h1>
-          <p>Internal access only. Google account on the @codelude.com domain required.</p>
+          <p>Internal access only. Google account on the @llife.app domain required.</p>
         </div>
         <LoginForm />
       </div>

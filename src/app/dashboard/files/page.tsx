@@ -4,13 +4,10 @@ import { useState } from 'react';
 import { FILES, type FileCategory, type FileStatus } from '@/lib/workspace';
 import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const CATEGORIES: (FileCategory | 'all')[] = ['all', 'Financial Model', 'Pitch Deck', 'Legal', 'Brand', 'Technical', 'Research', 'Internal'];
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
 
 const CAT_COLORS: Record<FileCategory, string> = {
   'Financial Model': '#dbdbdb',
@@ -33,6 +30,7 @@ const FORMAT_COLORS: Record<string, string> = {
   HTML: '#adadad', PDF: '#9d9d9d', XLSX: '#dbdbdb', PPTX: '#c8c8c8',
   DOCX: '#a5a5a5', Figma: '#eeeeee', MD: '#b5b5b5', 'PNG/SVG': 'var(--muted)',
 };
+
 
 export default function FilesPage() {
   const { names: allowed } = usePageScopes('files');
@@ -68,7 +66,7 @@ export default function FilesPage() {
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
         {VENTURES.map(v => (
           <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
+            style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}}
             onClick={() => setVenture(v)}>{v}</button>
         ))}
       </div>
@@ -102,7 +100,7 @@ export default function FilesPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.2rem' }}>{f.name}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', lineHeight: 1.5 }}>{f.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[f.venture]) }}>{f.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(scopeColor(f.venture)) }}>{f.venture}</span></td>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', color: sc(CAT_COLORS[f.category]) }}>{f.category}</span></td>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(FORMAT_COLORS[f.format] || 'var(--card-border)')}`, color: FORMAT_COLORS[f.format] || 'var(--muted)' }}>{f.format}</span></td>
                 <td><span className="category-label">{f.version}</span></td>

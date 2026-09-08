@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { CAMPAIGNS, type CampaignStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = {
   live:      { color: '#dbdbdb', label: 'Live'      },
@@ -10,7 +11,7 @@ const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = 
   completed: { color: 'var(--muted)', label: 'Completed' },
 };
 const TYPE_COLORS: Record<string, string> = { Content: '#c8c8c8', Email: '#a5a5a5', Social: '#eeeeee', PR: '#dbdbdb', Community: '#adadad', Paid: '#b5b5b5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
+
 
 export default function CampaignPage() {
   const [status, setStatus] = useState<CampaignStatus | 'all'>('all');
@@ -36,7 +37,7 @@ export default function CampaignPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--off-white)', lineHeight: 1.6, fontWeight: 300 }}>Goal: {c.goal}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.5, fontWeight: 300, marginTop: '0.3rem' }}>{c.notes}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[c.venture]), alignSelf: 'flex-start' }}>{c.venture}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(scopeColor(c.venture)), alignSelf: 'flex-start' }}>{c.venture}</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[c.type])}`, color: sc(TYPE_COLORS[c.type]), alignSelf: 'flex-start' }}>{c.type}</span>
               <span className="category-label">{c.start}</span>
               <span className="category-label">{c.end}</span>

@@ -7,13 +7,13 @@ export interface TaskExtra { notes: TaskNote[]; files: TaskFile[]; }
 
 const DATA_PATHS = [
   process.env.TASK_DATA_FILE,
-  '/home/centos/codelude/data/task-data.json',
+  '/home/centos/llife/data/task-data.json',
   path.join(process.cwd(), 'data', 'task-data.json'),
 ].filter(Boolean) as string[];
 
 const UPLOAD_DIRS = [
   process.env.TASK_UPLOADS_DIR,
-  '/home/centos/codelude/data/uploads/tasks',
+  '/home/centos/llife/data/uploads/tasks',
   path.join(process.cwd(), 'public', 'uploads', 'tasks'),
 ].filter(Boolean) as string[];
 

@@ -11,26 +11,6 @@ import { sc, scBorder } from '@/lib/status-colors';
 
 const ALL_VENTURE_CARDS = [
   {
-    name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure',
-    status: 'In Development', statusColor: '#dbdbdb',
-    metrics: [{ k: 'Raise', v: '₹18.1 Cr' }, { k: 'Phase', v: 'Feasibility' }, { k: 'HoldCo', v: 'Dubai' }],
-  },
-  {
-    name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant',
-    status: 'Alpha', statusColor: '#eeeeee',
-    metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout', v: 'Daily + monthly' }, { k: 'Target AUM', v: '$60M Y5' }],
-  },
-  {
-    name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant',
-    status: 'In Development', statusColor: '#dbdbdb',
-    metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
-  },
-  {
-    name: 'Nanotrade',     color: '#adadad', sector: 'AI Trading Assistant',
-    status: 'Live — Beta', statusColor: '#dbdbdb',
-    metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
-  },
-  {
     name: 'Llife',     color: '#a5a5a5', sector: 'AI Life Assistant',
     status: 'Planning', statusColor: '#b5b5b5',
     metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
@@ -390,7 +370,7 @@ ${tasksSection(tasks)}`,
 export default function AIPage() {
   // The AI page is not in the nav registry, so scope it by any-grant rather
   // than by page. The chat API re-checks this server-side — see api/chat.
-  const { names: allowed, loading } = usePageScopes('overview');
+  const { names: allowed, loading } = usePageScopes('tasks');
   const VENTURES = ALL_VENTURE_CARDS.filter(v => allowed.includes(v.name));
   const [selected, setSelected] = useState(0);
   const index = clampIndex(selected, VENTURES.length);

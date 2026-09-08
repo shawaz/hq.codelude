@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { CONTENT, type ContentStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   published:   { color: '#dbdbdb', label: 'Published'   },
@@ -10,7 +11,7 @@ const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   idea:        { color: 'var(--muted)', label: 'Idea'        },
 };
 const TYPE_COLORS: Record<string, string> = { Article: '#c8c8c8', 'Social Post': '#eeeeee', Video: '#adadad', 'Case Study': '#dbdbdb', 'Press Release': '#a5a5a5', Newsletter: '#b5b5b5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
+
 
 export default function ContentPage() {
   const [status, setStatus] = useState<ContentStatus | 'all'>('all');
@@ -36,7 +37,7 @@ export default function ContentPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.2rem' }}>{c.title}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{c.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[c.venture]) }}>{c.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(scopeColor(c.venture)) }}>{c.venture}</span></td>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[c.type])}`, color: sc(TYPE_COLORS[c.type]) }}>{c.type}</span></td>
                 <td><span className="category-label">{c.channel}</span></td>
                 <td><span className="category-label">{c.dueDate}</span></td>

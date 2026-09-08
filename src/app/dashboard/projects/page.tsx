@@ -2,17 +2,14 @@ import Link from 'next/link';
 import { convexAuthNextjsToken } from '@convex-dev/auth/nextjs/server';
 import { fetchQuery } from 'convex/nextjs';
 import { api } from '@/convex/_generated/api';
-import { PROJECT_COLORS, type Project } from '@/lib/tasks';
+import { projectColor, type Project } from '@/lib/tasks';
+import { VENTURES } from '@/lib/ventures';
 import { getAllProjects } from '@/lib/site-projects';
 import SiteProjectsBoard from './site-projects-board';
 
-const PROJECTS: { name: Project; sector: string }[] = [
-  { name: 'Roborns',     sector: 'Coastal AI Infrastructure' },
-  { name: 'Franchiseen', sector: 'AI Business Assistant' },
-  { name: 'HubCV',       sector: 'AI Career Assistant' },
-  { name: 'Nanotrade',     sector: 'AI Trading Assistant' },
-  { name: 'Llife',       sector: 'AI Life Assistant' },
-];
+// Derived from the registry rather than restated, so consolidating a venture
+// removes its card here without a second edit.
+const PROJECTS = VENTURES.map((v) => ({ name: v.name as Project, sector: v.sector }));
 
 export default async function ProjectsPage() {
   const siteProjects = getAllProjects();
@@ -23,7 +20,7 @@ export default async function ProjectsPage() {
   return (
     <div>
       <h1 className="page-title">Projects</h1>
-      <p className="page-sub">Task progress across all five ventures.</p>
+      <p className="page-sub">Task progress across every venture.</p>
 
       <div className="projects-grid">
         {PROJECTS.map(({ name, sector }) => {
@@ -32,7 +29,7 @@ export default async function ProjectsPage() {
           const inProgress = all.filter(t => t.status === 'in-progress').length;
           const todo       = all.filter(t => t.status === 'todo').length;
           const pct        = all.length ? Math.round((done / all.length) * 100) : 0;
-          const color      = PROJECT_COLORS[name];
+          const color      = projectColor(name);
 
           return (
             <div key={name} className="project-card" style={{ borderTop: `2px solid ${color}` }}>

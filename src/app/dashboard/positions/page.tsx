@@ -73,7 +73,7 @@ export default function PositionsPage() {
       await create({
         title,
         department:  String(fd.get('department') ?? '').trim() || undefined,
-        venture:     String(fd.get('venture') ?? 'Codelude'),
+        venture:     String(fd.get('venture') ?? 'LLIFE'),
         type:        String(fd.get('type') ?? 'Full-time') as typeof TYPES[number],
         priority:    String(fd.get('priority') ?? 'medium') as 'critical' | 'high' | 'medium',
         targetStart: String(fd.get('targetStart') ?? '').trim() || undefined,
@@ -115,8 +115,8 @@ export default function PositionsPage() {
             <div><label style={label}>Department</label><input name="department" style={field} /></div>
             <div>
               <label style={label}>Venture</label>
-              <select name="venture" style={field} defaultValue="Codelude">
-                <option value="Codelude">Codelude</option>
+              <select name="venture" style={field} defaultValue="LLIFE">
+                <option value="LLIFE">LLIFE</option>
                 {VENTURES.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
               </select>
             </div>

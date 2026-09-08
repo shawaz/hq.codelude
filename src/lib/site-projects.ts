@@ -31,7 +31,7 @@ export interface SiteProject {
 
 const DATA_PATHS = [
   process.env.SITE_PROJECTS_FILE,
-  '/home/centos/codelude/data/site-projects.json',
+  '/home/centos/llife/data/site-projects.json',
   path.join(process.cwd(), 'data', 'site-projects.json'),
 ].filter(Boolean) as string[];
 
@@ -47,30 +47,12 @@ function genId(prefix: string): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-const SEED_PROJECTS: SiteProject[] = [
-  {
-    id: 'SP-seed-mangaluru',
-    ventureId: 'Roborns',
-    name: 'Roborns Coastal Site — Mangaluru',
-    location: 'Uchila Thalapady, Mangaluru',
-    status: 'planning',
-    source: 'manual',
-    config: 'West Coast, India · $10M – $50M (Pilot Infrastructure) · 2 MW compute · 15 kL/day water · 30 t/mo minerals',
-    budget: [
-      { id: genId('bl'), label: 'Coastal land lease (1 acre)', category: 'Land', amount: 0, currency: 'INR', notes: 'Lease value TBD — pending site survey and permits' },
-    ],
-    team: [],
-    tasks: [
-      { id: genId('pt'), title: 'Coastal site survey — Mangaluru', status: 'in-progress' },
-      { id: genId('pt'), title: 'Coastal land lease / acquisition', status: 'todo' },
-      { id: genId('pt'), title: 'Coastal construction permits (Govt)', status: 'todo' },
-    ],
-    activities: [
-      { id: genId('act'), title: 'Site identified — Uchila Thalapady, 1-acre coastal plot', date: new Date().toISOString(), status: 'done' },
-    ],
-    createdAt: new Date().toISOString(),
-  },
-];
+/**
+ * Seed data. Emptied when Roborns was consolidated into Llife — the sole seed
+ * project belonged to it, and seeding a venture that no longer exists in the
+ * registry would create a row that renders with no colour and no venture tab.
+ */
+const SEED_PROJECTS: SiteProject[] = [];
 
 function readAll(): SiteProject[] {
   try {

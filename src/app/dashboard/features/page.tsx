@@ -1,4 +1,5 @@
 import { sc, scBorder } from '@/lib/status-colors';
+import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
 
 interface Feature {
@@ -16,8 +17,8 @@ interface PlatformFeatures {
 
 const DATA: PlatformFeatures[] = [
   {
-    platform: 'Codelude Web',
-    domain: 'codelude.com',
+    platform: 'LLIFE Web',
+    domain: APP_DOMAIN,
     color: '#eeeeee',
     features: [
       { name: 'Venture pages',         description: 'Individual deep-dive pages for Roborns, Franchiseen, HubCV, and Llife',                status: 'live' },
@@ -34,11 +35,11 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Codelude HQ',
-    domain: 'hq.codelude.com',
+    platform: 'LLIFE HQ',
+    domain: HQ_DOMAIN,
     color: '#eeeeee',
     features: [
-      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @codelude.com accounts',                     status: 'live' },
+      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @llife.app accounts',                     status: 'live' },
       { name: 'Protected routes',      description: 'Middleware-level auth guard — all /dashboard/* routes require an active session',        status: 'live' },
       { name: 'Accordion sidebar',     description: '10-section collapsible sidebar — auto-opens to active page, single section at a time',   status: 'live' },
       { name: 'Overview dashboard',    description: 'Venture status cards, quick stats, and activity feed',                                   status: 'live' },
@@ -159,7 +160,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Llife',
-    domain: 'llife.ai',
+    domain: APP_DOMAIN,
     color: '#a5a5a5',
     features: [
       { name: 'Five-domain model',         description: 'Finances, Education, Earnings, Mind and Body — each mapped to a daily time block. Spec complete.', status: 'live' },

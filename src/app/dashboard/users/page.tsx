@@ -45,41 +45,27 @@ interface Agent {
 }
 
 const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
-  Roborns: {
-    agents: [],
-    openRoles: ['Thermal Engineer', 'Government Liaison', 'Site Survey Coordinator'],
-  },
-  Franchiseen: {
-    agents: [],
-    openRoles: ['Franchise Partnership Manager', 'Investment Legal Counsel', 'KYC Integration Engineer'],
-  },
-  HubCV: {
-    agents: [
-      {
-        name: 'HubCV Matcher', emoji: '🔍', color: '#b5b5b5',
-        type: 'Claude Agent', model: 'claude-3-5-haiku',
-        tf: ['async'],
-        role: 'Analyzes professional profiles against recruiter requirements using Anthropic SDK. Scores match quality, identifies skill gaps, and surfaces upskilling recommendations.',
-        tools: ['profile_analysis', 'skill_scoring', 'job_matching', 'gap_detection'],
-      },
-    ],
-    openRoles: ['AI/ML Engineer', 'Skill Verifiers (×20)', 'Recruiter Success Manager'],
-  },
+  // One venture now. The agents below were HubCV's and Nanotrade's — those
+  // systems are still running, so their agents are documented here under Llife
+  // rather than dropped. Roborns and Franchiseen had none; their open roles
+  // were hiring plans for ventures that no longer exist separately.
   Llife: {
     agents: [
-      {
+{
         name: 'Llife Daily', emoji: '🗓️', color: '#a5a5a5',
         type: 'Claude Agent', model: 'claude-3-5-haiku',
         tf: ['daily'],
         role: 'Personal life agent — reviews the day across Finances, Education, Earnings, Mind and Body, flags what slipped, and prepares tomorrow\u2019s time blocks.',
         tools: ['domain_review', 'net_worth_rollup', 'streak_tracking', 'daily_briefing'],
       },
-    ],
-    openRoles: ['Integrations Engineer', 'Product Engineer (Mobile)', 'Privacy & Compliance Lead'],
-  },
-  Nanotrade: {
-    agents: [
-      { name: 'Alpha', emoji: '🔴', color: '#9d9d9d', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Aggressive UP-biased trader. Strong in breakout and bullish continuation regimes.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
+{
+        name: 'HubCV Matcher', emoji: '🔍', color: '#b5b5b5',
+        type: 'Claude Agent', model: 'claude-3-5-haiku',
+        tf: ['async'],
+        role: 'Analyzes professional profiles against recruiter requirements using Anthropic SDK. Scores match quality, identifies skill gaps, and surfaces upskilling recommendations.',
+        tools: ['profile_analysis', 'skill_scoring', 'job_matching', 'gap_detection'],
+      },
+{ name: 'Alpha', emoji: '🔴', color: '#9d9d9d', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Aggressive UP-biased trader. Strong in breakout and bullish continuation regimes.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
       { name: 'Sigma', emoji: '🔵', color: '#a5a5a5', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Balanced risk manager. Reads regime before committing direction. Holds more than most.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
       { name: 'Delta', emoji: '🟢', color: '#dbdbdb', type: 'Claude Agent', model: 'claude-3-5-haiku', tf: ['5m', '15m'], role: 'Contrarian fade specialist. Hunts overextended moves and fades them with RSI + VWAP.', tools: ['get_market_data', 'get_polymarket_prices', 'get_resolved_windows', 'get_session_performance', 'make_decision'] },
       { name: 'Lisa',      emoji: '🟡', color: '#b5b5b5', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Volume Surge specialist. Trades breakout candles when volume spikes above baseline.',         tools: ['Volume Surge', 'VWAP Reclaim'] },
@@ -93,9 +79,9 @@ const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
       { name: 'Apu',       emoji: '🟢', color: '#dbdbdb', type: 'Strategy Agent', model: 'Rules-based', tf: ['5m', '15m'], role: 'Multi-strategy opportunist. Avoids chaos regimes. Picks the strongest signal available.',    tools: ['Volume Surge', 'Momentum Break', 'VWAP Reclaim'] },
       { name: 'Multi-Bot', emoji: '⚙️', color: '#eeeeee', type: 'Execution Bot',  model: 'Node.js',     tf: ['5m', '15m'], role: 'Core multi-exchange execution engine. Routes orders across Binance, Bybit, OKX.',           tools: ['Order execution', 'Balance management', 'Multi-exchange routing'] },
       { name: 'TV Bot',    emoji: '📺', color: '#adadad', type: 'Feed Bot',       model: 'Python 3',    tf: ['5m', '15m'], role: 'Processes live market signals and pushes to TV dashboard via /webhook/5m and /webhook/15m.', tools: ['Webhook ingestion', 'Signal broadcast', 'TV feed'] },
-      { name: 'Spot Bot',  emoji: '🎯', color: '#b5b5b5', type: 'Execution Bot',  model: 'Python 3',    tf: ['live'],      role: 'Automated spot trade execution. Monitors signals and places spot orders autonomously.',        tools: ['Spot execution', 'Balance tracking', 'Signal monitoring'] },
+      { name: 'Spot Bot',  emoji: '🎯', color: '#b5b5b5', type: 'Execution Bot',  model: 'Python 3',    tf: ['live'],      role: 'Automated spot trade execution. Monitors signals and places spot orders autonomously.',        tools: ['Spot execution', 'Balance tracking', 'Signal monitoring'] }
     ],
-    openRoles: ['Strategy Creator Programme Lead'],
+    openRoles: ['Integrations Engineer', 'Product Engineer (Mobile)', 'Privacy & Compliance Lead'],
   },
 };
 

@@ -12,32 +12,9 @@ export type Segment = { key: string; label: string; unit: string };
 
 /** Each venture sells into a different market, so segments differ per venture. */
 export const SEGMENTS: Record<string, Segment[]> = {
-  // Mirrors roborns.com: one input, three revenue streams (compute, water,
-  // minerals), plus the capital and site pipelines that make them possible.
-  Roborns: [
-    { key: 'investor',       label: 'Investors',      unit: 'investors' },
-    { key: 'infrastructure', label: 'Infrastructure', unit: 'sites'     },
-    { key: 'compute',        label: 'Compute',        unit: 'tenants'   },
-    { key: 'minerals',       label: 'Minerals',       unit: 'buyers'    },
-    { key: 'water',          label: 'Water',          unit: 'offtakers' },
-  ],
-  Franchiseen: [
-    { key: 'brand',      label: 'Brands',      unit: 'brands'      },
-    { key: 'investor',   label: 'Investors',   unit: 'investors'   },
-    { key: 'franchisee', label: 'Franchisees', unit: 'franchisees' },
-  ],
-  HubCV: [
-    { key: 'school',   label: 'School',   unit: 'schools'    },
-    { key: 'college',  label: 'College',  unit: 'colleges'   },
-    { key: 'business', label: 'Business', unit: 'businesses' },
-  ],
-  Nanotrade: [
-    { key: 'creator',   label: 'Creators',    unit: 'creators'    },
-    { key: 'exchange',  label: 'Exchanges',   unit: 'exchanges'   },
-    { key: 'community', label: 'Communities', unit: 'communities' },
-  ],
-  // Llife's five life domains. Education is fed by the HubCV API, Earnings by
-  // the Nanotrade (job/crypto/stocks) and Franchiseen (franchise) APIs.
+  // Llife's five life domains. Education, Earnings and the rest are now first
+  // -party surfaces rather than integrations, since the ventures that used to
+  // feed them were consolidated into Llife.
   Llife: [
     { key: 'finances',  label: 'Finances',  unit: 'institutions' },
     { key: 'education', label: 'Education', unit: 'providers'    },

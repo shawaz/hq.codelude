@@ -1,5 +1,6 @@
 import { DEPARTMENTS } from '@/lib/ops';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#dbdbdb', label: 'Active'   },
@@ -7,10 +8,7 @@ const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   planned:  { color: 'var(--muted)', label: 'Planned'  },
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
+
 
 export default function DepartmentsPage() {
   return (
@@ -32,7 +30,7 @@ export default function DepartmentsPage() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${scBorder(VENTURE_COLORS[v] || 'var(--card-border)')}`, color: VENTURE_COLORS[v] || 'var(--muted)' }}>{v}</span>)}
+                {d.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '0.1rem 0.5rem', border: `1px solid ${scBorder(scopeColor(v) || 'var(--card-border)')}`, color: scopeColor(v) || 'var(--muted)' }}>{v}</span>)}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {d.responsibilities.map((r, j) => <span key={j} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', padding: '0.2rem 0.65rem', border: '1px solid var(--card-border)' }}>{r}</span>)}

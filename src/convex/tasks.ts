@@ -21,6 +21,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { requireUser } from "./team";
+import { isActiveScope } from "./access";
 import { istDay } from "./aichat";
 
 // ─── TASKS ────────────────────────────────────────────────────────────────────
@@ -35,12 +36,17 @@ export const list = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
 
-    const rows = args.project
+    const all = args.project
       ? await ctx.db
           .query("tasks")
           .withIndex("by_project", (q) => q.eq("project", args.project!))
           .collect()
       : await ctx.db.query("tasks").collect();
+
+    // Tasks belonging to a consolidated venture are archived, not deleted, so
+    // they are still in the table and would otherwise inflate every count and
+    // the Today list. Absence from the registry is what makes them archived.
+    const rows = all.filter((t) => isActiveScope(t.project));
 
     // in-progress, then todo, then done — the order every task surface uses.
     const rank = { "in-progress": 0, todo: 1, done: 2 } as const;
@@ -202,6 +208,60 @@ export const seedFromStatic = internalMutation({
       created++;
     }
     return { created, skipped };
+  },
+});
+
+/**
+ * Move every task from one project name to another.
+ *
+ * A venture rename lands in src/lib, but seedFromStatic skips any seedId that
+ * already exists, so the stored rows keep the old name and silently drift from
+ * the code. This is the other half of a rename. Internal: maintenance only.
+ */
+export const renameProject = internalMutation({
+  args: { from: v.string(), to: v.string() },
+  handler: async (ctx, args) => {
+    const rows = await ctx.db
+      .query("tasks")
+      .withIndex("by_project", (q) => q.eq("project", args.from))
+      .collect();
+    for (const r of rows) {
+      await ctx.db.patch(r._id, { project: args.to, updatedAt: Date.now() });
+    }
+    return { renamed: rows.length, to: args.to };
+  },
+});
+
+/**
+ * Force stored titles to match the seed array, matched on seedId.
+ *
+ * Same drift, different field: a title edited in src/lib after the initial seed
+ * never reaches the stored row. Reports rows it could not find rather than
+ * failing, so a partial list is safe to re-run.
+ */
+export const syncTitles = internalMutation({
+  args: { rows: v.array(v.object({ seedId: v.string(), title: v.string() })) },
+  handler: async (ctx, args) => {
+    let updated = 0;
+    let unchanged = 0;
+    const missing: string[] = [];
+    for (const r of args.rows) {
+      const row = await ctx.db
+        .query("tasks")
+        .withIndex("by_seedId", (q) => q.eq("seedId", r.seedId))
+        .unique();
+      if (!row) {
+        missing.push(r.seedId);
+        continue;
+      }
+      if (row.title === r.title) {
+        unchanged++;
+        continue;
+      }
+      await ctx.db.patch(row._id, { title: r.title, updatedAt: Date.now() });
+      updated++;
+    }
+    return { updated, unchanged, missing };
   },
 });
 

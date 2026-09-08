@@ -2,7 +2,7 @@
  * Candidate applications, with resume files.
  *
  * This is the first real file upload in the app. The existing task-file upload
- * writes to /home/centos/codelude/data/ via fs, which cannot work on Vercel —
+ * writes to /home/centos/llife/data/ via fs, which cannot work on Vercel —
  * this uses Convex storage instead so uploads survive a deploy.
  *
  * Upload is a three-step handshake, which is how Convex avoids proxying file
@@ -15,6 +15,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { isActiveScope } from "./access";
 import { requireUser } from "./team";
 
 const status = v.union(
@@ -41,7 +42,10 @@ export const list = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
 
-    const rows = await ctx.db.query("applications").collect();
+    // Candidates who applied to a consolidated venture are archived, not
+    // deleted. They stay in the table and out of the pipeline.
+    const rows = (await ctx.db.query("applications").collect())
+      .filter((r) => isActiveScope(r.venture));
     rows.sort((a, b) => b.createdAt - a.createdAt);
 
     return await Promise.all(

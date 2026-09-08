@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { TRIPS, type TripStatus } from '@/lib/workspace';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
   planned:     { color: '#b5b5b5', label: 'Planned'     },
@@ -12,10 +13,7 @@ const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
   cancelled:   { color: '#9d9d9d', label: 'Cancelled'   },
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
+
 
 export default function TravelsPage() {
   const [selected, setSelected] = useState<string | null>(TRIPS[0]?.id ?? null);
@@ -38,11 +36,11 @@ export default function TravelsPage() {
             return (
               <div key={t.id} onClick={() => setSelected(t.id)}
                 style={{ background: isActive ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '1rem 1.25rem', cursor: 'pointer',
-                  borderLeft: isActive ? `2px solid ${VENTURE_COLORS[t.venture]}` : '2px solid transparent', transition: 'background 0.15s' }}>
+                  borderLeft: isActive ? `2px solid ${scopeColor(t.venture)}` : '2px solid transparent', transition: 'background 0.15s' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.82rem', marginBottom: '0.25rem' }}>{t.destination}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>{t.departure} → {t.return}</div>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc(VENTURE_COLORS[t.venture]) }}>{t.venture}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc(scopeColor(t.venture)) }}>{t.venture}</span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color) }}>{ss.label}</span>
                 </div>
               </div>
@@ -53,8 +51,8 @@ export default function TravelsPage() {
         {/* Trip detail */}
         {trip ? (
           <div>
-            <div style={{ borderLeft: `2px solid ${VENTURE_COLORS[trip.venture]}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[trip.venture]), letterSpacing: '0.1em', marginBottom: '0.2rem' }}>{trip.venture} — {trip.purpose}</div>
+            <div style={{ borderLeft: `2px solid ${scopeColor(trip.venture)}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(scopeColor(trip.venture)), letterSpacing: '0.1em', marginBottom: '0.2rem' }}>{trip.venture} — {trip.purpose}</div>
               <div style={{ fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.01em' }}>{trip.destination}, {trip.country}</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', marginTop: '0.25rem' }}>
                 {trip.departure} → {trip.return} · {trip.traveler}

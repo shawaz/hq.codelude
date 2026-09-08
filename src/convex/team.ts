@@ -5,7 +5,9 @@ import type { QueryCtx, MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import {
   ALL_SCOPE_NAMES,
+  ALLOWED_EMAIL_DOMAINS,
   can,
+  isAllowedEmail,
   normalizeAccess,
   venturesForPage,
   venturesForUser,
@@ -205,10 +207,11 @@ export const inviteMember = mutation({
     const actor = await requireAdmin(ctx);
 
     const email = normalizeEmail(args.email);
-    if (!email.endsWith("@codelude.com")) {
+    if (!isAllowedEmail(email)) {
       // Sign-in is domain-locked, so an invite to any other domain could never
       // be redeemed. Reject it here rather than leaving a dead row behind.
-      throw new Error("Team members need a @codelude.com address");
+      const allowed = ALLOWED_EMAIL_DOMAINS.map((d) => `@${d}`).join(" or ");
+      throw new Error(`Team members need ${allowed} address`);
     }
 
     const access = accessForRole(args.role, args.access);

@@ -13,6 +13,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
+import { isActiveScope } from "./access";
 import { requireUser } from "./team";
 
 const type = v.union(
@@ -41,7 +42,10 @@ export const list = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
 
-    const rows = await ctx.db.query("positions").collect();
+    // Roles under a consolidated venture are archived, not deleted — filter
+    // them out here so headcount and the hiring worklist stay truthful.
+    const rows = (await ctx.db.query("positions").collect())
+      .filter((r) => isActiveScope(r.venture));
     // Active roles first, then by priority — the page is a hiring worklist,
     // so what still needs doing belongs at the top.
     const rank = { critical: 0, high: 1, medium: 2 } as const;
