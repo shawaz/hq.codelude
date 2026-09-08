@@ -42,8 +42,9 @@ export const list = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
 
-    // Candidates who applied to a consolidated venture are archived, not
-    // deleted. They stay in the table and out of the pipeline.
+    // Candidates who applied to an archived venture stay in the table and out
+    // of the pipeline. All five ventures are live, so this currently filters
+    // nothing — it is the guard for the next time one is archived.
     const rows = (await ctx.db.query("applications").collect())
       .filter((r) => isActiveScope(r.venture));
     rows.sort((a, b) => b.createdAt - a.createdAt);

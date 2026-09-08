@@ -42,7 +42,8 @@ export const list = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
 
-    // Roles under a consolidated venture are archived, not deleted — filter
+    // Roles under an archived venture stay in the table rather than being
+    // deleted, so absence from the registry is what hides them — filter
     // them out here so headcount and the hiring worklist stay truthful.
     const rows = (await ctx.db.query("positions").collect())
       .filter((r) => isActiveScope(r.venture));

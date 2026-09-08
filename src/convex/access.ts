@@ -38,21 +38,19 @@ export const HOLDCO: Scope = {
 };
 
 /**
- * The live ventures. `name` is load-bearing: every static dataset in src/lib
+ * The five ventures. `name` is load-bearing: every static dataset in src/lib
  * keys off these exact strings, so they must not be renamed casually.
  *
- * Roborns, Franchiseen, HubCV and Nanotrade were consolidated into Llife when
- * the studio moved to one product. Their Convex rows were deliberately NOT
- * deleted — dropping a name from this array is what archives them, because a
- * row whose venture is absent here matches no live scope. See isActiveScope.
- * Re-adding an entry brings its records straight back.
+ * Each ships as its own platform. The Sep 2026 consolidation into a single
+ * Llife product was reversed on 8 Sep 2026 — the ventures are separate again,
+ * and their records were never deleted, so restoring them here is all it takes.
  */
 export const VENTURES: Scope[] = [
-  { id: 'llife',     name: 'Llife',     color: '#a5a5a5', sector: 'AI Life Assistant' },
-  // Restored 7 Sep 2026. Nanotrade is a live venture again — the platform is
-  // deployed and nanotrade.ai is being registered — so its records should be
-  // visible rather than archived. Values are the originals from 4e637c1.
-  { id: 'nanotrade', name: 'Nanotrade', color: '#adadad', sector: 'AI Trading Assistant' },
+  { id: 'roborns',     name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure' },
+  { id: 'franchiseen', name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant' },
+  { id: 'hubcv',       name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant' },
+  { id: 'nanotrade',   name: 'Nanotrade',   color: '#adadad', sector: 'AI Trading Assistant' },
+  { id: 'llife',       name: 'Llife',       color: '#a5a5a5', sector: 'AI Life Assistant' },
 ];
 
 /** Everything grantable: HoldCo first, then the ventures. */

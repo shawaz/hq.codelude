@@ -26,7 +26,7 @@ import { ALL_SCOPES as _ALL_SCOPES } from '@/convex/access';
  * once and the pages call this instead.
  *
  * Unknown names return a neutral grey rather than undefined: rows belonging to
- * a consolidated venture are archived rather than deleted, so a stale name can
+ * an archived venture are kept rather than deleted, so a stale name can
  * still reach a colour lookup from the file-backed stores.
  */
 const SCOPE_COLORS: Record<string, string> = Object.fromEntries(

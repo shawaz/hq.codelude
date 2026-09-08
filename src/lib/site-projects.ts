@@ -48,11 +48,40 @@ function genId(prefix: string): string {
 }
 
 /**
- * Seed data. Emptied when Roborns was consolidated into Llife — the sole seed
- * project belonged to it, and seeding a venture that no longer exists in the
- * registry would create a row that renders with no colour and no venture tab.
+ * Seed data. Restored when the ventures were split back out on 8 Sep 2026.
+ *
+ * Siting reflects the Sep 2026 position, not the original seed: Uchila
+ * Thalapady was ruled out on grid access and Kapu superseded, so the project
+ * points at Panambur / Baikampady. The survey is `todo`, not `in-progress` —
+ * it was never commissioned.
  */
-const SEED_PROJECTS: SiteProject[] = [];
+const SEED_PROJECTS: SiteProject[] = [
+  {
+    id: 'SP-seed-mangaluru',
+    ventureId: 'Roborns',
+    name: 'Roborns Coastal Site — Mangaluru',
+    location: 'Panambur / Baikampady, Mangaluru (Dakshina Kannada)',
+    status: 'planning',
+    source: 'manual',
+    config: 'West Coast, India · $10M – $50M (Pilot Infrastructure) · 2 MW compute · 15 kL/day water · 30 t/mo minerals',
+    budget: [
+      { id: genId('bl'), label: 'Coastal land — KIADB allotment or lease', category: 'Land', amount: 0, currency: 'INR', notes: 'Value TBD — pursue KIADB allotment via KDEM rather than the private Panambur parcel' },
+    ],
+    team: [],
+    tasks: [
+      { id: genId('pt'), title: 'GATE 1 — power load feasibility opinion (KPT)', status: 'todo' },
+      { id: genId('pt'), title: 'GATE 2 — CRZ classification for the Panambur survey number', status: 'todo' },
+      { id: genId('pt'), title: 'GATE 3 — Kaveri guidance value + KIADB Baikampady rate', status: 'todo' },
+      { id: genId('pt'), title: 'Coastal site survey — Mangaluru', status: 'todo' },
+      { id: genId('pt'), title: 'Coastal construction permits (Govt)', status: 'todo' },
+    ],
+    activities: [
+      { id: genId('act'), title: 'Uchila Thalapady ruled out — no power available at site', date: new Date().toISOString(), status: 'done' },
+      { id: genId('act'), title: 'Panambur / Baikampady adopted as preferred siting', date: new Date().toISOString(), status: 'done' },
+    ],
+    createdAt: new Date().toISOString(),
+  },
+];
 
 function readAll(): SiteProject[] {
   try {

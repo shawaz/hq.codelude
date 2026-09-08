@@ -34,7 +34,7 @@ const TOTAL = "*"; // sentinel status holding the per-segment grand total
 
 /**
  * The pipeline pages this data belongs to. Access is checked per (venture,
- * page), so a member granted Llife on `deals` but not `leads` can read one
+ * page), so a member granted Nanotrade on `deals` but not `leads` can read one
  * and not the other.
  */
 const STAGE_PAGE: Record<string, string> = {
@@ -679,18 +679,54 @@ export const seedSamples = internalMutation({
     };
 
     const rows: Row[] = [
+      // ── Roborns prospects: investors / infrastructure / compute / minerals / water
+      { stage: "prospect", venture: "Roborns", segment: "investor", name: "Blume Ventures", category: "VC", state: "Karnataka", city: "Bengaluru", priority: "high", status: "researching" },
+      { stage: "prospect", venture: "Roborns", segment: "investor", name: "Green Climate Fund", category: "Climate Finance", city: "Songdo", priority: "high", status: "identified" },
+      { stage: "prospect", venture: "Roborns", segment: "infrastructure", name: "New Mangalore Port Authority", category: "Port Authority", state: "Karnataka", city: "Mangaluru", priority: "high", status: "contacted" },
+      { stage: "prospect", venture: "Roborns", segment: "infrastructure", name: "Karnataka Industrial Areas Development Board", category: "State Authority", state: "Karnataka", city: "Bengaluru", priority: "high", status: "identified" },
+      { stage: "prospect", venture: "Roborns", segment: "compute", name: "Yotta Data Services", category: "GPU Cloud", state: "Maharashtra", city: "Mumbai", priority: "high", status: "researching" },
+      { stage: "prospect", venture: "Roborns", segment: "compute", name: "E2E Networks", category: "GPU Cloud", state: "Delhi", city: "New Delhi", status: "identified" },
+      { stage: "prospect", venture: "Roborns", segment: "minerals", name: "Tata Chemicals", category: "Soda Ash / Salt", state: "Gujarat", city: "Mithapur", priority: "high", status: "identified" },
+      { stage: "prospect", venture: "Roborns", segment: "minerals", name: "Archean Chemical Industries", category: "Bromine / Salt", state: "Tamil Nadu", city: "Chennai", status: "identified" },
+      { stage: "prospect", venture: "Roborns", segment: "water", name: "Mangaluru City Corporation", category: "Municipal", state: "Karnataka", city: "Mangaluru", priority: "high", status: "contacted" },
+      { stage: "prospect", venture: "Roborns", segment: "water", name: "Karnataka Urban Water Supply Board", category: "State Utility", state: "Karnataka", city: "Bengaluru", status: "identified" },
 
+      // ── HubCV prospects
+      { stage: "prospect", venture: "HubCV", segment: "school", name: "Kendriya Vidyalaya, Mangaluru", category: "Government", state: "Karnataka", district: "Dakshina Kannada", city: "Mangaluru", priority: "high", status: "contacted" },
+      { stage: "prospect", venture: "HubCV", segment: "school", name: "St. Aloysius High School", category: "Aided", state: "Karnataka", district: "Dakshina Kannada", city: "Mangaluru", priority: "high", status: "responded" },
+      { stage: "prospect", venture: "HubCV", segment: "school", name: "Delhi Public School, Bengaluru North", category: "Private", state: "Karnataka", district: "Bengaluru Urban", city: "Bengaluru", status: "identified" },
+      { stage: "prospect", venture: "HubCV", segment: "college", name: "National Institute of Technology Karnataka", category: "Engineering", state: "Karnataka", district: "Dakshina Kannada", city: "Surathkal", priority: "high", status: "contacted" },
+      { stage: "prospect", venture: "HubCV", segment: "college", name: "Manipal Institute of Technology", category: "Engineering", state: "Karnataka", district: "Udupi", city: "Manipal", priority: "high", status: "shortlisted" },
+      { stage: "prospect", venture: "HubCV", segment: "college", name: "Sahyadri College of Engineering & Management", category: "Engineering", state: "Karnataka", district: "Dakshina Kannada", city: "Mangaluru", status: "identified" },
+      { stage: "prospect", venture: "HubCV", segment: "business", name: "Robosoft Technologies", category: "IT Services", state: "Karnataka", district: "Udupi", city: "Udupi", priority: "high", status: "contacted" },
+      { stage: "prospect", venture: "HubCV", segment: "business", name: "Infosys", category: "IT Services", state: "Karnataka", district: "Bengaluru Urban", city: "Bengaluru", status: "researching" },
 
       // ── Other ventures, prospects
+      { stage: "prospect", venture: "Franchiseen", segment: "brand", name: "Wow! Momo", category: "F&B", state: "West Bengal", city: "Kolkata", status: "identified" },
+      { stage: "prospect", venture: "Llife", segment: "education", name: "HubCV (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
+      { stage: "prospect", venture: "Llife", segment: "earnings", name: "Nanotrade (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
+      { stage: "prospect", venture: "Llife", segment: "earnings", name: "Franchiseen (internal API)", category: "Ecosystem", state: "Karnataka", city: "Mangaluru", priority: "high", status: "shortlisted" },
       { stage: "prospect", venture: "Llife", segment: "finances", name: "Sahamati (Account Aggregator)", category: "Financial rails", state: "Karnataka", city: "Bengaluru", priority: "high", status: "researching" },
       { stage: "prospect", venture: "Llife", segment: "body", name: "Apple HealthKit / Google Health Connect", category: "Health data", city: "—", status: "identified" },
       { stage: "lead", venture: "Llife", segment: "education", name: "HubCV student beta enquiry", category: "Student", city: "Mangaluru", interest: "Daily tracker beta", source: "web-form", status: "new", priority: "high" },
+      { stage: "prospect", venture: "Nanotrade", segment: "exchange", name: "CoinDCX", category: "Exchange", state: "Maharashtra", city: "Mumbai", status: "identified" },
 
       // ── Leads (inbound: forms + social)
+      { stage: "lead", venture: "Roborns", segment: "compute", name: "Anonymous GPU enquiry", category: "AI startup", city: "Bengaluru", interest: "2 MW inference colocation", source: "web-form", status: "new", priority: "high" },
+      { stage: "lead", venture: "Roborns", segment: "water", name: "Coastal resort enquiry", category: "Hospitality", city: "Udupi", interest: "Industrial water offtake", source: "linkedin", status: "qualified" },
+      { stage: "lead", venture: "HubCV", segment: "college", name: "Placement cell enquiry", category: "Private college", city: "Hubballi", interest: "Placement analytics pilot", source: "instagram", status: "new" },
+      { stage: "lead", venture: "HubCV", segment: "school", name: "CBSE school enquiry", category: "Private school", city: "Mysuru", interest: "Career guidance for class 11–12", source: "web-form", status: "new" },
+      { stage: "lead", venture: "Nanotrade", segment: "creator", name: "Strategy creator applicant", category: "Individual", city: "Pune", interest: "Creator programme", source: "twitter", status: "qualified" },
 
       // ── Deals (calls & appointments in progress)
+      { stage: "deal", venture: "Roborns", segment: "investor", name: "Roborns seed infrastructure round", category: "Strategic investors", value: "₹18 Cr ($2.1M)", closeDate: "Q4 2026", status: "discovery", priority: "high" },
+      { stage: "deal", venture: "Franchiseen", segment: "brand", name: "Pilot franchise partner", category: "Regional F&B brand", value: "₹1–5 Cr AUM", closeDate: "Q3 2026", status: "discovery", priority: "high" },
+      { stage: "deal", venture: "HubCV", segment: "business", name: "Recruiter design partner ×5", category: "Recruitment agencies", value: "$0 (design partner)", closeDate: "Q4 2026", status: "proposal" },
 
       // ── Clients (converted)
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #1", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #2", category: "Individual trader", value: "$99/month", since: "2026-05-01", status: "active" },
+      { stage: "client", venture: "Nanotrade", segment: "creator", name: "Nanotrade Beta Subscriber #3", category: "Individual trader", value: "$29/month", since: "2026-05-01", status: "at-risk" },
     ];
 
     let inserted = 0;

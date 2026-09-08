@@ -43,9 +43,9 @@ export const list = query({
           .collect()
       : await ctx.db.query("tasks").collect();
 
-    // Tasks belonging to a consolidated venture are archived, not deleted, so
-    // they are still in the table and would otherwise inflate every count and
-    // the Today list. Absence from the registry is what makes them archived.
+    // Tasks belonging to an archived venture stay in the table and would
+    // otherwise inflate every count and the Today list. Absence from the
+    // registry is what makes them archived.
     const rows = all.filter((t) => isActiveScope(t.project));
 
     // in-progress, then todo, then done — the order every task surface uses.

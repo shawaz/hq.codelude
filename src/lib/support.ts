@@ -44,12 +44,18 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to check server health',
     venture: 'LLIFE',
     category: 'Infrastructure',
-    content: `SSH into the server: ssh centos@64.227.160.224\n\nCheck all PM2 processes: pm2 list\nCheck specific process logs: pm2 logs [name] --lines 20 --nostream\nCheck server load: htop\nCheck disk usage: df -h\nCheck port availability: ss -tlnp\nCheck Apache status: sudo systemctl status httpd\n\nKey processes to monitor:\n- codelude-web (port 3004) — llife.app\n- hq-llife (port 3005) — hq.llife.app\n- nanotrade-web (port 3000) — bot.nanotrade.com\n- nanotrade-multi-bot (port 8081) — core trading engine\n\nIf a process is stopped: pm2 restart [name]\nIf Apache is down: sudo systemctl restart httpd`,
+    content: `SSH into the server: ssh centos@64.227.160.224\n\nCheck all PM2 processes: pm2 list\nCheck specific process logs: pm2 logs [name] --lines 20 --nostream\nCheck server load: htop\nCheck disk usage: df -h\nCheck port availability: ss -tlnp\nCheck Apache status: sudo systemctl status httpd\n\nKey processes to monitor:\n- codelude-web (port 3004) — llife.app\n- hq-codelude (port 3005) — hq.llife.app\n- nanotrade-web (port 3000) — bot.nanotrade.com\n- nanotrade-multi-bot (port 8081) — core trading engine\n\nIf a process is stopped: pm2 restart [name]\nIf Apache is down: sudo systemctl restart httpd`,
   },
   {
     title: 'How to renew SSL certificates',
     venture: 'LLIFE',
     category: 'Infrastructure',
     content: `SSL certificates via Let\'s Encrypt / Certbot auto-renew via scheduled task.\n\nTo manually trigger renewal:\nsudo certbot renew\n\nTo check certificate expiry:\nsudo certbot certificates\n\nAll current certificates expire 2026-08-18. Certbot will auto-renew 30 days before expiry.\n\nTo add a new domain:\nsudo certbot --apache -d [domain.com] --non-interactive --agree-tos -m shawaz@llife.app\n\nNote: Domain must have DNS A record pointing to 64.227.160.224 before running certbot.`,
+  },
+  {
+    title: 'Nanotrade — strategy not executing',
+    venture: 'Nanotrade',
+    category: 'Platform',
+    content: `If a Nanotrade strategy is not executing:\n\n1. Check PM2 status: pm2 logs nanotrade-multi-bot --lines 20\n2. Verify exchange API keys are valid and not rate-limited\n3. Check Binance/Bybit API status (status.binance.com)\n4. Confirm the strategy is enabled in the user's dashboard\n5. Check if the bot has sufficient account balance to execute\n\nCommon causes:\n- Exchange API rate limit hit → upgrade to VIP tier\n- API key expired or permissions changed → re-issue keys\n- Market conditions triggering risk management stop → expected behaviour\n- Bot restarted and lost state → pm2 restart nanotrade-multi-bot`,
   },
 ];
