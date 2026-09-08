@@ -3,6 +3,7 @@
 import { INVOICES, type InvoiceStatus } from '@/lib/finance';
 import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const TABS: VentureTab[] = [
   { key: 'all',     label: 'All'     },
@@ -19,10 +20,7 @@ const STATUS_STYLES: Record<InvoiceStatus, { color: string; label: string }> = {
   draft:   { color: 'var(--muted)', label: 'Draft'   },
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
+
 
 export default function InvoicePage() {
   return (
@@ -77,7 +75,7 @@ export default function InvoicePage() {
             return (
               <tr key={i}>
                 <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)' }}>{inv.id}</span></td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc(VENTURE_COLORS[inv.venture]) }}>{inv.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: sc(scopeColor(inv.venture)) }}>{inv.venture}</span></td>
                 <td><span className="category-label">{inv.client}</span></td>
                 <td><span className="category-label" style={{ fontSize: '0.67rem' }}>{inv.description}</span></td>
                 <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)' }}>{inv.currency} {inv.amount.toLocaleString()}</td>

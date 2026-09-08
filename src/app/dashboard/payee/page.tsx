@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { PAYEES, type PayeeStatus, type PayeeFrequency } from '@/lib/finance';
 import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const TABS: VentureTab[] = [
   { key: 'all',      label: 'All'      },
@@ -27,12 +28,9 @@ const FREQ_COLORS: Record<PayeeFrequency, string> = {
   variable:  '#a5a5a5',
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
 
 const CATEGORIES = ['All', 'Infrastructure', 'Legal', 'AI Infrastructure', 'Compliance', 'Payments', 'Engineering', 'Manufacturing', 'Operations', 'SaaS'];
+
 
 export default function PayeePage() {
   const [cat, setCat] = useState('All');
@@ -87,7 +85,7 @@ export default function PayeePage() {
                 <div style={{ fontWeight: 600, fontSize: '0.8rem', marginBottom: '0.3rem' }}>{p.name}</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
                   {p.ventures.map(v => (
-                    <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(VENTURE_COLORS[v])}`, color: sc(VENTURE_COLORS[v]) }}>{v}</span>
+                    <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(scopeColor(v))}`, color: sc(scopeColor(v)) }}>{v}</span>
                   ))}
                 </div>
               </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { NDAS, type NDAStatus } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
   active:   { color: '#dbdbdb', label: 'Active'   },
@@ -10,13 +11,10 @@ const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
   pending:  { color: '#b5b5b5', label: 'Pending'  },
   unsigned: { color: '#9d9d9d', label: 'Unsigned' },
 };
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
 
 interface SendState { sending: boolean; sent: boolean; error: string }
 const defaultSend: SendState = { sending: false, sent: false, error: '' };
+
 
 export default function NDAPage() {
   const [modal, setModal] = useState<typeof NDAS[0] | null>(null);
@@ -79,7 +77,7 @@ export default function NDAPage() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{n.id}</div>
                 <div style={{ fontWeight: 600, fontSize: '0.8rem' }}>{n.party}</div>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(VENTURE_COLORS[n.venture]) }}>{n.venture}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(scopeColor(n.venture)) }}>{n.venture}</span>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', marginBottom: '0.2rem' }}>{n.type}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>Signed: {n.signed}</div>

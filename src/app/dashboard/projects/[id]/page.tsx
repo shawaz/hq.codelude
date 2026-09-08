@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECT_COLORS, type Status } from '@/lib/tasks';
+import { projectColor, type Status } from '@/lib/tasks';
 import type { SiteProject, BudgetLine, TeamMember, ProjectTask, Activity, SiteProjectStatus, ActivityStatus } from '@/lib/site-projects';
 import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
 import { sc, scBorder } from '@/lib/status-colors';
@@ -63,7 +63,7 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const color = PROJECT_COLORS[project.ventureId];
+  const color = projectColor(project.ventureId);
   const ss = STATUS_STYLES[project.status];
 
   return (

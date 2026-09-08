@@ -1,5 +1,6 @@
 import { CONTRACTS, type ContractStatus } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = {
   draft:      { color: 'var(--muted)', label: 'Draft'      },
@@ -10,7 +11,7 @@ const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = 
   terminated: { color: '#9d9d9d', label: 'Terminated' },
 };
 const TYPE_COLORS: Record<string, string> = { Service: '#c8c8c8', Employment: '#dbdbdb', Partnership: '#eeeeee', Investment: '#b5b5b5', Lease: '#a5a5a5', SaaS: '#adadad', Advisory: '#b5b5b5' };
-const VENTURE_COLORS: Record<string, string> = { Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8', HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad' };
+
 
 export default function ContractsPage() {
   const active = CONTRACTS.filter(c => c.status === 'active').length;
@@ -36,7 +37,7 @@ export default function ContractsPage() {
               <div>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[c.type])}`, color: sc(TYPE_COLORS[c.type]) }}>{c.type}</span>
               </div>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(VENTURE_COLORS[c.venture]) }}>{c.venture}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: sc(scopeColor(c.venture)) }}>{c.venture}</span>
               <div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)', marginBottom: '0.3rem' }}>{c.value}</div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', lineHeight: 1.5, fontWeight: 300 }}>{c.keyTerms}</div>

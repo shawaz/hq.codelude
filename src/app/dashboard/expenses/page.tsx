@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { EXPENSES, type ExpenseStatus } from '@/lib/budget-data';
 import VenturePageLayout, { type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 // The venture strip now comes from VenturePageLayout; status becomes the tab row.
 const TABS: VentureTab[] = [
@@ -21,12 +22,9 @@ const STATUS_STYLES: Record<ExpenseStatus, { color: string; label: string }> = {
   recurring:  { color: '#a5a5a5', label: 'Recurring'  },
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
 
 const CATS      = ['All', 'Infrastructure', 'Engineering', 'Legal', 'Domain', 'SaaS', 'AI Infrastructure'];
+
 
 export default function ExpensesPage() {
   const [cat, setCat] = useState('All');
@@ -103,7 +101,7 @@ export default function ExpensesPage() {
                   <div style={{ fontWeight: 600, fontSize: '0.78rem', marginBottom: '0.15rem' }}>{e.description}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{e.notes}</div>
                 </td>
-                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(VENTURE_COLORS[e.venture]) }}>{e.venture}</span></td>
+                <td><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: sc(scopeColor(e.venture)) }}>{e.venture}</span></td>
                 <td><span className="category-label">{e.category}</span></td>
                 <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: e.amount > 0 ? 'var(--off-white)' : 'var(--muted)', fontWeight: 600 }}>
                   {e.amount > 0 ? `$${e.amount.toLocaleString()}` : 'Free'}

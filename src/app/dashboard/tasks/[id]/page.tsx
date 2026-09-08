@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECT_COLORS, type Project } from '@/lib/tasks';
+import { projectColor } from '@/lib/tasks';
 import { sc, scBorder } from '@/lib/status-colors';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -59,7 +59,7 @@ export default function TaskDetailPage() {
     );
   }
 
-  const color = PROJECT_COLORS[task.project as Project] ?? 'var(--muted)';
+  const color = projectColor(task.project);
 
   return (
     <div style={{ maxWidth: 880 }}>
@@ -287,7 +287,7 @@ function TaskChat({ task, color }: { task: { title: string; project: string; cat
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
 
-  const systemOverride = `You are helping Shawaz, founder of Codelude, with a specific task on his internal company OS.
+  const systemOverride = `You are helping Shawaz, founder of LLIFE, with a specific task on his internal company OS.
 
 TASK: "${task.title}"
 Venture: ${task.project}

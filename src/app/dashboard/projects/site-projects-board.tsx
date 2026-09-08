@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { PROJECT_COLORS, type Project } from '@/lib/tasks';
+import { projectColor, type Project } from '@/lib/tasks';
+import { VENTURES as ALL_VENTURES } from '@/lib/ventures';
 import type { SiteProject, SiteProjectStatus } from '@/lib/site-projects';
 import SiteBoundaryMap, { type BoundaryResult } from '@/components/site-boundary-map';
 import { usePageScopes } from '@/lib/use-page-scopes';
@@ -26,6 +27,8 @@ const labelStyle: React.CSSProperties = {
   letterSpacing: '0.12em', textTransform: 'uppercase',
 };
 
+const DEFAULT_VENTURE = ALL_VENTURES[0].name as Project;
+
 export default function SiteProjectsBoard({ projects }: { projects: SiteProject[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -34,7 +37,9 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
   // POST /api/projects handler rejects the rest anyway.
   const { names: allowed } = usePageScopes('projects');
   const VENTURES = allowed as Project[];
-  const [ventureId, setVentureId] = useState<Project>('Roborns');
+  // Default from the registry rather than a literal, so consolidating a venture
+  // cannot leave this pointing at one that no longer exists.
+  const [ventureId, setVentureId] = useState<Project>(DEFAULT_VENTURE);
   const [location, setLocation] = useState('');
   const [status, setStatus] = useState<SiteProjectStatus>('planning');
   const [boundary, setBoundary] = useState<BoundaryResult | null>(null);
@@ -42,7 +47,9 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
   const [error, setError] = useState('');
 
   function openModal() {
-    setName(''); setVentureId('Roborns'); setLocation(''); setStatus('planning');
+    // Prefer a venture the user can actually create under; fall back to the
+    // registry default while access is still loading.
+    setName(''); setVentureId(VENTURES[0] ?? DEFAULT_VENTURE); setLocation(''); setStatus('planning');
     setBoundary(null);
     setSaving(false); setError('');
     setOpen(true);
@@ -96,7 +103,7 @@ export default function SiteProjectsBoard({ projects }: { projects: SiteProject[
       ) : (
         <div className="projects-grid">
           {projects.map(p => {
-            const color = PROJECT_COLORS[p.ventureId];
+            const color = projectColor(p.ventureId);
             const ss = STATUS_STYLES[p.status];
             const done = p.tasks.filter(t => t.status === 'done').length;
             const total = p.tasks.length;

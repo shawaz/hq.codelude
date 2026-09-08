@@ -7,7 +7,7 @@ export default function OnboardingPage() {
   return (
     <div>
       <h1 className="page-title">Onboarding</h1>
-      <p className="page-sub">Standard onboarding checklist for all new Codelude team members.</p>
+      <p className="page-sub">Standard onboarding checklist for all new LLIFE team members.</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {ONBOARDING_TEMPLATE.map((step, i) => (
           <div key={i} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem', borderLeft: `2px solid ${CAT_COLORS[step.category] || 'var(--accent)'}` }}>

@@ -1,4 +1,9 @@
+'use client';
+
+import { useState } from 'react';
+import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
 import { sc, scBorder } from '@/lib/status-colors';
+import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type Status = 'live' | 'stopped' | 'static' | 'building';
 type Kind   = 'Web' | 'Bot' | 'API' | 'Static' | 'Mobile';
 
@@ -15,24 +20,24 @@ interface Platform {
 
 const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   {
-    title: 'Codelude',
+    title: 'LLIFE',
     color: '#eeeeee',
     platforms: [
       {
-        name: 'Codelude Web',
-        domain: 'codelude.com',
+        name: 'Llife Web',
+        domain: APP_DOMAIN,
         port: 3004,
-        pm2: 'codelude-web',
+        pm2: 'llife-web',
         stack: 'Next.js 16 · Outfit + DM Mono',
         kind: 'Web',
         status: 'live',
         note: 'Public company website — ventures, token, news, contact',
       },
       {
-        name: 'Codelude HQ',
-        domain: 'hq.codelude.com',
+        name: 'Llife HQ',
+        domain: HQ_DOMAIN,
         port: 3005,
-        pm2: 'hq-codelude',
+        pm2: 'hq-llife',
         stack: 'Next.js 16 · Convex Auth (Google OAuth)',
         kind: 'Web',
         status: 'live',
@@ -51,6 +56,14 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
         kind: 'Web',
         status: 'building',
         note: 'AI Business Assistant — fractional ownership platform. Code on server, deployment in progress.',
+      },
+      {
+        name: 'Franchiseen Mobile',
+        pm2: 'EAS build — com.franchiseen.app',
+        stack: 'Expo 54 · React Native 0.81 · Clerk · Supabase · Stripe · NativeWind',
+        kind: 'Mobile',
+        status: 'building',
+        note: 'iOS + Android app — brand onboarding, property listing, franchise creation, payments and an admin console. Beta builds shipping via EAS; App Store submit not yet wired (eas.json submit block still has FILL_IN placeholders). Separate stack from the web platform: Supabase/Clerk, not Convex/Solana.',
       },
     ],
   },
@@ -98,7 +111,7 @@ const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
     platforms: [
       {
         name: 'Llife',
-        domain: 'llife.ai',
+        domain: APP_DOMAIN,
         stack: 'Next.js · Convex · LLM assistant · Ecosystem APIs',
         kind: 'Web',
         status: 'building',
@@ -243,14 +256,21 @@ const KIND_COLOR: Record<Kind, string> = {
 };
 
 export default function PlatformPage() {
-  const total   = GROUPS.flatMap(g => g.platforms).length;
-  const live    = GROUPS.flatMap(g => g.platforms).filter(p => p.status === 'live').length;
-  const stopped = GROUPS.flatMap(g => g.platforms).filter(p => p.status === 'stopped').length;
+  const [venture, setVenture] = useState('LLIFE');
+
+  // Group titles already match registry scope names, so no mapping is needed.
+  const groups  = GROUPS.filter(g => g.title === venture);
+  const shown   = groups.flatMap(g => g.platforms);
+  const total   = shown.length;
+  const live    = shown.filter(p => p.status === 'live').length;
+  const stopped = shown.filter(p => p.status === 'stopped').length;
 
   return (
     <div>
       <h1 className="page-title">Platform</h1>
       <p className="page-sub">All platforms and services running on 64.227.160.224 — Apache + PM2 stack.</p>
+
+      <VentureTabs active={venture} onChange={setVenture} />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">
@@ -267,7 +287,9 @@ export default function PlatformPage() {
         </div>
       </div>
 
-      {GROUPS.map(group => (
+      {groups.length === 0 && <VentureEmpty what="platforms" venture={venture} />}
+
+      {groups.map(group => (
         <div key={group.title} style={{ marginBottom: '2rem' }}>
           <div className="section-label" style={{ color: group.color }}>{group.title}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>

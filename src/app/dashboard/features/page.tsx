@@ -1,4 +1,9 @@
+'use client';
+
+import { useState } from 'react';
+import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
 import { sc, scBorder } from '@/lib/status-colors';
+import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
 
 interface Feature {
@@ -9,6 +14,8 @@ interface Feature {
 
 interface PlatformFeatures {
   platform: string;
+  /** Registry scope this platform belongs to — drives the venture tabs. */
+  venture: string;
   domain?: string;
   color: string;
   features: Feature[];
@@ -16,8 +23,9 @@ interface PlatformFeatures {
 
 const DATA: PlatformFeatures[] = [
   {
-    platform: 'Codelude Web',
-    domain: 'codelude.com',
+    platform: 'LLIFE Web',
+    venture: 'LLIFE',
+    domain: APP_DOMAIN,
     color: '#eeeeee',
     features: [
       { name: 'Venture pages',         description: 'Individual deep-dive pages for Roborns, Franchiseen, HubCV, and Llife',                status: 'live' },
@@ -34,11 +42,12 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'Codelude HQ',
-    domain: 'hq.codelude.com',
+    platform: 'LLIFE HQ',
+    venture: 'LLIFE',
+    domain: HQ_DOMAIN,
     color: '#eeeeee',
     features: [
-      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @codelude.com accounts',                     status: 'live' },
+      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @llife.app accounts',                     status: 'live' },
       { name: 'Protected routes',      description: 'Middleware-level auth guard — all /dashboard/* routes require an active session',        status: 'live' },
       { name: 'Accordion sidebar',     description: '10-section collapsible sidebar — auto-opens to active page, single section at a time',   status: 'live' },
       { name: 'Overview dashboard',    description: 'Venture status cards, quick stats, and activity feed',                                   status: 'live' },
@@ -58,6 +67,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Nanotrade Web',
+    venture: 'Nanotrade',
     domain: 'bot.nanotrade.com',
     color: '#adadad',
     features: [
@@ -72,6 +82,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Nanotrade TV',
+    venture: 'Nanotrade',
     domain: 'tv.nanotrade.com',
     color: '#adadad',
     features: [
@@ -82,6 +93,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Spot Dashboard',
+    venture: 'Nanotrade',
     domain: 'spot.nanotrade.com',
     color: '#adadad',
     features: [
@@ -91,6 +103,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Roborns',
+    venture: 'Roborns',
     domain: 'roborns.com',
     color: '#dbdbdb',
     features: [
@@ -101,6 +114,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Nanotrade Client Portal',
+    venture: 'Nanotrade',
     domain: 'client.nanotrade.com',
     color: '#adadad',
     features: [
@@ -113,6 +127,7 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Franchiseen',
+    venture: 'Franchiseen',
     domain: 'franchiseen.com',
     color: '#c8c8c8',
     features: [
@@ -125,7 +140,30 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
+    platform: 'Franchiseen Mobile',
+    venture: 'Franchiseen',
+    domain: 'com.franchiseen.app',
+    color: '#c8c8c8',
+    features: [
+      { name: 'Clerk authentication',        description: 'Phone and OAuth sign-in via Clerk, with the session token bridged to Supabase for RLS',   status: 'live' },
+      { name: 'Five-tab shell',              description: 'Home, Search, Property, Updates and Account tabs on Expo Router file-based navigation',    status: 'live' },
+      { name: 'Brand registration',          description: 'Multi-step onboarding — country, cities, target regions, building and shop selection',     status: 'live' },
+      { name: 'Brand dashboard',             description: 'Finances, products, invoices, outlets and per-project views for a registered brand',       status: 'live' },
+      { name: 'Property listing',            description: 'List a property with a map picker, geo coordinates, shop units and photo upload',          status: 'live' },
+      { name: 'Franchise creation flow',     description: 'Select franchise, location, property and shop, ending in an investment summary',           status: 'live' },
+      { name: 'Stripe payments',             description: 'Card payment via Stripe React Native and a create-payment-intent edge function',           status: 'live' },
+      { name: 'Admin console',               description: 'Brands, deals, outlets, payments, payouts, properties, projects, support, team and users', status: 'live' },
+      { name: 'KYC flow',                    description: 'In-app identity capture and document upload ahead of investment',                          status: 'live' },
+      { name: 'Push notifications',          description: 'expo-notifications with send / fetch / mark-read edge functions',                          status: 'live' },
+      { name: 'Favorites and support',       description: 'Liked brands, support tickets, careers listings and legal pages',                          status: 'live' },
+      { name: 'AI assistant',                description: 'In-app chat backed by the chat-assistant edge function',                                   status: 'in-progress' },
+      { name: 'Payouts and commissions',     description: 'Broker commission and owner deposit flows via mark-payout and release-payout',             status: 'in-progress' },
+      { name: 'Stripe Connect',              description: 'Removed in Sep 2026 — payout routing needs a replacement before operators can be paid',    status: 'planned' },
+    ],
+  },
+  {
     platform: 'HubCV',
+    venture: 'HubCV',
     domain: 'hubcv.pro',
     color: '#b5b5b5',
     features: [
@@ -159,7 +197,8 @@ const DATA: PlatformFeatures[] = [
   },
   {
     platform: 'Llife',
-    domain: 'llife.ai',
+    venture: 'Llife',
+    domain: APP_DOMAIN,
     color: '#a5a5a5',
     features: [
       { name: 'Five-domain model',         description: 'Finances, Education, Earnings, Mind and Body — each mapped to a daily time block. Spec complete.', status: 'live' },
@@ -183,7 +222,10 @@ const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {
 };
 
 export default function FeaturesPage() {
-  const all         = DATA.flatMap(d => d.features);
+  const [venture, setVenture] = useState('LLIFE');
+
+  const blocks      = DATA.filter(d => d.venture === venture);
+  const all         = blocks.flatMap(d => d.features);
   const live        = all.filter(f => f.status === 'live').length;
   const inProgress  = all.filter(f => f.status === 'in-progress').length;
   const planned     = all.filter(f => f.status === 'planned').length;
@@ -192,6 +234,8 @@ export default function FeaturesPage() {
     <div>
       <h1 className="page-title">Features</h1>
       <p className="page-sub">Feature inventory across all platforms — what's live, what's being built, and what's planned.</p>
+
+      <VentureTabs active={venture} onChange={setVenture} />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">
@@ -212,7 +256,9 @@ export default function FeaturesPage() {
         </div>
       </div>
 
-      {DATA.map(d => (
+      {blocks.length === 0 && <VentureEmpty what="features" venture={venture} />}
+
+      {blocks.map(d => (
         <div key={d.platform} style={{ marginBottom: '2rem' }}>
           <div className="section-label" style={{ color: d.color }}>
             {d.platform}{d.domain ? ` — ${d.domain}` : ''}

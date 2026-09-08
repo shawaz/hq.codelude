@@ -11,7 +11,9 @@
  * straight out of the browser, whatever the API allowed. Keep it off the client.
  */
 export const VENTURE_CONTEXT: Record<string, string> = {
-  Roborns: `You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a 1-acre coastal site in Uchila Thalapady, Mangaluru, India.
+
+  Roborns: `You are helping Shawaz work on ROBORNS — a coastal AI data center co-located with seawater desalination and mineral extraction on a coastal site in Mangaluru, India. Preferred siting is Panambur / Baikampady,
+Dakshina Kannada — Uchila Thalapady was ruled out on grid access and Kapu was superseded.
 
 KEY FACTS:
 - Waste heat from AI compute drives MED seawater desalination (50K L/day pilot)
@@ -26,9 +28,9 @@ KEY FACTS:
 
 CURRENT STATUS:
 - Financial model published (HQ)
-- Thermal feasibility study commissioned May 2026
-- Site survey planned June 2026
-- Dubai HoldCo incorporation in progress
+- Thermal feasibility study NOT yet commissioned — gated behind the power, CRZ and land-price gates (EXP-010/011/012)
+- Site survey pending, to be rescoped to the Mangaluru site
+- Dubai HoldCo closed — India-first structure now planned
 - India entity (Roborns Energy & Infrastructure Pvt. Ltd.) to be incorporated
 `,
 
@@ -72,7 +74,7 @@ KEY FACTS:
 
 Help Shawaz work on Nanotrade.`,
 
-  Llife: `You are helping Shawaz work on LLIFE — an AI personal assistant at llife.ai that manages a user's day-to-day life across five domains: Finances, Education, Earnings, Mind and Body.
+  Llife: `You are helping Shawaz work on LLIFE — an AI personal assistant at llife.app that manages a user's day-to-day life across five domains: Finances, Education, Earnings, Mind and Body.
 
 KEY FACTS:
 - Education pulls from the HubCV API; Earnings pulls from the Nanotrade (job, crypto, stocks) and Franchiseen (franchise) APIs
@@ -84,5 +86,4 @@ KEY FACTS:
 - Needs: integrations engineer, mobile product engineer, Account Aggregator approval for financial data
 - Y5 revenue: $8.95M
 `,
-
 };

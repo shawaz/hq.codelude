@@ -1,6 +1,6 @@
 const NEWS = [
-  { date: 'May 20, 2026', title: 'Codelude.com launched.', body: 'The Codelude studio site is live at codelude.com — consolidating all four ventures under a single public presence with SSL and PM2 process management.' },
-  { date: 'May 20, 2026', title: 'hq.codelude.com deployed.', body: 'Internal company dashboard live with team login, venture tracking, and activity feed.' },
+  { date: 'May 20, 2026', title: 'LLIFE.com launched.', body: 'The LLIFE studio site is live at llife.app — consolidating all four ventures under a single public presence with SSL and PM2 process management.' },
+  { date: 'May 20, 2026', title: 'hq.llife.app deployed.', body: 'Internal company dashboard live with team login, venture tracking, and activity feed.' },
   { date: 'May 19, 2026', title: 'Franchiseen payout architecture finalized.', body: 'Revenue-sharing and investor payout structure locked. First franchise partner onboarding begins next quarter.' },
   { date: 'May 15, 2026', title: 'Roborns thermal feasibility study commissioned.', body: 'Engagement with coastal infrastructure specialists begins. Site survey for the Mangaluru pilot facility underway.' },
   { date: 'May 10, 2026', title: 'HubCV matching engine in development.', body: 'AI-driven candidate-to-opportunity matching core in active development. First recruiter partnerships being established ahead of beta.' },

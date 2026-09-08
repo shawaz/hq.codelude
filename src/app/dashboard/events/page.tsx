@@ -4,11 +4,8 @@ import { useState, useMemo } from 'react';
 import { EVENTS, type EventType, type EventStatus } from '@/lib/workspace';
 import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor, ALL_SCOPES } from '@/lib/ventures';
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
 
 const STATUS_STYLES: Record<EventStatus, { color: string; label: string }> = {
   today:     { color: '#eeeeee', label: 'Today'     },
@@ -41,6 +38,7 @@ function calendarDays(year: number, month: number): (number | null)[] {
 function dateStr(year: number, month: number, day: number) {
   return `${year}-${pad(month + 1)}-${pad(day)}`;
 }
+
 
 export default function EventsPage() {
   const now    = new Date();
@@ -156,7 +154,7 @@ export default function EventsPage() {
                     {hasEvents && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', alignItems: 'center' }}>
                         {events.slice(0, 5).map((e, j) => (
-                          <span key={j} style={{ width: 7, height: 7, borderRadius: '50%', background: VENTURE_COLORS[e.venture], flexShrink: 0, display: 'inline-block' }} />
+                          <span key={j} style={{ width: 7, height: 7, borderRadius: '50%', background: scopeColor(e.venture), flexShrink: 0, display: 'inline-block' }} />
                         ))}
                         {events.length > 5 && (
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.48rem', color: 'var(--muted)' }}>+{events.length - 5}</span>
@@ -170,7 +168,7 @@ export default function EventsPage() {
 
             {/* Venture legend */}
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-              {Object.entries(VENTURE_COLORS).map(([v, c]) => (
+              {ALL_SCOPES.map(({ name: v, color: c }) => (
                 <span key={v} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: c }} />{v}
                 </span>
@@ -189,7 +187,7 @@ export default function EventsPage() {
                   {selectedEvents.map((e, i) => {
                     const ss = STATUS_STYLES[e.status];
                     return (
-                      <div key={i} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem', borderLeft: `2px solid ${VENTURE_COLORS[e.venture]}` }}>
+                      <div key={i} style={{ background: 'var(--card-bg)', padding: '1rem 1.1rem', borderLeft: `2px solid ${scopeColor(e.venture)}` }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.4rem' }}>
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.08em', padding: '0.12rem 0.4rem', border: `1px solid ${scBorder(TYPE_COLORS[e.type])}`, color: sc(TYPE_COLORS[e.type]) }}>{e.type}</span>
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: sc(ss.color) }}>{ss.label}</span>
@@ -229,7 +227,7 @@ export default function EventsPage() {
           </div>
 
           <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-            {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}} onClick={() => setVenture(v)}>{v}</button>)}
+            {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}} onClick={() => setVenture(v)}>{v}</button>)}
           </div>
           <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
             {TYPES.map(t => <button key={t} className={`filter-pill${type === t ? ' active' : ''}`} style={type === t && t !== 'all' ? { borderColor: TYPE_COLORS[t as EventType], color: sc(TYPE_COLORS[t as EventType]) } : {}} onClick={() => setType(t)}>{t === 'all' ? 'All types' : t}</button>)}
@@ -248,7 +246,7 @@ export default function EventsPage() {
                       {e.time && <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)' }}>{e.time}</div>}
                     </div>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(TYPE_COLORS[e.type])}`, color: sc(TYPE_COLORS[e.type]), alignSelf: 'center' }}>{e.type}</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(VENTURE_COLORS[e.venture]) }}>{e.venture}</span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(scopeColor(e.venture)) }}>{e.venture}</span>
                     <div style={{ fontWeight: 600, fontSize: '0.82rem', color: e.status === 'completed' ? 'var(--muted)' : 'var(--off-white)' }}>{e.title}</div>
                     <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(ss.color)}`, color: sc(ss.color), whiteSpace: 'nowrap' }}>{ss.label}</span>
                   </div>

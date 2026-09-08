@@ -22,7 +22,7 @@ const limIx = process.argv.indexOf('--limit');
 const limit = limIx > -1 ? Number(process.argv[limIx + 1]) : 100;
 
 const RATE_MS = 1100;              // Nominatim: ~1 req/sec. Leave headroom.
-const UA = 'hq.codelude.com pipeline map (codelude@gmail.com)';
+const UA = 'hq.llife.app pipeline map (shawaz@llife.app)';
 
 const convex = (fn, args) =>
   JSON.parse(

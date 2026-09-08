@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { PROJECT_COLORS, type Project, type Status } from '@/lib/tasks';
+import { projectColor, type Status } from '@/lib/tasks';
 import { sc, scBorder } from '@/lib/status-colors';
 import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import NewTaskForm from '@/components/NewTaskForm';
@@ -147,7 +147,7 @@ export default function TasksPage() {
                             letterSpacing: '0.08em', textTransform: 'uppercase',
                             padding: '0.15rem 0.4rem', cursor: 'pointer',
                             background: 'transparent',
-                            border: `1px solid ${scBorder(PROJECT_COLORS[venture.name as Project])}`,
+                            border: `1px solid ${scBorder(projectColor(venture.name))}`,
                             color: 'var(--muted)',
                           }}
                         >

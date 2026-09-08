@@ -24,7 +24,7 @@ const DESCRIPTIONS: Record<string, string> = {
   invoice:     'Outgoing invoices and billing management.',
   payee:       'Vendor and contractor payment tracking.',
   shares:      'Cap table, equity ledger, and HoldCo share registry.',
-  investors:   'Token-based and equity fundraising tracker. Codelude raises via a Dubai HoldCo structure — investor allocations, token tranches, and venture-level round tracking live here.',
+  investors:   'Token-based and equity fundraising tracker. LLIFE raises via a Dubai HoldCo structure — investor allocations, token tranches, and venture-level round tracking live here.',
   attendance:  'Team attendance, leave requests, and working hours.',
   application: 'Job applications and candidate pipeline.',
   positions:   'Open roles and headcount planning across all ventures.',

@@ -20,6 +20,16 @@ export const PROJECT_COLORS: Record<Project, string> = {
 };
 
 /**
+ * Colour for a project name.
+ *
+ * Unknown names return neutral grey rather than undefined: stored task rows can
+ * still carry a pre-rename name (Codelude, Dextrip) and must not crash a lookup.
+ */
+export function projectColor(name: string | undefined | null): string {
+  return (name && PROJECT_COLORS[name as Project]) || 'var(--muted)';
+}
+
+/**
  * Seed data only. The source of truth is the Convex `tasks` table — these rows
  * were migrated once via tasks:seedFromStatic and are kept so the migration can
  * be re-run against a fresh deployment. Editing this array does not change what
@@ -122,4 +132,29 @@ export const SEED_TASKS: Task[] = [
   { id: 'd13', project: 'Nanotrade', category: 'Business',       priority: 'high',   status: 'todo',        title: 'Go-to-market strategy' },
   { id: 'd14', project: 'Nanotrade', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Community and Discord setup' },
   { id: 'd15', project: 'Nanotrade', category: 'Marketing',      priority: 'medium', status: 'todo',        title: 'Beta user acquisition plan' },
+  // ── ROBORNS — gates, legal, govt and comms (added Sep 2026) ──
+  // Ordered by dependency: gates first, then the things gated on them.
+  // Zero-cost and time-sensitive items (govt policy window, legal exposure)
+  // are high priority regardless of where they sit in the build sequence.
+  { id: 'rb01', project: 'Roborns', category: 'Gate',         priority: 'high',   status: 'todo', title: 'GATE 1 — Power load feasibility opinion via KPT (EXP-010, ~₹15–25K)' },
+  { id: 'rb02', project: 'Roborns', category: 'Gate',         priority: 'high',   status: 'todo', title: 'GATE 2 — CRZ classification for Panambur survey no. (EXP-011, ~₹25–50K)' },
+  { id: 'rb03', project: 'Roborns', category: 'Gate',         priority: 'high',   status: 'todo', title: 'GATE 3 — Kaveri guidance value + KIADB Baikampady rate (EXP-012, free)' },
+  { id: 'rb04', project: 'Roborns', category: 'Legal',        priority: 'high',   status: 'todo', title: 'Gate roborns.com/investors — s.42(7) public solicitation exposure' },
+  { id: 'rb05', project: 'Roborns', category: 'Legal',        priority: 'high',   status: 'todo', title: 'Email CA/CS — incorporation, FDI structure, s.42, Nidhi second opinion' },
+  { id: 'rb06', project: 'Roborns', category: 'Legal',        priority: 'high',   status: 'todo', title: 'Incorporate Roborns Energy & Infrastructure Pvt Ltd + DPIIT recognition' },
+  { id: 'rb07', project: 'Roborns', category: 'Legal',        priority: 'high',   status: 'todo', title: 'Sign NDA-001 with thermal engineering partner — blocks CON-002' },
+  { id: 'rb08', project: 'Roborns', category: 'Govt',         priority: 'high',   status: 'todo', title: 'Send KDEM approach note — coastal AI hub, get on radar pre-consultation' },
+  { id: 'rb09', project: 'Roborns', category: 'Govt',         priority: 'high',   status: 'todo', title: 'File Karnataka DC policy consultation response — window closes on rollout' },
+  { id: 'rb10', project: 'Roborns', category: 'Govt',         priority: 'high',   status: 'todo', title: 'KIADB Mangaluru — Baikampady allotment enquiry, marine-intake parcel' },
+  { id: 'rb11', project: 'Roborns', category: 'Comms',        priority: 'high',   status: 'todo', title: 'Correct 15 May 2026 news entry — feasibility study was never commissioned' },
+  { id: 'rb12', project: 'Roborns', category: 'Comms',        priority: 'high',   status: 'todo', title: 'Audit investor deck v1.2 for the same unsupported feasibility claim' },
+  { id: 'rb13', project: 'Roborns', category: 'Finance',      priority: 'high',   status: 'todo', title: 'Fix opex model — 20MW draws ~175 GWh/yr, exceeds stated ₹20 Cr opex' },
+  { id: 'rb14', project: 'Roborns', category: 'Eng',          priority: 'high',   status: 'todo', title: 'Verify MED-TVC vs available waste heat grade — TVC needs motive steam' },
+  { id: 'rb15', project: 'Roborns', category: 'Eng',          priority: 'medium', status: 'todo', title: 'Dark fibre enquiry — KPTCL OPGW, RailTel (Konkan), Jio/Airtel/Tata NLD' },
+  { id: 'rb16', project: 'Roborns', category: 'Gate',         priority: 'medium', status: 'todo', title: 'Site survey at Mangaluru site (EXP-008 — rescope from Uchila Thalapady)' },
+  { id: 'rb17', project: 'Roborns', category: 'Gate',         priority: 'medium', status: 'todo', title: 'Thermal feasibility study (EXP-009) — only after Gates 1–3 clear' },
+  { id: 'rb18', project: 'Roborns', category: 'Comms',        priority: 'medium', status: 'todo', title: 'Reframe pitch on PUE not water — ~₹40 Cr/yr energy delta at 20MW' },
+  { id: 'rb19', project: 'Roborns', category: 'Comms',        priority: 'medium', status: 'todo', title: 'Update roborns.com site from Kapu to Mangaluru/DK' },
+  { id: 'rb20', project: 'Roborns', category: 'Finance',      priority: 'medium', status: 'todo', title: 'Reconcile instrument — ₹18.1 Cr CCD (HQ) vs ₹15 Cr equity 8% pref (site)' },
+  { id: 'rb21', project: 'Roborns', category: 'Finance',      priority: 'medium', status: 'todo', title: 'R7 verification checklist — no spend, no FD, no office until cleared' },
 ];

@@ -6,13 +6,13 @@
  * Lifted out of the Financial Model page so the eight Finance pages share one
  * implementation instead of eight near-identical copies of the same 40 lines.
  *
- * The strip shows the five ventures only, matching Financial Model. HoldCo-level
- * rows (the cap table's Codelude entries, treasury wallets, the Dubai and India
+ * The strip shows ventures only, matching Financial Model. HoldCo-level
+ * rows (the cap table's LLIFE entries, treasury wallets, the Dubai and India
  * bank accounts) have no tab of their own — see `isHoldCo` in src/lib/finance.ts
  * for how those surface instead.
  *
- * Ventures are filtered by the caller's access, so a member scoped to Nanotrade
- * sees one tab here, not five.
+ * Ventures are filtered by the caller's access, and the strip is hidden
+ * entirely when only one survives that filter.
  */
 
 import { useState, type ReactNode } from 'react';
@@ -73,7 +73,10 @@ export default function VenturePageLayout({
       <h1 className="page-title">{title}</h1>
       <p className="page-sub">{subtitle}</p>
 
-      {/* Venture selector */}
+      {/* Venture selector — hidden when there is nothing to choose between.
+          Rendered conditionally rather than deleted: the strip is correct the
+          moment a second scope returns to the registry. */}
+      {ventures.length > 1 && (
       <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
         border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
         {ventures.map((v, i) => (
@@ -91,6 +94,7 @@ export default function VenturePageLayout({
           >{v.name}</button>
         ))}
       </div>
+      )}
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${venture.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

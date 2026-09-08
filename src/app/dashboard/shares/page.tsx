@@ -4,7 +4,7 @@ import { SHARES, forVenture, isHoldCo } from '@/lib/finance';
 import VenturePageLayout, { NoRows, HoldCoTag, type VentureTab } from '@/components/VenturePageLayout';
 
 const ENTITY_COLORS: Record<string, string> = {
-  'Codelude HoldCo (Dubai)':  '#eeeeee',
+  'LLIFE HoldCo (Dubai)':  '#eeeeee',
   'Roborns (Project Entity)': '#dbdbdb',
   'Franchiseen (Project)':    '#c8c8c8',
   'Nanotrade (Project)':        '#adadad',
@@ -43,7 +43,7 @@ export default function SharesPage() {
             <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1.25rem 1.5rem', marginBottom: '2rem' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Cap table structure</div>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
-                Codelude HoldCo (Dubai) sits at the top. All five ventures are subsidiaries. Token holders receive <strong style={{ color: 'var(--off-white)' }}>revenue share</strong>, not equity — token issuance does not dilute the cap table. Equity dilution only occurs at the project entity level (Franchiseen, Llife) through SAFE/seed rounds.
+                LLIFE HoldCo (Dubai) sits at the top. All five ventures are subsidiaries. Token holders receive <strong style={{ color: 'var(--off-white)' }}>revenue share</strong>, not equity — token issuance does not dilute the cap table. Equity dilution only occurs at the project entity level (Franchiseen, Llife) through SAFE/seed rounds.
               </p>
             </div>
 

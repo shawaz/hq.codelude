@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { PAYROLL, type PayrollType, type PayrollStatus } from '@/lib/budget-data';
 import { usePageScopes } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<PayrollStatus, { color: string; label: string }> = {
   active:  { color: '#dbdbdb', label: 'Active'  },
@@ -18,10 +19,7 @@ const TYPE_COLORS: Record<PayrollType, string> = {
   advisor:    '#b5b5b5',
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
+
 
 
 export default function PayrollPage() {
@@ -67,7 +65,7 @@ export default function PayrollPage() {
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
         {VENTURES.map(v => (
           <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: VENTURE_COLORS[v], color: sc(VENTURE_COLORS[v]) } : {}}
+            style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}}
             onClick={() => setVenture(v)}>{v}</button>
         ))}
       </div>
@@ -98,7 +96,7 @@ export default function PayrollPage() {
                   </div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--muted)', marginBottom: '0.4rem' }}>{p.role}</div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    {p.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(VENTURE_COLORS[v])}`, color: sc(VENTURE_COLORS[v]) }}>{v}</span>)}
+                    {p.ventures.map(v => <span key={v} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.4rem', border: `1px solid ${scBorder(scopeColor(v))}`, color: sc(scopeColor(v)) }}>{v}</span>)}
                   </div>
                 </div>
 

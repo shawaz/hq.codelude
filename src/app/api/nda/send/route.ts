@@ -16,17 +16,17 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from:    'Codelude Legal <legal@codelude.com>',
+      from:    'LLIFE Legal <legal@llife.app>',
       to:      [toEmail],
-      replyTo: 'shawaz@codelude.com',
-      subject: `NDA signature requested — Codelude × ${party}`,
+      replyTo: 'shawaz@llife.app',
+      subject: `NDA signature requested — LLIFE × ${party}`,
       html: `
         <div style="font-family:monospace;background:#0a0a08;color:#f5f3ee;padding:40px;max-width:600px;margin:0 auto;">
           <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#eeeeee;margin-bottom:8px;">Non-Disclosure Agreement</div>
           <div style="font-size:22px;font-weight:700;margin-bottom:24px;letter-spacing:-0.02em;">Signature requested</div>
 
           <p style="font-family:monospace;font-size:13px;color:#7a7870;line-height:1.8;font-weight:300;margin-bottom:24px;">
-            Codelude is requesting your signature on a mutual Non-Disclosure Agreement (NDA) for the following purpose:
+            LLIFE is requesting your signature on a mutual Non-Disclosure Agreement (NDA) for the following purpose:
           </p>
 
           <div style="background:#111110;border:1px solid #252522;border-left:2px solid #eeeeee;padding:16px 20px;margin-bottom:24px;">
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
           ${personalNote ? `
           <div style="background:#111110;border:1px solid #252522;padding:16px 20px;margin-bottom:24px;">
-            <div style="font-size:11px;color:#7a7870;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Note from Codelude</div>
+            <div style="font-size:11px;color:#7a7870;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Note from LLIFE</div>
             <div style="font-size:13px;color:#f5f3ee;line-height:1.7;font-weight:300;">${personalNote}</div>
           </div>
           ` : ''}
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
           <div style="border-top:1px solid #252522;padding-top:16px;font-size:11px;color:#7a7870;">
             Questions? Reply directly to this email.<br/>
-            Codelude · hello@codelude.com · codelude.com
+            LLIFE · hello@llife.app · llife.app
           </div>
         </div>
       `,

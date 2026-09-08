@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireApiUser } from '@/lib/api-auth';
+import { HQ_DOMAIN } from '@/lib/domains';
 
 export async function GET(req: NextRequest) {
   const guard = await requireApiUser();
@@ -9,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({ q, format: 'json', limit: '5' })}`;
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'hq.codelude.com site-projects map (codelude@gmail.com)' } });
+    const res = await fetch(url, { headers: { 'User-Agent': `${HQ_DOMAIN} site-projects map (shawaz@llife.app)` } });
     if (!res.ok) return NextResponse.json([]);
     const data: { display_name: string; lat: string; lon: string }[] = await res.json();
     return NextResponse.json(data.map(d => ({

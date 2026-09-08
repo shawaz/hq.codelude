@@ -4,7 +4,7 @@ import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from './ConvexClientProvider';
 
 export const metadata: Metadata = {
-  title: 'Codelude HQ',
+  title: 'LLIFE HQ',
   description: 'Internal company dashboard',
 };
 

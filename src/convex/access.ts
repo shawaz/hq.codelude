@@ -25,13 +25,13 @@ export interface Scope {
 }
 
 /**
- * Company-level scope. Not a venture — it is the `venture: 'Codelude'` string
+ * Company-level scope. Not a venture — it is the `venture: 'LLIFE'` string
  * already used across src/lib/people.ts, legal-data.ts, finance.ts and ops.ts
  * to mean "HoldCo, not venture-specific".
  */
 export const HOLDCO: Scope = {
-  id: 'codelude',
-  name: 'Codelude',
+  id: 'llife',
+  name: 'LLIFE',
   color: '#eeeeee',
   sector: 'HoldCo',
   holdco: true,
@@ -40,12 +40,16 @@ export const HOLDCO: Scope = {
 /**
  * The five ventures. `name` is load-bearing: every static dataset in src/lib
  * keys off these exact strings, so they must not be renamed casually.
+ *
+ * Each ships as its own platform. The Sep 2026 consolidation into a single
+ * Llife product was reversed on 8 Sep 2026 — the ventures are separate again,
+ * and their records were never deleted, so restoring them here is all it takes.
  */
 export const VENTURES: Scope[] = [
   { id: 'roborns',     name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure' },
   { id: 'franchiseen', name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant' },
   { id: 'hubcv',       name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant' },
-  { id: 'nanotrade',     name: 'Nanotrade',     color: '#adadad', sector: 'AI Trading Assistant' },
+  { id: 'nanotrade',   name: 'Nanotrade',   color: '#adadad', sector: 'AI Trading Assistant' },
   { id: 'llife',       name: 'Llife',       color: '#a5a5a5', sector: 'AI Life Assistant' },
 ];
 
@@ -56,6 +60,28 @@ export const ALL_SCOPE_NAMES: string[] = ALL_SCOPES.map((s) => s.name);
 
 export function scopeByName(name: string): Scope | undefined {
   return ALL_SCOPES.find((s) => s.name === name);
+}
+
+/**
+ * Whether a stored scope name is still live.
+ *
+ * Archiving is defined as absence from the registry rather than a flag on each
+ * row: no schema change, no migration, and reversible by editing VENTURES.
+ * Callers that read a table wholesale must apply this, because the venture
+ * string on an archived row is otherwise indistinguishable from a live one.
+ */
+export function isActiveScope(name: string | undefined | null): boolean {
+  return !!name && ALL_SCOPE_NAMES.includes(name);
+}
+
+/**
+ * Email domains permitted to sign in.
+ */
+export const ALLOWED_EMAIL_DOMAINS = ['llife.app', 'codelude.com'] as const;
+
+export function isAllowedEmail(email: string | undefined | null): boolean {
+  const e = email?.toLowerCase().trim();
+  return !!e && ALLOWED_EMAIL_DOMAINS.some((d) => e.endsWith(`@${d}`));
 }
 
 // ─── PAGE REGISTRY ────────────────────────────────────────────────────────────
@@ -112,6 +138,7 @@ export const NAV: NavSection[] = [
       page('departments', 'Departments'),
       page('franchise',   'Franchise'),
       page('properties',  'Properties'),
+      page('feasibility', 'Feasibility'),
     ],
   },
   {
@@ -249,6 +276,11 @@ export function can(
   pageSlug: string,
 ): boolean {
   if (!user) return false;
+  // Unrestricted means every *live* scope, not any string ever stored. Without
+  // this an admin could still reach archived ventures by naming one directly —
+  // which the UI never does, but the assistant's tools pass a venture straight
+  // from the model, so the guard belongs here rather than at each call site.
+  if (!isActiveScope(venture)) return false;
   if (isUnrestricted(user)) return true;
   return (user.access ?? []).some(
     (g) => g.venture === venture && g.pages.includes(pageSlug),

@@ -31,7 +31,7 @@ export interface SiteProject {
 
 const DATA_PATHS = [
   process.env.SITE_PROJECTS_FILE,
-  '/home/centos/codelude/data/site-projects.json',
+  '/home/centos/llife/data/site-projects.json',
   path.join(process.cwd(), 'data', 'site-projects.json'),
 ].filter(Boolean) as string[];
 
@@ -47,26 +47,37 @@ function genId(prefix: string): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/**
+ * Seed data. Restored when the ventures were split back out on 8 Sep 2026.
+ *
+ * Siting reflects the Sep 2026 position, not the original seed: Uchila
+ * Thalapady was ruled out on grid access and Kapu superseded, so the project
+ * points at Panambur / Baikampady. The survey is `todo`, not `in-progress` —
+ * it was never commissioned.
+ */
 const SEED_PROJECTS: SiteProject[] = [
   {
     id: 'SP-seed-mangaluru',
     ventureId: 'Roborns',
     name: 'Roborns Coastal Site — Mangaluru',
-    location: 'Uchila Thalapady, Mangaluru',
+    location: 'Panambur / Baikampady, Mangaluru (Dakshina Kannada)',
     status: 'planning',
     source: 'manual',
     config: 'West Coast, India · $10M – $50M (Pilot Infrastructure) · 2 MW compute · 15 kL/day water · 30 t/mo minerals',
     budget: [
-      { id: genId('bl'), label: 'Coastal land lease (1 acre)', category: 'Land', amount: 0, currency: 'INR', notes: 'Lease value TBD — pending site survey and permits' },
+      { id: genId('bl'), label: 'Coastal land — KIADB allotment or lease', category: 'Land', amount: 0, currency: 'INR', notes: 'Value TBD — pursue KIADB allotment via KDEM rather than the private Panambur parcel' },
     ],
     team: [],
     tasks: [
-      { id: genId('pt'), title: 'Coastal site survey — Mangaluru', status: 'in-progress' },
-      { id: genId('pt'), title: 'Coastal land lease / acquisition', status: 'todo' },
+      { id: genId('pt'), title: 'GATE 1 — power load feasibility opinion (KPT)', status: 'todo' },
+      { id: genId('pt'), title: 'GATE 2 — CRZ classification for the Panambur survey number', status: 'todo' },
+      { id: genId('pt'), title: 'GATE 3 — Kaveri guidance value + KIADB Baikampady rate', status: 'todo' },
+      { id: genId('pt'), title: 'Coastal site survey — Mangaluru', status: 'todo' },
       { id: genId('pt'), title: 'Coastal construction permits (Govt)', status: 'todo' },
     ],
     activities: [
-      { id: genId('act'), title: 'Site identified — Uchila Thalapady, 1-acre coastal plot', date: new Date().toISOString(), status: 'done' },
+      { id: genId('act'), title: 'Uchila Thalapady ruled out — no power available at site', date: new Date().toISOString(), status: 'done' },
+      { id: genId('act'), title: 'Panambur / Baikampady adopted as preferred siting', date: new Date().toISOString(), status: 'done' },
     ],
     createdAt: new Date().toISOString(),
   },

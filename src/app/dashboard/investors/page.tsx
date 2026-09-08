@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { INVESTOR_ROUNDS, type RoundStatus, type RoundType } from '@/lib/finance';
 import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import { sc, scBorder } from '@/lib/status-colors';
+import { scopeColor } from '@/lib/ventures';
 
 const TABS: VentureTab[] = [
   { key: 'all',         label: 'All'         },
@@ -29,10 +30,7 @@ const TYPE_COLORS: Record<RoundType, string> = {
   revenue:   '#adadad',
 };
 
-const VENTURE_COLORS: Record<string, string> = {
-  Codelude: '#eeeeee', Roborns: '#dbdbdb', Franchiseen: '#c8c8c8',
-  HubCV: '#b5b5b5', Llife: '#a5a5a5', Nanotrade: '#adadad',
-};
+
 
 export default function InvestorsPage() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -57,7 +55,7 @@ export default function InvestorsPage() {
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: '2px solid var(--accent)', padding: '1.25rem 1.5rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--accent-text)', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Structure overview</div>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300, margin: 0 }}>
-          Codelude raises via a <strong style={{ color: 'var(--off-white)' }}>Dubai HoldCo token structure</strong>. Physical infrastructure assets (Roborns) are tokenised — token holders receive revenue share, not equity. The HoldCo studio token gives exposure across all five ventures. Equity rounds (Franchiseen, Llife) sit below the HoldCo and dilute at the project level only.
+          LLIFE raises via a <strong style={{ color: 'var(--off-white)' }}>Dubai HoldCo token structure</strong>. Physical infrastructure assets (Roborns) are tokenised — token holders receive revenue share, not equity. The HoldCo studio token gives exposure across all five ventures. Equity rounds (Franchiseen, Llife) sit below the HoldCo and dilute at the project level only.
         </p>
       </div>
 
@@ -69,10 +67,10 @@ export default function InvestorsPage() {
             const isActive = selected === r.id;
             return (
               <div key={r.id} onClick={() => setSelected(isActive ? null : r.id)}
-                style={{ background: isActive ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '1.25rem 1.5rem', cursor: 'pointer', borderLeft: isActive ? `2px solid ${VENTURE_COLORS[r.venture]}` : '2px solid transparent', transition: 'background 0.15s' }}>
+                style={{ background: isActive ? 'var(--card-bg-alt)' : 'var(--card-bg)', padding: '1.25rem 1.5rem', cursor: 'pointer', borderLeft: isActive ? `2px solid ${scopeColor(r.venture)}` : '2px solid transparent', transition: 'background 0.15s' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', marginBottom: '0.5rem' }}>
                   <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(VENTURE_COLORS[r.venture]), letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{r.venture}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(scopeColor(r.venture)), letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{r.venture}</div>
                     <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{r.roundName}</div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
@@ -95,7 +93,7 @@ export default function InvestorsPage() {
 
         {round && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: `2px solid ${VENTURE_COLORS[round.venture]}`, padding: '1.5rem' }}>
+            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderLeft: `2px solid ${scopeColor(round.venture)}`, padding: '1.5rem' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: 'var(--muted)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Structure</div>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--off-white)', lineHeight: 1.9, fontWeight: 300, margin: 0 }}>{round.structure}</p>
             </div>
