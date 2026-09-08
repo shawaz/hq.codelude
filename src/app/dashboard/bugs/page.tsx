@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
 import { sc, scBorder } from '@/lib/status-colors';
 type Severity = 'high' | 'medium' | 'low';
 type BugStatus = 'open' | 'fixed';
@@ -13,6 +17,8 @@ interface Bug {
 
 interface PlatformBugs {
   platform: string;
+  /** Registry scope this platform belongs to — drives the venture tabs. */
+  venture: string;
   domain: string;
   color: string;
   bugs: Bug[];
@@ -29,6 +35,7 @@ interface PlatformBugs {
 const DATA: PlatformBugs[] = [
   {
     platform: 'Franchiseen Mobile',
+    venture: 'Franchiseen',
     domain: 'com.franchiseen.app',
     color: '#c8c8c8',
     bugs: [
@@ -78,6 +85,7 @@ const DATA: PlatformBugs[] = [
   },
   {
     platform: 'HubCV',
+    venture: 'HubCV',
     domain: 'hubcv.pro',
     color: '#b5b5b5',
     bugs: [
@@ -177,7 +185,10 @@ const mono = (size: string): React.CSSProperties => ({
 });
 
 export default function BugsPage() {
-  const all = DATA.flatMap(p => p.bugs);
+  const [venture, setVenture] = useState('LLIFE');
+
+  const groups = DATA.filter(p => p.venture === venture);
+  const all = groups.flatMap(p => p.bugs);
   const open = all.filter(b => b.status === 'open');
   const fixed = all.filter(b => b.status === 'fixed');
   const highOpen = open.filter(b => b.severity === 'high').length;
@@ -186,6 +197,8 @@ export default function BugsPage() {
     <div>
       <h1 className="page-title">Bugs</h1>
       <p className="page-sub">Known issues and recent fixes across all platforms.</p>
+
+      <VentureTabs active={venture} onChange={setVenture} />
 
       {/* Summary */}
       <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
@@ -203,7 +216,9 @@ export default function BugsPage() {
         ))}
       </div>
 
-      {DATA.map(group => (
+      {groups.length === 0 && <VentureEmpty what="bugs" venture={venture} />}
+
+      {groups.map(group => (
         <div key={group.platform} style={{ marginBottom: '2.5rem' }}>
           <div style={{ borderLeft: `2px solid ${group.color}`, paddingLeft: '1rem', marginBottom: '1rem' }}>
             <div style={{ fontSize: '1.1rem', fontWeight: 700, letterSpacing: '-0.01em' }}>{group.platform}</div>

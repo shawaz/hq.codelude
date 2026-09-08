@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
 import { sc, scBorder } from '@/lib/status-colors';
 import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type Status = 'live' | 'stopped' | 'static' | 'building';
@@ -252,14 +256,21 @@ const KIND_COLOR: Record<Kind, string> = {
 };
 
 export default function PlatformPage() {
-  const total   = GROUPS.flatMap(g => g.platforms).length;
-  const live    = GROUPS.flatMap(g => g.platforms).filter(p => p.status === 'live').length;
-  const stopped = GROUPS.flatMap(g => g.platforms).filter(p => p.status === 'stopped').length;
+  const [venture, setVenture] = useState('LLIFE');
+
+  // Group titles already match registry scope names, so no mapping is needed.
+  const groups  = GROUPS.filter(g => g.title === venture);
+  const shown   = groups.flatMap(g => g.platforms);
+  const total   = shown.length;
+  const live    = shown.filter(p => p.status === 'live').length;
+  const stopped = shown.filter(p => p.status === 'stopped').length;
 
   return (
     <div>
       <h1 className="page-title">Platform</h1>
       <p className="page-sub">All platforms and services running on 64.227.160.224 — Apache + PM2 stack.</p>
+
+      <VentureTabs active={venture} onChange={setVenture} />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">
@@ -276,7 +287,9 @@ export default function PlatformPage() {
         </div>
       </div>
 
-      {GROUPS.map(group => (
+      {groups.length === 0 && <VentureEmpty what="platforms" venture={venture} />}
+
+      {groups.map(group => (
         <div key={group.title} style={{ marginBottom: '2rem' }}>
           <div className="section-label" style={{ color: group.color }}>{group.title}</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
