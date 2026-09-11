@@ -185,7 +185,7 @@ const mono = (size: string): React.CSSProperties => ({
 });
 
 export default function BugsPage() {
-  const [venture, setVenture] = useState('LLIFE');
+  const [venture, setVenture] = useState('Codelude');
 
   const groups = DATA.filter(p => p.venture === venture);
   const all = groups.flatMap(p => p.bugs);

@@ -7,7 +7,7 @@
  * implementation instead of eight near-identical copies of the same 40 lines.
  *
  * The strip shows ventures only, matching Financial Model. HoldCo-level
- * rows (the cap table's LLIFE entries, treasury wallets, the Dubai and India
+ * rows (the cap table's Codelude entries, treasury wallets, the Dubai and India
  * bank accounts) have no tab of their own — see `isHoldCo` in src/lib/finance.ts
  * for how those surface instead.
  *

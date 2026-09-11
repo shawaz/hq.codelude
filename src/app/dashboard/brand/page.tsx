@@ -4,7 +4,7 @@ export default function BrandPage() {
   return (
     <div>
       <h1 className="page-title">Brand</h1>
-      <p className="page-sub">LLIFE brand guidelines — typography, colour, venture palette, and voice.</p>
+      <p className="page-sub">Codelude brand guidelines — typography, colour, venture palette, and voice.</p>
 
       {/* Typography */}
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--accent-text)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--card-border)' }}>Typography</div>

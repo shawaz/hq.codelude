@@ -27,7 +27,7 @@ for (const line of body.split('\n')) {
     seedId,
     title:       str(line, 'title'),
     department:  str(line, 'department') ?? 'General',
-    venture:     str(line, 'venture')    ?? 'LLIFE',
+    venture:     str(line, 'venture')    ?? 'Codelude',
     type:        str(line, 'type')       ?? 'Full-time',
     status:      str(line, 'status')     ?? 'open',
     priority:    str(line, 'priority')   ?? 'medium',

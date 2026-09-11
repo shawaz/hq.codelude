@@ -60,7 +60,7 @@ export interface VActivity {
 
 export const VENTURE_ACTIVITIES: Record<string, VActivity[]> = {
   Roborns: [
-    { date: '2026-05-21', category: 'Milestone',   title: 'hq.llife.app financial model published',    description: 'Roborns 5-year financial model live in HQ dashboard — seed ask ₹18 Cr, Y5 revenue ₹142 Cr.' },
+    { date: '2026-05-21', category: 'Milestone',   title: 'hq.codelude.com financial model published',    description: 'Roborns 5-year financial model live in HQ dashboard — seed ask ₹18 Cr, Y5 revenue ₹142 Cr.' },
     { date: '2026-05-15', category: 'Engineering',  title: 'Thermal feasibility study commissioned',       description: 'Engagement with coastal infrastructure specialists begins. Site survey underway.' },
     { date: '2026-05-10', category: 'Legal',        title: 'Dubai HoldCo legal review started',            description: 'Legal review of Dubai HoldCo tokenisation structure initiated with external counsel.' },
     { date: '2026-04-10', category: 'Decision',     title: 'Uchila Thalapady site shortlisted',           description: 'Coastal site identified as primary candidate. Coastal access, grid proximity, and water intake assessed.' },
@@ -132,7 +132,7 @@ export const VENTURE_CHANNELS: Record<string, VChannel[]> = {
     { name: '10-home pilot programme',   type: 'Marketing', status: 'planned',   description: 'Real pilot homes in Mangaluru and Dubai — documented for testimonial content', metric: 'Pilot homes complete' },
     { name: 'Pre-order campaign',        type: 'Marketing', status: 'planned',   description: 'DTC pre-order with pilot testimonials — validates demand before production run', metric: 'Pre-orders collected (target: 200)' },
     { name: 'Instagram + YouTube',       type: 'Marketing', status: 'planned',   description: 'Short-form content on daily life tracking — net worth, streaks and routine reviews in action', metric: 'Views and waitlist sign-ups' },
-    { name: 'llife.app',               type: 'Marketing', status: 'planned',   description: 'Product website with beta waitlist, the five-domain explainer, and daily-board demo', metric: 'Waitlist registrations' },
+    { name: 'llife.app',                 type: 'Marketing', status: 'planned',   description: 'Product website with beta waitlist, the five-domain explainer, and daily-board demo', metric: 'Waitlist registrations' },
   ],
   Nanotrade: [
     { name: 'Twitter / X community',     type: 'Community', status: 'building',  description: 'Strategy performance sharing, market commentary, creator-friendly content', metric: 'Followers and engagement' },
@@ -164,7 +164,7 @@ export const VENTURE_RELATIONS: Record<string, VRelation[]> = {
     { name: 'Franchise Operator Community', category: 'Customer',    health: 'target',     description: 'Existing operators who need capital — the supply side of the marketplace', lastContact: 'Not yet', nextStep: 'Attend 1 franchise expo and collect 20 operator contacts' },
     { name: 'Retail Investor Community',    category: 'Customer',    health: 'target',     description: 'High-income professionals who want yield alternatives beyond stock market', lastContact: 'Not yet', nextStep: 'Build investor waitlist page on Franchiseen.com' },
     { name: 'SEBI / Regulatory',           category: 'Government',  health: 'cold',       description: 'Indian regulator for retail investment platform operations', lastContact: 'Not yet', nextStep: 'Identify lightest regulatory path — revenue-share vs equity structure' },
-    { name: 'Angel Investors (SAFE)',      category: 'Investor',    health: 'developing', description: 'Pre-seed angels who invest post first payout proof. SAFE at $1.5M cap', lastContact: 'Mar 2026', nextStep: 'Share Franchiseen pitch with LLIFE angel network' },
+    { name: 'Angel Investors (SAFE)',      category: 'Investor',    health: 'developing', description: 'Pre-seed angels who invest post first payout proof. SAFE at $1.5M cap', lastContact: 'Mar 2026', nextStep: 'Share Franchiseen pitch with Codelude angel network' },
     { name: 'Franchise Trade Media',       category: 'Media',       health: 'target',     description: 'Franchise India, Franchise World — target for first payout case study', lastContact: 'Not yet', nextStep: 'Prepare press release for first payout milestone' },
   ],
   HubCV: [

@@ -10,10 +10,10 @@ import { normalizeAccess, isAllowedEmail, ALLOWED_EMAIL_DOMAINS } from "./access
  */
 type Db = GenericDatabaseWriter<DataModel>;
 
-// `hd` takes a single Workspace domain, so it cannot express the transition
-// period where both llife.app and codelude.com are valid. Dropping it means the
-// consent screen no longer pre-filters; beforeSessionCreation below is the real
-// boundary and rejects anything outside ALLOWED_EMAIL_DOMAINS regardless.
+// `hd` takes a single Workspace domain, so it cannot express the period where
+// both codelude.com and the older llife.app accounts are valid. Dropping it
+// means the consent screen no longer pre-filters; beforeSessionCreation below
+// is the real boundary and rejects anything outside ALLOWED_EMAIL_DOMAINS.
 const google = Google({
   authorization: {
     params: { prompt: "select_account" },

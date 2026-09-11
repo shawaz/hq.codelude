@@ -250,7 +250,7 @@ export const MODELS: VentureModel[] = [
       { title: 'Funding',    rows: [{ label: 'Model', value: 'Bootstrap' }, { label: 'Peak deficit', value: '~$42K in Y1' }, { label: 'Break-even', value: 'Y2' }, { label: 'External raise', value: 'Only to compress the state rollout' }] },
     ],
   },
-  // ──────────────────────────────────────────────────────────────── LLIFE ────
+  // ──────────────────────────────────────────────────────────────── Codelude ────
   {
     name: 'Nanotrade', color: '#adadad', currency: 'USD', currencySymbol: '$',
     pnlCards: [

@@ -161,7 +161,7 @@ export const PLANS: VenturePlan[] = [
     },
     financialPlan: {
       fundingNeed:   '$150K–300K (platform completion + compliance + launch)',
-      fundingSource: 'Bootstrap from LLIFE HoldCo + small angel round post first payout proof',
+      fundingSource: 'Bootstrap from Codelude HoldCo + small angel round post first payout proof',
       revenueModel: [
         { label: 'Platform fee',        value: '1.5% of deal size — avg deal $50K = $750 per deal' },
         { label: 'Management fee',      value: '0.5% on AUM — $500K AUM = $2.5K/year' },

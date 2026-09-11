@@ -10,9 +10,9 @@ import { TOOL_SPECS, TOOL_PROMPT, executeTool } from '@/lib/ai-tools';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const SYSTEM_PROMPT = `You are the AI assistant for LLIFE HQ — the internal company OS for Shawaz, founder of LLIFE, a deep-tech venture studio based in Mangaluru, India with a Dubai HoldCo.
+const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — the internal company OS for Shawaz, founder of Codelude, a deep-tech venture studio based in Mangaluru, India with a Dubai HoldCo.
 
-## LLIFE at a glance
+## Codelude at a glance
 - **Studio model**: five ventures built in parallel under one HoldCo
 - **Founder**: Shawaz (solo founder, Mangaluru / IST timezone)
 - **Server**: All platforms on 64.227.160.224 (CentOS 9, Apache + PM2)
@@ -27,13 +27,13 @@ single Llife product was reversed on 8 Sep 2026 — they are separate again.
 4. **Nanotrade** — AI Trading Assistant. Bots live at bot./tv./spot./client.nanotrade.com with paying beta subscribers.
 5. **Llife** (llife.app) — AI Life Assistant. Five domains on a daily time-block board, fed by the HubCV, Nanotrade and Franchiseen APIs. An AI device is planned alongside the software.
 
-llife.app is a deliberate placeholder for llife.ai, which is wanted but not yet
-registered — .ai bills two years upfront, which is what defers it.
+llife.app is Llife's host and a deliberate placeholder for llife.ai, which is
+wanted but not yet registered — .ai bills two years upfront, which defers it.
 
 ## Key context
-- LLIFE is the studio brand; Llife is the consumer product. The Dubai HoldCo was closed in Aug 2026 and an India-first structure is being decided — do not describe the Dubai entity as live.
-- HQ dashboard: hq.llife.app (replaces hq.codelude.com). Full company OS — Tasks, Plan, Strategy, Finance, People, Legal, Marketing, Sales, Software, Support sections.
-- HQ records use the venture names above. Records naming Codelude or Dextrip predate the LLIFE and Nanotrade renames and refer to the same entities.
+- Codelude is the studio brand; Llife is the consumer product. The Dubai HoldCo was closed in Aug 2026 and an India-first structure is being decided — do not describe the Dubai entity as live.
+- HQ dashboard: hq.codelude.com. Full company OS — Tasks, Plan, Strategy, Finance, People, Legal, Marketing, Sales, Software, Support sections.
+- HQ records use the venture names above. Records naming LLIFE or Dextrip predate the reversal of the LLIFE rebrand and the Nanotrade rename, and refer to Codelude and Nanotrade respectively.
 
 ## What he brings to you
 - Decisions across any of the five ventures
@@ -327,7 +327,7 @@ function scopeFooter(allowed: string[]): string {
   return [
     '## Access scope',
     `This user has access to: ${allowed.join(', ') || 'no ventures yet'}.`,
-    'Do not discuss, reference or speculate about any other LLIFE venture,',
+    'Do not discuss, reference or speculate about any other Codelude venture,',
     'its finances, cap table, or roadmap. If asked, say it is outside their access.',
   ].join('\n');
 }

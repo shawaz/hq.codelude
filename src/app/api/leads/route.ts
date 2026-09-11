@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
   // Validate against the configured taxonomy so a typo can't create an
   // orphan bucket that never shows up under any tab.
-  const venture = s('venture') ?? 'LLIFE';
+  const venture = s('venture') ?? 'Codelude';
   if (!VENTURE_NAMES.includes(venture as typeof VENTURE_NAMES[number])) {
     return NextResponse.json(
       { error: `venture must be one of: ${VENTURE_NAMES.join(', ')}` },

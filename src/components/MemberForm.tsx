@@ -162,7 +162,7 @@ export default function MemberForm({
           >
             {editing
               ? 'Changes apply immediately, including on their next page load.'
-              : 'They sign in with their @llife.app Google account. Access applies on first sign-in — you can add them before the account exists.'}
+              : 'They sign in with their @codelude.com Google account. Access applies on first sign-in — you can add them before the account exists.'}
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export default function MemberForm({
               style={inputStyle}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@llife.app"
+              placeholder="name@codelude.com"
               required={!editing}
               disabled={editing}
             />

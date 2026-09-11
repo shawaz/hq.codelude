@@ -287,7 +287,7 @@ function TaskChat({ task, color }: { task: { title: string; project: string; cat
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
 
-  const systemOverride = `You are helping Shawaz, founder of LLIFE, with a specific task on his internal company OS.
+  const systemOverride = `You are helping Shawaz, founder of Codelude, with a specific task on his internal company OS.
 
 TASK: "${task.title}"
 Venture: ${task.project}

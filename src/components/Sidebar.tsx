@@ -51,7 +51,7 @@ export default function Sidebar({ user, nav }: Props) {
     <aside className="sidebar">
       <div className="sidebar-logo">
         <Logo size={32} />
-        <span className="logo-text">L<span>LIFE</span></span>
+        <span className="logo-text">Code<span>lude</span></span>
       </div>
 
       <nav className="sidebar-nav">
