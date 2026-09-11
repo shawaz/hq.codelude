@@ -18,7 +18,7 @@ import { ALL_SCOPES as _ALL_SCOPES } from '@/convex/access';
 
 
 /**
- * Colour for any scope name — ventures plus the LLIFE HoldCo.
+ * Colour for any scope name — ventures plus the Codelude HoldCo.
  *
  * This replaced sixteen identical `VENTURE_COLORS` literals, one per dashboard
  * page, each restating the registry's colours. That duplication is how the

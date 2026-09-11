@@ -9,9 +9,31 @@ import NewTaskForm from '@/components/NewTaskForm';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
 import { sc, scBorder } from '@/lib/status-colors';
 
+// One card per venture, in registry order (src/convex/access.ts). The strip is
+// filtered by usePageScopes, so a scoped member only sees their own ventures.
 const ALL_VENTURE_CARDS = [
   {
-    name: 'Llife',     color: '#a5a5a5', sector: 'AI Life Assistant',
+    name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure',
+    status: 'In Development', statusColor: '#dbdbdb',
+    metrics: [{ k: 'Raise', v: '₹18.1 Cr' }, { k: 'Phase', v: 'Feasibility' }, { k: 'HoldCo', v: 'Dubai' }],
+  },
+  {
+    name: 'Franchiseen', color: '#c8c8c8', sector: 'AI Business Assistant',
+    status: 'Alpha', statusColor: '#eeeeee',
+    metrics: [{ k: 'Stage', v: 'Alpha' }, { k: 'Payout', v: 'Daily + monthly' }, { k: 'Target AUM', v: '$60M Y5' }],
+  },
+  {
+    name: 'HubCV',       color: '#b5b5b5', sector: 'AI Career Assistant',
+    status: 'In Development', statusColor: '#dbdbdb',
+    metrics: [{ k: 'Stage', v: 'Build' }, { k: 'Beta', v: 'Q4 2026' }, { k: 'Y5 ARR', v: '$4.4M' }],
+  },
+  {
+    name: 'Nanotrade',   color: '#adadad', sector: 'AI Trading Assistant',
+    status: 'Live — Beta', statusColor: '#dbdbdb',
+    metrics: [{ k: 'MRR', v: '$227' }, { k: 'Subscribers', v: '3 beta' }, { k: 'Y5 ARR', v: '$7.1M' }],
+  },
+  {
+    name: 'Llife',       color: '#a5a5a5', sector: 'AI Life Assistant',
     status: 'Planning', statusColor: '#b5b5b5',
     metrics: [{ k: 'Stage', v: 'Planning' }, { k: 'Hub price', v: '$499' }, { k: 'MOQ', v: '$300K' }],
   },
@@ -389,7 +411,7 @@ export default function AIPage() {
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 4rem)', minHeight: 0 }}>
 
       {/* Venture selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${VENTURES.length},1fr)`, gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
         {VENTURES.map((v, i) => (
           <button key={v.name} onClick={() => setSelected(i)} style={{
             background: index === i ? 'var(--accent)' : 'var(--card-bg)', border: 'none', cursor: 'pointer',

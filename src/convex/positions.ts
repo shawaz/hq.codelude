@@ -158,7 +158,7 @@ export const remove = mutation({
  * already exists, so stored rows keep the old name and silently drift from the
  * registry — and a row whose venture has left the registry is filtered out of
  * `list`, so the drift shows up as records vanishing rather than as an error.
- * Renaming the Codelude HoldCo to LLIFE hid three positions this way.
+ * Renaming the Codelude HoldCo to Codelude hid three positions this way.
  *
  * Internal: maintenance only.
  */

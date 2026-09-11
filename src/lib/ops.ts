@@ -11,9 +11,9 @@ export interface OfficeLocation {
 }
 
 export const OFFICES: OfficeLocation[] = [
-  { name: 'LLIFE HoldCo — Dubai', type: 'Registered', city: 'Dubai', country: 'UAE', status: 'planned', purpose: 'Registered address for Dubai HoldCo entity. DIFC or mainland incorporation.', notes: 'Pending HoldCo incorporation (Q3 2026). Registered address service ~$500–800/year.' },
+  { name: 'Codelude HoldCo — Dubai', type: 'Registered', city: 'Dubai', country: 'UAE', status: 'planned', purpose: 'Registered address for Dubai HoldCo entity. DIFC or mainland incorporation.', notes: 'Pending HoldCo incorporation (Q3 2026). Registered address service ~$500–800/year.' },
   { name: 'Engineering Base — Mangaluru', type: 'Engineering', city: 'Mangaluru', country: 'India', status: 'active', purpose: 'Primary engineering and operations base. Roborns site nearby. Core team location.', notes: 'No formal office lease yet. Founder operates from home base. Office space to be taken when team > 3.' },
-  { name: 'Production Server', type: 'Server', city: 'Frankfurt', country: 'Germany', status: 'active', purpose: 'All LLIFE platforms hosted on 64.227.160.224. 2 vCPU, 8GB RAM, 160GB NVMe, CentOS 9.', notes: 'Hosted via cloud provider. Monthly cost ~$120. Apache + PM2 stack. All 10+ platforms on this node.' },
+  { name: 'Production Server', type: 'Server', city: 'Frankfurt', country: 'Germany', status: 'active', purpose: 'All Codelude platforms hosted on 64.227.160.224. 2 vCPU, 8GB RAM, 160GB NVMe, CentOS 9.', notes: 'Hosted via cloud provider. Monthly cost ~$120. Apache + PM2 stack. All 10+ platforms on this node.' },
   { name: 'Remote — Southeast Asia', type: 'Remote', city: 'Kuala Lumpur', country: 'Malaysia', status: 'planned', purpose: 'Future SE Asia hub for Llife and HubCV regional operations.', notes: 'Not active. Planned for 2027 when SE Asia operations begin.' },
 ];
 
@@ -29,14 +29,14 @@ export interface Department {
 }
 
 export const DEPARTMENTS: Department[] = [
-  { name: 'Engineering', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['LLIFE', 'Roborns', 'Nanotrade', 'HubCV', 'Llife', 'Franchiseen'], status: 'active', responsibilities: ['Platform development', 'Infrastructure management', 'Llife protocol', 'HubCV matching engine', 'Nanotrade automation engine'] },
-  { name: 'Strategy & Finance', lead: 'Shawaz', headcount: 1, ventures: ['LLIFE'], status: 'active', responsibilities: ['Venture strategy', 'Financial modelling', 'Investor relations', 'HoldCo token structure', 'Budget management'] },
-  { name: 'Operations', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['LLIFE'], status: 'active', responsibilities: ['Company OS (HQ)', 'Legal coordination', 'Partner management', 'Procurement', 'Team administration'] },
+  { name: 'Engineering', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['Codelude', 'Roborns', 'Nanotrade', 'HubCV', 'Llife', 'Franchiseen'], status: 'active', responsibilities: ['Platform development', 'Infrastructure management', 'Llife protocol', 'HubCV matching engine', 'Nanotrade automation engine'] },
+  { name: 'Strategy & Finance', lead: 'Shawaz', headcount: 1, ventures: ['Codelude'], status: 'active', responsibilities: ['Venture strategy', 'Financial modelling', 'Investor relations', 'HoldCo token structure', 'Budget management'] },
+  { name: 'Operations', lead: 'Shawaz (Acting)', headcount: 1, ventures: ['Codelude'], status: 'active', responsibilities: ['Company OS (HQ)', 'Legal coordination', 'Partner management', 'Procurement', 'Team administration'] },
   { name: 'Roborns Engineering', lead: 'TBH — Thermal Engineer', headcount: 0, ventures: ['Roborns'], status: 'forming', responsibilities: ['Site engineering', 'Thermal system design', 'Desalination unit', 'Coastal infrastructure', 'Govt permit liaison'] },
   { name: 'Franchiseen Product', lead: 'TBH', headcount: 0, ventures: ['Franchiseen'], status: 'forming', responsibilities: ['Platform product management', 'KYC/AML integration', 'Payout infrastructure', 'Franchise partner onboarding', 'Investor support'] },
-  { name: 'Marketing & Brand', lead: 'TBH', headcount: 0, ventures: ['LLIFE'], status: 'planned', responsibilities: ['Brand identity', 'Content strategy', 'Investor communications', 'Social media', 'PR and media relations'] },
-  { name: 'Legal & Compliance', lead: 'External Counsel', headcount: 0, ventures: ['LLIFE', 'Franchiseen', 'Roborns'], status: 'forming', responsibilities: ['HoldCo incorporation', 'Token structure legal review', 'Investment platform compliance', 'NDA and contract management', 'IP protection'] },
-  { name: 'People & Culture', lead: 'TBH', headcount: 0, ventures: ['LLIFE'], status: 'planned', responsibilities: ['Recruitment', 'Onboarding', 'Culture', 'Performance', 'Team wellbeing'] },
+  { name: 'Marketing & Brand', lead: 'TBH', headcount: 0, ventures: ['Codelude'], status: 'planned', responsibilities: ['Brand identity', 'Content strategy', 'Investor communications', 'Social media', 'PR and media relations'] },
+  { name: 'Legal & Compliance', lead: 'External Counsel', headcount: 0, ventures: ['Codelude', 'Franchiseen', 'Roborns'], status: 'forming', responsibilities: ['HoldCo incorporation', 'Token structure legal review', 'Investment platform compliance', 'NDA and contract management', 'IP protection'] },
+  { name: 'People & Culture', lead: 'TBH', headcount: 0, ventures: ['Codelude'], status: 'planned', responsibilities: ['Recruitment', 'Onboarding', 'Culture', 'Performance', 'Team wellbeing'] },
 ];
 
 // ─── FRANCHISE (OPERATIONS) ───────────────────────────────────────────────────
@@ -75,8 +75,9 @@ export interface Property {
 }
 
 export const PROPERTIES: Property[] = [
-  { name: 'Production Server — 64.227.160.224', type: 'Digital', venture: 'LLIFE', status: 'active', value: '$120/month', location: 'Cloud VPS — Frankfurt', notes: 'Hosts all 10+ LLIFE platforms. CentOS 9, Apache + PM2.' },
-  { name: 'llife.app', type: 'Domain', venture: 'LLIFE', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Primary company domain and the Llife product host — replaced codelude.com. SSL live via Let\'s Encrypt. Placeholder for llife.ai.' },
+  { name: 'Production Server — 64.227.160.224', type: 'Digital', venture: 'Codelude', status: 'active', value: '$120/month', location: 'Cloud VPS — Frankfurt', notes: 'Hosts all 10+ Codelude platforms. CentOS 9, Apache + PM2.' },
+  { name: 'codelude.com', type: 'Domain', venture: 'Codelude', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Primary company domain — studio site and hq.codelude.com. SSL live via Let\'s Encrypt.' },
+  { name: 'llife.app', type: 'Domain', venture: 'Llife', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Llife product host. Held as a placeholder for llife.ai, which is wanted but not yet budgeted.' },
   { name: 'roborns.com', type: 'Domain', venture: 'Roborns', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Venture website live.' },
   { name: 'franchiseen.com', type: 'Domain', venture: 'Franchiseen', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Platform domain. Website pending.' },
   { name: 'hubcv.pro', type: 'Domain', venture: 'HubCV', status: 'active', value: '$15/year', location: 'Domain Registrar', notes: 'Platform domain. Website pending.' },

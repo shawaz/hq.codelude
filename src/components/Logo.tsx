@@ -1,5 +1,5 @@
 /**
- * The LLIFE mark.
+ * The Codelude mark.
  *
  * The source SVG is a 546 square with the mark occupying only the middle —
  * roughly x 118-428, y 164-381 — so at any given size most of the box was

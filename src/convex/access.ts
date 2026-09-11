@@ -25,13 +25,13 @@ export interface Scope {
 }
 
 /**
- * Company-level scope. Not a venture — it is the `venture: 'LLIFE'` string
+ * Company-level scope. Not a venture — it is the `venture: 'Codelude'` string
  * already used across src/lib/people.ts, legal-data.ts, finance.ts and ops.ts
  * to mean "HoldCo, not venture-specific".
  */
 export const HOLDCO: Scope = {
-  id: 'llife',
-  name: 'LLIFE',
+  id: 'codelude',
+  name: 'Codelude',
   color: '#eeeeee',
   sector: 'HoldCo',
   holdco: true,
@@ -76,8 +76,12 @@ export function isActiveScope(name: string | undefined | null): boolean {
 
 /**
  * Email domains permitted to sign in.
+ *
+ * codelude.com is the company domain again. llife.app is kept accepted so the
+ * accounts issued during the Codelude period do not lose access the moment this
+ * deploys — drop it from this array once every member is on @codelude.com.
  */
-export const ALLOWED_EMAIL_DOMAINS = ['llife.app', 'codelude.com'] as const;
+export const ALLOWED_EMAIL_DOMAINS = ['codelude.com', 'llife.app'] as const;
 
 export function isAllowedEmail(email: string | undefined | null): boolean {
   const e = email?.toLowerCase().trim();

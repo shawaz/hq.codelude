@@ -13,11 +13,11 @@ export interface BudgetLine {
 }
 
 export const BUDGET: BudgetLine[] = [
-  // Studio / LLIFE
-  { venture: 'LLIFE', category: 'Infrastructure',  monthlyBudget: 120,    spentToDate: 120,    currency: 'USD', note: 'VPS server — 64.227.160.224 (2C / 8G / 160G)',              status: 'on-track' },
-  { venture: 'LLIFE', category: 'Domains',         monthlyBudget: 30,     spentToDate: 15,     currency: 'USD', note: 'llife.app, roborns.com, franchiseen.com, hubcv.com etc.', status: 'on-track' },
-  { venture: 'LLIFE', category: 'Legal (HoldCo)',  monthlyBudget: 1500,   spentToDate: 0,      currency: 'USD', note: 'Dubai HoldCo incorporation and token structure counsel',      status: 'not-started' },
-  { venture: 'LLIFE', category: 'Tools & SaaS',    monthlyBudget: 100,    spentToDate: 45,     currency: 'USD', note: 'AI tools, design, productivity subscriptions',               status: 'under' },
+  // Studio / Codelude
+  { venture: 'Codelude', category: 'Infrastructure',  monthlyBudget: 120,    spentToDate: 120,    currency: 'USD', note: 'VPS server — 64.227.160.224 (2C / 8G / 160G)',              status: 'on-track' },
+  { venture: 'Codelude', category: 'Domains',         monthlyBudget: 30,     spentToDate: 15,     currency: 'USD', note: 'codelude.com, roborns.com, franchiseen.com, hubcv.com etc.', status: 'on-track' },
+  { venture: 'Codelude', category: 'Legal (HoldCo)',  monthlyBudget: 1500,   spentToDate: 0,      currency: 'USD', note: 'Dubai HoldCo incorporation and token structure counsel',      status: 'not-started' },
+  { venture: 'Codelude', category: 'Tools & SaaS',    monthlyBudget: 100,    spentToDate: 45,     currency: 'USD', note: 'AI tools, design, productivity subscriptions',               status: 'under' },
 
   // Roborns
   { venture: 'Roborns',  category: 'Engineering',     monthlyBudget: 5000,   spentToDate: 0,      currency: 'USD', note: 'Thermal engineering partner — feasibility study',            status: 'not-started' },
@@ -80,7 +80,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
   },
   {
     id: 'R2',
-    venture: 'LLIFE',
+    venture: 'Codelude',
     roundName: 'Studio Token — HoldCo',
     type: 'token',
     targetAmount: 'TBD',
@@ -150,7 +150,7 @@ export const INVESTOR_ROUNDS: InvestorRound[] = [
   },
   {
     id: 'R7',
-    venture: 'LLIFE',
+    venture: 'Codelude',
     roundName: 'Roborns Pilot — Delhi Broker Introduction',
     type: 'equity',
     targetAmount: '₹15 Cr – ₹20 Cr (pilot tranche). Broker figure has escalated: ₹15–150 Cr (Sep 4) → ₹150–200 Cr (Sep 7). Unconfirmed at every stage.',
@@ -179,14 +179,14 @@ export interface ShareEntry {
 }
 
 export const SHARES: ShareEntry[] = [
-  { entity: 'LLIFE HoldCo (Dubai)',  shareholder: 'Shawaz (Founder)',    shareClass: 'Ordinary A',  percentage: 100,  shares: '10,000,000',  vestingSchedule: 'Fully vested',               notes: 'Founder shares — sole shareholder at incorporation. Dilution expected via strategic and token rounds.' },
-  { entity: 'LLIFE HoldCo (Dubai)',  shareholder: 'Strategic Reserve',   shareClass: 'Token Pool',   percentage: 0,    shares: 'TBD',         vestingSchedule: 'Per token tranche schedule', notes: 'Reserved for HoldCo token issuance — exact allocation TBD on token structure finalisation.' },
-  { entity: 'LLIFE HoldCo (Dubai)',  shareholder: 'Employee Pool',       shareClass: 'Options',      percentage: 0,    shares: 'TBD',         vestingSchedule: '4-year / 1-year cliff',      notes: 'ESOP pool to be created before first team hire. Recommended: 10–15% of total cap table.' },
-  { entity: 'Roborns (Project Entity)', venture: 'Roborns', shareholder: 'LLIFE HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Roborns will be a subsidiary of LLIFE HoldCo. Token holders get revenue share, not equity.' },
-  { entity: 'Franchiseen (Project)', venture: 'Franchiseen',    shareholder: 'LLIFE HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
-  { entity: 'Nanotrade (Project)', venture: 'Nanotrade',        shareholder: 'LLIFE HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
-  { entity: 'HubCV (Project)', venture: 'HubCV',          shareholder: 'LLIFE HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
-  { entity: 'Llife (Project)', venture: 'Llife',        shareholder: 'LLIFE HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
+  { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Shawaz (Founder)',    shareClass: 'Ordinary A',  percentage: 100,  shares: '10,000,000',  vestingSchedule: 'Fully vested',               notes: 'Founder shares — sole shareholder at incorporation. Dilution expected via strategic and token rounds.' },
+  { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Strategic Reserve',   shareClass: 'Token Pool',   percentage: 0,    shares: 'TBD',         vestingSchedule: 'Per token tranche schedule', notes: 'Reserved for HoldCo token issuance — exact allocation TBD on token structure finalisation.' },
+  { entity: 'Codelude HoldCo (Dubai)',  shareholder: 'Employee Pool',       shareClass: 'Options',      percentage: 0,    shares: 'TBD',         vestingSchedule: '4-year / 1-year cliff',      notes: 'ESOP pool to be created before first team hire. Recommended: 10–15% of total cap table.' },
+  { entity: 'Roborns (Project Entity)', venture: 'Roborns', shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Roborns will be a subsidiary of Codelude HoldCo. Token holders get revenue share, not equity.' },
+  { entity: 'Franchiseen (Project)', venture: 'Franchiseen',    shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Pre-seed round will dilute HoldCo stake. Target: retain 70%+ post seed.' },
+  { entity: 'Nanotrade (Project)', venture: 'Nanotrade',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'No external raise planned. 100% HoldCo owned.' },
+  { entity: 'HubCV (Project)', venture: 'HubCV',          shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Bootstrap phase. No external shareholders.' },
+  { entity: 'Llife (Project)', venture: 'Llife',        shareholder: 'Codelude HoldCo',    shareClass: 'Ordinary',     percentage: 100,  shares: 'TBD',         vestingSchedule: 'N/A',                        notes: 'Consumer AI pre-seed will bring in angel investors. Target: retain 75%+ post round.' },
 ];
 
 // ─── WALLETS ─────────────────────────────────────────────────────────────────
@@ -208,7 +208,7 @@ export interface Wallet {
 
 export const WALLETS: Wallet[] = [
   { label: 'HoldCo Treasury',      chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Primary Dubai HoldCo treasury wallet — receives token sale proceeds and distributes to project entities', status: 'pending', balance: '$0',      notes: 'Deploy after legal structure finalised. Multisig (2-of-3) recommended.' },
-  { label: 'Token Issuance Wallet', chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Issues and manages Roborns token and eventually LLIFE studio token',                                   status: 'pending', balance: '$0',      notes: 'Requires smart contract audit before token issuance. Budget $20–50K for audit.' },
+  { label: 'Token Issuance Wallet', chain: 'Ethereum',   address: '0x — not yet deployed',   purpose: 'Issues and manages Roborns token and eventually Codelude studio token',                                   status: 'pending', balance: '$0',      notes: 'Requires smart contract audit before token issuance. Budget $20–50K for audit.' },
   { label: 'Nanotrade Operations', venture: 'Nanotrade',   chain: 'Multi-chain', address: 'Exchange API accounts',   purpose: 'Operational wallet for Nanotrade strategy execution — holds user API keys, not funds (non-custodial)',     status: 'active',  balance: 'N/A',     notes: 'Non-custodial — Nanotrade never holds user funds. API key vault only.' },
   { label: 'Investor Distributions',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Quarterly revenue distribution wallet — sends proportional payouts to token holders',                     status: 'pending', balance: '$0',      notes: 'Linked to HoldCo Treasury. Automated distribution contract to be built.' },
   { label: 'Operational Cold Store',chain: 'Ethereum',  address: '0x — not yet deployed',   purpose: 'Cold storage for any crypto held in reserve — hardware wallet controlled by founder',                    status: 'cold',    balance: '$0',      notes: 'Ledger hardware wallet. Address generated offline.' },
@@ -232,12 +232,12 @@ export interface Account {
 }
 
 export const ACCOUNTS: Account[] = [
-  { entity: 'LLIFE HoldCo (Dubai)',  bank: 'Emirates NBD / Mashreq (TBD)', type: 'Current',  currency: 'AED / USD', purpose: 'Primary operating account for Dubai HoldCo — receives investor capital, pays project entities',             status: 'planned', notes: 'Requires HoldCo incorporation to open. Target: Q3 2026.' },
-  { entity: 'LLIFE India',           bank: 'HDFC Bank',                    type: 'Current',  currency: 'INR',       purpose: 'Engineering operations in Mangaluru — salaries, contractors, Roborns site costs',                         status: 'planned', notes: 'Open alongside Roborns engineering engagement. FIRA compliance for inward remittances from Dubai.' },
+  { entity: 'Codelude HoldCo (Dubai)',  bank: 'Emirates NBD / Mashreq (TBD)', type: 'Current',  currency: 'AED / USD', purpose: 'Primary operating account for Dubai HoldCo — receives investor capital, pays project entities',             status: 'planned', notes: 'Requires HoldCo incorporation to open. Target: Q3 2026.' },
+  { entity: 'Codelude India',           bank: 'HDFC Bank',                    type: 'Current',  currency: 'INR',       purpose: 'Engineering operations in Mangaluru — salaries, contractors, Roborns site costs',                         status: 'planned', notes: 'Open alongside Roborns engineering engagement. FIRA compliance for inward remittances from Dubai.' },
   { entity: 'Franchiseen (Platform)', venture: 'Franchiseen',   bank: 'TBD — escrow provider',        type: 'Escrow',   currency: 'INR / USD', purpose: 'Investor capital held in escrow before franchise deployment. Mandatory for regulatory compliance.',        status: 'planned', notes: 'Escrow account with regulated trustee is a legal requirement for holding retail investor funds.' },
   { entity: 'Nanotrade Operations', venture: 'Nanotrade',       bank: 'Binance / Bybit (Exchange)',   type: 'Exchange', currency: 'USDT / BTC',purpose: 'Exchange accounts for strategy execution — API-connected to Nanotrade multi-bot',                          status: 'active',  notes: 'Not a bank account — exchange accounts for operational trading. API keys stored securely in bot.' },
   { entity: 'Nanotrade Revenue', venture: 'Nanotrade',          bank: 'Stripe (TBD)',                 type: 'Current',  currency: 'USD',       purpose: 'Subscription revenue collection for Nanotrade public beta — Stripe or Paddle integration',                status: 'planned', notes: 'Apply after public beta launch. Requires business registration in a Stripe-supported country.' },
-  { entity: 'LLIFE Operations (MY)', bank: 'TBD',                          type: 'Current',  currency: 'MYR / USD', purpose: 'Southeast Asia operations account — for future expansion into Malaysia / Singapore markets',              status: 'planned', notes: 'Not urgent — open when SE Asia operations begin (est. 2027).' },
+  { entity: 'Codelude Operations (MY)', bank: 'TBD',                          type: 'Current',  currency: 'MYR / USD', purpose: 'Southeast Asia operations account — for future expansion into Malaysia / Singapore markets',              status: 'planned', notes: 'Not urgent — open when SE Asia operations begin (est. 2027).' },
 ];
 
 // ─── INVOICE ──────────────────────────────────────────────────────────────────
@@ -262,7 +262,7 @@ export const INVOICES: Invoice[] = [
   { id: 'INV-002', venture: 'Nanotrade', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 99,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Second beta subscriber.' },
   { id: 'INV-003', venture: 'Nanotrade', client: 'Beta User (Closed)',     description: 'Strategy engine beta subscription — May 2026',        amount: 29,   currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-07', status: 'paid',    notes: 'Base tier beta subscriber.' },
   { id: 'INV-004', venture: 'Roborns', client: 'Internal (HoldCo)',      description: 'Thermal engineering consultation — feasibility phase', amount: 5000, currency: 'USD', issueDate: '2026-06-01', dueDate: '2026-06-15', status: 'draft',   notes: 'Placeholder — to be issued when engineering partner is engaged.' },
-  { id: 'INV-005', venture: 'LLIFE',client: 'Internal (Operations)',  description: 'Server infrastructure — May 2026',                    amount: 120,  currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-05', status: 'paid',    notes: 'Monthly VPS cost — auto-renewing.' },
+  { id: 'INV-005', venture: 'Codelude',client: 'Internal (Operations)',  description: 'Server infrastructure — May 2026',                    amount: 120,  currency: 'USD', issueDate: '2026-05-01', dueDate: '2026-05-05', status: 'paid',    notes: 'Monthly VPS cost — auto-renewing.' },
 ];
 
 // ─── PAYEE ────────────────────────────────────────────────────────────────────
@@ -283,18 +283,18 @@ export interface Payee {
 }
 
 export const PAYEES: Payee[] = [
-  { name: 'VPS Provider (Server)',        type: 'Infrastructure', ventures: ['LLIFE'],                             amount: '~$120',      currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: '64.227.160.224 — 2C/8G/160G CentOS 9 server hosting all platforms.' },
-  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['LLIFE'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'llife.app, roborns.com, franchiseen.com, hubcv.com, llife.app, nanotrade.com.' },
-  { name: 'AI API (Anthropic/OpenAI)',   type: 'SaaS',           ventures: ['HubCV', 'LLIFE'],                    amount: '$50–400',    currency: 'USD', frequency: 'variable', status: 'pending', category: 'AI Infrastructure', notes: 'LLM API usage for HubCV matching engine and internal tools. Cost scales with usage.' },
+  { name: 'VPS Provider (Server)',        type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$120',      currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: '64.227.160.224 — 2C/8G/160G CentOS 9 server hosting all platforms.' },
+  { name: 'Domain Registrar',            type: 'Infrastructure', ventures: ['Codelude'],                             amount: '~$30',       currency: 'USD', frequency: 'monthly',  status: 'active',  category: 'Infrastructure', notes: 'codelude.com, roborns.com, franchiseen.com, hubcv.com, llife.app, nanotrade.com.' },
+  { name: 'AI API (Anthropic/OpenAI)',   type: 'SaaS',           ventures: ['HubCV', 'Codelude'],                    amount: '$50–400',    currency: 'USD', frequency: 'variable', status: 'pending', category: 'AI Infrastructure', notes: 'LLM API usage for HubCV matching engine and internal tools. Cost scales with usage.' },
   { name: 'Thermal Engineering Firm',    type: 'Contractor',     ventures: ['Roborns'],                              amount: '$5,000–10K', currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Engineering', notes: 'Feasibility study and technical validation of closed-loop heat exchange system.' },
-  { name: 'Dubai Legal Counsel',         type: 'Legal',          ventures: ['LLIFE', 'Roborns'],                  amount: '$1,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'HoldCo incorporation, token structure, and ongoing compliance. DIFC-registered firm.' },
+  { name: 'Dubai Legal Counsel',         type: 'Legal',          ventures: ['Codelude', 'Roborns'],                  amount: '$1,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'HoldCo incorporation, token structure, and ongoing compliance. DIFC-registered firm.' },
   { name: 'Investment Platform Legal',   type: 'Legal',          ventures: ['Franchiseen'],                          amount: '$2,500/mo',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Legal', notes: 'KYC/AML compliance, investor agreement templates, and regulatory pathway.' },
   { name: 'KYC / AML Provider',         type: 'SaaS',           ventures: ['Franchiseen'],                          amount: '$200–500',   currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Compliance', notes: 'Per-verification pricing model. Cost scales with investor onboarding volume.' },
   { name: 'Stripe / Payment Processor', type: 'SaaS',           ventures: ['Franchiseen', 'Nanotrade'],               amount: '2.9% + $0.30',currency:'USD', frequency: 'variable', status: 'pending', category: 'Payments', notes: 'Per-transaction fee. Apply to Stripe after business entity registration.' },
   { name: 'Binance API (VIP tier)',      type: 'Infrastructure', ventures: ['Nanotrade'],                              amount: 'Volume-based',currency:'USD', frequency: 'variable', status: 'active',  category: 'Infrastructure', notes: 'Exchange API access. VIP tier needed for higher rate limits at public beta scale.' },
   { name: 'LLM Inference (Llife)',      type: 'Supplier',       ventures: ['Llife'],                              amount: '$2K/month',  currency: 'USD', frequency: 'monthly',  status: 'pending', category: 'Technology',    notes: 'Per-user assistant reasoning — daily summaries, nudges and domain reviews. Scales with active users.' },
   { name: 'Human Skill Verifiers',      type: 'Contractor',     ventures: ['HubCV'],                                amount: '$20–50/assess',currency:'USD', frequency: 'variable', status: 'pending', category: 'Operations', notes: 'Pay-per-assessment model for domain expert verifiers. Cost scales with profile volume.' },
-  { name: 'Smart Contract Audit',       type: 'Professional',   ventures: ['Roborns', 'LLIFE'],                  amount: '$20K–50K',   currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Legal', notes: 'Required before token issuance. Budget for Roborns token smart contract security audit.' },
+  { name: 'Smart Contract Audit',       type: 'Professional',   ventures: ['Roborns', 'Codelude'],                  amount: '$20K–50K',   currency: 'USD', frequency: 'one-time', status: 'pending', category: 'Legal', notes: 'Required before token issuance. Budget for Roborns token smart contract security audit.' },
 ];
 
 

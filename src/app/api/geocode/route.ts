@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({ q, format: 'json', limit: '5' })}`;
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': `${HQ_DOMAIN} site-projects map (shawaz@llife.app)` } });
+    const res = await fetch(url, { headers: { 'User-Agent': `${HQ_DOMAIN} site-projects map (shawaz@codelude.com)` } });
     if (!res.ok) return NextResponse.json([]);
     const data: { display_name: string; lat: string; lon: string }[] = await res.json();
     return NextResponse.json(data.map(d => ({

@@ -23,8 +23,8 @@ interface PlatformFeatures {
 
 const DATA: PlatformFeatures[] = [
   {
-    platform: 'LLIFE Web',
-    venture: 'LLIFE',
+    platform: 'Codelude Web',
+    venture: 'Codelude',
     domain: APP_DOMAIN,
     color: '#eeeeee',
     features: [
@@ -42,12 +42,12 @@ const DATA: PlatformFeatures[] = [
     ],
   },
   {
-    platform: 'LLIFE HQ',
-    venture: 'LLIFE',
+    platform: 'Codelude HQ',
+    venture: 'Codelude',
     domain: HQ_DOMAIN,
     color: '#eeeeee',
     features: [
-      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @llife.app accounts',                     status: 'live' },
+      { name: 'Team login',            description: 'Google OAuth via Convex Auth — restricted to @codelude.com accounts',                     status: 'live' },
       { name: 'Protected routes',      description: 'Middleware-level auth guard — all /dashboard/* routes require an active session',        status: 'live' },
       { name: 'Accordion sidebar',     description: '10-section collapsible sidebar — auto-opens to active page, single section at a time',   status: 'live' },
       { name: 'Overview dashboard',    description: 'Venture status cards, quick stats, and activity feed',                                   status: 'live' },
@@ -222,7 +222,7 @@ const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {
 };
 
 export default function FeaturesPage() {
-  const [venture, setVenture] = useState('LLIFE');
+  const [venture, setVenture] = useState('Codelude');
 
   const blocks      = DATA.filter(d => d.venture === venture);
   const all         = blocks.flatMap(d => d.features);

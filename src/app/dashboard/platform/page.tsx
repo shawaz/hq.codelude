@@ -20,7 +20,7 @@ interface Platform {
 
 const GROUPS: { title: string; color: string; platforms: Platform[] }[] = [
   {
-    title: 'LLIFE',
+    title: 'Codelude',
     color: '#eeeeee',
     platforms: [
       {
@@ -256,7 +256,7 @@ const KIND_COLOR: Record<Kind, string> = {
 };
 
 export default function PlatformPage() {
-  const [venture, setVenture] = useState('LLIFE');
+  const [venture, setVenture] = useState('Codelude');
 
   // Group titles already match registry scope names, so no mapping is needed.
   const groups  = GROUPS.filter(g => g.title === venture);

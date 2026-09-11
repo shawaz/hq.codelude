@@ -100,7 +100,7 @@ export const SEED_TASKS: Task[] = [
   { id: 'h14', project: 'HubCV', category: 'Business',         priority: 'high',   status: 'todo',        title: 'Revenue model finalization' },
   { id: 'h15', project: 'HubCV', category: 'Business',         priority: 'medium', status: 'todo',        title: 'University and bootcamp partnership outreach' },
 
-  // ── LLIFE ─────────────────────────────────────────────────────────────
+  // ── Codelude ─────────────────────────────────────────────────────────────
   { id: 'c01', project: 'Llife', category: 'Product',        priority: 'high',   status: 'done',        title: 'Five-domain model specification' },
   { id: 'c02', project: 'Llife', category: 'Business',       priority: 'high',   status: 'in-progress', title: 'Ecosystem API contracts with HubCV and Nanotrade' },
   { id: 'c03', project: 'Llife', category: 'Product',        priority: 'high',   status: 'todo',        title: 'AI personal assistant core development' },

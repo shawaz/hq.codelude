@@ -14,7 +14,7 @@ export default function LoginForm() {
     try {
       await signIn('google', { redirectTo: '/dashboard' });
     } catch (e: any) {
-      setError(e?.message ?? 'Sign-in failed. Use a @llife.app Google account.');
+      setError(e?.message ?? 'Sign-in failed. Use a @codelude.com Google account.');
       setLoading(false);
     }
   }
