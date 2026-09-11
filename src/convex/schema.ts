@@ -405,6 +405,26 @@ const schema = defineSchema({
     .index("by_user_day", ["userId", "day"])
     .index("by_user_day_task", ["userId", "day", "taskId"]),
 
+  // ─── Raise plan documents ───────────────────────────────────────────
+  // Per-venture attachments for the Finance → Planning page. The page's
+  // structured sections are Roborns-only static data; this is how the other
+  // four ventures get a raise plan on the record without re-authoring all of
+  // it in the UI.
+  //
+  // Bytes live in Convex storage, not on disk — the old task-file upload wrote
+  // to /home/centos and cannot survive a Vercel deploy. See planDocs.ts for
+  // the three-step upload handshake.
+  plan_documents: defineTable({
+    venture: v.string(),
+    name: v.string(),            // original filename, shown as the row label
+    storageId: v.id("_storage"),
+    size: v.number(),            // bytes, for the size column
+    contentType: v.optional(v.string()),
+    note: v.optional(v.string()),
+    uploadedBy: v.id("users"),
+    uploadedAt: v.number(),
+  }).index("by_venture", ["venture"]),
+
   // ─── AI assistant history ───────────────────────────────────────────
   // The dashboard assistant keeps one day of conversation, then rolls it up
   // into a summary. Private per (user, venture) — this is someone's working
