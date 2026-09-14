@@ -4,7 +4,6 @@ import { mutation, query } from "./_generated/server";
 import type { QueryCtx, MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import {
-  ALL_SCOPE_NAMES,
   ALLOWED_EMAIL_DOMAINS,
   can,
   isAllowedEmail,
@@ -12,7 +11,9 @@ import {
   venturesForPage,
   venturesForUser,
   type Grant,
+  type LiveScopes,
 } from "./access";
+import { liveScopeNames } from "./scopes";
 
 // ─── SHARED GUARDS ────────────────────────────────────────────────────────────
 // Imported by pipeline.ts. These are the checks that make the matrix real —
@@ -44,7 +45,12 @@ export async function assertAccess(
   pageSlug: string,
 ): Promise<Doc<"users">> {
   const user = await requireUser(ctx);
-  if (!can(user, venture, pageSlug)) {
+  // Reads the live registry rather than the compiled-in one, which is what
+  // lets a database-created organization pass at all. This function and
+  // scopesForPage below are the only paths pipeline.ts, planDocs.ts and
+  // contacts.ts take to reach can()/venturesForPage — fixing the two here
+  // covers every one of their call sites without touching those files.
+  if (!can(user, venture, pageSlug, await liveScopeNames(ctx))) {
     throw new Error(`No access to ${venture} · ${pageSlug}`);
   }
   return user;
@@ -56,7 +62,7 @@ export async function scopesForPage(
   pageSlug: string,
 ): Promise<string[]> {
   const user = await requireUser(ctx);
-  return venturesForPage(user, pageSlug);
+  return venturesForPage(user, pageSlug, await liveScopeNames(ctx));
 }
 
 // ─── VALIDATORS ───────────────────────────────────────────────────────────────
@@ -72,10 +78,11 @@ const ventureRolesValidator = v.array(
 /** Drop venture roles naming a scope that does not exist. */
 function cleanVentureRoles(
   roles: { venture: string; role: string }[] | undefined,
+  live: LiveScopes,
 ): { venture: string; role: string }[] | undefined {
   if (!roles) return undefined;
   const cleaned = roles.filter(
-    (r) => ALL_SCOPE_NAMES.includes(r.venture) && r.role.trim().length > 0,
+    (r) => live.includes(r.venture) && r.role.trim().length > 0,
   );
   return cleaned.length > 0 ? cleaned : undefined;
 }
@@ -89,8 +96,8 @@ function normalizeEmail(email: string): string {
  * full matrix — otherwise their access would silently narrow the next time a
  * page is added to the registry.
  */
-function accessForRole(role: "admin" | "member", access: Grant[]) {
-  return role === "admin" ? undefined : normalizeAccess(access);
+function accessForRole(role: "admin" | "member", access: Grant[], live: LiveScopes) {
+  return role === "admin" ? undefined : normalizeAccess(access, live);
 }
 
 // ─── QUERIES ──────────────────────────────────────────────────────────────────
@@ -129,7 +136,7 @@ export const getTeam = query({
     if (!viewer) return [];
 
     const isAdmin = viewer.role === "admin";
-    const myVentures = new Set(venturesForUser(viewer));
+    const myVentures = new Set(venturesForUser(viewer, await liveScopeNames(ctx)));
 
     /** Does this person share a venture with the viewer? */
     const shares = (access: Grant[] | undefined, role?: string) => {
@@ -214,8 +221,9 @@ export const inviteMember = mutation({
       throw new Error(`Team members need ${allowed} address`);
     }
 
-    const access = accessForRole(args.role, args.access);
-    const ventureRoles = cleanVentureRoles(args.ventureRoles);
+    const live = await liveScopeNames(ctx);
+    const access = accessForRole(args.role, args.access, live);
+    const ventureRoles = cleanVentureRoles(args.ventureRoles, live);
 
     const existingUser = await ctx.db
       .query("users")
@@ -242,7 +250,7 @@ export const inviteMember = mutation({
       name: args.name,
       title: args.title,
       role: args.role,
-      access: normalizeAccess(args.access),
+      access: normalizeAccess(args.access, live),
       ventureRoles,
       invitedBy: actor._id,
       createdAt: Date.now(),
@@ -290,14 +298,15 @@ export const updateMember = mutation({
       }
     }
 
+    const live = await liveScopeNames(ctx);
     await ctx.db.patch(args.userId, {
       ...(args.title !== undefined ? { title: args.title } : {}),
       ...(args.role !== undefined ? { role: args.role } : {}),
       ...(args.access !== undefined
-        ? { access: accessForRole(nextRole, args.access) }
+        ? { access: accessForRole(nextRole, args.access, live) }
         : {}),
       ...(args.ventureRoles !== undefined
-        ? { ventureRoles: cleanVentureRoles(args.ventureRoles) }
+        ? { ventureRoles: cleanVentureRoles(args.ventureRoles, live) }
         : {}),
     });
   },

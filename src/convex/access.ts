@@ -63,6 +63,44 @@ export function scopeByName(name: string): Scope | undefined {
 }
 
 /**
+ * The live scope names, when the caller has them.
+ *
+ * Organizations moved into Convex (see convex/organizations.ts), but this
+ * module is deliberately pure and sync — 36 files import through it, and the
+ * Convex backend and the Next app both do. Rather than make every check async,
+ * the functions below take the live list as an optional trailing argument and
+ * fall back to the compiled-in registry.
+ *
+ * That fallback is load-bearing twice over: it keeps every existing call site
+ * working unchanged, and it keeps the dashboard functional in the window
+ * between `convex deploy` creating an empty organizations table and the seed
+ * being run against it.
+ */
+export type LiveScopes = readonly string[];
+
+/**
+ * The colours an organization may take, in ramp order.
+ *
+ * This is a CLOSED set, and that is not a style preference. src/lib/status-colors.ts
+ * maps each of these fill greys to a --st-* token that flips with the theme; a
+ * colour absent from that map falls through and renders as grey text, which is
+ * invisible on a light card. The two lists must stay in step.
+ *
+ * Six are already spoken for by the seeded scopes, so exactly one is free. Past
+ * that, organizations reuse a colour — extending the ramp means adding to TOKEN
+ * and the --st-* variables in globals.css together.
+ */
+export const SCOPE_PALETTE: readonly string[] = [
+  '#eeeeee', // --st-lime    (Codelude)
+  '#dbdbdb', // --st-green   (Roborns)
+  '#c8c8c8', // --st-purple  (Franchiseen)
+  '#b5b5b5', // --st-amber   (HubCV)
+  '#adadad', // --st-orange  (Nanotrade)
+  '#a5a5a5', // --st-blue    (Llife)
+  '#9d9d9d', // --st-red     — the only unallocated step
+];
+
+/**
  * Whether a stored scope name is still live.
  *
  * Archiving is defined as absence from the registry rather than a flag on each
@@ -70,8 +108,11 @@ export function scopeByName(name: string): Scope | undefined {
  * Callers that read a table wholesale must apply this, because the venture
  * string on an archived row is otherwise indistinguishable from a live one.
  */
-export function isActiveScope(name: string | undefined | null): boolean {
-  return !!name && ALL_SCOPE_NAMES.includes(name);
+export function isActiveScope(
+  name: string | undefined | null,
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): boolean {
+  return !!name && live.includes(name);
 }
 
 /**
@@ -278,13 +319,14 @@ export function can(
   user: AccessSubject | null | undefined,
   venture: string,
   pageSlug: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
 ): boolean {
   if (!user) return false;
   // Unrestricted means every *live* scope, not any string ever stored. Without
   // this an admin could still reach archived ventures by naming one directly —
   // which the UI never does, but the assistant's tools pass a venture straight
   // from the model, so the guard belongs here rather than at each call site.
-  if (!isActiveScope(venture)) return false;
+  if (!isActiveScope(venture, live)) return false;
   if (isUnrestricted(user)) return true;
   return (user.access ?? []).some(
     (g) => g.venture === venture && g.pages.includes(pageSlug),
@@ -295,14 +337,18 @@ export function can(
 export function venturesForPage(
   user: AccessSubject | null | undefined,
   pageSlug: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
 ): string[] {
   if (!user) return [];
-  if (isUnrestricted(user)) return ALL_SCOPE_NAMES;
+  if (isUnrestricted(user)) return [...live];
   return (user.access ?? [])
     .filter((g) => g.pages.includes(pageSlug))
     .map((g) => g.venture)
-    // Keep ALL_SCOPES ordering rather than whatever order the grants were saved in.
-    .sort((a, b) => ALL_SCOPE_NAMES.indexOf(a) - ALL_SCOPE_NAMES.indexOf(b));
+    // A grant can outlive the organization it names — drop those rather than
+    // handing back a scope nothing else will resolve.
+    .filter((name) => live.includes(name))
+    // Keep registry ordering rather than whatever order the grants were saved in.
+    .sort((a, b) => live.indexOf(a) - live.indexOf(b));
 }
 
 /**
@@ -310,39 +356,47 @@ export function venturesForPage(
  * Coarser than venturesForPage — use it where the scope is the whole venture
  * rather than a single page (e.g. what the AI assistant may discuss).
  */
-export function venturesForUser(user: AccessSubject | null | undefined): string[] {
+export function venturesForUser(
+  user: AccessSubject | null | undefined,
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): string[] {
   if (!user) return [];
-  if (isUnrestricted(user)) return ALL_SCOPE_NAMES;
+  if (isUnrestricted(user)) return [...live];
   const held = new Set((user.access ?? []).filter((g) => g.pages.length > 0).map((g) => g.venture));
-  return ALL_SCOPE_NAMES.filter((name) => held.has(name));
+  return live.filter((name) => held.has(name));
 }
 
 /** A page is visible when the user holds at least one venture grant on it. */
 export function canSeePage(
   user: AccessSubject | null | undefined,
   pageSlug: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
 ): boolean {
   if (!user) return false;
   if (isUnrestricted(user)) return true;
   if ((ALWAYS_ALLOWED_PAGES as readonly string[]).includes(pageSlug)) return true;
-  return venturesForPage(user, pageSlug).length > 0;
+  return venturesForPage(user, pageSlug, live).length > 0;
 }
 
 /** A section is visible when at least one of its pages is. */
 export function canSeeSection(
   user: AccessSubject | null | undefined,
   sectionTitle: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
 ): boolean {
   const section = NAV.find((s) => s.title === sectionTitle);
   if (!section) return false;
-  return section.pages.some((p) => canSeePage(user, p.slug));
+  return section.pages.some((p) => canSeePage(user, p.slug, live));
 }
 
 /** The sidebar, filtered. Empty sections collapse out entirely. */
-export function visibleNav(user: AccessSubject | null | undefined): NavSection[] {
+export function visibleNav(
+  user: AccessSubject | null | undefined,
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): NavSection[] {
   if (isUnrestricted(user)) return NAV;
   return NAV
-    .map((s) => ({ title: s.title, pages: s.pages.filter((p) => canSeePage(user, p.slug)) }))
+    .map((s) => ({ title: s.title, pages: s.pages.filter((p) => canSeePage(user, p.slug, live)) }))
     .filter((s) => s.pages.length > 0);
 }
 
@@ -358,17 +412,20 @@ export function grantCount(access: Grant[] | undefined): number {
  * every write so a renamed page cannot leave orphan grants that silently mean
  * nothing, and so a malformed client payload cannot widen access.
  */
-export function normalizeAccess(access: Grant[]): Grant[] {
+export function normalizeAccess(
+  access: Grant[],
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): Grant[] {
   const byVenture = new Map<string, Set<string>>();
   for (const grant of access) {
-    if (!ALL_SCOPE_NAMES.includes(grant.venture)) continue;
+    if (!live.includes(grant.venture)) continue;
     const pages = byVenture.get(grant.venture) ?? new Set<string>();
     for (const slug of grant.pages) {
       if (ALL_PAGE_SLUGS.includes(slug)) pages.add(slug);
     }
     if (pages.size > 0) byVenture.set(grant.venture, pages);
   }
-  return ALL_SCOPE_NAMES
+  return live
     .filter((name) => byVenture.has(name))
     .map((name) => ({
       venture: name,
@@ -382,21 +439,28 @@ export function normalizeAccess(access: Grant[]): Grant[] {
 const SENSITIVE_SECTIONS = ['Finance', 'People', 'Legal'];
 
 /** Every page, for one venture. */
-export function presetVentureLead(venture: string): Grant[] {
-  return normalizeAccess([{ venture, pages: [...ALL_PAGE_SLUGS] }]);
+export function presetVentureLead(
+  venture: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): Grant[] {
+  return normalizeAccess([{ venture, pages: [...ALL_PAGE_SLUGS] }], live);
 }
 
 /** One venture, minus Finance / People / Legal. */
-export function presetOperating(venture: string): Grant[] {
+export function presetOperating(
+  venture: string,
+  live: LiveScopes = ALL_SCOPE_NAMES,
+): Grant[] {
   const pages = NAV
     .filter((s) => !SENSITIVE_SECTIONS.includes(s.title))
     .flatMap((s) => s.pages.map((p) => p.slug));
-  return normalizeAccess([{ venture, pages }]);
+  return normalizeAccess([{ venture, pages }], live);
 }
 
 /** Every page, every scope. */
-export function presetFullAccess(): Grant[] {
+export function presetFullAccess(live: LiveScopes = ALL_SCOPE_NAMES): Grant[] {
   return normalizeAccess(
-    ALL_SCOPE_NAMES.map((venture) => ({ venture, pages: [...ALL_PAGE_SLUGS] })),
+    live.map((venture) => ({ venture, pages: [...ALL_PAGE_SLUGS] })),
+    live,
   );
 }
