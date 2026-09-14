@@ -5,11 +5,11 @@ import { usePaginatedQuery, useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import ConvertToProjectButton from '@/components/ConvertToProjectButton';
-import {
-  VENTURES, SEGMENTS, STATUSES, STAGE_META, statusColor,
+import { SEGMENTS, STATUSES, STAGE_META, statusColor,
   type Stage, type Segment,
 } from '@/lib/pipeline-config';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { VentureEmpty } from '@/components/VentureTabs';
 import { sc, scBorder } from '@/lib/status-colors';
 import PipelineContacts, { type Contact } from '@/components/PipelineContacts';
 
@@ -208,19 +208,19 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
   // Must filter before querying, not after: pipeline.stats and pipeline.list
   // now throw on an ungranted (venture, page), so pointing them at a venture
   // this user lacks would error the whole page rather than just show nothing.
-  const { names: allowed, loading } = usePageScopes(STAGE_PAGE[stage]);
-  const ventures = VENTURES.filter(v => allowed.includes(v.name) && SEGMENTS[v.name]);
+  const { scope: venture, loading } = useActiveScope(STAGE_PAGE[stage]);
 
-  const [vi, setVi] = useState(0);
+
   const [segKey, setSegKey] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [adding, setAdding] = useState(false);
 
-  const index    = clampIndex(vi, ventures.length);
-  const venture  = ventures[index];
-  const segments = venture ? SEGMENTS[venture.name] : [];
+  // An organization with no segment configuration used to be filtered out of
+  // the strip entirely, which surfaced as "you do not have access" — the wrong
+  // answer for a perfectly valid organization that simply has no segments yet.
+  const segments = venture ? SEGMENTS[venture.name] ?? [] : [];
   const segment  = segments.find(s => s.key === segKey) ?? segments[0];
 
   // "skip" keeps the queries from firing until we know the venture is allowed.
@@ -271,13 +271,16 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
   function reset() {
     setStatus(null); setSearchInput(''); setSearch(''); setAdding(false);
   }
-  function selectVenture(i: number) {
-    setVi(i);
-    setSegKey(SEGMENTS[ventures[i].name][0].key);
-    reset();
-  }
-
   if (loading) return null;
+  if (venture && segments.length === 0) {
+    return (
+      <div>
+        <h1 className="page-title">{meta.title}</h1>
+        <p className="page-sub">{meta.sub}</p>
+        <VentureEmpty what={`${meta.title.toLowerCase()} segments`} venture={venture.name} />
+      </div>
+    );
+  }
   if (!venture) {
     return (
       <div>
@@ -295,21 +298,6 @@ export default function PipelineBoard({ stage }: { stage: Stage }) {
     <div>
       <h1 className="page-title">{meta.title}</h1>
       <p className="page-sub">{meta.sub}</p>
-
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
-        border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {ventures.map((v, i) => (
-          <button key={v.name} onClick={() => selectVenture(i)} style={{
-            flex: 1, padding: '0.8rem 0.5rem',
-            background: index === i ? 'var(--accent)' : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: index === i ? 'var(--on-accent)' : 'var(--muted)',
-            fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${venture.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

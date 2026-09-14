@@ -6,7 +6,8 @@ import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import MemberForm, { type MemberDraft } from '@/components/MemberForm';
 import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
-import { ALL_SCOPES, isUnrestricted, type Grant } from '@/lib/nav';
+import { scopeColor, type Scope } from '@/lib/ventures';
+import { isUnrestricted, type Grant } from '@/lib/nav';
 import { sc, scBorder } from '@/lib/status-colors';
 
 /** A row from team.getTeam — a real user, or an invite not yet redeemed. */
@@ -99,9 +100,12 @@ function HumansSection({
   onEdit: (m: Member) => void;
 }) {
   const revokeInvite = useMutation(api.team.revokeInvite);
-  const color = ALL_SCOPES.find(v => v.name === venture)!.color;
+  // Both lookups miss for any organization created after this file was
+  // written. The non-null assertion threw, and VENTURE_DATA only ever had a
+  // Llife key — so this already crashed for five of the six seeded scopes.
+  const color = scopeColor(venture);
   const people = membersOf(team, venture);
-  const { openRoles } = VENTURE_DATA[venture];
+  const { openRoles } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
@@ -206,11 +210,10 @@ function AgentsSection({ venture }: { venture: string }) {
   );
 }
 
-function OrgSection({ venture, team }: { venture: string; team: Member[] | undefined }) {
-  const { agents, openRoles } = VENTURE_DATA[venture];
-  const scope  = ALL_SCOPES.find(v => v.name === venture)!;
-  const color  = scope.color;
-  const sector = scope.sector;
+function OrgSection({ venture, team, scope }: { venture: string; team: Member[] | undefined; scope?: Scope }) {
+  const { agents, openRoles } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
+  const color  = scope?.color ?? scopeColor(venture);
+  const sector = scope?.sector ?? '';
   const activeHumans = membersOf(team, venture).filter(m => !m.pending);
 
   return (
@@ -399,7 +402,7 @@ export default function TeamPage() {
         <HumansSection venture={venture.name} team={team} canManage={canManage} onEdit={openEdit} />
       )}
       {tab === 'agents' && <AgentsSection venture={venture.name} />}
-      {tab === 'org'    && <OrgSection    venture={venture.name} team={team} />}
+      {tab === 'org'    && <OrgSection    venture={venture.name} team={team} scope={venture} />}
 
       {canManage && tab === 'humans' && (
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--muted)', marginTop: '1.5rem', lineHeight: 1.7 }}>

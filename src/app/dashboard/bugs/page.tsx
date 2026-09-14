@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
+import { VentureEmpty } from '@/components/VentureTabs';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 type Severity = 'high' | 'medium' | 'low';
 type BugStatus = 'open' | 'fixed';
@@ -185,7 +185,9 @@ const mono = (size: string): React.CSSProperties => ({
 });
 
 export default function BugsPage() {
-  const [venture, setVenture] = useState('Codelude');
+  const { scope, loading } = useActiveScope('bugs');
+  const venture = scope?.name ?? '';
+  if (loading) return null;
 
   const groups = DATA.filter(p => p.venture === venture);
   const all = groups.flatMap(p => p.bugs);
@@ -197,8 +199,6 @@ export default function BugsPage() {
     <div>
       <h1 className="page-title">Bugs</h1>
       <p className="page-sub">Known issues and recent fixes across all platforms.</p>
-
-      <VentureTabs active={venture} onChange={setVenture} />
 
       {/* Summary */}
       <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
