@@ -16,6 +16,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { can } from "./access";
 import { assertAccess, requireUser } from "./team";
+import { liveScopeNames } from "./scopes";
 
 /** The page these documents hang off. Every check here uses it. */
 const PAGE = "fundraise";
@@ -36,7 +37,7 @@ export const list = query({
   args: { venture: v.string() },
   handler: async (ctx, { venture }) => {
     const user = await requireUser(ctx).catch(() => null);
-    if (!user || !can(user, venture, PAGE)) return [];
+    if (!user || !can(user, venture, PAGE, await liveScopeNames(ctx))) return [];
 
     const rows = await ctx.db
       .query("plan_documents")

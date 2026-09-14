@@ -18,11 +18,6 @@
  * is visible rather than silent.
  *
  * IF YOU ADD A TABLE THAT STORES AN ORGANIZATION NAME, ADD IT HERE.
- *
- * KNOWN GAP: plan_documents.venture is not covered, because that table only
- * exists on the unmerged feature/planning-plan-documents branch. Add it here
- * the moment that lands — its omission from the two older copies of this walk
- * is precisely the drift this file exists to stop.
  */
 
 import type { MutationCtx } from "./_generated/server";
@@ -80,6 +75,13 @@ export async function retagScope(
     if (row.venture !== from) continue;
     if (write) await ctx.db.patch(row._id, { venture: to });
     bump("ai_day_summaries");
+  }
+  // The table both older copies of this walk missed, having been written
+  // before it existed. Covering it is the reason they were consolidated.
+  for (const row of await ctx.db.query("plan_documents").collect()) {
+    if (row.venture !== from) continue;
+    if (write) await ctx.db.patch(row._id, { venture: to });
+    bump("plan_documents");
   }
 
   // Same field, but optional.
