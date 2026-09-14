@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
+import { VentureEmpty } from '@/components/VentureTabs';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc } from '@/lib/status-colors';
 import {
   programmeFor, stageCost, programmeCost, decisionCost, rupees, lakh,
@@ -18,7 +18,9 @@ const KIND_LABEL: Record<ItemKind, string | null> = {
 };
 
 export default function FeasibilityPage() {
-  const [venture, setVenture] = useState('Roborns');
+  const { scope, loading } = useActiveScope('feasibility');
+  const venture = scope?.name ?? '';
+  if (loading) return null;
   const p = programmeFor(venture);
 
   return (
@@ -28,8 +30,6 @@ export default function FeasibilityPage() {
         Staged site diligence — ordered by what can kill a site soonest and cheapest, not by
         engineering sequence.
       </p>
-
-      <VentureTabs active={venture} onChange={setVenture} />
 
       {!p && <VentureEmpty what="feasibility programme" venture={venture} />}
 

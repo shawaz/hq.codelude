@@ -19,7 +19,13 @@
  *   fill    → leave the hex alone
  */
 
-/** Fill grey → the token carrying its readable-as-text counterpart per theme. */
+/**
+ * Fill grey → the token carrying its readable-as-text counterpart per theme.
+ *
+ * The keys are the same seven values as SCOPE_PALETTE in src/convex/access.ts,
+ * which is what organization colours are allocated from. Add to one and you
+ * must add to the other, plus a matching --st-* variable in globals.css.
+ */
 const TOKEN: Record<string, string> = {
   '#dbdbdb': 'var(--st-green)',
   '#b5b5b5': 'var(--st-amber)',

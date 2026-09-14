@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
+import { VentureEmpty } from '@/components/VentureTabs';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type FeatureStatus = 'live' | 'in-progress' | 'planned';
@@ -222,7 +222,9 @@ const STATUS_STYLES: Record<FeatureStatus, { color: string; label: string }> = {
 };
 
 export default function FeaturesPage() {
-  const [venture, setVenture] = useState('Codelude');
+  const { scope, loading } = useActiveScope('features');
+  const venture = scope?.name ?? '';
+  if (loading) return null;
 
   const blocks      = DATA.filter(d => d.venture === venture);
   const all         = blocks.flatMap(d => d.features);
@@ -234,8 +236,6 @@ export default function FeaturesPage() {
     <div>
       <h1 className="page-title">Features</h1>
       <p className="page-sub">Feature inventory across all platforms — what's live, what's being built, and what's planned.</p>
-
-      <VentureTabs active={venture} onChange={setVenture} />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">

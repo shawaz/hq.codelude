@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { VentureEmpty } from '@/components/VentureTabs';
 import { MODELS, type VentureModel } from '@/lib/fin-models';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -169,14 +171,17 @@ function AssumptionsTab({ model }: { model: VentureModel }) {
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function FinancialModelPage() {
-  const [vi,  setVi]  = useState(0);
+  const { scope, loading } = useActiveScope('financial-model');
   const [tab, setTab] = useState<Tab>('pnl');
   const chartRef  = useRef<HTMLCanvasElement>(null);
   const chartInst = useRef<unknown>(null);
-  const model = MODELS[vi];
+  // This page used to index MODELS directly, with no access check at all — a
+  // member could see a venture they hold no grant on, and an organization
+  // absent from MODELS could never appear. Both follow the switcher now.
+  const model = MODELS.find(m => m.name === scope?.name);
 
   useEffect(() => {
-    if (tab !== 'pnl' || !chartRef.current) return;
+    if (tab !== 'pnl' || !chartRef.current || !model) return;
     import('chart.js/auto').then(mod => {
       const Chart = mod.default as any;
       if (chartInst.current) (chartInst.current as any).destroy();
@@ -208,7 +213,18 @@ export default function FinancialModelPage() {
       });
     });
     return () => { if (chartInst.current) (chartInst.current as any).destroy(); };
-  }, [vi, tab]);
+  }, [model, tab]);
+
+  if (loading) return null;
+  if (!model) {
+    return (
+      <div>
+        <h1 className="page-title">Financial Model</h1>
+        <p className="page-sub">5-year financial model, capex, unit economics, and assumptions — per venture.</p>
+        <VentureEmpty what="financial model" venture={scope?.name ?? ''} />
+      </div>
+    );
+  }
 
   const cards = tab === 'pnl' ? model.pnlCards : tab === 'capex' ? model.capexCards : tab === 'unit' ? model.unitCards : model.pnlCards;
 
@@ -216,20 +232,6 @@ export default function FinancialModelPage() {
     <div>
       <h1 className="page-title">Financial Model</h1>
       <p className="page-sub">5-year financial model, capex, unit economics, and assumptions — per venture.</p>
-
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {MODELS.map((m, i) => (
-          <button key={m.name} onClick={() => { setVi(i); setTab('pnl'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem',
-            background: vi === i ? m.color : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: vi === i ? 'var(--black)' : 'var(--muted)',
-            fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{m.name}</button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${model.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

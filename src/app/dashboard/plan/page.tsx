@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { VentureEmpty } from '@/components/VentureTabs';
 import { PLANS, type VenturePlan } from '@/lib/plans';
 
 type Tab = 'model' | 'plan' | 'finance';
@@ -193,32 +195,27 @@ function FinanceTab({ plan }: { plan: VenturePlan }) {
 }
 
 export default function PlanPage() {
-  const [venture, setVenture] = useState(0);
+  const { scope, loading } = useActiveScope('plan');
   const [tab, setTab]         = useState<Tab>('model');
-  const plan = PLANS[venture];
+  // Was a bare index into PLANS with no access check — the switcher
+  // decides now, and an organization absent from that list says so.
+  const plan = PLANS.find(x => x.name === scope?.name);
+
+  if (loading) return null;
+  if (!plan) {
+    return (
+      <div>
+      <h1 className="page-title">Plan</h1>
+        <VentureEmpty what="business plan" venture={scope?.name ?? ''} />
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1 className="page-title">Plan</h1>
       <p className="page-sub">Business model, business plan, and financial plan for each venture.</p>
 
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {PLANS.map((p, i) => (
-          <button
-            key={p.name}
-            onClick={() => setVenture(i)}
-            style={{
-              flex: 1, padding: '0.85rem 1rem', background: venture === i ? p.color : 'var(--card-bg)',
-              border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-              letterSpacing: '0.08em', color: venture === i ? 'var(--black)' : 'var(--muted)',
-              fontWeight: venture === i ? 700 : 400, transition: 'all 0.15s',
-            }}
-          >
-            {p.name}
-          </button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${plan.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

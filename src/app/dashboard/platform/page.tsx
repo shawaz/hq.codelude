@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import VentureTabs, { VentureEmpty } from '@/components/VentureTabs';
+import { VentureEmpty } from '@/components/VentureTabs';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { APP_DOMAIN, HQ_DOMAIN } from '@/lib/domains';
 type Status = 'live' | 'stopped' | 'static' | 'building';
@@ -256,7 +256,9 @@ const KIND_COLOR: Record<Kind, string> = {
 };
 
 export default function PlatformPage() {
-  const [venture, setVenture] = useState('Codelude');
+  const { scope, loading } = useActiveScope('platform');
+  const venture = scope?.name ?? '';
+  if (loading) return null;
 
   // Group titles already match registry scope names, so no mapping is needed.
   const groups  = GROUPS.filter(g => g.title === venture);
@@ -269,8 +271,6 @@ export default function PlatformPage() {
     <div>
       <h1 className="page-title">Platform</h1>
       <p className="page-sub">All platforms and services running on 64.227.160.224 — Apache + PM2 stack.</p>
-
-      <VentureTabs active={venture} onChange={setVenture} />
 
       <div className="tasks-count-row" style={{ gridTemplateColumns: 'repeat(3,1fr)', marginBottom: '2rem' }}>
         <div className="tasks-count-cell">

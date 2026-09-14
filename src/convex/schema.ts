@@ -28,6 +28,14 @@ const schema = defineSchema({
         }),
       ),
     ),
+    // Which organization the sidebar switcher is pointed at. Not a permission:
+    // venturesForPage still decides what is reachable, and assertAccess still
+    // decides what the data layer hands over. This only says which of the
+    // reachable organizations is on screen. Lives on the user rather than in
+    // localStorage so server components can read it — the dashboard layout
+    // already fetches getCurrentUser, so it rides along for free.
+    activeVenture: v.optional(v.string()),
+
     // Display-only label per venture, e.g. { venture: "Nanotrade", role: "Co-founder" }.
     // Carries no permissions — `access` is the only thing that grants anything.
     ventureRoles: v.optional(
@@ -56,6 +64,37 @@ const schema = defineSchema({
   }).index("by_email", ["email"]),
 
   // ─── Writable app data ──────────────────────────────────────────────
+
+  // The scope registry — the list of organizations (ventures plus the HoldCo)
+  // that the rest of the app validates names against.
+  //
+  // This is a REGISTRY, not a foreign-key target. Every other table stores the
+  // organization NAME as a plain string (under three different field names:
+  // `venture`, `tasks.project`, `site_projects.ventureId`), and pipeline_orgs
+  // embeds it in four indexes plus a search filter. Keying off an Id here would
+  // force an index rebuild on the largest table in the app for no gain, so the
+  // name stays the key and this table decides which names are live.
+  //
+  // Seeded from the static ALL_SCOPES in access.ts, which remains the fallback
+  // while this table is empty — see organizations.ts.
+  organizations: defineTable({
+    name: v.string(),
+    // Must be one of the seven fill greys in src/lib/status-colors.ts TOKEN.
+    // A colour outside that map renders as invisible text in light mode.
+    color: v.string(),
+    sector: v.string(),
+    holdco: v.optional(v.boolean()),
+    // Replaces position in the old ALL_SCOPE_NAMES array, which ordered every
+    // strip and the normalizeAccess output.
+    order: v.number(),
+    // Archived rather than deleted: rows elsewhere still carry the name, and
+    // absence from the live list is what makes them invisible.
+    archived: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index("by_name", ["name"])
+    .index("by_order", ["order"]),
+
 
   site_projects: defineTable({
     id: v.string(),

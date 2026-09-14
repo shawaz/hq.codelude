@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { VentureEmpty } from '@/components/VentureTabs';
 import { VENTURE_BUDGETS, type BudgetLine } from '@/lib/budget-data';
 import { sc } from '@/lib/status-colors';
 
@@ -42,29 +44,35 @@ function groupByCategory(lines: BudgetLine[]) {
 }
 
 export default function BudgetPage() {
-  const [vi,  setVi]  = useState(0);
+  const { scope, loading } = useActiveScope('budget');
   const [tab, setTab] = useState<Tab>('planned');
-  const vb = VENTURE_BUDGETS[vi];
+  // Was a bare index into VENTURE_BUDGETS with no access check — the switcher
+  // decides now, and an organization absent from that list says so.
+  const vb = VENTURE_BUDGETS.find(x => x.venture === scope?.name);
 
-  const totalPlanned  = useMemo(() => vb.lines.reduce((s, l) => s + l.planned,  0), [vb]);
-  const totalActual   = useMemo(() => vb.lines.reduce((s, l) => s + l.actual,   0), [vb]);
-  const totalYtd      = useMemo(() => vb.lines.reduce((s, l) => s + l.ytdActual, 0), [vb]);
+  // Null-safe because these are hooks: they have to run before the empty-state
+  // guard below, which cannot sit above them. Memoised so the fallback []
+  // keeps a stable identity and the totals below stay memoised too.
+  const lines = useMemo(() => vb?.lines ?? [], [vb]);
+  const totalPlanned  = useMemo(() => lines.reduce((s, l) => s + l.planned,   0), [lines]);
+  const totalActual   = useMemo(() => lines.reduce((s, l) => s + l.actual,    0), [lines]);
+  const totalYtd      = useMemo(() => lines.reduce((s, l) => s + l.ytdActual, 0), [lines]);
   const variance      = totalActual - totalPlanned;
-  const grouped       = useMemo(() => groupByCategory(vb.lines), [vb]);
+  const grouped       = useMemo(() => groupByCategory(lines), [lines]);
 
   // Per-tab summary cards
   const cards = {
     planned: [
       { label: 'Monthly budget',  val: fmt(totalPlanned), sub: 'Total planned spend',       color: 'var(--off-white)' },
       { label: 'Categories',      val: String(grouped.size), sub: 'Budget line categories', color: 'var(--off-white)' },
-      { label: 'Currency',        val: vb.currency,       sub: 'Reporting currency',          color: 'var(--off-white)' },
-      { label: 'Period',          val: vb.period,         sub: 'Current budget period',       color: 'var(--off-white)' },
+      { label: 'Currency',        val: vb?.currency ?? '',       sub: 'Reporting currency',          color: 'var(--off-white)' },
+      { label: 'Period',          val: vb?.period ?? '',         sub: 'Current budget period',       color: 'var(--off-white)' },
     ],
     actual: [
       { label: 'Actual MTD',      val: fmt(totalActual),  sub: 'Spent this month to date',  color: totalActual > 0 ? '#eeeeee' : 'var(--muted)' },
       { label: 'YTD actual',      val: fmt(totalYtd),     sub: 'Year to date total',         color: '#b5b5b5' },
       { label: 'MTD utilisation', val: pct(totalActual, totalPlanned), sub: 'Of monthly budget used', color: totalActual > totalPlanned ? '#9d9d9d' : '#dbdbdb' },
-      { label: 'Not started',     val: String(vb.lines.filter(l => l.actual === 0 && l.planned > 0).length), sub: 'Lines with $0 actual', color: 'var(--muted)' },
+      { label: 'Not started',     val: String(lines.filter(l => l.actual === 0 && l.planned > 0).length), sub: 'Lines with $0 actual', color: 'var(--muted)' },
     ],
     variance: [
       { label: 'MTD variance',    val: `${variance >= 0 ? '+' : ''}${fmt(Math.abs(variance))}`, sub: variance >= 0 ? 'Over budget' : 'Under budget', color: variance > 0 ? '#9d9d9d' : '#dbdbdb' },
@@ -74,22 +82,21 @@ export default function BudgetPage() {
     ],
   };
 
+  if (loading) return null;
+  if (!vb) {
+    return (
+      <div>
+      <h1 className="page-title">Budget</h1>
+        <VentureEmpty what="budget" venture={scope?.name ?? ''} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1 className="page-title">Budget</h1>
       <p className="page-sub">Monthly planned vs actual spend — per venture.</p>
 
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {VENTURE_BUDGETS.map((v, i) => (
-          <button key={v.venture} onClick={() => { setVi(i); setTab('planned'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem', background: vi === i ? 'var(--accent)' : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: vi === i ? 'var(--black)' : 'var(--muted)',
-            fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.venture}</button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${vb.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

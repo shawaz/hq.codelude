@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { VENTURES, VENTURE_CHANNELS, type ChStatus } from '@/lib/mgmt-ventures';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { VENTURE_CHANNELS, type ChStatus } from '@/lib/mgmt-ventures';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 
 const STATUS_STYLES: Record<ChStatus,{color:string;label:string}> = {
@@ -12,11 +11,7 @@ const TYPE_COLORS: Record<string,string> = {
 };
 
 export default function ChannelPage() {
-  const { names: allowed, loading } = usePageScopes('channel');
-  const ventures = VENTURES.filter(v => allowed.includes(v.name));
-  const [vi, setVi] = useState(0);
-  const index = clampIndex(vi, ventures.length);
-  const venture  = ventures[index];
+  const { scope: venture, loading } = useActiveScope('channel');
 
   // A member with no grant on this page has no venture to render.
   if (loading) return null;
@@ -37,11 +32,6 @@ export default function ChannelPage() {
     <div>
       <h1 className="page-title">Channel</h1>
       <p className="page-sub">Marketing, sales, distribution, and community channels — per venture.</p>
-      <div style={{ display:'flex',gap:'1px',background:'var(--card-border)',border:'1px solid var(--card-border)',marginBottom:'1.5rem' }}>
-        {ventures.map((v,i) => (
-          <button key={v.name} onClick={() => setVi(i)} style={{ flex:1,padding:'0.8rem 0.5rem',background:index===i?'var(--accent)':'var(--card-bg)',border:'none',cursor:'pointer',fontFamily:'var(--font-mono)',fontSize:'0.68rem',letterSpacing:'0.06em',color:index===i?'var(--on-accent)':'var(--muted)',fontWeight:index===i?700:400,transition:'all 0.15s' }}>{v.name}</button>
-        ))}
-      </div>
       <div style={{ borderLeft:`2px solid ${venture.color}`,paddingLeft:'1rem',marginBottom:'1.5rem' }}>
         <div style={{ fontFamily:'var(--font-mono)',fontSize:'0.6rem',color:venture.color,letterSpacing:'0.14em',textTransform:'uppercase',marginBottom:'0.2rem' }}>{venture.sector}</div>
         <div style={{ fontSize:'1.3rem',fontWeight:700,letterSpacing:'-0.01em',display:'flex',alignItems:'center',gap:'1rem' }}>

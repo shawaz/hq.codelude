@@ -16,6 +16,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { isActiveScope } from "./access";
+import { liveScopeNames } from "./scopes";
 import { requireUser } from "./team";
 
 const status = v.union(
@@ -45,8 +46,9 @@ export const list = query({
     // Candidates who applied to an archived venture stay in the table and out
     // of the pipeline. All five ventures are live, so this currently filters
     // nothing — it is the guard for the next time one is archived.
+    const live = await liveScopeNames(ctx);
     const rows = (await ctx.db.query("applications").collect())
-      .filter((r) => isActiveScope(r.venture));
+      .filter((r) => isActiveScope(r.venture, live));
     rows.sort((a, b) => b.createdAt - a.createdAt);
 
     return await Promise.all(

@@ -18,6 +18,7 @@ import type { QueryCtx, MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
 import { requireUser } from "./team";
 import { venturesForUser } from "./access";
+import { liveScopeNames } from "./scopes";
 
 type AnyCtx = QueryCtx | MutationCtx;
 
@@ -36,7 +37,7 @@ export function istDay(ms: number): string {
 
 async function requireVenture(ctx: AnyCtx, venture: string): Promise<Doc<"users">> {
   const user = await requireUser(ctx);
-  if (!venturesForUser(user).includes(venture)) {
+  if (!venturesForUser(user, await liveScopeNames(ctx)).includes(venture)) {
     throw new Error(`No access to ${venture}`);
   }
   return user;
@@ -51,7 +52,7 @@ export const today = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
     const user = await ctx.db.get(userId);
-    if (!user || !venturesForUser(user).includes(args.venture)) return [];
+    if (!user || !venturesForUser(user, await liveScopeNames(ctx)).includes(args.venture)) return [];
 
     const day = istDay(Date.now());
     const rows = await ctx.db
@@ -76,7 +77,7 @@ export const history = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
     const user = await ctx.db.get(userId);
-    if (!user || !venturesForUser(user).includes(args.venture)) return [];
+    if (!user || !venturesForUser(user, await liveScopeNames(ctx)).includes(args.venture)) return [];
 
     const todayKey = istDay(Date.now());
 
@@ -120,7 +121,7 @@ export const dayMessages = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return [];
     const user = await ctx.db.get(userId);
-    if (!user || !venturesForUser(user).includes(args.venture)) return [];
+    if (!user || !venturesForUser(user, await liveScopeNames(ctx)).includes(args.venture)) return [];
 
     const rows = await ctx.db
       .query("ai_messages")
@@ -148,7 +149,7 @@ export const pendingSummary = query({
     const userId = await getAuthUserId(ctx);
     if (userId === null) return null;
     const user = await ctx.db.get(userId);
-    if (!user || !venturesForUser(user).includes(args.venture)) return null;
+    if (!user || !venturesForUser(user, await liveScopeNames(ctx)).includes(args.venture)) return null;
 
     const todayKey = istDay(Date.now());
 

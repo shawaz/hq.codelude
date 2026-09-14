@@ -22,6 +22,7 @@ import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { requireUser } from "./team";
 import { isActiveScope } from "./access";
+import { liveScopeNames } from "./scopes";
 import { istDay } from "./aichat";
 
 // ─── TASKS ────────────────────────────────────────────────────────────────────
@@ -46,7 +47,8 @@ export const list = query({
     // Tasks belonging to an archived venture stay in the table and would
     // otherwise inflate every count and the Today list. Absence from the
     // registry is what makes them archived.
-    const rows = all.filter((t) => isActiveScope(t.project));
+    const live = await liveScopeNames(ctx);
+    const rows = all.filter((t) => isActiveScope(t.project, live));
 
     // in-progress, then todo, then done — the order every task surface uses.
     const rank = { "in-progress": 0, todo: 1, done: 2 } as const;

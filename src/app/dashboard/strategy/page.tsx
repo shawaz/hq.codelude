@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { VentureEmpty } from '@/components/VentureTabs';
 import { STRATEGIES } from '@/lib/management';
 import { sc, scBorder } from '@/lib/status-colors';
 
@@ -18,25 +20,27 @@ const STATUS_COLOR   = { active: '#dbdbdb',  planned: '#eeeeee', 'on-hold': 'var
 const SEVERITY_COLOR = { high: '#9d9d9d', medium: '#b5b5b5', low: 'var(--muted)' };
 
 export default function StrategyPage() {
-  const [vi, setVi] = useState(0);
+  const { scope, loading } = useActiveScope('strategy');
   const [tab, setTab] = useState<Tab>('positioning');
-  const s = STRATEGIES[vi];
+  // Was a bare index into STRATEGIES with no access check — the switcher
+  // decides now, and an organization absent from that list says so.
+  const s = STRATEGIES.find(x => x.name === scope?.name);
+
+  if (loading) return null;
+  if (!s) {
+    return (
+      <div>
+      <h1 className="page-title">Strategy</h1>
+        <VentureEmpty what="strategy" venture={scope?.name ?? ''} />
+      </div>
+    );
+  }
 
   return (
     <div>
       <h1 className="page-title">Strategy</h1>
       <p className="page-sub">Strategic positioning, key initiatives, risks, and 3-year vision per venture.</p>
 
-      {/* Venture tabs */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {STRATEGIES.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setTab('positioning'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem', background: vi === i ? 'var(--accent)' : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: vi === i ? 'var(--black)' : 'var(--muted)', fontWeight: vi === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
 
       <div style={{ borderLeft: `2px solid ${s.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: sc(s.color), letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>{s.name}</div>

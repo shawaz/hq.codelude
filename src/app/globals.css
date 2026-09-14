@@ -97,6 +97,25 @@ body{background:var(--black);color:var(--off-white);font-family:var(--font-head)
 .hq-layout{display:flex;min-height:100vh}
 .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--card-bg);border-right:1px solid var(--card-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh}
 .sidebar-logo{padding:1.5rem 1.25rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid var(--card-border)}
+/* Organization switcher. Sits between the logo and .sidebar-nav on purpose:
+   .sidebar-nav is overflow-y:auto and would clip an expanding panel. Expands in
+   place using the same max-height transition as .sidebar-section-items. */
+.sidebar-org{border-bottom:1px solid var(--card-border);flex-shrink:0}
+.sidebar-org-trigger{display:flex;align-items:center;gap:0.65rem;width:100%;padding:0.85rem 1.25rem;background:none;border:none;cursor:pointer;text-align:left;transition:background 0.15s}
+.sidebar-org-trigger:hover{background:var(--hover-wash)}
+.sidebar-org-mark{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800;color:var(--on-brand);flex-shrink:0}
+.sidebar-org-meta{display:flex;flex-direction:column;gap:0.1rem;overflow:hidden;min-width:0}
+.sidebar-org-name{font-size:0.82rem;font-weight:600;color:var(--off-white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-org-sector{font-family:var(--font-mono);font-size:0.55rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-org-caret{margin-left:auto;font-size:0.6rem;color:var(--muted);opacity:0.5;transition:transform 0.2s;flex-shrink:0}
+.sidebar-org-caret.open{transform:rotate(180deg)}
+.sidebar-org-list{overflow:hidden;max-height:0;transition:max-height 0.25s ease}
+.sidebar-org-list.open{max-height:420px}
+.sidebar-org-item{display:flex;align-items:center;gap:0.6rem;width:100%;padding:0.5rem 1.25rem;background:none;border:none;border-left:2px solid transparent;cursor:pointer;text-align:left;font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);transition:color 0.15s,background 0.15s}
+.sidebar-org-item:hover{background:var(--hover-wash);color:var(--off-white)}
+.sidebar-org-item.active{color:var(--off-white);border-left-color:var(--accent-text)}
+.sidebar-org-item.holdco{border-bottom:1px solid var(--card-border);padding-bottom:0.6rem;margin-bottom:0.2rem}
+.sidebar-org-add{color:var(--accent-text);letter-spacing:0.08em;border-top:1px solid var(--card-border);margin-top:0.2rem;padding-top:0.6rem}
 .sidebar-nav{flex:1;padding:0.5rem 0 1rem;display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none}
 .sidebar-nav::-webkit-scrollbar{display:none}
 .sidebar-section{display:flex;flex-direction:column}

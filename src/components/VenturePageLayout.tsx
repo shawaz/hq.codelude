@@ -16,8 +16,8 @@
  */
 
 import { useState, type ReactNode } from 'react';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
-import { VENTURES, type Scope } from '@/lib/ventures';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { type Scope } from '@/lib/ventures';
 
 export interface VentureTab {
   key: string;
@@ -35,23 +35,20 @@ export default function VenturePageLayout({
 }: {
   title: string;
   subtitle: string;
-  /** Permission key from src/convex/access.ts — filters the strip. */
+  /** Permission key from src/convex/access.ts — decides what this user may see. */
   pageSlug: string;
   /** Small caps line above the heading, e.g. "INR model". Gets "VENTURE · " prefixed. */
   eyebrow?: (venture: Scope) => string;
-  /** Big line under the strip. Defaults to "<Venture> <title>". */
+  /** Big line under the header. Defaults to "<Venture> <title>". */
   heading?: (venture: Scope) => string;
   tabs?: VentureTab[];
   children: (ctx: { venture: Scope; tab: string }) => ReactNode;
 }) {
-  const { names: allowed, loading } = usePageScopes(pageSlug);
-  const ventures = VENTURES.filter(v => allowed.includes(v.name));
-
-  const [vi, setVi] = useState(0);
+  // The organization comes from the sidebar switcher now, not from a strip
+  // this page owns. Ten Finance pages render through this shell and none of
+  // them needed an edit for that change.
+  const { scope: venture, loading } = useActiveScope(pageSlug);
   const [tab, setTab] = useState(tabs?.[0]?.key ?? '');
-
-  const index = clampIndex(vi, ventures.length);
-  const venture = ventures[index];
 
   if (loading) return null;
 
@@ -72,29 +69,6 @@ export default function VenturePageLayout({
     <div>
       <h1 className="page-title">{title}</h1>
       <p className="page-sub">{subtitle}</p>
-
-      {/* Venture selector — hidden when there is nothing to choose between.
-          Rendered conditionally rather than deleted: the strip is correct the
-          moment a second scope returns to the registry. */}
-      {ventures.length > 1 && (
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)',
-        border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {ventures.map((v, i) => (
-          <button
-            key={v.name}
-            onClick={() => { setVi(i); setTab(tabs?.[0]?.key ?? ''); }}
-            style={{
-              flex: 1, padding: '0.8rem 0.5rem',
-              background: index === i ? 'var(--accent)' : 'var(--card-bg)',
-              border: 'none', cursor: 'pointer',
-              fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-              color: index === i ? 'var(--on-accent)' : 'var(--muted)',
-              fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
-            }}
-          >{v.name}</button>
-        ))}
-      </div>
-      )}
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${venture.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

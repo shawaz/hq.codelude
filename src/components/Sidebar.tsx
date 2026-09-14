@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
-import type { NavSection } from '@/lib/nav';
+import type { NavSection, Scope } from '@/lib/nav';
+import OrgSwitcher from '@/components/OrgSwitcher';
 import ThemeToggle from '@/components/ThemeToggle';
 import Logo from '@/components/Logo';
 
@@ -24,9 +25,13 @@ interface Props {
    * access decision of its own.
    */
   nav: NavSection[];
+  /** Same rule as `nav` — pre-filtered upstream, rendered verbatim here. */
+  orgs: Scope[];
+  activeOrg: string;
+  canCreateOrg: boolean;
 }
 
-export default function Sidebar({ user, nav }: Props) {
+export default function Sidebar({ user, nav, orgs, activeOrg, canCreateOrg }: Props) {
   const pathname = usePathname();
   const router   = useRouter();
   const { signOut } = useAuthActions();
@@ -53,6 +58,10 @@ export default function Sidebar({ user, nav }: Props) {
         <Logo size={32} />
         <span className="logo-text">Code<span>lude</span></span>
       </div>
+
+      {orgs.length > 0 && (
+        <OrgSwitcher orgs={orgs} active={activeOrg} canCreate={canCreateOrg} />
+      )}
 
       <nav className="sidebar-nav">
         <Link

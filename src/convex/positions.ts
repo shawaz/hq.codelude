@@ -14,6 +14,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import { isActiveScope } from "./access";
+import { liveScopeNames } from "./scopes";
 import { requireUser } from "./team";
 
 const type = v.union(
@@ -45,8 +46,9 @@ export const list = query({
     // Roles under an archived venture stay in the table rather than being
     // deleted, so absence from the registry is what hides them — filter
     // them out here so headcount and the hiring worklist stay truthful.
+    const live = await liveScopeNames(ctx);
     const rows = (await ctx.db.query("positions").collect())
-      .filter((r) => isActiveScope(r.venture));
+      .filter((r) => isActiveScope(r.venture, live));
     // Active roles first, then by priority — the page is a hiring worklist,
     // so what still needs doing belongs at the top.
     const rank = { critical: 0, high: 1, medium: 2 } as const;

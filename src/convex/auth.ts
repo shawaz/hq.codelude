@@ -3,6 +3,7 @@ import { convexAuth } from "@convex-dev/auth/server";
 import type { DataModel } from "./_generated/dataModel";
 import type { GenericDatabaseWriter } from "convex/server";
 import { normalizeAccess, isAllowedEmail, ALLOWED_EMAIL_DOMAINS } from "./access";
+import { liveScopeNames } from "./scopes";
 
 /**
  * The auth callbacks hand us a ctx typed against a generic data model, so
@@ -60,7 +61,7 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
             access:
               invite.role === "admin"
                 ? undefined
-                : normalizeAccess(invite.access),
+                : normalizeAccess(invite.access, await liveScopeNames(ctx)),
             ventureRoles: invite.ventureRoles,
           });
           await db.delete(invite._id);
