@@ -5,7 +5,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import MemberForm, { type MemberDraft } from '@/components/MemberForm';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { scopeColor, type Scope } from '@/lib/ventures';
 import { isUnrestricted, type Grant } from '@/lib/nav';
 import { sc, scBorder } from '@/lib/status-colors';
@@ -289,18 +289,16 @@ const TABS: { key: Tab; label: string }[] = [
 ];
 
 export default function TeamPage() {
-  const { scopes, loading } = usePageScopes('users');
+  const { scope: venture, loading } = useActiveScope('users');
   const me   = useQuery(api.team.getCurrentUser);
   const team = useQuery(api.team.getTeam) as Member[] | undefined;
 
-  const [vi,  setVi]  = useState(0);
   const [tab, setTab] = useState<Tab>('humans');
   const [form, setForm] = useState<{ initial?: MemberDraft; venture: string } | null>(null);
 
-  // Only ventures that carry static agent/open-role content can be rendered here.
-  const ventures = scopes.filter(v => VENTURE_DATA[v.name]);
-  const index    = clampIndex(vi, ventures.length);
-  const venture  = ventures[index];
+  // VENTURE_DATA only ever had a Llife key, so filtering the strip by it hid
+  // five of the six seeded scopes. The organization comes from the switcher
+  // now, and the sections below fall back to empty rather than being hidden.
   const canManage = me?.role === 'admin';
 
   if (loading) return null;
@@ -316,18 +314,21 @@ export default function TeamPage() {
     );
   }
 
+  // Captured so the callbacks below keep the narrowed type — TypeScript will
+  // not carry the null check into a closure.
+  const ventureName = venture.name;
   const data    = VENTURE_DATA[venture.name];
   const people  = membersOf(team, venture.name);
   const active  = people.filter(m => !m.pending).length;
   const invited = people.filter(m => m.pending).length;
 
   function openAdd() {
-    setForm({ venture: venture.name });
+    setForm({ venture: ventureName });
   }
 
   function openEdit(m: Member) {
     setForm({
-      venture: venture.name,
+      venture: ventureName,
       initial: {
         userId: m._id,
         pending: m.pending,
@@ -358,18 +359,6 @@ export default function TeamPage() {
       </div>
 
       {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {ventures.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setTab('humans'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem',
-            background: index === i ? 'var(--accent)' : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer',
-            fontFamily: 'var(--font-mono)', fontSize: '0.68rem', letterSpacing: '0.06em',
-            color: index === i ? 'var(--on-accent)' : 'var(--muted)',
-            fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ borderLeft: `2px solid ${venture.color}`, paddingLeft: '1rem', marginBottom: '1.5rem' }}>

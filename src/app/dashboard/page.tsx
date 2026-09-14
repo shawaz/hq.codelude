@@ -10,7 +10,7 @@ import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 
 // One card per venture, in registry order (src/convex/access.ts). The strip is
-// filtered by usePageScopes, so a scoped member only sees their own ventures.
+// filtered by the sidebar switcher, so a scoped member only sees their own.
 const ALL_VENTURE_CARDS = [
   {
     name: 'Roborns',     color: '#dbdbdb', sector: 'Coastal AI Infrastructure',
