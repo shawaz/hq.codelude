@@ -6,7 +6,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import ChatHistory, { useLazySummarise } from '@/components/ChatHistory';
 import NewTaskForm from '@/components/NewTaskForm';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 
 // One card per venture, in registry order (src/convex/access.ts). The strip is
@@ -392,11 +392,20 @@ ${tasksSection(tasks)}`,
 export default function AIPage() {
   // The AI page is not in the nav registry, so scope it by any-grant rather
   // than by page. The chat API re-checks this server-side — see api/chat.
-  const { names: allowed, loading } = usePageScopes('tasks');
-  const VENTURES = ALL_VENTURE_CARDS.filter(v => allowed.includes(v.name));
-  const [selected, setSelected] = useState(0);
-  const index = clampIndex(selected, VENTURES.length);
-  const venture = VENTURES[index];
+  const { scope, loading } = useActiveScope('tasks');
+
+  // ALL_VENTURE_CARDS carries status and metrics the registry does not, so a
+  // card is looked up by name rather than derived. An organization created
+  // after this literal was written has no card — it still gets a working
+  // assistant, just without the metric strip.
+  const card = ALL_VENTURE_CARDS.find(v => v.name === scope?.name);
+  const venture = scope
+    ? card ?? {
+        name: scope.name, color: scope.color, sector: scope.sector,
+        status: '', statusColor: scope.color,
+        metrics: [] as { k: string; v: string }[],
+      }
+    : undefined;
 
   if (loading) return null;
   if (!venture) {
@@ -409,20 +418,6 @@ export default function AIPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 4rem)', minHeight: 0 }}>
-
-      {/* Venture selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${VENTURES.length},1fr)`, gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', flexShrink: 0 }}>
-        {VENTURES.map((v, i) => (
-          <button key={v.name} onClick={() => setSelected(i)} style={{
-            background: index === i ? 'var(--accent)' : 'var(--card-bg)', border: 'none', cursor: 'pointer',
-            padding: '1rem 0.75rem', textAlign: 'left', transition: 'background 0.15s',
-          }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: index === i ? 'var(--on-accent)' : v.color, opacity: index === i ? 0.6 : 1, marginBottom: '0.25rem' }}>0{i + 1}</div>
-            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: index === i ? 'var(--on-accent)' : 'var(--off-white)', marginBottom: '0.15rem' }}>{v.name}</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: index === i ? 'var(--on-accent)' : 'var(--muted)', opacity: index === i ? 0.75 : 1, letterSpacing: '0.04em' }}>{v.sector}</div>
-          </button>
-        ))}
-      </div>
 
       {/* Venture header */}
       <div style={{ padding: '0.85rem 1.25rem', borderLeft: '1px solid var(--card-border)', borderRight: '1px solid var(--card-border)', borderBottom: '1px solid var(--card-border)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -438,7 +433,10 @@ export default function AIPage() {
             </div>
           ))}
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.18rem 0.55rem', border: `1px solid ${scBorder(venture.statusColor)}`, color: venture.statusColor, flexShrink: 0 }}>{venture.status}</span>
+        {/* A newly created organization has no card, so no status to show. */}
+        {venture.status && (
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.54rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.18rem 0.55rem', border: `1px solid ${scBorder(venture.statusColor)}`, color: venture.statusColor, flexShrink: 0 }}>{venture.status}</span>
+        )}
       </div>
 
       {/* Chat + Tasks */}
