@@ -119,7 +119,30 @@ export const getCurrentUser = query({
       // lock every admin out of everything.
       access: user.access,
       ventureRoles: user.ventureRoles ?? [],
+      // Which organization the switcher is pointed at. Rides along on a query
+      // the layout and usePageScopes already subscribe to, so the selection
+      // costs no extra round trip on any page.
+      activeVenture: user.activeVenture,
     };
+  },
+});
+
+/**
+ * Point the sidebar switcher at an organization.
+ *
+ * Validated, but this is not a permission: venturesForPage still decides what
+ * is reachable and assertAccess still decides what the data layer hands over.
+ * This only records which of the reachable organizations is on screen.
+ */
+export const setActiveVenture = mutation({
+  args: { venture: v.string() },
+  handler: async (ctx, { venture }) => {
+    const user = await requireUser(ctx);
+    const live = await liveScopeNames(ctx);
+    if (!venturesForUser(user, live).includes(venture)) {
+      throw new Error(`No access to ${venture}`);
+    }
+    await ctx.db.patch(user._id, { activeVenture: venture });
   },
 });
 
