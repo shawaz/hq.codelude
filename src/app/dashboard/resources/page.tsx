@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { VENTURES, VENTURE_RESOURCES, type ResType, type ResStatus, type ResPriority } from '@/lib/mgmt-ventures';
+import { VENTURE_RESOURCES, type ResType, type ResStatus, type ResPriority } from '@/lib/mgmt-ventures';
 
 type Tab = 'human' | 'technology' | 'legal' | 'summary';
 
@@ -24,7 +24,7 @@ function fmtCost(n: number) {
 }
 
 import type { Resource } from '@/lib/mgmt-ventures';
-import { usePageScopes, clampIndex } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 
 function ResourceTable({ resources }: { resources: Resource[] }) {
@@ -75,12 +75,8 @@ function ResourceTable({ resources }: { resources: Resource[] }) {
 }
 
 export default function ResourcesPage() {
-  const { names: allowed, loading } = usePageScopes('resources');
-  const ventures = VENTURES.filter(v => allowed.includes(v.name));
-  const [vi,  setVi]  = useState(0);
+  const { scope: venture, loading } = useActiveScope('resources');
   const [tab, setTab] = useState<Tab>('human');
-  const index = clampIndex(vi, ventures.length);
-  const venture = ventures[index];
 
   // A member with no grant on this page has no venture to render.
   if (loading) return null;
@@ -124,17 +120,6 @@ export default function ResourcesPage() {
       <h1 className="page-title">Resources</h1>
       <p className="page-sub">All resources needed per venture — human, technology, legal, and physical — with costs.</p>
 
-      {/* Venture selector */}
-      <div style={{ display: 'flex', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
-        {ventures.map((v, i) => (
-          <button key={v.name} onClick={() => { setVi(i); setTab('human'); }} style={{
-            flex: 1, padding: '0.8rem 0.5rem', background: index === i ? 'var(--accent)' : 'var(--card-bg)',
-            border: 'none', cursor: 'pointer', fontFamily: 'var(--font-mono)', fontSize: '0.68rem',
-            letterSpacing: '0.06em', color: index === i ? 'var(--on-accent)' : 'var(--muted)',
-            fontWeight: index === i ? 700 : 400, transition: 'all 0.15s',
-          }}>{v.name}</button>
-        ))}
-      </div>
 
       {/* Header + cost snapshot */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem' }}>
