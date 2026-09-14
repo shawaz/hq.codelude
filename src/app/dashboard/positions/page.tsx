@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { VENTURES } from '@/lib/ventures';
@@ -52,11 +53,15 @@ export default function PositionsPage() {
   const [filter, setFilter] = useState<typeof FILTERS[number]['key']>('active');
   const [adding, setAdding] = useState(false);
   const [busy, setBusy]     = useState(false);
+  const { scope, loading } = useActiveScope('positions');
+  const activeName = scope?.name ?? '';
   const [error, setError]   = useState<string | null>(null);
   // Which role is being marked filled — the hire's name is asked for inline.
   const [filling, setFilling] = useState<string | null>(null);
 
-  const all  = positions ?? [];
+  // Scoped to the sidebar's organization: the Convex query returns every row
+  // the caller may see, which across organizations is a mixed list.
+  const all  = (positions ?? []).filter(p => p.venture === activeName);
   const rows = all.filter(p =>
     filter === 'all' ? true : filter === 'active' ? ACTIVE.has(p.status) : p.status === filter,
   );
@@ -73,7 +78,7 @@ export default function PositionsPage() {
       await create({
         title,
         department:  String(fd.get('department') ?? '').trim() || undefined,
-        venture:     String(fd.get('venture') ?? 'Codelude'),
+        venture:     String(fd.get('venture') ?? activeName),
         type:        String(fd.get('type') ?? 'Full-time') as typeof TYPES[number],
         priority:    String(fd.get('priority') ?? 'medium') as 'critical' | 'high' | 'medium',
         targetStart: String(fd.get('targetStart') ?? '').trim() || undefined,
@@ -87,6 +92,8 @@ export default function PositionsPage() {
       setError(err instanceof Error ? err.message : 'Could not create the position');
     } finally { setBusy(false); }
   }
+
+  if (loading) return null;
 
   return (
     <div>
@@ -115,7 +122,7 @@ export default function PositionsPage() {
             <div><label style={label}>Department</label><input name="department" style={field} /></div>
             <div>
               <label style={label}>Venture</label>
-              <select name="venture" style={field} defaultValue="Codelude">
+              <select name="venture" style={field} defaultValue={activeName}>
                 <option value="Codelude">Codelude</option>
                 {VENTURES.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
               </select>

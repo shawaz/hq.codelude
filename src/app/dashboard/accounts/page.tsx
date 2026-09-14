@@ -36,7 +36,7 @@ export default function AccountsPage() {
       tabs={TABS}
     >
       {({ venture, tab }) => {
-        const scoped = forVenture(ACCOUNTS, venture.name);
+        const scoped = forVenture(ACCOUNTS, venture.name, venture.holdco);
         const rows = tab === 'all' ? scoped : scoped.filter(a => a.type === tab);
 
         const active  = rows.filter(a => a.status === 'active').length;

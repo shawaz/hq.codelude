@@ -36,3 +36,20 @@ const SCOPE_COLORS: Record<string, string> = Object.fromEntries(
 export function scopeColor(name: string | undefined | null): string {
   return (name && SCOPE_COLORS[name]) || 'var(--muted)';
 }
+
+
+/**
+ * Does this row belong to the named organization?
+ *
+ * The static datasets use two shapes — most carry `venture: string`, a few
+ * (payees, departments, payroll, partners) carry `ventures: string[]` because
+ * the record genuinely spans several. This is the one place that knows both,
+ * so pages filtering to the active organization do not each re-derive it.
+ */
+export function inScope(
+  row: { venture?: string; ventures?: string[] },
+  name: string,
+): boolean {
+  if (Array.isArray(row.ventures)) return row.ventures.includes(name);
+  return row.venture === name;
+}

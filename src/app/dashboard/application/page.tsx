@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, type FormEvent } from 'react';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
@@ -51,6 +52,8 @@ export default function ApplicationPage() {
   // page has to appear here immediately or the two screens disagree.
   const positions    = useQuery(api.positions.list);
 
+  const { scope, loading } = useActiveScope('application');
+  const activeName = scope?.name ?? '';
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState<Stage | 'all'>('all');
   const [busy, setBusy]     = useState(false);
@@ -107,8 +110,12 @@ export default function ApplicationPage() {
     }
   }
 
-  const rows = (applications ?? []).filter(a => filter === 'all' || a.status === filter);
-  const countFor = (k: Stage) => (applications ?? []).filter(a => a.status === k).length;
+  // Scoped to the sidebar's organization — see positions/page.tsx.
+  const mine = (applications ?? []).filter(a => a.venture === activeName);
+  const rows = mine.filter(a => filter === 'all' || a.status === filter);
+  const countFor = (k: Stage) => mine.filter(a => a.status === k).length;
+
+  if (loading) return null;
 
   return (
     <div>

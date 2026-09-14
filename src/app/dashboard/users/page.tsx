@@ -178,7 +178,7 @@ function HumansSection({
 }
 
 function AgentsSection({ venture }: { venture: string }) {
-  const { agents } = VENTURE_DATA[venture];
+  const { agents } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
   if (!agents.length) return (
     <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8 }}>
       No AI agents assigned to {venture} yet. Agents will be added as the platform enters development.
@@ -317,7 +317,7 @@ export default function TeamPage() {
   // Captured so the callbacks below keep the narrowed type — TypeScript will
   // not carry the null check into a closure.
   const ventureName = venture.name;
-  const data    = VENTURE_DATA[venture.name];
+  const data    = VENTURE_DATA[venture.name] ?? { agents: [], openRoles: [] };
   const people  = membersOf(team, venture.name);
   const active  = people.filter(m => !m.pending).length;
   const invited = people.filter(m => m.pending).length;

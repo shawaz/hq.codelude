@@ -39,7 +39,7 @@ export default function InvestorsPage() {
   return (
     <VenturePageLayout
       title="Investors"
-      subtitle="Fundraising rounds, token tranches, and investor allocation across all ventures."
+      subtitle="Fundraising rounds, token tranches, and investor allocation."
       pageSlug="investors"
       eyebrow={() => 'rounds'}
       heading={v => `${v.name} Investors`}

@@ -32,7 +32,7 @@ export default function ExpensesPage() {
   return (
     <VenturePageLayout
       title="Expenses"
-      subtitle="All company expenses — paid, pending, and recurring across all ventures."
+      subtitle="Expenses — paid, pending, and recurring."
       pageSlug="expenses"
       eyebrow={() => 'expenses'}
       heading={v => `${v.name} Expenses`}

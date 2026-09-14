@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FILES, type FileCategory, type FileStatus } from '@/lib/workspace';
-import { usePageScopes } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { scopeColor } from '@/lib/ventures';
 
@@ -33,16 +33,18 @@ const FORMAT_COLORS: Record<string, string> = {
 
 
 export default function FilesPage() {
-  const { names: allowed } = usePageScopes('files');
-  const VENTURES = ['All', ...allowed];
+  const { scope, loading } = useActiveScope('files');
+  // Was an 'All ventures' filter defaulting to All, so every page load
+  // showed every organization's rows together. The sidebar decides now.
+  const venture = scope?.name ?? '';
   const [category, setCategory] = useState<FileCategory | 'all'>('all');
-  const [venture,  setVenture]  = useState('All');
 
   const filtered = FILES.filter(f =>
-    allowed.includes(f.venture) &&
     (category === 'all' || f.category === category) &&
-    (venture  === 'All' || f.venture  === venture)
+    f.venture === venture
   );
+
+  if (loading) return null;
 
   return (
     <div>
@@ -64,11 +66,6 @@ export default function FilesPage() {
       </div>
 
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-        {VENTURES.map(v => (
-          <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}}
-            onClick={() => setVenture(v)}>{v}</button>
-        ))}
       </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {CATEGORIES.map(c => (

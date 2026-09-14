@@ -1,6 +1,7 @@
-import { CONTRACTS, type ContractStatus } from '@/lib/legal-data';
+import { CONTRACTS as ALL_CONTRACTS, type ContractStatus } from '@/lib/legal-data';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<ContractStatus, { color: string; label: string }> = {
   draft:      { color: 'var(--muted)', label: 'Draft'      },
@@ -14,7 +15,14 @@ const TYPE_COLORS: Record<string, string> = { Service: '#c8c8c8', Employment: '#
 
 
 export default function ContractsPage() {
+  const { scope, loading } = useActiveScope('contracts');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const CONTRACTS = ALL_CONTRACTS.filter(r => inScope(r, scope?.name ?? ''));
   const active = CONTRACTS.filter(c => c.status === 'active').length;
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Contracts</h1>

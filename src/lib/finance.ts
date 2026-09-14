@@ -304,16 +304,30 @@ export const PAYEES: Payee[] = [
  * A row with no `venture` belongs to the HoldCo, not to any one venture: the
  * Dubai treasury, the founder's cap table entry, the India operating account.
  *
- * The Finance strip carries the five ventures only (matching Financial Model),
- * so HoldCo rows have no tab of their own. They appear on every venture tab
- * instead, badged, because the HoldCo does in fact own all five ventures —
- * showing them everywhere is truer than hiding them.
+ * These used to be shown on every venture tab, badged, on the reasoning that
+ * the HoldCo owns all five ventures so showing them everywhere was truer than
+ * hiding them. That stopped being true once the sidebar switcher replaced the
+ * tabs and organizations became creatable: a brand-new organization inherited
+ * the HoldCo's bank accounts, wallets and cap table on its first render, which
+ * reads as another organization's data leaking into it.
+ *
+ * They now belong to the HoldCo scope alone, which has its own entry in the
+ * switcher and is where someone looking for company-level rows would go.
  */
 export function isHoldCo(row: { venture?: string }): boolean {
   return !row.venture;
 }
 
-/** Rows for one venture tab: that venture's own rows, plus HoldCo-level ones. */
-export function forVenture<T extends { venture?: string }>(rows: T[], venture: string): T[] {
-  return rows.filter(r => isHoldCo(r) || r.venture === venture);
+/**
+ * Rows for one organization.
+ *
+ * HoldCo-level rows surface only when the HoldCo itself is selected — pass
+ * `scope.holdco`. Every other organization sees strictly its own rows.
+ */
+export function forVenture<T extends { venture?: string }>(
+  rows: T[],
+  venture: string,
+  isHoldCoScope = false,
+): T[] {
+  return rows.filter(r => (isHoldCoScope ? isHoldCo(r) : false) || r.venture === venture);
 }

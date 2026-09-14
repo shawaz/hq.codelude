@@ -1,6 +1,7 @@
-import { DEPARTMENTS } from '@/lib/ops';
+import { DEPARTMENTS as ALL_DEPARTMENTS } from '@/lib/ops';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<string, { color: string; label: string }> = {
   active:   { color: '#dbdbdb', label: 'Active'   },
@@ -11,6 +12,13 @@ const STATUS_STYLES: Record<string, { color: string; label: string }> = {
 
 
 export default function DepartmentsPage() {
+  const { scope, loading } = useActiveScope('departments');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const DEPARTMENTS = ALL_DEPARTMENTS.filter(r => inScope(r, scope?.name ?? ''));
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Departments</h1>

@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { CONTENT, type ContentStatus } from '@/lib/mktg';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { CONTENT as ALL_CONTENT, type ContentStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<ContentStatus, { color: string; label: string }> = {
   published:   { color: '#dbdbdb', label: 'Published'   },
@@ -14,12 +15,19 @@ const TYPE_COLORS: Record<string, string> = { Article: '#c8c8c8', 'Social Post':
 
 
 export default function ContentPage() {
+  const { scope, loading } = useActiveScope('content');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const CONTENT = ALL_CONTENT.filter(r => inScope(r, scope?.name ?? ''));
   const [status, setStatus] = useState<ContentStatus | 'all'>('all');
   const filtered = CONTENT.filter(c => status === 'all' || c.status === status);
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Content</h1>
-      <p className="page-sub">Content calendar — articles, social posts, case studies, and press releases across all ventures.</p>
+      <p className="page-sub">Content calendar — articles, social posts, case studies, and press releases.</p>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [ContentStatus, typeof STATUS_STYLES[ContentStatus]][]).map(([key, s]) => (

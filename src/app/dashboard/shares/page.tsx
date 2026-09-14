@@ -32,7 +32,7 @@ export default function SharesPage() {
       tabs={TABS}
     >
       {({ venture, tab }) => {
-        const scoped = forVenture(SHARES, venture.name);
+        const scoped = forVenture(SHARES, venture.name, venture.holdco);
         const rows = tab === 'all' ? scoped : scoped.filter(s => s.shareClass === tab);
         // Still grouped by legal entity — the HoldCo and the project entity are
         // separate cap tables even when both show under one venture tab.

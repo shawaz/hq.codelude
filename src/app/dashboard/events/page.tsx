@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { EVENTS, type EventType, type EventStatus } from '@/lib/workspace';
-import { usePageScopes } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { scopeColor, ALL_SCOPES } from '@/lib/ventures';
 
@@ -42,10 +42,11 @@ function dateStr(year: number, month: number, day: number) {
 
 export default function EventsPage() {
   const now    = new Date();
-  const { names: allowed } = usePageScopes('events');
-  const VENTURES = ['All', ...allowed];
+  const { scope, loading } = useActiveScope('events');
+  // Was an 'All ventures' filter defaulting to All, so every page load
+  // showed every organization's rows together. The sidebar decides now.
+  const venture = scope?.name ?? '';
   const [view,    setView]    = useState<'list' | 'calendar'>('calendar');
-  const [venture, setVenture] = useState('All');
   const [type,    setType]    = useState<EventType | 'all'>('all');
   const [calYear,  setCalYear]  = useState(now.getFullYear());
   const [calMonth, setCalMonth] = useState(now.getMonth());
@@ -56,12 +57,11 @@ export default function EventsPage() {
 
   const filtered = useMemo(() => EVENTS
     .filter(e =>
-      allowed.includes(e.venture) &&
-      (venture === 'All' || e.venture === venture) &&
+      e.venture === venture &&
       (type === 'all'  || e.type    === type)
     )
     .sort((a, b) => a.date.localeCompare(b.date)),
-    [allowed, venture, type]
+    [venture, type]
   );
 
   // Build a date→events map for the calendar
@@ -85,6 +85,8 @@ export default function EventsPage() {
   }
 
   const selectedEvents = selected ? (byDate[selected] ?? []) : [];
+
+  if (loading) return null;
 
   return (
     <div>
@@ -227,7 +229,6 @@ export default function EventsPage() {
           </div>
 
           <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-            {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}} onClick={() => setVenture(v)}>{v}</button>)}
           </div>
           <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
             {TYPES.map(t => <button key={t} className={`filter-pill${type === t ? ' active' : ''}`} style={type === t && t !== 'all' ? { borderColor: TYPE_COLORS[t as EventType], color: sc(TYPE_COLORS[t as EventType]) } : {}} onClick={() => setType(t)}>{t === 'all' ? 'All types' : t}</button>)}

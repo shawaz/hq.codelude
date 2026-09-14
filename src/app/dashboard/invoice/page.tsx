@@ -26,7 +26,7 @@ export default function InvoicePage() {
   return (
     <VenturePageLayout
       title="Invoice"
-      subtitle="Outgoing invoices across all ventures — issued, pending, and drafted."
+      subtitle="Outgoing invoices — issued, pending, and drafted."
       pageSlug="invoice"
       eyebrow={() => 'invoices'}
       heading={v => `${v.name} Invoices`}

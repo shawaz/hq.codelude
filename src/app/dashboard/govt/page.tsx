@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/legal-data';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { GOVT_FILINGS as ALL_GOVT_FILINGS, type GovtStatus, type GovtJurisdiction } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<GovtStatus, { color: string; label: string }> = {
   required:      { color: '#9d9d9d', label: 'Required'     },
@@ -16,8 +17,15 @@ const JURISDICTIONS: (GovtJurisdiction | 'all')[] = ['all', 'India', 'UAE', 'Int
 
 
 export default function GovtPage() {
+  const { scope, loading } = useActiveScope('govt');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const GOVT_FILINGS = ALL_GOVT_FILINGS.filter(r => inScope(r, scope?.name ?? ''));
   const [juris, setJuris] = useState<GovtJurisdiction | 'all'>('all');
   const filtered = GOVT_FILINGS.filter(g => juris === 'all' || g.jurisdiction === juris);
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Govt</h1>

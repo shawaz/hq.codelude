@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PAYROLL, type PayrollType, type PayrollStatus } from '@/lib/budget-data';
-import { usePageScopes } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { scopeColor } from '@/lib/ventures';
 
@@ -23,15 +23,15 @@ const TYPE_COLORS: Record<PayrollType, string> = {
 
 
 export default function PayrollPage() {
-  const { names: allowed } = usePageScopes('payroll');
-  const VENTURES = ['All', ...allowed];
-  const [venture, setVenture] = useState('All');
+  const { scope, loading } = useActiveScope('payroll');
+  // Was an 'All ventures' filter defaulting to All, so every page load
+  // showed every organization's rows together. The sidebar decides now.
+  const venture = scope?.name ?? '';
   const [status,  setStatus]  = useState<PayrollStatus | 'all'>('all');
 
   const filtered = PAYROLL.filter(p =>
     // A payroll row spans ventures; showing it needs access to at least one.
-    p.ventures.some((v: string) => allowed.includes(v)) &&
-    (venture === 'All' || p.ventures.includes(venture)) &&
+    p.ventures.includes(venture) &&
     (status  === 'all' || p.status === status)
   );
 
@@ -39,6 +39,8 @@ export default function PayrollPage() {
   const plannedMonthly = PAYROLL.filter(p => p.status !== 'active').reduce((s, p) => s + p.monthlyCost, 0);
   const oneTimePlanned = PAYROLL.filter(p => p.status !== 'active').reduce((s, p) => s + p.oneTimeCost, 0);
   const headcount      = PAYROLL.filter(p => p.status === 'active').length;
+
+  if (loading) return null;
 
   return (
     <div>
@@ -63,11 +65,6 @@ export default function PayrollPage() {
 
       {/* Filters */}
       <div className="filter-bar" style={{ marginBottom: '0.4rem' }}>
-        {VENTURES.map(v => (
-          <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`}
-            style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}}
-            onClick={() => setVenture(v)}>{v}</button>
-        ))}
       </div>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         {(['all', 'active', 'planned', 'open'] as const).map(s => (

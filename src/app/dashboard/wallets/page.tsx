@@ -37,7 +37,7 @@ export default function WalletsPage() {
       tabs={TABS}
     >
       {({ venture, tab }) => {
-        const scoped = forVenture(WALLETS, venture.name);
+        const scoped = forVenture(WALLETS, venture.name, venture.holdco);
         const rows = tab === 'all' ? scoped : scoped.filter(w => w.status === tab);
         return (
           <>

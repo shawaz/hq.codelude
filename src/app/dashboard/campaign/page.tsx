@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { CAMPAIGNS, type CampaignStatus } from '@/lib/mktg';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { CAMPAIGNS as ALL_CAMPAIGNS, type CampaignStatus } from '@/lib/mktg';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<CampaignStatus, { color: string; label: string }> = {
   live:      { color: '#dbdbdb', label: 'Live'      },
@@ -14,12 +15,19 @@ const TYPE_COLORS: Record<string, string> = { Content: '#c8c8c8', Email: '#a5a5a
 
 
 export default function CampaignPage() {
+  const { scope, loading } = useActiveScope('campaign');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const CAMPAIGNS = ALL_CAMPAIGNS.filter(r => inScope(r, scope?.name ?? ''));
   const [status, setStatus] = useState<CampaignStatus | 'all'>('all');
   const filtered = CAMPAIGNS.filter(c => status === 'all' || c.status === status);
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Campaign</h1>
-      <p className="page-sub">Marketing campaigns across all ventures — planning, execution, and goals.</p>
+      <p className="page-sub">Marketing campaigns — planning, execution, and goals.</p>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
         <button className={`filter-pill${status === 'all' ? ' active' : ''}`} onClick={() => setStatus('all')}>All</button>
         {(Object.entries(STATUS_STYLES) as [CampaignStatus, typeof STATUS_STYLES[CampaignStatus]][]).map(([key, s]) => (

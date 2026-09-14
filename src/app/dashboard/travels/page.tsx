@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { TRIPS, type TripStatus } from '@/lib/workspace';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { TRIPS as ALL_TRIPS, type TripStatus } from '@/lib/workspace';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
   planned:     { color: '#b5b5b5', label: 'Planned'     },
@@ -16,11 +17,18 @@ const STATUS_STYLES: Record<TripStatus, { color: string; label: string }> = {
 
 
 export default function TravelsPage() {
+  const { scope, loading } = useActiveScope('travels');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const TRIPS = ALL_TRIPS.filter(r => inScope(r, scope?.name ?? ''));
   const [selected, setSelected] = useState<string | null>(TRIPS[0]?.id ?? null);
   const trip = TRIPS.find(t => t.id === selected);
 
   const totalBudget = trip ? trip.expenses.reduce((s, e) => s + e.budgeted, 0) : 0;
   const totalActual = trip ? trip.expenses.reduce((s, e) => s + e.actual, 0) : 0;
+
+  if (loading) return null;
 
   return (
     <div>

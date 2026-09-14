@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
 import { COMPETITORS } from '@/lib/mktg';
-import { usePageScopes } from '@/lib/use-page-scopes';
+import { useActiveScope } from '@/lib/use-active-scope';
 import { sc, scBorder } from '@/lib/status-colors';
 import { scopeColor } from '@/lib/ventures';
 
@@ -9,18 +8,20 @@ const TYPE_COLORS: Record<string, string> = { Direct: '#9d9d9d', Indirect: '#b5b
 
 
 export default function CompetitionPage() {
-  const { names: allowed } = usePageScopes('competition');
-  const VENTURES = ['All', ...allowed];
-  const [venture, setVenture] = useState('All');
+  const { scope, loading } = useActiveScope('competition');
+  // Was an 'All ventures' filter defaulting to All, so every page load
+  // showed every organization's rows together. The sidebar decides now.
+  const venture = scope?.name ?? '';
   const filtered = COMPETITORS.filter(c =>
-    allowed.includes(c.venture) && (venture === 'All' || c.venture === venture),
+    c.venture === venture,
   );
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Competition</h1>
       <p className="page-sub">Competitor intelligence — direct, indirect, and adjacent competition per venture.</p>
       <div className="filter-bar" style={{ marginBottom: '1.5rem' }}>
-        {VENTURES.map(v => <button key={v} className={`filter-pill${venture === v ? ' active' : ''}`} style={venture === v && v !== 'All' ? { borderColor: scopeColor(v), color: sc(scopeColor(v)) } : {}} onClick={() => setVenture(v)}>{v}</button>)}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
         {filtered.map((c, i) => (

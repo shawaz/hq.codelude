@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { PROPERTIES, type PropertyType } from '@/lib/ops';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { PROPERTIES as ALL_PROPERTIES, type PropertyType } from '@/lib/ops';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const TYPE_COLORS: Record<PropertyType, string> = { Digital: '#c8c8c8', Physical: '#dbdbdb', IP: '#eeeeee', Domain: '#a5a5a5' };
 const STATUS_STYLES: Record<string, { color: string }> = {
@@ -15,8 +16,15 @@ const TYPES: (PropertyType | 'all')[] = ['all', 'Digital', 'Domain', 'Physical',
 
 
 export default function PropertiesPage() {
+  const { scope, loading } = useActiveScope('properties');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const PROPERTIES = ALL_PROPERTIES.filter(r => inScope(r, scope?.name ?? ''));
   const [type, setType] = useState<PropertyType | 'all'>('all');
   const filtered = PROPERTIES.filter(p => type === 'all' || p.type === type);
+  if (loading) return null;
+
   return (
     <div>
       <h1 className="page-title">Properties</h1>

@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { NDAS, type NDAStatus } from '@/lib/legal-data';
+import { useActiveScope } from '@/lib/use-active-scope';
+import { NDAS as ALL_NDAS, type NDAStatus } from '@/lib/legal-data';
 import { sc, scBorder } from '@/lib/status-colors';
-import { scopeColor } from '@/lib/ventures';
+import { inScope, scopeColor } from '@/lib/ventures';
 
 const STATUS_STYLES: Record<NDAStatus, { color: string; label: string }> = {
   active:   { color: '#dbdbdb', label: 'Active'   },
@@ -17,6 +18,11 @@ const defaultSend: SendState = { sending: false, sent: false, error: '' };
 
 
 export default function NDAPage() {
+  const { scope, loading } = useActiveScope('nda');
+  // Scoped to the organization in the sidebar. This page used to list
+  // every organization's rows together, which meant a new organization
+  // opened onto other organizations' data.
+  const NDAS = ALL_NDAS.filter(r => inScope(r, scope?.name ?? ''));
   const [modal, setModal] = useState<typeof NDAS[0] | null>(null);
   const [toEmail,  setToEmail]  = useState('');
   const [note,     setNote]     = useState('');
@@ -55,6 +61,8 @@ export default function NDAPage() {
       setSendState({ sending: false, sent: false, error: 'Network error.' });
     }
   }
+
+  if (loading) return null;
 
   return (
     <div>
