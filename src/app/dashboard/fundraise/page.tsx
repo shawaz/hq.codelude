@@ -1,18 +1,29 @@
 'use client';
 
 import VenturePageLayout, { NoRows } from '@/components/VenturePageLayout';
+import PlanDocuments from '@/components/PlanDocuments';
 import { useState } from 'react';
 import { sc, scBorder } from '@/lib/status-colors';
 
-type Tab = 'round' | 'investors' | 'legal' | 'timeline' | 'hyperscaler';
+type Tab = 'round' | 'investors' | 'legal' | 'timeline' | 'hyperscaler' | 'documents';
 
-const TABS: { key: Tab; label: string }[] = [
+/**
+ * The structured tabs describe Roborns' seed round and nothing else. Documents
+ * is the one tab every venture has, which is why it is separated out here
+ * rather than sitting at the end of the same list.
+ */
+const PLAN_TABS: { key: Tab; label: string }[] = [
   { key: 'round',       label: 'Round Structure' },
   { key: 'investors',   label: 'Investor Targets' },
   { key: 'legal',       label: 'Legal & Compliance' },
   { key: 'timeline',    label: 'Timeline' },
   { key: 'hyperscaler', label: 'Hyperscaler & Govt Pitch' },
 ];
+
+const DOCS_TAB: { key: Tab; label: string } = { key: 'documents', label: 'Documents' };
+
+/** Ventures whose structured raise plan is authored in this file. */
+const VENTURES_WITH_PLAN = ['Roborns'];
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -262,21 +273,51 @@ export default function PlanningPage() {
   return (
     <VenturePageLayout
       title="Planning"
-      subtitle="Raise planning per venture — round structure, investor targets, legal, and timeline."
+      subtitle="Raise planning per venture — round structure, investor targets, legal, timeline, and plan documents."
       pageSlug="fundraise"
       eyebrow={() => 'raise plan'}
       heading={v => `${v.name} Raise Plan`}
     >
       {({ venture }) => {
-        // Every figure on this page — ₹18.1 Cr, the CCD structure, the
-        // hyperscaler pitch — is Roborns'. Showing it under another venture's
-        // tab would be worse than showing nothing.
-        if (venture.name !== 'Roborns') {
+        const hasPlan = VENTURES_WITH_PLAN.includes(venture.name);
+        // Every figure in the structured tabs — ₹18.1 Cr, the CCD structure,
+        // the hyperscaler pitch — is Roborns'. Showing it under another
+        // venture's tab would be worse than showing nothing, so those ventures
+        // get Documents alone until their own plan is authored.
+        const tabs = hasPlan ? [...PLAN_TABS, DOCS_TAB] : [DOCS_TAB];
+        // A venture without the structured tabs cannot sit on 'round', and the
+        // tab state survives a venture switch — so resolve it per render
+        // instead of trusting what the last venture left behind.
+        const active: Tab = tabs.some(t => t.key === tab) ? tab : DOCS_TAB.key;
+
+        const tabRow = (
+          <div style={{ display: 'flex', gap: '2px', marginBottom: '1.5rem' }}>
+            {tabs.map(t => (
+              <button key={t.key} onClick={() => setTab(t.key)} style={{
+                padding: '0.55rem 1.3rem', border: '1px solid', cursor: 'pointer',
+                fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.1em',
+                textTransform: 'uppercase', transition: 'all 0.15s',
+                background: active === t.key ? 'var(--off-white)' : 'transparent',
+                borderColor: active === t.key ? 'var(--off-white)' : 'var(--card-border)',
+                color: active === t.key ? 'var(--black)' : 'var(--muted)',
+              }}>{t.label}</button>
+            ))}
+          </div>
+        );
+
+        if (!hasPlan) {
           return (
-            <NoRows>
-              No raise plan for {venture.name} yet. Roborns is the only venture
-              currently raising — its ₹18.1 Cr seed round is on the Roborns tab.
-            </NoRows>
+            <>
+              {tabRow}
+              <NoRows>
+                No structured raise plan for {venture.name} yet — Roborns is the only
+                venture currently raising, and its ₹18.1 Cr seed round is on the
+                Roborns tab. Attach {venture.name}&rsquo;s deck, model or raise memo below.
+              </NoRows>
+              <div style={{ marginTop: '1.5rem' }}>
+                <PlanDocuments venture={venture.name} accent={venture.color} />
+              </div>
+            </>
           );
         }
         return (
@@ -299,21 +340,10 @@ export default function PlanningPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '2px', marginBottom: '1.5rem' }}>
-        {TABS.map(t => (
-          <button key={t.key} onClick={() => setTab(t.key)} style={{
-            padding: '0.55rem 1.3rem', border: '1px solid', cursor: 'pointer',
-            fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.1em',
-            textTransform: 'uppercase', transition: 'all 0.15s',
-            background: tab === t.key ? 'var(--off-white)' : 'transparent',
-            borderColor: tab === t.key ? 'var(--off-white)' : 'var(--card-border)',
-            color: tab === t.key ? 'var(--black)' : 'var(--muted)',
-          }}>{t.label}</button>
-        ))}
-      </div>
+      {tabRow}
 
       {/* ── ROUND STRUCTURE ─────────────────────────────────────────────────── */}
-      {tab === 'round' && (
+      {active === 'round' && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
             <div>
@@ -397,7 +427,7 @@ export default function PlanningPage() {
       )}
 
       {/* ── INVESTORS ───────────────────────────────────────────────────────── */}
-      {tab === 'investors' && (
+      {active === 'investors' && (
         <div>
           {INVESTORS.map((cat, ci) => (
             <div key={ci} style={{ marginBottom: '1.5rem' }}>
@@ -420,7 +450,7 @@ export default function PlanningPage() {
       )}
 
       {/* ── LEGAL ───────────────────────────────────────────────────────────── */}
-      {tab === 'legal' && (
+      {active === 'legal' && (
         <div>
           {LEGAL_STEPS.map((phase, pi) => (
             <div key={pi} style={{ marginBottom: '1.5rem' }}>
@@ -448,7 +478,7 @@ export default function PlanningPage() {
       )}
 
       {/* ── TIMELINE ────────────────────────────────────────────────────────── */}
-      {tab === 'timeline' && (
+      {active === 'timeline' && (
         <div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)' }}>
             {TIMELINE.map((t, i) => (
@@ -470,7 +500,7 @@ export default function PlanningPage() {
       )}
 
       {/* ── HYPERSCALER & GOVT PITCH ─────────────────────────────────────────── */}
-      {tab === 'hyperscaler' && (
+      {active === 'hyperscaler' && (
         <div>
           <Section title="The data center freshwater crisis — in numbers" />
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'var(--card-border)', border: '1px solid var(--card-border)', marginBottom: '1.5rem' }}>
@@ -536,6 +566,11 @@ export default function PlanningPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* ── DOCUMENTS ───────────────────────────────────────────────────────── */}
+      {active === 'documents' && (
+        <PlanDocuments venture={venture.name} accent={venture.color} />
       )}
           </>
         );
