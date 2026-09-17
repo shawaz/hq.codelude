@@ -95,11 +95,11 @@ const OPENAI_COMPATIBLE = {
   gemini: {
     url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
     keyEnv: 'GEMINI_API_KEY',
-    label: 'Gemini 2.0 Flash',
+    label: 'Gemini 3.6 Flash',
     models: [
-      'gemini-2.0-flash',
-      'gemini-1.5-flash',
-      'gemini-2.5-flash',
+      'gemini-3.6-flash',
+      'gemini-3.5-flash',
+      'gemini-3.7-flash',
     ],
     maxTokens: 4096,
   },

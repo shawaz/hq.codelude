@@ -80,7 +80,7 @@ function tasksSection(tasks: { title: string; status: string; priority: string; 
 }
 
 const MODEL_LABELS: Record<AIModel, string> = {
-  gemini:   'Gemini 2.0 Flash',
+  gemini:   'Gemini 3.6 Flash',
   opencode: 'Big Pickle',
   claude:   'Claude Sonnet',
   deepseek: 'DeepSeek Flash',
