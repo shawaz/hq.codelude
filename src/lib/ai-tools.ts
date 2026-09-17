@@ -22,6 +22,11 @@
 import { fetchQuery, fetchMutation } from 'convex/nextjs';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
+import { BUDGET, INVESTOR_ROUNDS, SHARES, WALLETS, ACCOUNTS, INVOICES, PAYEES } from '@/lib/finance';
+import { STRATEGIES, ACTIVITIES, PARTNERS, CHANNELS, RELATIONS } from '@/lib/management';
+import { MARKETS, COMPETITORS, CAMPAIGNS, CONTENT, BRAND } from '@/lib/mktg';
+import { HELP_ARTICLES, TICKETS } from '@/lib/support';
+import { SEED_POSITIONS, TRAINING, ONBOARDING_TEMPLATE } from '@/lib/people';
 
 /** OpenAI-compatible function-calling shape, which the gateway speaks. */
 export interface ToolSpec {
@@ -127,6 +132,67 @@ export const TOOL_SPECS: ToolSpec[] = [
       parameters: obj({
         taskId: str('The task _id from list_tasks.'),
       }, ['taskId']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_department_data',
+      description: 'Fetch detailed records for any department (Finance, Management, Operations, Sales, Marketing, Human Resource, Support, Software, Home).',
+      parameters: obj({
+        department: enumOf(['Finance', 'Management', 'Operations', 'Sales', 'Marketing', 'Human Resource', 'Support', 'Software', 'Home'], 'Department name.'),
+        venture: str('Optional venture name filter.'),
+      }, ['department']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'create_pipeline_org',
+      description: 'Add a new prospect, lead, deal or client entry to the Sales pipeline.',
+      parameters: obj({
+        name: str('Organization or contact name.'),
+        venture: str('Venture name.'),
+        segment: str('Segment, e.g. investor, compute, school, brand, creator.'),
+        email: str('Contact email.'),
+        phone: str('Contact phone.'),
+        city: str('City location.'),
+        state: str('State location.'),
+        interest: str('Key interest or requirement.'),
+        message: str('Notes or initial message.'),
+      }, ['name', 'venture', 'segment']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'create_position',
+      description: 'Open a new position or role in Human Resources / People.',
+      parameters: obj({
+        title: str('Role title.'),
+        venture: str('Venture name.'),
+        department: str('Department name.'),
+        type: enumOf(['Full-time', 'Contract', 'Part-time', 'Advisory'], 'Employment type.'),
+        priority: enumOf(['critical', 'high', 'medium'], 'Role priority.'),
+        location: str('Office city or remote.'),
+        notes: str('Role details or requirements.'),
+      }, ['title', 'venture']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'create_application',
+      description: 'Record a candidate application in Human Resources / People.',
+      parameters: obj({
+        name: str('Candidate name.'),
+        position: str('Position title applied for.'),
+        venture: str('Venture name.'),
+        email: str('Candidate email.'),
+        phone: str('Candidate phone.'),
+        source: str('Application source, e.g. LinkedIn, Direct, Referral.'),
+        notes: str('Initial screening notes.'),
+      }, ['name', 'position']),
     },
   },
   {
@@ -289,6 +355,72 @@ export async function executeTool(
           taskId: String(args.taskId),
         }, opts);
         return { name, content: `Task ${args.taskId} ${res.onToday ? 'added to' : 'removed from'} Today.`, wrote: true };
+      }
+      case 'get_department_data': {
+        const dept = String(args.department);
+        const venture = args.venture ? String(args.venture) : undefined;
+        let data: unknown = {};
+        if (dept === 'Finance') {
+          data = { budget: BUDGET, investorRounds: INVESTOR_ROUNDS, shares: SHARES, wallets: WALLETS, accounts: ACCOUNTS, invoices: INVOICES, payees: PAYEES };
+        } else if (dept === 'Management') {
+          data = { strategies: STRATEGIES, activities: ACTIVITIES, partners: PARTNERS, channels: CHANNELS, relations: RELATIONS };
+        } else if (dept === 'Marketing') {
+          data = { markets: MARKETS, competitors: COMPETITORS, campaigns: CAMPAIGNS, content: CONTENT, brand: BRAND };
+        } else if (dept === 'Support') {
+          data = { helpArticles: HELP_ARTICLES, tickets: TICKETS };
+        } else if (dept === 'Human Resource') {
+          const positions = await fetchQuery(api.positions.list, {}, opts);
+          const applications = await fetchQuery(api.applications.list, {}, opts);
+          data = { positions, applications, seedPositions: SEED_POSITIONS, training: TRAINING, onboarding: ONBOARDING_TEMPLATE };
+        } else if (dept === 'Operations') {
+          const offices = await fetchQuery(api.offices.list, {}, opts);
+          data = { offices };
+        } else if (dept === 'Sales') {
+          data = venture ? await fetchQuery(api.pipeline.ventureBriefing, { venture }, opts) : 'Use pipeline_summary with a venture parameter.';
+        } else if (dept === 'Software' || dept === 'Home') {
+          const tasks = await fetchQuery(api.tasks.list, venture ? { project: venture } : {}, opts);
+          data = { tasks };
+        }
+        return { name, content: JSON.stringify(data), wrote: false };
+      }
+      case 'create_pipeline_org': {
+        const id = await fetchMutation(api.pipeline.submitLead, {
+          venture: String(args.venture),
+          segment: String(args.segment),
+          name: String(args.name),
+          email: args.email ? String(args.email) : undefined,
+          phone: args.phone ? String(args.phone) : undefined,
+          city: args.city ? String(args.city) : undefined,
+          state: args.state ? String(args.state) : undefined,
+          interest: args.interest ? String(args.interest) : undefined,
+          message: args.message ? String(args.message) : undefined,
+          source: 'ai-agent',
+        }, opts);
+        return { name, content: `Added "${args.name}" to Sales pipeline under ${args.venture} (id ${id}).`, wrote: true };
+      }
+      case 'create_position': {
+        const id = await fetchMutation(api.positions.create, {
+          title: String(args.title),
+          venture: String(args.venture),
+          department: args.department ? String(args.department) : undefined,
+          type: args.type as any,
+          priority: args.priority as any,
+          location: args.location ? String(args.location) : undefined,
+          notes: args.notes ? String(args.notes) : undefined,
+        }, opts);
+        return { name, content: `Created position "${args.title}" under ${args.venture} (id ${id}).`, wrote: true };
+      }
+      case 'create_application': {
+        const id = await fetchMutation(api.applications.create, {
+          name: String(args.name),
+          position: String(args.position),
+          venture: args.venture ? String(args.venture) : undefined,
+          email: args.email ? String(args.email) : undefined,
+          phone: args.phone ? String(args.phone) : undefined,
+          source: args.source ? String(args.source) : 'Direct',
+          notes: args.notes ? String(args.notes) : undefined,
+        }, opts);
+        return { name, content: `Created candidate application for "${args.name}" (id ${id}).`, wrote: true };
       }
       case 'set_application_status': {
         await fetchMutation(api.applications.update, {

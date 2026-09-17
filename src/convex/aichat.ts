@@ -63,7 +63,7 @@ export const today = query({
       .collect();
     return rows
       .sort((a, b) => a.createdAt - b.createdAt)
-      .map((m) => ({ role: m.role, content: m.content, createdAt: m.createdAt }));
+      .map((m) => ({ role: m.role, content: m.content, image: m.image, createdAt: m.createdAt }));
   },
 });
 
@@ -189,11 +189,12 @@ export const append = mutation({
     venture: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
     content: v.string(),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await requireVenture(ctx, args.venture);
     const content = args.content.trim();
-    if (!content) return null;
+    if (!content && !args.image) return null;
 
     const now = Date.now();
     return await ctx.db.insert("ai_messages", {
@@ -201,7 +202,8 @@ export const append = mutation({
       venture: args.venture,
       day: istDay(now),
       role: args.role,
-      content: content.slice(0, 100_000),
+      content: (content || '[Image attached]').slice(0, 100_000),
+      image: args.image,
       createdAt: now,
     });
   },

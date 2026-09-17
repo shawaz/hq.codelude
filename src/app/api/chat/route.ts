@@ -35,8 +35,23 @@ wanted but not yet registered — .ai bills two years upfront, which defers it.
 - HQ dashboard: hq.codelude.com. Full company OS — Tasks, Plan, Strategy, Finance, People, Legal, Marketing, Sales, Software, Support sections.
 - HQ records use the venture names above. Records naming LLIFE or Dextrip predate the reversal of the LLIFE rebrand and the Nanotrade rename, and refer to Codelude and Nanotrade respectively.
 
+## Full Department Access (Read & Write)
+You have full Read and Write (CRUD) capabilities across all 9 departments:
+1. **Home / Workspace**: Manage task creation, task status updates, workspace focus, and daily priorities.
+2. **Management**: Access strategic vision, OKRs, milestones, decisions, advisors/partners, and channel strategies.
+3. **Operations**: Access offices, site projects, infrastructure, site surveys, and operational logistics.
+4. **Finance**: Access budgets, MTD expenses, invoices, cap table equity, bank accounts, crypto wallets, and raise plan docs.
+5. **Sales**: Access sales pipeline, prospects, leads, deals, clients, contact lists, and create/update pipeline entries.
+6. **Marketing**: Access market analysis, competitor breakdowns, marketing campaigns, content plans, and channels.
+7. **Human Resource (People)**: Access open positions, candidate applications, team roles, onboarding, and training data. Create roles and candidate entries.
+8. **Support**: Access help articles, troubleshooting docs, system operating procedures, and support tickets.
+9. **Software**: Access software platform architecture, feature backlogs, bug tracking, and deployment specifications.
+
+Use tools ('get_department_data', 'create_task', 'set_task_status', 'update_task', 'create_pipeline_org', 'create_position', 'create_application', 'set_application_status', 'set_position_status', 'list_tasks', 'list_positions', 'list_applications', 'list_offices', 'pipeline_summary') whenever you need to read or modify records across any department.
+
 ## What he brings to you
 - Decisions across any of the five ventures
+- Department operations (Finance, HR, Sales, Ops, Marketing, Support, Software, Management, Home)
 - Fundraising strategy (India equity, token structure, investor outreach)
 - Nanotrade trading strategy and bot behaviour
 - Drafts: content, investor updates, business plans
@@ -46,12 +61,41 @@ wanted but not yet registered — .ai bills two years upfront, which defers it.
 You have the full context above. Use it — reference the actual numbers and
 constraints rather than talking in generalities.`;
 
+function formatClaudeMessage(m: any) {
+  if (m.role === 'user' && m.image) {
+    const match = m.image.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
+    if (match) {
+      return {
+        role: 'user',
+        content: [
+          { type: 'text', text: m.content || 'Attached image' },
+          { type: 'image', source: { type: 'base64', media_type: match[1], data: match[2] } },
+        ],
+      };
+    }
+  }
+  return { role: m.role, content: m.content };
+}
+
+function formatOpenAIMessage(m: any) {
+  if (m.role === 'user' && m.image) {
+    return {
+      role: 'user',
+      content: [
+        { type: 'text', text: m.content || 'Attached image' },
+        { type: 'image_url', image_url: { url: m.image } },
+      ],
+    };
+  }
+  return { role: m.role, content: m.content };
+}
+
 async function streamClaude(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 2048,
     system: systemOverride ?? SYSTEM_PROMPT,
-    messages: messages.map((m: any) => ({ role: m.role, content: m.content })),
+    messages: messages.map(formatClaudeMessage),
     stream: true,
   });
   for await (const event of response) {
@@ -161,7 +205,7 @@ async function runToolLoop(
 ): Promise<{ messages: any[]; wrote: string[] } | null> {
   const convo: any[] = [
     { role: 'system', content: `${system}\n\n${TOOL_PROMPT}` },
-    ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+    ...messages.map(formatOpenAIMessage),
   ];
   const wrote: string[] = [];
   let usedAnyTool = false;
@@ -205,22 +249,19 @@ async function streamOpenAICompatible(
   systemOverride: string | undefined,
   controller: ReadableStreamDefaultController,
   encoder: TextEncoder,
-  /** Conversation from the tool loop, already carrying its system turn and tool results. */
-  prepared?: any[],
+  preparedMessages?: any[],
 ) {
   const cfg = OPENAI_COMPATIBLE[provider];
   const apiKey = process.env[cfg.keyEnv];
-  if (!apiKey) {
-    throw new Error(`${cfg.label} is not configured — set ${cfg.keyEnv}`);
-  }
+  if (!apiKey) throw new Error(`${cfg.label} is not configured — set ${cfg.keyEnv}`);
 
   const body = (model: string) => JSON.stringify({
     model,
-    max_tokens: cfg.maxTokens,
+    max_tokens: cfg.maxTokens ?? 2048,
     stream: true,
-    messages: prepared ?? [
+    messages: preparedMessages ?? [
       { role: 'system', content: systemOverride ?? SYSTEM_PROMPT },
-      ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+      ...messages.map(formatOpenAIMessage),
     ],
   });
 

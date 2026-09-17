@@ -478,6 +478,7 @@ const schema = defineSchema({
     day: v.string(),
     role: v.union(v.literal("user"), v.literal("assistant")),
     content: v.string(),
+    image: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index("by_user_venture_day", ["userId", "venture", "day"])

@@ -86,15 +86,15 @@ const MODEL_LABELS: Record<AIModel, string> = {
   deepseek: 'DeepSeek Flash',
 };
 
-interface Message { role: 'user' | 'assistant'; content: string; }
+interface Message { role: 'user' | 'assistant'; content: string; image?: string; }
 
 function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   // Today's conversation is the source of truth; local state only holds the
-  // in-flight turn, so a refresh mid-thought loses nothing.
+  // in-flight assistant response, so stored messages are never duplicated.
   const stored      = useQuery(api.aichat.today, { venture: venture.name });
   const append      = useMutation(api.aichat.append);
   const clearToday  = useMutation(api.aichat.clearToday);
-  const [pending,   setPending]   = useState<Message[]>([]);
+  const [pendingAssistant, setPendingAssistant] = useState<Message | null>(null);
   const [input,     setInput]     = useState('');
   const [loading,   setLoading]   = useState(false);
   const [model,     setModel]     = useState<AIModel>('gemini');
@@ -102,38 +102,43 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const [taskFilter, setTaskFilter] = useState<'today' | 'todo' | 'done'>('today');
   const [newTaskOpen, setNewTaskOpen] = useState(false);
   
+  // Image attachment state
+  const [attachedImage, setAttachedImage] = useState<{ name: string; base64: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Voice interaction states
   const [isListening, setIsListening] = useState(false);
   const [ttsEnabled, setTtsEnabled]   = useState(false);
   const [isSpeaking, setIsSpeaking]   = useState(false);
   const recognitionRef = useRef<any>(null);
-  // Task ids the user has put on today. Per-user and cross-venture — you have
-  // one day, not five — so this rail shows the intersection with this venture.
+
+  // Task ids the user has put on today.
   const todayIds    = useQuery(api.tasks.today);
   const toggleToday = useMutation(api.tasks.toggle);
-  // Roll up any finished day the moment the assistant is opened, so the
-  // summary exists before anyone goes looking for it.
   useLazySummarise(venture.name);
   const bottomRef   = useRef<HTMLDivElement>(null);
   const inputRef    = useRef<HTMLTextAreaElement>(null);
   const briefing    = useQuery(api.pipeline.ventureBriefing, { venture: venture.name });
 
-  // Persisted turns, plus whatever is still streaming.
-  const messages: Message[] = [
-    ...(stored ?? []).map(m => ({ role: m.role, content: m.content })),
-    ...pending,
-  ];
+  // Persisted turns from Convex, plus whatever assistant reply is currently streaming.
+  const storedMessages: Message[] = (stored ?? []).map(m => ({
+    role: m.role as 'user' | 'assistant',
+    content: m.content,
+    image: (m as any).image,
+  }));
+
+  const messages: Message[] = [...storedMessages];
+  if (pendingAssistant) {
+    messages.push(pendingAssistant);
+  }
+
   const allTasks    = useQuery(api.tasks.list, { project: venture.name });
   const tasks       = allTasks ?? [];
   const inProgress  = tasks.filter(t => t.status === 'in-progress');
   const todo        = tasks.filter(t => t.status === 'todo');
   const done        = tasks.filter(t => t.status === 'done');
 
-  // Today is stored per user across all ventures, so intersect it with this
-  // venture's tasks. `undefined` means the query is still in flight — treat it
-  // as empty rather than flashing every task in as "on today".
   const onTodayIds  = new Set(todayIds ?? []);
-  // In-progress first, then todo, then done — the order the rail always used.
   const ordered     = [...inProgress, ...todo, ...done];
   const TASK_FILTERS = [
     { key: 'today' as const, label: 'Today', rows: ordered.filter(t => onTodayIds.has(t._id)) },
@@ -143,7 +148,7 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const visibleTasks = TASK_FILTERS.find(f => f.key === taskFilter)?.rows ?? ordered;
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
-  useEffect(() => { setPending([]); setInput(''); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
+  useEffect(() => { setPendingAssistant(null); setInput(''); setAttachedImage(null); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
 
   function speakText(text: string) {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -183,17 +188,17 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
     }
 
     const rec = new SpeechRecognition();
-    rec.continuous = true;
+    rec.continuous = false;
     rec.interimResults = true;
     rec.lang = 'en-US';
 
     rec.onresult = (e: any) => {
-      let transcript = '';
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        transcript += e.results[i][0].transcript;
+      let currentText = '';
+      for (let i = 0; i < e.results.length; i++) {
+        currentText += e.results[i][0].transcript;
       }
-      if (transcript) {
-        setInput(prev => (prev ? prev + ' ' + transcript : transcript));
+      if (currentText.trim()) {
+        setInput(currentText.trim());
       }
     };
 
@@ -205,30 +210,52 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
     setIsListening(true);
   }
 
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target?.result as string;
+      setAttachedImage({ name: file.name, base64 });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  }
+
   async function send() {
     const text = input.trim();
-    if (!text || loading) return;
+    if ((!text && !attachedImage) || loading) return;
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
     }
-    const newMessages: Message[] = [...messages, { role: 'user', content: text }];
-    // Show the turn immediately, persist it in the background — a failed write
-    // should not swallow what was typed.
-    setPending([{ role: 'user', content: text }]);
-    setInput(''); setLoading(true);
-    void append({ venture: venture.name, role: 'user', content: text });
+    const imgPayload = attachedImage?.base64;
+    const currentInput = text || '[Image attached]';
+
+    const userMessage: Message = { role: 'user', content: currentInput, image: imgPayload };
+    const apiMessages: Message[] = [...messages, userMessage];
+
+    setInput('');
+    setAttachedImage(null);
+    setLoading(true);
+    setPendingAssistant({ role: 'assistant', content: '' });
+
+    // Save user message to database immediately
+    await append({ venture: venture.name, role: 'user', content: currentInput, image: imgPayload });
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: newMessages,
+          messages: apiMessages,
           venture: venture.name,
           liveData: `## LIVE DATA FROM THE HQ DATABASE (${venture.name})
 This is real current data from the dashboard, not an example. Use it directly
-when asked about prospects, leads, deals, clients or tasks. Sample rows are
-capped — where a count exceeds the rows listed, say so rather than implying the
-list is complete.
+when asked about prospects, leads, deals, clients, departments or tasks.
 
 ### Sales pipeline
 ${pipelineSection(briefing)}
@@ -240,25 +267,25 @@ ${tasksSection(tasks)}`,
       });
       if (!res.body) throw new Error('No stream');
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let reply = '';
-      setPending(prev => [...prev, { role: 'assistant', content: '' }]);
       while (true) {
         const { value, done: d } = await reader.read();
         if (d) break;
         reply += decoder.decode(value, { stream: true });
-        setPending(prev => { const u = [...prev]; u[u.length - 1] = { role: 'assistant', content: reply }; return u; });
+        setPendingAssistant({ role: 'assistant', content: reply });
       }
-      // Persist the completed reply, then drop the local copy — the Convex
-      // query re-renders it, so clearing early would blank the thread.
       if (reply.trim()) {
         await append({ venture: venture.name, role: 'assistant', content: reply });
-        setPending([]);
+        setPendingAssistant(null);
         if (ttsEnabled) {
           speakText(reply);
         }
       }
     } catch (e: any) {
-      setPending(prev => [...prev, { role: 'assistant', content: `Error: ${e.message}` }]);
-    } finally { setLoading(false); inputRef.current?.focus(); }
+      setPendingAssistant({ role: 'assistant', content: `Error: ${e.message}` });
+    } finally {
+      setLoading(false);
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
   }
 
   function handleKey(e: React.KeyboardEvent) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
@@ -281,7 +308,7 @@ ${tasksSection(tasks)}`,
           {messages.length === 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--muted)', lineHeight: 1.8, fontWeight: 300 }}>
-                I have full context on {venture.name}. Ask anything — strategy, next steps, drafts, analysis.
+                I have full context on {venture.name}. Ask anything — strategy, next steps, drafts, analysis across all departments.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {(SUGGESTIONS[venture.name] ?? []).map(s => (
@@ -304,6 +331,9 @@ ${tasksSection(tasks)}`,
                 fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--off-white)',
                 lineHeight: 1.85, fontWeight: 300, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
               }}>
+                {m.image && (
+                  <img src={m.image} alt="Attached image" style={{ maxWidth: '100%', maxHeight: 240, objectFit: 'contain', borderRadius: 4, marginBottom: m.content ? '0.6rem' : 0, display: 'block' }} />
+                )}
                 {m.content || (loading && i === messages.length - 1 ? <span style={{ color: 'var(--muted)' }}>▌</span> : '')}
               </div>
             </div>
@@ -313,7 +343,15 @@ ${tasksSection(tasks)}`,
 
         {/* Input */}
         <div style={{ padding: '0.75rem 1.25rem', borderTop: '1px solid var(--card-border)', display: 'flex', flexDirection: 'column', gap: '0.5rem', flexShrink: 0 }}>
+          {attachedImage && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.05)', padding: '0.35rem 0.65rem', border: '1px solid var(--card-border)', fontSize: '0.65rem', fontFamily: 'var(--font-mono)' }}>
+              <img src={attachedImage.base64} alt="Attached preview" style={{ width: 28, height: 28, objectFit: 'cover', borderRadius: 3 }} />
+              <span style={{ color: 'var(--off-white)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{attachedImage.name}</span>
+              <button type="button" onClick={() => setAttachedImage(null)} style={{ background: 'none', border: 'none', color: '#d9534f', cursor: 'pointer', fontSize: '0.8rem', padding: '0 0.3rem' }}>✕</button>
+            </div>
+          )}
           <div style={{ display: 'flex', gap: '0.6rem' }}>
+            <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageSelect} style={{ display: 'none' }} />
             <textarea
               ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKey}
               placeholder={`Ask about ${venture.name}… (Enter to send)`} rows={1}
@@ -321,6 +359,20 @@ ${tasksSection(tasks)}`,
               onFocus={e => { e.target.style.borderColor = venture.color; }}
               onBlur={e => { e.target.style.borderColor = 'var(--card-border)'; }}
             />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              title="Attach an image"
+              style={{
+                background: attachedImage ? `${venture.color}20` : 'transparent',
+                color: attachedImage ? venture.color : 'var(--off-white)',
+                border: `1px solid ${attachedImage ? venture.color : 'var(--card-border)'}`,
+                cursor: 'pointer', padding: '0 0.65rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'var(--font-mono)', fontSize: '0.75rem', transition: 'all 0.15s', flexShrink: 0,
+              }}
+            >
+              📷
+            </button>
             <button
               type="button"
               onClick={toggleListening}
@@ -335,9 +387,9 @@ ${tasksSection(tasks)}`,
             >
               🎙️ {isListening ? 'Listening…' : ''}
             </button>
-            <button onClick={send} disabled={loading || !input.trim()} style={{
-              background: input.trim() && !loading ? venture.color : 'var(--card-border)', color: input.trim() && !loading ? 'var(--on-brand)' : 'var(--muted)',
-              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
+            <button onClick={send} disabled={loading || (!input.trim() && !attachedImage)} style={{
+              background: (input.trim() || attachedImage) && !loading ? venture.color : 'var(--card-border)', color: (input.trim() || attachedImage) && !loading ? 'var(--on-brand)' : 'var(--muted)',
+              border: 'none', cursor: (input.trim() || attachedImage) && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
             }}>
               {loading ? '...' : 'Send'}
             </button>
