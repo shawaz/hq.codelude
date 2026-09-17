@@ -56,7 +56,7 @@ export default function Sidebar({ user, nav, orgs, activeOrg, canCreateOrg }: Pr
     <aside className="sidebar">
       <div className="sidebar-logo">
         <Logo size={32} />
-        <span className="logo-text">Code<span>lude</span></span>
+        <span className="logo-text">LL<span>IFE</span></span>
       </div>
 
       {orgs.length > 0 && (

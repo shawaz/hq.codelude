@@ -10,7 +10,7 @@ import { TOOL_SPECS, TOOL_PROMPT, executeTool } from '@/lib/ai-tools';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const SYSTEM_PROMPT = `You are the AI assistant for Codelude HQ — the internal company OS for Shawaz, founder of Codelude, a deep-tech venture studio based in Mangaluru, India with a Dubai HoldCo.
+const SYSTEM_PROMPT = `You are the AI assistant for LLIFE HQ — the internal company OS for Shawaz, founder of LLIFE, a deep-tech venture studio based in Mangaluru, India.
 
 ## Codelude at a glance
 - **Studio model**: five ventures built in parallel under one HoldCo
