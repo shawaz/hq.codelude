@@ -108,6 +108,30 @@ export const TOOL_SPECS: ToolSpec[] = [
   {
     type: 'function',
     function: {
+      name: 'update_task',
+      description: 'Update an existing task details (title, category, priority, or due date).',
+      parameters: obj({
+        taskId: str('The task _id from list_tasks.'),
+        title: str('New task title.'),
+        category: str('New category.'),
+        priority: enumOf(['high', 'medium', 'low'], 'New priority level.'),
+        dueDate: str('ISO calendar date, YYYY-MM-DD.'),
+      }, ['taskId']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'toggle_task_today',
+      description: 'Add or remove a task from Today\'s focus list.',
+      parameters: obj({
+        taskId: str('The task _id from list_tasks.'),
+      }, ['taskId']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'set_application_status',
       description: "Move a candidate through the hiring pipeline, optionally adding a note.",
       parameters: obj({
@@ -249,6 +273,22 @@ export async function executeTool(
           status: args.status as 'todo' | 'in-progress' | 'done',
         }, opts);
         return { name, content: `Task ${args.taskId} moved to ${args.status}.`, wrote: true };
+      }
+      case 'update_task': {
+        await fetchMutation(api.tasks.update, {
+          id: String(args.taskId) as Id<'tasks'>,
+          title: args.title ? String(args.title) : undefined,
+          category: args.category ? String(args.category) : undefined,
+          priority: args.priority as 'high' | 'medium' | 'low' | undefined,
+          dueDate: args.dueDate ? String(args.dueDate) : undefined,
+        }, opts);
+        return { name, content: `Updated task ${args.taskId}.`, wrote: true };
+      }
+      case 'toggle_task_today': {
+        const res = await fetchMutation(api.tasks.toggle, {
+          taskId: String(args.taskId),
+        }, opts);
+        return { name, content: `Task ${args.taskId} ${res.onToday ? 'added to' : 'removed from'} Today.`, wrote: true };
       }
       case 'set_application_status': {
         await fetchMutation(api.applications.update, {

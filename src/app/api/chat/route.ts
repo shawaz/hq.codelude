@@ -92,6 +92,17 @@ const OPENAI_COMPATIBLE = {
     // (finish_reason "length"). Give it room.
     maxTokens: 8192,
   },
+  gemini: {
+    url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+    keyEnv: 'GEMINI_API_KEY',
+    label: 'Gemini 2.0 Flash',
+    models: [
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-2.5-flash',
+    ],
+    maxTokens: 4096,
+  },
 } as const;
 
 type OpenAIProvider = keyof typeof OPENAI_COMPATIBLE;
