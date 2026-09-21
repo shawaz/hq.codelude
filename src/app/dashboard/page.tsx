@@ -106,12 +106,6 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   const [attachedImage, setAttachedImage] = useState<{ name: string; base64: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Voice interaction states
-  const [isListening, setIsListening] = useState(false);
-  const [ttsEnabled, setTtsEnabled]   = useState(false);
-  const [isSpeaking, setIsSpeaking]   = useState(false);
-  const recognitionRef = useRef<any>(null);
-
   // Task ids the user has put on today.
   const todayIds    = useQuery(api.tasks.today);
   const toggleToday = useMutation(api.tasks.toggle);
@@ -150,66 +144,6 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
   useEffect(() => { setPendingAssistant(null); setInput(''); setAttachedImage(null); setTimeout(() => inputRef.current?.focus(), 100); }, [venture.name]);
 
-  function speakText(text: string) {
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    if (!text.trim()) return;
-
-    const clean = text.replace(/[*#_`~>|-]/g, '').replace(/\[(.*?)\]\(.*?\)/g, '$1').trim();
-    const utterance = new SpeechSynthesisUtterance(clean);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  function stopSpeaking() {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-    setIsSpeaking(false);
-  }
-
-  function toggleListening() {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert('Speech recognition is not supported in this browser. Try Chrome, Edge, or Safari.');
-      return;
-    }
-
-    const rec = new SpeechRecognition();
-    rec.continuous = false;
-    rec.interimResults = true;
-    rec.lang = 'en-US';
-
-    rec.onresult = (e: any) => {
-      let currentText = '';
-      for (let i = 0; i < e.results.length; i++) {
-        currentText += e.results[i][0].transcript;
-      }
-      if (currentText.trim()) {
-        setInput(currentText.trim());
-      }
-    };
-
-    rec.onerror = () => setIsListening(false);
-    rec.onend = () => setIsListening(false);
-
-    recognitionRef.current = rec;
-    rec.start();
-    setIsListening(true);
-  }
-
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -229,10 +163,6 @@ function VentureChat({ venture }: { venture: typeof ALL_VENTURE_CARDS[0] }) {
   async function send() {
     const text = input.trim();
     if ((!text && !attachedImage) || loading) return;
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    }
     const imgPayload = attachedImage?.base64;
     const currentInput = text || '[Image attached]';
 
@@ -276,9 +206,6 @@ ${tasksSection(tasks)}`,
       if (reply.trim()) {
         await append({ venture: venture.name, role: 'assistant', content: reply });
         setPendingAssistant(null);
-        if (ttsEnabled) {
-          speakText(reply);
-        }
       }
     } catch (e: any) {
       setPendingAssistant({ role: 'assistant', content: `Error: ${e.message}` });
@@ -373,20 +300,6 @@ ${tasksSection(tasks)}`,
             >
               📷
             </button>
-            <button
-              type="button"
-              onClick={toggleListening}
-              title={isListening ? 'Stop listening' : 'Start voice input'}
-              style={{
-                background: isListening ? '#d9534f' : 'transparent',
-                color: isListening ? '#ffffff' : 'var(--off-white)',
-                border: `1px solid ${isListening ? '#d9534f' : 'var(--card-border)'}`,
-                cursor: 'pointer', padding: '0 0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'var(--font-mono)', fontSize: '0.65rem', transition: 'all 0.15s', flexShrink: 0,
-              }}
-            >
-              🎙️ {isListening ? 'Listening…' : ''}
-            </button>
             <button onClick={send} disabled={loading || (!input.trim() && !attachedImage)} style={{
               background: (input.trim() || attachedImage) && !loading ? venture.color : 'var(--card-border)', color: (input.trim() || attachedImage) && !loading ? 'var(--on-brand)' : 'var(--muted)',
               border: 'none', cursor: (input.trim() || attachedImage) && !loading ? 'pointer' : 'default', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, padding: '0 1.25rem', transition: 'all 0.15s', flexShrink: 0,
@@ -405,34 +318,6 @@ ${tasksSection(tasks)}`,
                 {MODEL_LABELS[m]}
               </button>
             ))}
-            <div style={{ width: 1, height: 12, background: 'var(--card-border)', margin: '0 0.3rem' }} />
-            <button
-              onClick={() => {
-                const next = !ttsEnabled;
-                setTtsEnabled(next);
-                if (!next) stopSpeaking();
-              }}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', textTransform: 'uppercase',
-                padding: '0.2rem 0.65rem', border: `1px solid ${ttsEnabled ? venture.color : 'var(--card-border)'}`,
-                background: ttsEnabled ? `${venture.color}18` : 'transparent',
-                color: ttsEnabled ? venture.color : 'var(--muted)', cursor: 'pointer', transition: 'all 0.15s',
-              }}
-            >
-              {ttsEnabled ? '🔊 Voice On' : '🔇 Voice Off'}
-            </button>
-            {isSpeaking && (
-              <button
-                onClick={stopSpeaking}
-                style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.08em', textTransform: 'uppercase',
-                  padding: '0.2rem 0.65rem', border: '1px solid #d9534f', background: 'rgba(217,83,79,0.15)',
-                  color: '#d9534f', cursor: 'pointer', transition: 'all 0.15s',
-                }}
-              >
-                ⏹ Stop Voice
-              </button>
-            )}
           </div>
         </div>
       </div>

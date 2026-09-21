@@ -36,7 +36,7 @@ wanted but not yet registered — .ai bills two years upfront, which defers it.
 - HQ records use the venture names above. Records naming LLIFE or Dextrip predate the reversal of the LLIFE rebrand and the Nanotrade rename, and refer to Codelude and Nanotrade respectively.
 
 ## Full Department Access (Read & Write)
-You have full Read and Write (CRUD) capabilities across all 9 departments:
+You have full Read and Write (CRUD) capabilities across all departments:
 1. **Home / Workspace**: Manage task creation, task status updates, workspace focus, and daily priorities.
 2. **Management**: Access strategic vision, OKRs, milestones, decisions, advisors/partners, and channel strategies.
 3. **Operations**: Access offices, site projects, infrastructure, site surveys, and operational logistics.
@@ -44,10 +44,12 @@ You have full Read and Write (CRUD) capabilities across all 9 departments:
 5. **Sales**: Access sales pipeline, prospects, leads, deals, clients, contact lists, and create/update pipeline entries.
 6. **Marketing**: Access market analysis, competitor breakdowns, marketing campaigns, content plans, and channels.
 7. **Human Resource (People)**: Access open positions, candidate applications, team roles, onboarding, and training data. Create roles and candidate entries.
-8. **Support**: Access help articles, troubleshooting docs, system operating procedures, and support tickets.
-9. **Software**: Access software platform architecture, feature backlogs, bug tracking, and deployment specifications.
+8. **Legal**: Access the NDA registry, contracts and government filings.
+9. **Support**: Access help articles, troubleshooting docs, system operating procedures, and support tickets.
+10. **Software**: Access software platform architecture, feature backlogs, bug tracking, and deployment specifications.
+11. **Plan**: Access each venture's business model, business plan and financial plan.
 
-Use tools ('get_department_data', 'create_task', 'set_task_status', 'update_task', 'create_pipeline_org', 'create_position', 'create_application', 'set_application_status', 'set_position_status', 'list_tasks', 'list_positions', 'list_applications', 'list_offices', 'pipeline_summary') whenever you need to read or modify records across any department.
+Use tools ('get_department_data', 'create_task', 'set_task_status', 'update_task', 'create_pipeline_org', 'create_position', 'create_application', 'set_application_status', 'set_position_status', 'list_tasks', 'list_positions', 'list_applications', 'list_offices', 'pipeline_summary') whenever you need to read or modify records across any department. Read first, then answer — do not tell the founder you lack access to a department before you have called get_department_data for it.
 
 ## What he brings to you
 - Decisions across any of the five ventures
@@ -90,12 +92,70 @@ function formatOpenAIMessage(m: any) {
   return { role: m.role, content: m.content };
 }
 
-async function streamClaude(messages: any[], systemOverride: string | undefined, controller: ReadableStreamDefaultController, encoder: TextEncoder) {
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
+
+/** TOOL_SPECS, restated in Anthropic's tool shape. */
+const CLAUDE_TOOLS = TOOL_SPECS.map((t) => ({
+  name: t.function.name,
+  description: t.function.description,
+  input_schema: t.function.parameters as any,
+}));
+
+/**
+ * Let Claude read and write HQ before it answers.
+ *
+ * The OpenAI-compatible providers had this and Claude did not, so picking
+ * "Claude Sonnet" in the model strip silently dropped every tool: it answered
+ * about departments from the system prompt alone. Runs non-streaming — a tool
+ * call has to complete before the next turn starts — and returns the message
+ * list for the streaming call, or null if no tool was requested.
+ */
+async function runClaudeToolLoop(
+  system: string,
+  messages: any[],
+  token: string | undefined,
+): Promise<any[] | null> {
+  const convo: any[] = messages.map(formatClaudeMessage);
+  let usedAnyTool = false;
+
+  for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+    const res = await client.messages.create({
+      model: CLAUDE_MODEL,
+      max_tokens: 4096,
+      system: `${system}\n\n${TOOL_PROMPT}`,
+      messages: convo,
+      tools: CLAUDE_TOOLS,
+    });
+
+    const calls = res.content.filter((b: any) => b.type === 'tool_use') as any[];
+    if (!calls.length) return usedAnyTool ? convo : null;
+
+    usedAnyTool = true;
+    convo.push({ role: 'assistant', content: res.content });
+
+    const results = [];
+    for (const call of calls) {
+      const out = await executeTool(call.name, call.input, token);
+      results.push({ type: 'tool_result', tool_use_id: call.id, content: out.content });
+    }
+    convo.push({ role: 'user', content: results });
+  }
+
+  return convo;
+}
+
+async function streamClaude(
+  messages: any[],
+  systemOverride: string | undefined,
+  controller: ReadableStreamDefaultController,
+  encoder: TextEncoder,
+  preparedMessages?: any[],
+) {
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: CLAUDE_MODEL,
     max_tokens: 2048,
     system: systemOverride ?? SYSTEM_PROMPT,
-    messages: messages.map(formatClaudeMessage),
+    messages: preparedMessages ?? messages.map(formatClaudeMessage),
     stream: true,
   });
   for await (const event of response) {
@@ -169,16 +229,26 @@ const isCooling = (model: string) => {
 };
 
 /**
- * Model used when tools are in play.
+ * Model used when tools are in play, per provider.
  *
- * The gateway's default, big-pickle, is a free-tier model that returns
- * FreeUsageLimitError under load — and a tool loop costs three to five requests
- * per answer rather than one, so it exhausts that quota far faster than plain
- * chat does. nemotron-3-ultra-free is the sibling verified to return
- * tool_calls, so tool turns run there and fall back to the normal chain if it
- * refuses.
+ * This used to be a single hardcoded id — nemotron-3-ultra-free, an OpenCode
+ * Zen model — sent to whichever provider was selected. Google and OpenRouter
+ * reject an unknown model outright, so every Gemini and DeepSeek turn had its
+ * tool loop 400 and fall through to plain chat: the assistant could not read a
+ * single HQ record unless the user happened to have OpenCode selected. Each
+ * provider now runs its tools on one of its own models.
+ *
+ * For OpenCode the pick is still nemotron: the gateway default, big-pickle, is
+ * a free-tier model that returns FreeUsageLimitError under load, and a tool
+ * loop costs three to five requests per answer rather than one, so it burns
+ * that quota far faster than plain chat does. nemotron is the sibling verified
+ * to return tool_calls.
  */
-const TOOL_MODEL = 'nemotron-3-ultra-free';
+const TOOL_MODEL: Record<OpenAIProvider, string> = {
+  opencode: 'nemotron-3-ultra-free',
+  gemini: 'gemini-3.6-flash',
+  deepseek: 'deepseek/deepseek-chat-v3-0324:free',
+};
 
 /** A tool loop that never terminates is a bill. Four rounds is plenty. */
 const MAX_TOOL_ROUNDS = 4;
@@ -197,12 +267,13 @@ interface ToolCall { id: string; function: { name: string; arguments: string } }
  * appended, or null if the model asked for no tools at all.
  */
 async function runToolLoop(
-  url: string,
+  provider: OpenAIProvider,
   apiKey: string,
   system: string,
   messages: any[],
   token: string | undefined,
 ): Promise<{ messages: any[]; wrote: string[] } | null> {
+  const url = OPENAI_COMPATIBLE[provider].url;
   const convo: any[] = [
     { role: 'system', content: `${system}\n\n${TOOL_PROMPT}` },
     ...messages.map(formatOpenAIMessage),
@@ -215,7 +286,7 @@ async function runToolLoop(
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: TOOL_MODEL,
+        model: TOOL_MODEL[provider],
         max_tokens: 4096,
         messages: convo,
         tools: TOOL_SPECS,
@@ -368,9 +439,13 @@ function scopedSystemPrompt(allowed: string[]): string {
   if (allowed.length === ALL_SCOPE_NAMES.length) return `${MENTOR_PERSONA}\n\n${SYSTEM_PROMPT}`;
   const lines = SYSTEM_PROMPT.split('\n');
   const kept = lines.filter((line) => {
-    const venture = /^\d+\.\s+\*\*(\w+)\*\*/.exec(line.trim());
-    if (!venture) return true;
-    return allowed.includes(venture[1]);
+    const match = /^\d+\.\s+\*\*(\w+)\*\*/.exec(line.trim());
+    if (!match) return true;
+    // The prompt has two numbered bold lists — the five ventures and the
+    // departments. Only the venture one is access-gated; testing membership of
+    // the venture registry keeps a scoped user's department list intact.
+    if (!ALL_SCOPE_NAMES.includes(match[1])) return true;
+    return allowed.includes(match[1]);
   });
   return `${MENTOR_PERSONA}\n\n${kept.join('\n')}\n\n${scopeFooter(allowed)}`;
 }
@@ -381,6 +456,24 @@ function scopeFooter(allowed: string[]): string {
     `This user has access to: ${allowed.join(', ') || 'no ventures yet'}.`,
     'Do not discuss, reference or speculate about any other Codelude venture,',
     'its finances, cap table, or roadmap. If asked, say it is outside their access.',
+  ].join('\n');
+}
+
+/**
+ * Tell the model which venture page it is answering from.
+ *
+ * Without this the venture prompt names the venture in prose but nothing says
+ * it is the argument to pass to the tools, so the assistant would either ask
+ * which venture was meant or read studio-wide records and answer with the
+ * wrong venture's numbers.
+ */
+function activeVentureNote(venture: string): string {
+  return [
+    '## Active venture',
+    `The person is on the ${venture} page. Pass venture: "${venture}" to every`,
+    'tool that takes one, unless they explicitly name a different venture.',
+    `So "what's in People?" means get_department_data with department`,
+    `"Human Resource" and venture "${venture}".`,
   ].join('\n');
 }
 
@@ -408,7 +501,7 @@ export async function POST(req: Request) {
       // it engages is identical across all five, and only the subject changes.
       // `liveData` is assembled client-side from queries that are themselves
       // access-checked in Convex, so it carries nothing they cannot already see.
-      systemOverride = [MENTOR_PERSONA, base, typeof liveData === 'string' ? liveData : '']
+      systemOverride = [MENTOR_PERSONA, base, activeVentureNote(venture), typeof liveData === 'string' ? liveData : '']
         .filter(Boolean)
         .join('\n\n');
     }
@@ -442,7 +535,7 @@ export async function POST(req: Request) {
           let prepared: any[] | undefined;
           if (apiKey) {
             const loop = await runToolLoop(
-              cfg.url, apiKey, systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
+              model as OpenAIProvider, apiKey, systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
             ).catch(() => null);
             prepared = loop?.messages;
           }
@@ -451,7 +544,10 @@ export async function POST(req: Request) {
             model as OpenAIProvider, messages, systemOverride, controller, encoder, prepared,
           );
         } else {
-          await streamClaude(messages, systemOverride, controller, encoder);
+          const prepared = await runClaudeToolLoop(
+            systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
+          ).catch(() => null);
+          await streamClaude(messages, systemOverride, controller, encoder, prepared ?? undefined);
         }
       } catch (e: any) {
         controller.enqueue(encoder.encode(`\n\n[Error: ${e.message}]`));

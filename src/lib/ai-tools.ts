@@ -23,10 +23,17 @@ import { fetchQuery, fetchMutation } from 'convex/nextjs';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import { BUDGET, INVESTOR_ROUNDS, SHARES, WALLETS, ACCOUNTS, INVOICES, PAYEES } from '@/lib/finance';
+import { MODELS as FINANCIAL_MODELS } from '@/lib/fin-models';
 import { STRATEGIES, ACTIVITIES, PARTNERS, CHANNELS, RELATIONS } from '@/lib/management';
+import { VENTURE_PARTNERS, VENTURE_ACTIVITIES, VENTURE_CHANNELS, VENTURE_RELATIONS, VENTURE_RESOURCES } from '@/lib/mgmt-ventures';
 import { MARKETS, COMPETITORS, CAMPAIGNS, CONTENT, BRAND } from '@/lib/mktg';
 import { HELP_ARTICLES, TICKETS } from '@/lib/support';
 import { SEED_POSITIONS, TRAINING, ONBOARDING_TEMPLATE } from '@/lib/people';
+import { OFFICES, DEPARTMENTS, FRANCHISE_BRANDS, PROPERTIES } from '@/lib/ops';
+import { NDAS, CONTRACTS, GOVT_FILINGS } from '@/lib/legal-data';
+import { PROSPECTS, LEADS, DEALS, CLIENTS } from '@/lib/sales';
+import { PLANS } from '@/lib/plans';
+import { PROGRAMMES } from '@/lib/feasibility';
 
 /** OpenAI-compatible function-calling shape, which the gateway speaks. */
 export interface ToolSpec {
@@ -39,6 +46,16 @@ const obj = (props: Record<string, unknown>, required: string[] = []) => ({
 });
 const str = (description: string) => ({ type: 'string', description });
 const enumOf = (values: string[], description: string) => ({ type: 'string', enum: values, description });
+
+/**
+ * Departments the assistant can pull records for — the same list the sidebar
+ * shows. Kept here so the tool description, the parameter enum and the system
+ * prompt cannot drift apart.
+ */
+export const DEPARTMENT_NAMES = [
+  'Finance', 'Management', 'Operations', 'Sales', 'Marketing',
+  'Human Resource', 'Legal', 'Support', 'Software', 'Plan', 'Home',
+] as const;
 
 export const TOOL_SPECS: ToolSpec[] = [
   // ── Reads ──────────────────────────────────────────────────────────────
@@ -138,10 +155,11 @@ export const TOOL_SPECS: ToolSpec[] = [
     type: 'function',
     function: {
       name: 'get_department_data',
-      description: 'Fetch detailed records for any department (Finance, Management, Operations, Sales, Marketing, Human Resource, Support, Software, Home).',
+      description:
+        'Read the records behind a department page in HQ. Finance (budget, raise, cap table, bank, crypto, invoices, model), Management (strategy, activities, partners, channels, relations), Operations (offices, departments, properties, franchise brands, site feasibility), Sales (prospects, leads, deals, clients plus the live pipeline), Marketing (market sizing, competitors, campaigns, content, brand), Human Resource (open roles, candidate applications, training, onboarding), Legal (NDAs, contracts, government filings), Support (help articles, tickets), Software (platform tasks and plan), Plan (business model, plan and financial plan), Home (tasks). Call this before answering anything about a department — pass the venture to scope it.',
       parameters: obj({
-        department: enumOf(['Finance', 'Management', 'Operations', 'Sales', 'Marketing', 'Human Resource', 'Support', 'Software', 'Home'], 'Department name.'),
-        venture: str('Optional venture name filter.'),
+        department: enumOf([...DEPARTMENT_NAMES], 'Department name.'),
+        venture: str('Venture name to scope the records to, e.g. "Franchiseen". Omit for studio-wide.'),
       }, ['department']),
     },
   },
@@ -359,29 +377,139 @@ export async function executeTool(
       case 'get_department_data': {
         const dept = String(args.department);
         const venture = args.venture ? String(args.venture) : undefined;
+
+        /**
+         * Keep the rows that belong to the named venture.
+         *
+         * The datasets disagree about how they record it — some carry
+         * `venture`, the ones that span several carry `ventures: string[]`,
+         * and the per-venture sets (plans, models, strategies) are keyed by
+         * `name`. Checking in that order means a row with both `name` and
+         * `venture` is matched on `venture`, which is the specific one.
+         */
+        const forV = <T,>(rows: T[]): T[] => {
+          if (!venture) return rows;
+          return rows.filter((row) => {
+            const r = row as Record<string, unknown>;
+            if (typeof r.venture === 'string') return r.venture === venture;
+            if (Array.isArray(r.ventures)) return (r.ventures as string[]).includes(venture);
+            if (typeof r.name === 'string') return r.name === venture;
+            return true;
+          });
+        };
+
         let data: unknown = {};
+        let external: string | undefined;
+
         if (dept === 'Finance') {
-          data = { budget: BUDGET, investorRounds: INVESTOR_ROUNDS, shares: SHARES, wallets: WALLETS, accounts: ACCOUNTS, invoices: INVOICES, payees: PAYEES };
+          data = {
+            budget: forV(BUDGET),
+            investorRounds: forV(INVESTOR_ROUNDS),
+            shares: SHARES,
+            wallets: forV(WALLETS),
+            accounts: forV(ACCOUNTS),
+            invoices: forV(INVOICES),
+            payees: forV(PAYEES),
+            financialModel: forV(FINANCIAL_MODELS),
+          };
         } else if (dept === 'Management') {
-          data = { strategies: STRATEGIES, activities: ACTIVITIES, partners: PARTNERS, channels: CHANNELS, relations: RELATIONS };
+          data = {
+            strategies: forV(STRATEGIES),
+            activities: cap(forV(ACTIVITIES), 40),
+            partners: forV(PARTNERS),
+            channels: forV(CHANNELS),
+            relations: forV(RELATIONS),
+            // The venture-keyed management sets, when one venture is in view.
+            ...(venture
+              ? {
+                  venturePartners: VENTURE_PARTNERS[venture] ?? [],
+                  ventureActivities: VENTURE_ACTIVITIES[venture] ?? [],
+                  ventureChannels: VENTURE_CHANNELS[venture] ?? [],
+                  ventureRelations: VENTURE_RELATIONS[venture] ?? [],
+                  ventureResources: VENTURE_RESOURCES[venture] ?? [],
+                }
+              : {}),
+          };
         } else if (dept === 'Marketing') {
-          data = { markets: MARKETS, competitors: COMPETITORS, campaigns: CAMPAIGNS, content: CONTENT, brand: BRAND };
+          data = {
+            markets: forV(MARKETS),
+            competitors: forV(COMPETITORS),
+            campaigns: forV(CAMPAIGNS),
+            content: forV(CONTENT),
+            brand: BRAND,
+          };
         } else if (dept === 'Support') {
-          data = { helpArticles: HELP_ARTICLES, tickets: TICKETS };
+          data = { helpArticles: forV(HELP_ARTICLES), tickets: forV(TICKETS) };
+        } else if (dept === 'Legal') {
+          data = { ndas: forV(NDAS), contracts: forV(CONTRACTS), govtFilings: forV(GOVT_FILINGS) };
         } else if (dept === 'Human Resource') {
           const positions = await fetchQuery(api.positions.list, {}, opts);
           const applications = await fetchQuery(api.applications.list, {}, opts);
-          data = { positions, applications, seedPositions: SEED_POSITIONS, training: TRAINING, onboarding: ONBOARDING_TEMPLATE };
+          const live = forV(positions as Record<string, unknown>[]);
+          const candidates = forV(applications as Record<string, unknown>[]);
+          const split = candidates.map(r => partition(r, EXTERNAL_FIELDS.list_applications));
+          data = {
+            positions: live,
+            applications: split.map(x => x.ours),
+            seedPositions: forV(SEED_POSITIONS),
+            training: TRAINING,
+            onboarding: ONBOARDING_TEMPLATE,
+          };
+          external = untrusted(
+            'candidate-supplied application data',
+            split.map(x => x.theirs),
+          );
         } else if (dept === 'Operations') {
           const offices = await fetchQuery(api.offices.list, {}, opts);
-          data = { offices };
+          data = {
+            offices,
+            referenceOffices: OFFICES,
+            departments: DEPARTMENTS,
+            properties: forV(PROPERTIES),
+            franchiseBrands: FRANCHISE_BRANDS,
+            siteFeasibility: forV(PROGRAMMES),
+          };
         } else if (dept === 'Sales') {
-          data = venture ? await fetchQuery(api.pipeline.ventureBriefing, { venture }, opts) : 'Use pipeline_summary with a venture parameter.';
+          const briefing = venture
+            ? await fetchQuery(api.pipeline.ventureBriefing, { venture }, opts).catch(() => null)
+            : null;
+          data = {
+            prospects: forV(PROSPECTS),
+            leads: forV(LEADS),
+            deals: forV(DEALS),
+            clients: forV(CLIENTS),
+            livePipeline: briefing ?? 'Pass a venture to include the live pipeline.',
+          };
+          if (briefing) {
+            const split = partition(briefing as unknown as Record<string, unknown>, EXTERNAL_FIELDS.pipeline_summary);
+            (data as Record<string, unknown>).livePipeline = split.ours;
+            external = untrusted('externally-submitted pipeline records', split.theirs);
+          }
+        } else if (dept === 'Plan') {
+          data = { plans: forV(PLANS) };
         } else if (dept === 'Software' || dept === 'Home') {
           const tasks = await fetchQuery(api.tasks.list, venture ? { project: venture } : {}, opts);
-          data = { tasks };
+          data = {
+            tasks: cap(tasks as Record<string, unknown>[], 120),
+            ...(dept === 'Software' ? { plan: forV(PLANS) } : {}),
+          };
+        } else {
+          return {
+            name,
+            content: `Unknown department "${dept}". Available: ${DEPARTMENT_NAMES.join(', ')}.`,
+            wrote: false,
+          };
         }
-        return { name, content: JSON.stringify(data), wrote: false };
+
+        // An empty result for a real department reads as "nothing recorded",
+        // which is a useful answer — say so rather than returning bare {}.
+        const body = JSON.stringify(data);
+        const note = venture ? ` (scoped to ${venture})` : '';
+        return {
+          name,
+          content: [`${dept} records${note}:`, body, external].filter(Boolean).join('\n'),
+          wrote: false,
+        };
       }
       case 'create_pipeline_org': {
         const id = await fetchMutation(api.pipeline.submitLead, {
@@ -455,6 +583,13 @@ export const TOOL_PROMPT = `## HQ data
 You can read and update HQ directly through the tools provided. Use them rather
 than asking the founder to paste data — if you are asked about candidates,
 roles, tasks, offices or the pipeline, call the relevant tool first.
+
+\`get_department_data\` reads the records behind every department page:
+${DEPARTMENT_NAMES.join(', ')}. Any question about what is in a department —
+"what's in People?", "show me the applications", "what does Finance look like" —
+is answered by calling it, scoped with the venture in view. Never say you cannot
+see a department's data without calling the tool first, and never describe a
+department from memory when a tool call would return the actual records.
 
 The tools run under the asking person's own permissions. If one returns an
 access error, say so plainly; do not guess at what the data might contain.
