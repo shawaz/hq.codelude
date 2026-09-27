@@ -13,6 +13,7 @@ import type * as aichat from "../aichat.js";
 import type * as applications from "../applications.js";
 import type * as auth from "../auth.js";
 import type * as contacts from "../contacts.js";
+import type * as content from "../content.js";
 import type * as http from "../http.js";
 import type * as migrations from "../migrations.js";
 import type * as offices from "../offices.js";
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   applications: typeof applications;
   auth: typeof auth;
   contacts: typeof contacts;
+  content: typeof content;
   http: typeof http;
   migrations: typeof migrations;
   offices: typeof offices;
