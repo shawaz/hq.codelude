@@ -320,11 +320,23 @@ const schema = defineSchema({
     // not at an instant, and storing a moment would drag timezone into it.
     startDate: v.optional(v.string()),
     dueDate: v.optional(v.string()),
+    // Who owns the work. Either a teammate or one of the venture's AI agents —
+    // the two are stored in one slot because a task has one owner, and which
+    // kind it is only changes how the row is rendered.
+    //
+    // assigneeId is a users._id for "human" and an agent name slug (see
+    // src/lib/agents.ts) for "agent". assigneeName is denormalized so the
+    // tasks table renders without a join, and so a task assigned to someone
+    // who later loses access still reads as assigned rather than blank.
+    assigneeType: v.optional(v.union(v.literal("human"), v.literal("agent"))),
+    assigneeId: v.optional(v.string()),
+    assigneeName: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.optional(v.number()),
     completedAt: v.optional(v.number()),
   })
     .index("by_project", ["project"])
+    .index("by_assignee", ["assigneeId"])
     .index("by_seedId", ["seedId"])
     .index("by_project_status", ["project", "status"]),
 

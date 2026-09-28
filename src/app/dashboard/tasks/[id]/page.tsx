@@ -5,8 +5,10 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { projectColor } from '@/lib/tasks';
 import { sc, scBorder } from '@/lib/status-colors';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
+import AssigneeSelect, { type AssigneeValue } from '@/components/AssigneeSelect';
 
 interface Note { id: string; text: string; createdAt: string; }
 interface FileRec { id: string; name: string; url: string; size: number; type: string; uploadedAt: string; }
@@ -79,6 +81,7 @@ export default function TaskDetailPage() {
               {task.status === 'in-progress' ? 'In Progress' : task.status === 'done' ? 'Done' : 'Todo'}
             </span>
           </div>
+          <AssigneeRow task={task} />
         </div>
       </div>
 
@@ -278,7 +281,47 @@ function FilesPanel({ taskId }: { taskId: string }) {
 // ─────────────────────────────────────────────────────────────────────
 // Ask AI — scoped to this task
 // ─────────────────────────────────────────────────────────────────────
-function TaskChat({ task, color }: { task: { title: string; project: string; category: string; status: string; priority: string }; color: string }) {
+// Assignee — a teammate or one of the venture's AI agents
+// ─────────────────────────────────────────────────────────────────────
+function AssigneeRow({ task }: { task: { _id: string; project: string } & AssigneeValue }) {
+  const setAssignee = useMutation(api.tasks.setAssignee);
+  const [error, setError] = useState<string | null>(null);
+
+  async function change(next: AssigneeValue) {
+    setError(null);
+    try {
+      await setAssignee({ id: task._id as Id<'tasks'>, ...next });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not change the assignee');
+    }
+  }
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
+      <span style={{
+        fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.12em',
+        textTransform: 'uppercase', color: 'var(--muted)',
+      }}>Assigned to</span>
+      <AssigneeSelect
+        venture={task.project}
+        value={{ assigneeType: task.assigneeType, assigneeId: task.assigneeId, assigneeName: task.assigneeName }}
+        onChange={change}
+        style={{ minWidth: 220 }}
+      />
+      {task.assigneeType && (
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)' }}>
+          {task.assigneeType === 'agent' ? '🤖 AI agent' : '👤 Team member'}
+        </span>
+      )}
+      {error && (
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--st-red)' }}>{error}</span>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+function TaskChat({ task, color }: { task: { title: string; project: string; category: string; status: string; priority: string } & AssigneeValue; color: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput]       = useState('');
   const [loading, setLoading]   = useState(false);
@@ -294,6 +337,7 @@ Venture: ${task.project}
 Category: ${task.category}
 Priority: ${task.priority}
 Status: ${task.status}
+Assigned to: ${task.assigneeName ? `${task.assigneeName} (${task.assigneeType === 'agent' ? 'AI agent' : 'team member'})` : 'nobody yet'}
 
 Help him think through this task — break it down into steps, identify blockers, draft outreach or content related to it, or analyse how to approach it. Be direct and concise, like a sharp co-founder. Reference the task context directly in your answers.`;
 

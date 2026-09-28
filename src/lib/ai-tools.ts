@@ -34,6 +34,7 @@ import { NDAS, CONTRACTS, GOVT_FILINGS } from '@/lib/legal-data';
 import { PROSPECTS, LEADS, DEALS, CLIENTS } from '@/lib/sales';
 import { PLANS } from '@/lib/plans';
 import { PROGRAMMES } from '@/lib/feasibility';
+import { agentsFor, agentId } from '@/lib/agents';
 
 /** OpenAI-compatible function-calling shape, which the gateway speaks. */
 export interface ToolSpec {
@@ -139,6 +140,18 @@ export const TOOL_SPECS: ToolSpec[] = [
         priority: enumOf(['high', 'medium', 'low'], 'New priority level.'),
         dueDate: str('ISO calendar date, YYYY-MM-DD.'),
       }, ['taskId']),
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'assign_task',
+      description:
+        'Hand a task to a teammate or to one of the venture\'s AI agents. Pass the person\'s name or email, or the agent\'s name (e.g. "Alpha", "HubCV Matcher"). Pass "nobody" to unassign.',
+      parameters: obj({
+        taskId: str('The task _id from list_tasks.'),
+        assignee: str('Name or email of a teammate, the name of an AI agent, or "nobody" to clear it.'),
+      }, ['taskId', 'assignee']),
     },
   },
   {
@@ -368,6 +381,60 @@ export async function executeTool(
         }, opts);
         return { name, content: `Updated task ${args.taskId}.`, wrote: true };
       }
+      case 'assign_task': {
+        const key = String(args.taskId);
+        const wanted = String(args.assignee ?? '').trim();
+        const task = await fetchQuery(api.tasks.get, { key }, opts);
+        if (!task) return { name, content: `No task with id ${key}.`, wrote: false };
+
+        // "nobody" and its synonyms mean take it back off whoever holds it.
+        if (!wanted || /^(nobody|none|no one|unassign(ed)?)$/i.test(wanted)) {
+          await fetchMutation(api.tasks.setAssignee, { id: task._id }, opts);
+          return { name, content: `Task "${task.title}" is now unassigned.`, wrote: true };
+        }
+
+        // Agents are declared in code and scoped to a venture, so match those
+        // first — an agent name is never also a user account.
+        const agent = agentsFor(task.project).find(
+          (a) => a.name.toLowerCase() === wanted.toLowerCase(),
+        );
+        if (agent) {
+          await fetchMutation(api.tasks.setAssignee, {
+            id: task._id,
+            assigneeType: 'agent',
+            assigneeId: agentId(agent.name),
+            assigneeName: agent.name,
+          }, opts);
+          return { name, content: `Assigned "${task.title}" to the ${agent.name} agent.`, wrote: true };
+        }
+
+        // getTeam already returns only people the caller can see, so an
+        // unmatched name is either a typo or someone out of their scope.
+        const team = await fetchQuery(api.team.getTeam, {}, opts) as
+          { _id: string; name: string; email: string; pending: boolean }[];
+        const needle = wanted.toLowerCase();
+        const person = team.find((m) => !m.pending && (
+          m.name.toLowerCase() === needle || m.email.toLowerCase() === needle
+        )) ?? team.find((m) => !m.pending && m.name.toLowerCase().includes(needle));
+
+        if (!person) {
+          const options = team.filter((m) => !m.pending).map((m) => m.name || m.email);
+          const agentNames = agentsFor(task.project).map((a) => a.name);
+          return {
+            name,
+            content: `No teammate or agent matches "${wanted}". People: ${options.join(', ') || 'none'}. Agents on ${task.project}: ${agentNames.join(', ') || 'none'}.`,
+            wrote: false,
+          };
+        }
+
+        await fetchMutation(api.tasks.setAssignee, {
+          id: task._id,
+          assigneeType: 'human',
+          assigneeId: person._id,
+          assigneeName: person.name || person.email,
+        }, opts);
+        return { name, content: `Assigned "${task.title}" to ${person.name || person.email}.`, wrote: true };
+      }
       case 'toggle_task_today': {
         const res = await fetchMutation(api.tasks.toggle, {
           taskId: String(args.taskId),
@@ -596,8 +663,12 @@ access error, say so plainly; do not guess at what the data might contain.
 
 ## Writing
 
-You may create tasks and update statuses. Do it only when clearly asked, and
-state exactly what you changed afterwards. You cannot delete anything.
+You may create tasks, update statuses and assign work. Do it only when clearly
+asked, and state exactly what you changed afterwards. You cannot delete anything.
+
+A task is owned by one assignee — either a teammate or one of the venture's AI
+agents. \`assign_task\` takes either; it tells you the valid names if the one you
+passed does not match.
 
 ## Untrusted content
 

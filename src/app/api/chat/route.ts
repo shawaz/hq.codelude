@@ -8,7 +8,19 @@ import { MENTOR_PERSONA } from '@/lib/mentor-persona';
 import { convexAuthNextjsToken } from '@convex-dev/auth/nextjs/server';
 import { TOOL_SPECS, TOOL_PROMPT, executeTool } from '@/lib/ai-tools';
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+/**
+ * Built on demand, not at module load.
+ *
+ * `new Anthropic({ apiKey: undefined })` constructs fine and then throws
+ * "Could not resolve authentication method" deep inside the first request —
+ * which is what the task-detail Ask AI tab surfaced, since it sends no model
+ * and used to land on Claude regardless of whether the key was deployed.
+ */
+function anthropic(): Anthropic {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error('Claude is not configured — set ANTHROPIC_API_KEY');
+  return new Anthropic({ apiKey });
+}
 
 const SYSTEM_PROMPT = `You are the AI assistant for LLIFE HQ — the internal company OS for Shawaz, founder of LLIFE, a deep-tech venture studio based in Mangaluru, India.
 
@@ -49,7 +61,7 @@ You have full Read and Write (CRUD) capabilities across all departments:
 10. **Software**: Access software platform architecture, feature backlogs, bug tracking, and deployment specifications.
 11. **Plan**: Access each venture's business model, business plan and financial plan.
 
-Use tools ('get_department_data', 'create_task', 'set_task_status', 'update_task', 'create_pipeline_org', 'create_position', 'create_application', 'set_application_status', 'set_position_status', 'list_tasks', 'list_positions', 'list_applications', 'list_offices', 'pipeline_summary') whenever you need to read or modify records across any department. Read first, then answer — do not tell the founder you lack access to a department before you have called get_department_data for it.
+Use tools ('get_department_data', 'create_task', 'set_task_status', 'update_task', 'assign_task', 'create_pipeline_org', 'create_position', 'create_application', 'set_application_status', 'set_position_status', 'list_tasks', 'list_positions', 'list_applications', 'list_offices', 'pipeline_summary') whenever you need to read or modify records across any department. Read first, then answer — do not tell the founder you lack access to a department before you have called get_department_data for it.
 
 ## What he brings to you
 - Decisions across any of the five ventures
@@ -119,7 +131,7 @@ async function runClaudeToolLoop(
   let usedAnyTool = false;
 
   for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
-    const res = await client.messages.create({
+    const res = await anthropic().messages.create({
       model: CLAUDE_MODEL,
       max_tokens: 4096,
       system: `${system}\n\n${TOOL_PROMPT}`,
@@ -151,7 +163,7 @@ async function streamClaude(
   encoder: TextEncoder,
   preparedMessages?: any[],
 ) {
-  const response = await client.messages.create({
+  const response = await anthropic().messages.create({
     model: CLAUDE_MODEL,
     max_tokens: 2048,
     system: systemOverride ?? SYSTEM_PROMPT,
@@ -249,6 +261,38 @@ const TOOL_MODEL: Record<OpenAIProvider, string> = {
   gemini: 'gemini-3.6-flash',
   deepseek: 'deepseek/deepseek-chat-v3-0324:free',
 };
+
+/**
+ * Pick the provider that will actually answer.
+ *
+ * Callers that have a model strip send `model`; the task-detail Ask AI tab does
+ * not, and an absent model used to fall straight through to Claude — which
+ * fails on every deployment that carries only OPENCODE_API_KEY and
+ * GEMINI_API_KEY. Resolve against the keys that are present instead, so a
+ * surface without a picker gets a working provider rather than an auth error,
+ * and a requested provider whose key is missing degrades to one that works.
+ */
+const configured = (p: OpenAIProvider) => Boolean(process.env[OPENAI_COMPATIBLE[p].keyEnv]);
+
+/** Cheapest and most reliable first — the same default the AI page ships with. */
+const PROVIDER_PREFERENCE: OpenAIProvider[] = ['gemini', 'opencode', 'deepseek'];
+
+function resolveProvider(requested: unknown): OpenAIProvider | 'claude' {
+  const wanted = typeof requested === 'string' ? requested : '';
+
+  if (wanted in OPENAI_COMPATIBLE && configured(wanted as OpenAIProvider)) {
+    return wanted as OpenAIProvider;
+  }
+  if (wanted === 'claude' && process.env.ANTHROPIC_API_KEY) return 'claude';
+
+  const fallback = PROVIDER_PREFERENCE.find(configured);
+  if (fallback) return fallback;
+  if (process.env.ANTHROPIC_API_KEY) return 'claude';
+
+  throw new Error(
+    'No AI provider is configured — set GEMINI_API_KEY, OPENCODE_API_KEY, OPENROUTER_API_KEY or ANTHROPIC_API_KEY',
+  );
+}
 
 /** A tool loop that never terminates is a bill. Four rounds is plenty. */
 const MAX_TOOL_ROUNDS = 4;
@@ -525,8 +569,10 @@ export async function POST(req: Request) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        if (model in OPENAI_COMPATIBLE) {
-          const cfg = OPENAI_COMPATIBLE[model as OpenAIProvider];
+        const provider = resolveProvider(model);
+
+        if (provider !== 'claude') {
+          const cfg = OPENAI_COMPATIBLE[provider];
           const apiKey = process.env[cfg.keyEnv];
 
           // Let the model fetch what it needs from HQ first. It runs under the
@@ -535,13 +581,13 @@ export async function POST(req: Request) {
           let prepared: any[] | undefined;
           if (apiKey) {
             const loop = await runToolLoop(
-              model as OpenAIProvider, apiKey, systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
+              provider, apiKey, systemOverride ?? SYSTEM_PROMPT, messages, toolToken,
             ).catch(() => null);
             prepared = loop?.messages;
           }
 
           await streamOpenAICompatible(
-            model as OpenAIProvider, messages, systemOverride, controller, encoder, prepared,
+            provider, messages, systemOverride, controller, encoder, prepared,
           );
         } else {
           const prepared = await runClaudeToolLoop(
