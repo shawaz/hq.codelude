@@ -15,7 +15,6 @@
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { isUnrestricted, type Grant } from '@/lib/nav';
-import { agentsFor, agentId } from '@/lib/agents';
 
 export interface AssigneeValue {
   assigneeType?: 'human' | 'agent';
@@ -54,7 +53,10 @@ export default function AssigneeSelect({
 }) {
   const team = useQuery(api.team.getTeam, {}) as Member[] | undefined;
   const people = membersOf(team, venture);
-  const agents = agentsFor(venture);
+  // Paused agents are left out: handing work to one that will not run is worse
+  // than not offering it.
+  const agents = (useQuery(api.agents.listByVenture, { venture }) ?? [])
+    .filter(a => a.status === 'active');
 
   const selected = value.assigneeType && value.assigneeId
     ? `${value.assigneeType}:${value.assigneeId}`
@@ -67,7 +69,7 @@ export default function AssigneeSelect({
       const m = people.find(p => p._id === id);
       onChange({ assigneeType: 'human', assigneeId: id, assigneeName: m?.name || m?.email || 'Member' });
     } else {
-      const a = agents.find(x => agentId(x.name) === id);
+      const a = agents.find(x => x._id === id);
       onChange({ assigneeType: 'agent', assigneeId: id, assigneeName: a?.name ?? id });
     }
   }
@@ -105,7 +107,7 @@ export default function AssigneeSelect({
       {agents.length > 0 && (
         <optgroup label="AI agents">
           {agents.map(a => (
-            <option key={a.name} value={`agent:${agentId(a.name)}`}>
+            <option key={a._id} value={`agent:${a._id}`}>
               {a.emoji} {a.name} · {a.type}
             </option>
           ))}
@@ -116,7 +118,7 @@ export default function AssigneeSelect({
           or the control would silently show "Unassigned" over a set value. */}
       {selected
         && !people.some(p => `human:${p._id}` === selected)
-        && !agents.some(a => `agent:${agentId(a.name)}` === selected) && (
+        && !agents.some(a => `agent:${a._id}` === selected) && (
         <option value={selected}>{value.assigneeName ?? 'Assigned'}</option>
       )}
     </select>

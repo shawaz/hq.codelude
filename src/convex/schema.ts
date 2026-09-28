@@ -437,6 +437,73 @@ const schema = defineSchema({
     .index("by_status", ["status"])
     .index("by_position", ["position"]),
 
+  // ─── AI agents ──────────────────────────────────────────────────────
+  // Migrated out of src/lib/agents.ts, which held seventeen literals under a
+  // single `Llife` key — so every other venture's Team page read "0 agents"
+  // and the only way to add one was to edit code and redeploy.
+  //
+  // `tools` is the load-bearing field. It used to be decorative; it is now the
+  // allowlist the runner filters TOOL_SPECS against, so an agent can only call
+  // what its record names. Tools still execute under the triggering user's own
+  // Convex token, so this narrows that person's permissions and never widens
+  // them — see src/app/api/agents/run/route.ts.
+  //
+  // `provider` names a gateway, not a model id. The old `model` strings
+  // ('claude-3-5-haiku') named models nothing in this deployment is keyed for;
+  // resolveProvider degrades to a configured one rather than failing.
+  //
+  // Pausing is a status change, not a delete — an agent that has run work is a
+  // record of what ran.
+  agents: defineTable({
+    seedId: v.optional(v.string()),
+    venture: v.string(),
+    name: v.string(),
+    emoji: v.string(),
+    color: v.string(),
+    type: v.string(),          // 'Claude Agent', 'Strategy Agent', 'Execution Bot', …
+    role: v.string(),          // the persona — becomes the run's system prompt
+    provider: v.union(
+      v.literal("gemini"),
+      v.literal("opencode"),
+      v.literal("deepseek"),
+      v.literal("claude"),
+    ),
+    tools: v.array(v.string()),
+    tf: v.array(v.string()),   // timeframes, kept so the existing cards render unchanged
+    status: v.union(v.literal("active"), v.literal("paused")),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index("by_venture", ["venture"])
+    .index("by_status", ["status"])
+    .index("by_seedId", ["seedId"]),
+
+  // ─── Agent runs ─────────────────────────────────────────────────────
+  // One row per Run pressed on a task. Exists so a run that returned something
+  // odd can be read back: which agent, which prompt, which tools it actually
+  // called, and what it cost in wall time. The answer itself is also appended
+  // to the task's notes, which is where you read it — this is the audit trail
+  // underneath that, not a second place to look.
+  //
+  // taskId is a string rather than v.id("tasks") to match task_today, which
+  // stores seed ids alongside document ids.
+  agent_runs: defineTable({
+    agentId: v.string(),
+    agentName: v.string(),
+    taskId: v.string(),
+    taskTitle: v.string(),
+    venture: v.string(),
+    userId: v.id("users"),
+    status: v.union(v.literal("running"), v.literal("done"), v.literal("error")),
+    output: v.optional(v.string()),
+    toolCalls: v.array(v.string()),
+    error: v.optional(v.string()),
+    startedAt: v.number(),
+    finishedAt: v.optional(v.number()),
+  })
+    .index("by_task", ["taskId"])
+    .index("by_agent", ["agentId"]),
+
   // ─── Today list ─────────────────────────────────────────────────────
   // The 87 tasks in src/lib/tasks.ts carry no dates, so "today" cannot be
   // derived from them. Instead you pick what you are working on by clicking,

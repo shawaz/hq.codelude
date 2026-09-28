@@ -9,7 +9,9 @@ import { useActiveScope } from '@/lib/use-active-scope';
 import { scopeColor, type Scope } from '@/lib/ventures';
 import { isUnrestricted, type Grant } from '@/lib/nav';
 import { sc, scBorder } from '@/lib/status-colors';
-import { VENTURE_DATA } from '@/lib/agents';
+import { openRolesFor } from '@/lib/agents';
+import AgentForm, { type AgentDraft } from '@/components/AgentForm';
+import { agentTool } from '@/lib/agent-tools';
 
 /** A row from team.getTeam — a real user, or an invite not yet redeemed. */
 interface Member {
@@ -58,7 +60,7 @@ function HumansSection({
   // Llife key — so this already crashed for five of the six seeded scopes.
   const color = scopeColor(venture);
   const people = membersOf(team, venture);
-  const { openRoles } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
+  const openRoles = openRolesFor(venture);
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
@@ -130,41 +132,102 @@ function HumansSection({
   );
 }
 
-function AgentsSection({ venture }: { venture: string }) {
-  const { agents } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
-  if (!agents.length) return (
-    <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8 }}>
-      No AI agents assigned to {venture} yet. Agents will be added as the platform enters development.
-    </div>
-  );
+function AgentsSection({
+  venture,
+  canManage,
+  onAdd,
+  onEdit,
+}: {
+  venture: string;
+  canManage: boolean;
+  onAdd: () => void;
+  onEdit: (a: AgentDraft) => void;
+}) {
+  const agents = useQuery(api.agents.listByVenture, { venture });
+
+  if (agents === undefined) return <div className="empty-note">Loading agents…</div>;
+
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-      {agents.map(a => (
-        <div key={a.name} style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '1.5rem', borderTop: `2px solid ${a.color}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-            <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{a.emoji}</span>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{a.name}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: a.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{a.type}</div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: '1px solid rgba(93,202,165,0.3)', color: sc('#dbdbdb') }}>Active</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>{a.tf.join(' / ')}</span>
-            </div>
-          </div>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{a.role}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-            {a.tools.map(t => <span key={t} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.45rem', border: `1px solid ${scBorder(a.color, 30)}`, color: a.color }}>{t}</span>)}
-          </div>
-          <div style={{ marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', opacity: 0.6 }}>model: {a.model}</div>
+    <>
+      {canManage && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+          <button
+            onClick={onAdd}
+            style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em',
+              textTransform: 'uppercase', padding: '0.45rem 1rem', cursor: 'pointer',
+              background: 'var(--accent)', border: '1px solid var(--accent)',
+              color: 'var(--on-accent)', fontWeight: 700,
+            }}
+          >+ New agent</button>
         </div>
-      ))}
-    </div>
+      )}
+
+      {agents.length === 0 ? (
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--muted)', lineHeight: 1.8 }}>
+          No AI agents on {venture} yet.{canManage ? ' Use New agent to create one — then assign it a task and press Run.' : ''}
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+          {agents.map(a => (
+            <div
+              key={a._id}
+              onClick={canManage ? () => onEdit({
+                id: a._id, name: a.name, emoji: a.emoji, type: a.type,
+                role: a.role, provider: a.provider, tools: a.tools, status: a.status,
+              }) : undefined}
+              style={{
+                background: 'var(--card-bg)', border: '1px solid var(--card-border)',
+                padding: '1.5rem', borderTop: `2px solid ${a.color}`,
+                cursor: canManage ? 'pointer' : 'default',
+                opacity: a.status === 'paused' ? 0.6 : 1,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{a.emoji}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{a.name}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color: a.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{a.type}</div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(a.color, 30)}`, color: a.status === 'active' ? sc('#dbdbdb') : 'var(--muted)' }}>
+                    {a.status}
+                  </span>
+                  {a.tf.length > 0 && (
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.52rem', color: 'var(--muted)' }}>{a.tf.join(' / ')}</span>
+                  )}
+                </div>
+              </div>
+
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.66rem', color: 'var(--muted)', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>{a.role}</p>
+
+              {/* The allowlist, not a description of one — this is what the
+                  runner filters against. An agent with none reasons from its
+                  role alone, which is worth saying rather than showing a gap. */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                {a.tools.length === 0 ? (
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', opacity: 0.7 }}>No tools granted</span>
+                ) : a.tools.map(t => (
+                  <span key={t} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.56rem', padding: '0.1rem 0.45rem', border: `1px solid ${scBorder(a.color, 30)}`, color: a.color }}>
+                    {agentTool(t)?.label ?? t}
+                  </span>
+                ))}
+              </div>
+
+              <div style={{ marginTop: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.56rem', color: 'var(--muted)', opacity: 0.6 }}>model: {a.provider}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
   );
 }
 
 function OrgSection({ venture, team, scope }: { venture: string; team: Member[] | undefined; scope?: Scope }) {
-  const { agents, openRoles } = VENTURE_DATA[venture] ?? { agents: [], openRoles: [] };
+  // Paused agents are left off the chart — it is a picture of who is working.
+  const agents = (useQuery(api.agents.listByVenture, { venture }) ?? [])
+    .filter(a => a.status === 'active');
+  const openRoles = openRolesFor(venture);
   const color  = scope?.color ?? scopeColor(venture);
   const sector = scope?.sector ?? '';
   const activeHumans = membersOf(team, venture).filter(m => !m.pending);
@@ -205,7 +268,7 @@ function OrgSection({ venture, team, scope }: { venture: string; team: Member[] 
           <div style={{ background: 'var(--card-bg)', border: '1px dashed var(--card-border)', padding: '1rem', textAlign: 'center' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', color, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>AI Agents ({agents.length})</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', justifyContent: 'center' }}>
-              {agents.map(a => <span key={a.name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(a.color)}`, color: a.color }}>{a.emoji} {a.name}</span>)}
+              {agents.map(a => <span key={a._id} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', padding: '0.15rem 0.5rem', border: `1px solid ${scBorder(a.color)}`, color: a.color }}>{a.emoji} {a.name}</span>)}
             </div>
           </div>
         </>
@@ -248,6 +311,15 @@ export default function TeamPage() {
 
   const [tab, setTab] = useState<Tab>('humans');
   const [form, setForm] = useState<{ initial?: MemberDraft; venture: string } | null>(null);
+  const [agentForm, setAgentForm] = useState<{ initial?: AgentDraft } | null>(null);
+
+  // The header count needs agents even while the Humans tab is showing, so the
+  // query lives here rather than inside AgentsSection. Convex dedupes the two
+  // subscriptions, so this is one websocket read, not two.
+  const agentCount = (useQuery(
+    api.agents.listByVenture,
+    venture ? { venture: venture.name } : 'skip',
+  ) ?? []).length;
 
   // VENTURE_DATA only ever had a Llife key, so filtering the strip by it hid
   // five of the six seeded scopes. The organization comes from the switcher
@@ -270,7 +342,7 @@ export default function TeamPage() {
   // Captured so the callbacks below keep the narrowed type — TypeScript will
   // not carry the null check into a closure.
   const ventureName = venture.name;
-  const data    = VENTURE_DATA[venture.name] ?? { agents: [], openRoles: [] };
+  const openRoles = openRolesFor(venture.name);
   const people  = membersOf(team, venture.name);
   const active  = people.filter(m => !m.pending).length;
   const invited = people.filter(m => m.pending).length;
@@ -321,7 +393,7 @@ export default function TeamPage() {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--muted)', fontWeight: 400, letterSpacing: '0.1em' }}>
             {active} human{active !== 1 ? 's' : ''}
             {invited > 0 && ` · ${invited} invited`}
-            {' '}· {data.agents.length} agent{data.agents.length !== 1 ? 's' : ''} · {data.openRoles.length} open role{data.openRoles.length !== 1 ? 's' : ''}
+            {' '}· {agentCount} agent{agentCount !== 1 ? 's' : ''} · {openRoles.length} open role{openRoles.length !== 1 ? 's' : ''}
           </span>
         </div>
       </div>
@@ -343,7 +415,14 @@ export default function TeamPage() {
       {tab === 'humans' && (
         <HumansSection venture={venture.name} team={team} canManage={canManage} onEdit={openEdit} />
       )}
-      {tab === 'agents' && <AgentsSection venture={venture.name} />}
+      {tab === 'agents' && (
+        <AgentsSection
+          venture={venture.name}
+          canManage={canManage}
+          onAdd={() => setAgentForm({})}
+          onEdit={initial => setAgentForm({ initial })}
+        />
+      )}
       {tab === 'org'    && <OrgSection    venture={venture.name} team={team} scope={venture} />}
 
       {canManage && tab === 'humans' && (
@@ -351,6 +430,14 @@ export default function TeamPage() {
           Click a member to edit their page access. Access is granted per venture and per page —
           everything is off by default.
         </p>
+      )}
+
+      {agentForm && (
+        <AgentForm
+          initial={agentForm.initial}
+          venture={ventureName}
+          onClose={() => setAgentForm(null)}
+        />
       )}
 
       {form && (

@@ -181,8 +181,12 @@ export const setAssignee = mutation({
       return { assigned: false };
     }
 
-    // A human assignee must be a real user; resolve the name server-side so a
-    // client cannot store a label that does not match the account.
+    // Either kind must name a record that exists, and the stored label is
+    // resolved server-side from that record — a client cannot store a name that
+    // does not match the account or the agent it points at.
+    //
+    // The agent half of this used to trust whatever string arrived, because
+    // agents were declared in code and had no ids to check against.
     let name = args.assigneeName?.trim() || "";
     if (args.assigneeType === "human") {
       const userId = ctx.db.normalizeId("users", args.assigneeId);
@@ -190,6 +194,18 @@ export const setAssignee = mutation({
       const person = await ctx.db.get(userId);
       if (!person) throw new Error("Unknown assignee");
       name = person.name ?? person.email ?? "Member";
+    } else {
+      const agentId = ctx.db.normalizeId("agents", args.assigneeId);
+      if (!agentId) throw new Error("Unknown agent");
+      const agent = await ctx.db.get(agentId);
+      if (!agent) throw new Error("Unknown agent");
+      // A task belongs to a venture; an agent belongs to one too. Crossing them
+      // would put work on an agent whose whole prompt is about somewhere else.
+      const task = await ctx.db.get(args.id);
+      if (task && agent.venture !== task.project) {
+        throw new Error(`${agent.name} belongs to ${agent.venture}, not ${task.project}`);
+      }
+      name = agent.name;
     }
 
     await ctx.db.patch(args.id, {

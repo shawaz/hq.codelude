@@ -66,6 +66,16 @@ export async function retagScope(
     if (write) await ctx.db.patch(row._id, { venture: to });
     bump("pipeline_stats");
   }
+  for (const row of await ctx.db.query("agents").collect()) {
+    if (row.venture !== from) continue;
+    if (write) await ctx.db.patch(row._id, { venture: to });
+    bump("agents");
+  }
+  for (const row of await ctx.db.query("agent_runs").collect()) {
+    if (row.venture !== from) continue;
+    if (write) await ctx.db.patch(row._id, { venture: to });
+    bump("agent_runs");
+  }
   for (const row of await ctx.db.query("ai_messages").collect()) {
     if (row.venture !== from) continue;
     if (write) await ctx.db.patch(row._id, { venture: to });

@@ -1,17 +1,25 @@
 /**
- * AI agents and open roles, per venture.
+ * Open roles per venture, and the seed source for the agents table.
  *
- * Lifted out of the Users page when tasks gained an assignee: a task can be
- * handed to a person or to an agent, so the agent roster had to be readable
- * from somewhere other than that page's render tree.
+ * Agents used to be served straight out of this file, which is why every
+ * venture but Llife read "0 agents" on the Team page — adding one meant editing
+ * code and redeploying. They live in Convex now (src/convex/agents.ts); what
+ * remains here is the one-time seed and the open-roles list, which has no table
+ * of its own yet (real roles live in `positions`).
+ *
+ * The legacy `model` and `tools` fields do not survive the migration. `model`
+ * named models this deployment has no key for ('claude-3-5-haiku'), and `tools`
+ * held descriptive labels ('Volume Surge', 'domain_review') rather than HQ tool
+ * names — seeded agents therefore start with an empty allowlist and are granted
+ * tools deliberately, in the form.
  */
 
-export interface Agent {
+export interface LegacyAgent {
   name: string; emoji: string; color: string; type: string;
   model: string; tf: string[]; role: string; tools: string[];
 }
 
-export const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[] }> = {
+export const VENTURE_DATA: Record<string, { agents: LegacyAgent[]; openRoles: string[] }> = {
   // One venture now. The agents below were HubCV's and Nanotrade's — those
   // systems are still running, so their agents are documented here under Llife
   // rather than dropped. Roborns and Franchiseen had none; their open roles
@@ -52,20 +60,37 @@ export const VENTURE_DATA: Record<string, { agents: Agent[]; openRoles: string[]
   },
 };
 
-/** Agents that can take work on this venture. Empty for a venture with none. */
-export function agentsFor(venture: string): Agent[] {
-  return VENTURE_DATA[venture]?.agents ?? [];
+/** Open roles listed against a venture. Empty for a venture with none. */
+export function openRolesFor(venture: string): string[] {
+  return VENTURE_DATA[venture]?.openRoles ?? [];
 }
 
 /**
- * A stable id for an agent.
+ * A stable slug for an agent name.
  *
- * Agent names are the only thing that identifies them — they are declared in
- * code, not stored — so a task assigned to one holds the slug of its name.
+ * Kept because task assignments minted before the migration stored one of
+ * these in `assigneeId`. agents:relinkAssignments repoints those at real
+ * document ids; this is what they are being migrated *from*.
  */
 export const agentId = (name: string): string =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-export function agentByIdIn(venture: string, id: string): Agent | undefined {
-  return agentsFor(venture).find((a) => agentId(a.name) === id);
+/** The literals above, flattened into the shape agents:seedFromStatic takes. */
+export function agentSeedRows() {
+  return Object.entries(VENTURE_DATA).flatMap(([venture, data]) =>
+    data.agents.map((a) => ({
+      seedId: `${agentId(venture)}-${agentId(a.name)}`,
+      venture,
+      name: a.name,
+      emoji: a.emoji,
+      color: a.color,
+      type: a.type,
+      role: a.role,
+      // Gemini is the provider this deployment is actually keyed for; the old
+      // `model` strings named models it cannot reach.
+      provider: 'gemini' as const,
+      tools: [] as string[],
+      tf: a.tf,
+    })),
+  );
 }
