@@ -16,6 +16,7 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { VENTURES } from '@/lib/ventures';
 import type { Priority } from '@/lib/tasks';
+import AssigneeSelect, { type AssigneeValue } from '@/components/AssigneeSelect';
 
 const CATEGORIES = [
   'Engineering', 'Legal', 'Finance', 'Marketing', 'Sales',
@@ -40,6 +41,7 @@ export default function NewTaskForm({
   const [proj, setProj]         = useState(project);
   const [category, setCategory] = useState('Engineering');
   const [priority, setPriority] = useState<Priority>('medium');
+  const [assignee, setAssignee] = useState<AssigneeValue>({});
   const [busy, setBusy]         = useState(false);
   const [error, setError]       = useState<string | null>(null);
 
@@ -69,8 +71,10 @@ export default function NewTaskForm({
         title, project: proj, category, priority,
         startDate: startDate || undefined,
         dueDate: dueDate || undefined,
+        ...assignee,
       });
       form.reset();
+      setAssignee({});
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not create the task');
@@ -121,6 +125,15 @@ export default function NewTaskForm({
           <option value="low">Low</option>
         </select>
       </div>
+
+      {/* Optional at capture: an unassigned task is still a captured task, and
+          most of these are the founder's own. */}
+      <AssigneeSelect
+        venture={proj}
+        value={assignee}
+        onChange={setAssignee}
+        style={{ width: '100%', fontSize: compact ? '0.62rem' : '0.72rem', padding: compact ? '0.35rem 0.5rem' : '0.55rem 0.7rem' }}
+      />
 
       {/* Dates are optional — most tasks never get one, and forcing a date on
           every capture would make the quick-add slower than writing it down. */}

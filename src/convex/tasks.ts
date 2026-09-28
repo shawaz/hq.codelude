@@ -29,6 +29,7 @@ import { istDay } from "./aichat";
 
 const priority = v.union(v.literal("high"), v.literal("medium"), v.literal("low"));
 const status = v.union(v.literal("todo"), v.literal("in-progress"), v.literal("done"));
+const assigneeType = v.union(v.literal("human"), v.literal("agent"));
 
 /** Every task, newest first within a project. Filtering happens client-side. */
 export const list = query({
@@ -92,6 +93,9 @@ export const create = mutation({
     status: v.optional(status),
     startDate: v.optional(v.string()),
     dueDate: v.optional(v.string()),
+    assigneeType: v.optional(assigneeType),
+    assigneeId: v.optional(v.string()),
+    assigneeName: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await requireUser(ctx);
@@ -109,6 +113,9 @@ export const create = mutation({
       status: args.status ?? "todo",
       startDate: args.startDate || undefined,
       dueDate: args.dueDate || undefined,
+      assigneeType: args.assigneeType,
+      assigneeId: args.assigneeId || undefined,
+      assigneeName: args.assigneeName?.trim() || undefined,
       createdAt: Date.now(),
     });
   },
@@ -139,6 +146,59 @@ export const update = mutation({
       }
     }
     await ctx.db.patch(id, patch);
+  },
+});
+
+/**
+ * Hand a task to a person or to an AI agent, or take it back.
+ *
+ * Assignment is one mutation rather than a field on `update` because the three
+ * columns move together — clearing an assignee has to clear all of them, and a
+ * partial patch would leave a name behind with no id.
+ *
+ * The agent roster lives in code (src/lib/agents.ts), so an agent assignment is
+ * a slug plus its display name; a human assignment is a users._id. Either way
+ * the name is stored alongside, so the tasks table renders with no join.
+ */
+export const setAssignee = mutation({
+  args: {
+    id: v.id("tasks"),
+    assigneeType: v.optional(assigneeType),
+    assigneeId: v.optional(v.string()),
+    assigneeName: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await requireUser(ctx);
+
+    // No type means unassign — drop all three rather than leaving an orphan.
+    if (!args.assigneeType || !args.assigneeId) {
+      await ctx.db.patch(args.id, {
+        assigneeType: undefined,
+        assigneeId: undefined,
+        assigneeName: undefined,
+        updatedAt: Date.now(),
+      });
+      return { assigned: false };
+    }
+
+    // A human assignee must be a real user; resolve the name server-side so a
+    // client cannot store a label that does not match the account.
+    let name = args.assigneeName?.trim() || "";
+    if (args.assigneeType === "human") {
+      const userId = ctx.db.normalizeId("users", args.assigneeId);
+      if (!userId) throw new Error("Unknown assignee");
+      const person = await ctx.db.get(userId);
+      if (!person) throw new Error("Unknown assignee");
+      name = person.name ?? person.email ?? "Member";
+    }
+
+    await ctx.db.patch(args.id, {
+      assigneeType: args.assigneeType,
+      assigneeId: args.assigneeId,
+      assigneeName: name.slice(0, 120) || undefined,
+      updatedAt: Date.now(),
+    });
+    return { assigned: true };
   },
 });
 

@@ -8,6 +8,7 @@ import { projectColor, type Status } from '@/lib/tasks';
 import { sc, scBorder } from '@/lib/status-colors';
 import VenturePageLayout, { NoRows, type VentureTab } from '@/components/VenturePageLayout';
 import NewTaskForm from '@/components/NewTaskForm';
+import { AssigneeBadge } from '@/components/AssigneeSelect';
 
 // Status becomes the tab row, matching how every other venture-tabbed page in
 // the app works. The venture strip replaces the old "All projects" pill list.
@@ -103,8 +104,9 @@ export default function TasksPage() {
               <table className="tasks-table">
                 <thead>
                   <tr>
-                    <th style={{ width: '45%' }}>Task</th>
+                    <th style={{ width: '38%' }}>Task</th>
                     <th>Category</th>
+                    <th>Assignee</th>
                     <th>Due</th>
                     <th>Priority</th>
                     <th>Status</th>
@@ -119,6 +121,9 @@ export default function TasksPage() {
                       >{task.title}</td>
                       <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
                         <span className="category-label">{task.category}</span>
+                      </td>
+                      <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
+                        <AssigneeBadge task={task} />
                       </td>
                       <td onClick={() => router.push(`/dashboard/tasks/${task._id}`)}>
                         {task.dueDate ? (
