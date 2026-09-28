@@ -10,7 +10,6 @@ import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import AssigneeSelect, { type AssigneeValue } from '@/components/AssigneeSelect';
 
-interface Note { id: string; text: string; createdAt: string; }
 interface FileRec { id: string; name: string; url: string; size: number; type: string; uploadedAt: string; }
 interface Message { role: 'user' | 'assistant'; content: string; }
 
@@ -82,6 +81,7 @@ export default function TaskDetailPage() {
             </span>
           </div>
           <AssigneeRow task={task} />
+          {task.assigneeType === 'agent' && <AgentRunner task={task} color={color} />}
         </div>
       </div>
 
@@ -102,43 +102,29 @@ export default function TaskDetailPage() {
 // Notes
 // ─────────────────────────────────────────────────────────────────────
 function NotesPanel({ taskId }: { taskId: string }) {
-  const [notes, setNotes]     = useState<Note[]>([]);
-  const [text, setText]       = useState('');
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving]   = useState(false);
+  // Notes used to be fetched from /api/tasks/[id]/notes, which wrote them to a
+  // JSON file on local disk — ephemeral on Vercel, so every note written in
+  // production was lost on the next deploy. They live in Convex now, which also
+  // means an agent run can file its output here and have it still be there.
+  const notes = useQuery(api.taskExtras.notes, { taskId });
+  const addNote    = useMutation(api.taskExtras.addNote);
+  const deleteNote = useMutation(api.taskExtras.deleteNote);
 
-  async function load() {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/tasks/${taskId}/notes`);
-      setNotes(await res.json());
-    } finally { setLoading(false); }
-  }
+  const [text, setText]     = useState('');
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => { load(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [taskId]);
-
-  async function addNote() {
+  async function save() {
     const value = text.trim();
     if (!value || saving) return;
     setSaving(true);
     try {
-      const res = await fetch(`/api/tasks/${taskId}/notes`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: value }),
-      });
-      const note: Note = await res.json();
-      setNotes(prev => [note, ...prev]);
+      await addNote({ taskId, text: value });
       setText('');
     } finally { setSaving(false); }
   }
 
-  async function removeNote(id: string) {
-    setNotes(prev => prev.filter(n => n.id !== id));
-    await fetch(`/api/tasks/${taskId}/notes?noteId=${encodeURIComponent(id)}`, { method: 'DELETE' });
-  }
-
   function handleKey(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addNote(); }
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(); }
   }
 
   return (
@@ -153,12 +139,12 @@ function NotesPanel({ taskId }: { taskId: string }) {
           onKeyDown={handleKey}
           style={{ resize: 'vertical', fontSize: '0.72rem', lineHeight: 1.7 }}
         />
-        <button className="btn-primary" onClick={addNote} disabled={!text.trim() || saving} style={{ alignSelf: 'flex-start' }}>
+        <button className="btn-primary" onClick={save} disabled={!text.trim() || saving} style={{ alignSelf: 'flex-start' }}>
           {saving ? 'Saving…' : 'Add note'}
         </button>
       </div>
 
-      {loading ? (
+      {notes === undefined ? (
         <div className="empty-note">Loading notes…</div>
       ) : notes.length === 0 ? (
         <div className="empty-note">No notes yet — add the first one above.</div>
@@ -168,7 +154,7 @@ function NotesPanel({ taskId }: { taskId: string }) {
             <div key={note.id} className="note-item">
               <div className="note-item-top">
                 <span className="note-date">{fmtDate(note.createdAt)}</span>
-                <button className="icon-btn" onClick={() => removeNote(note.id)}>Delete</button>
+                <button className="icon-btn" onClick={() => void deleteNote({ taskId, noteId: note.id })}>Delete</button>
               </div>
               <div className="note-text">{note.text}</div>
             </div>
@@ -315,6 +301,109 @@ function AssigneeRow({ task }: { task: { _id: string; project: string } & Assign
       )}
       {error && (
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--st-red)' }}>{error}</span>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Running the assigned agent
+// ─────────────────────────────────────────────────────────────────────
+function AgentRunner({
+  task,
+  color,
+}: {
+  task: { _id: string; title: string } & AssigneeValue;
+  color: string;
+}) {
+  const runs = useQuery(api.agents.runsForTask, { taskId: String(task._id) });
+  const [output, setOutput] = useState('');
+  const [running, setRunning] = useState(false);
+  const [error, setError]   = useState<string | null>(null);
+
+  const last = runs?.[0];
+
+  async function run() {
+    if (running) return;
+    setRunning(true);
+    setOutput('');
+    setError(null);
+    try {
+      const res = await fetch('/api/agents/run', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: String(task._id) }),
+      });
+      // A refusal (paused agent, no access) comes back as JSON, not a stream.
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error ?? `Run failed (${res.status})`);
+      }
+      if (!res.body) throw new Error('No stream');
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let acc = '';
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, { stream: true });
+        setOutput(acc);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Run failed');
+    } finally {
+      setRunning(false);
+    }
+  }
+
+  return (
+    <div style={{ marginTop: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <button
+          onClick={run}
+          disabled={running}
+          style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.1em',
+            textTransform: 'uppercase', padding: '0.4rem 1rem',
+            cursor: running ? 'wait' : 'pointer', fontWeight: 700,
+            background: running ? 'var(--card-border)' : color,
+            border: `1px solid ${running ? 'var(--card-border)' : color}`,
+            color: running ? 'var(--muted)' : 'var(--on-brand)',
+          }}
+        >{running ? 'Running…' : `Run ${task.assigneeName ?? 'agent'}`}</button>
+
+        {last && !running && (
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', color: 'var(--muted)' }}>
+            last run {fmtDate(new Date(last.startedAt).toISOString())} · {last.status}
+            {last.toolCalls.length > 0 && ` · ${last.toolCalls.length} tool call${last.toolCalls.length === 1 ? '' : 's'}`}
+          </span>
+        )}
+      </div>
+
+      {error && (
+        <div style={{ marginTop: '0.6rem', fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--st-red)', lineHeight: 1.7 }}>
+          {error}
+        </div>
+      )}
+
+      {/* Live output. It is also filed as a note when the run finishes, so this
+          is the progress view rather than the record — it clears on reload. */}
+      {output && (
+        <div style={{
+          marginTop: '0.75rem', padding: '0.85rem 1rem',
+          background: 'var(--card-bg)', border: '1px solid var(--card-border)',
+          borderLeft: `2px solid ${color}`,
+          fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--off-white)',
+          lineHeight: 1.8, fontWeight: 300, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+          maxHeight: 360, overflowY: 'auto',
+        }}>
+          {output}
+          {!running && (
+            <div style={{ marginTop: '0.75rem', fontSize: '0.55rem', color: 'var(--muted)' }}>
+              Filed as a note on this task.
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

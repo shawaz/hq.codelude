@@ -34,7 +34,7 @@ import { NDAS, CONTRACTS, GOVT_FILINGS } from '@/lib/legal-data';
 import { PROSPECTS, LEADS, DEALS, CLIENTS } from '@/lib/sales';
 import { PLANS } from '@/lib/plans';
 import { PROGRAMMES } from '@/lib/feasibility';
-import { agentsFor, agentId } from '@/lib/agents';
+import { AGENT_TOOLS } from '@/lib/agent-tools';
 
 /** OpenAI-compatible function-calling shape, which the gateway speaks. */
 export interface ToolSpec {
@@ -253,6 +253,25 @@ export const TOOL_SPECS: ToolSpec[] = [
 ];
 
 /**
+ * The catalog the agent form renders and TOOL_SPECS must agree.
+ *
+ * src/lib/agent-tools.ts is a second, import-free copy of the tool list that
+ * the browser can hold — the specs themselves drag in every department dataset.
+ * Two lists mean drift, so this asserts they name the same tools at module
+ * load: a tool added here without a catalog entry would otherwise be invisible
+ * in the form and silently ungrantable.
+ */
+const specNames = new Set(TOOL_SPECS.map((t) => t.function.name));
+const catalogNames = new Set(AGENT_TOOLS.map((t) => t.name));
+const missing = [...specNames].filter((n) => !catalogNames.has(n));
+const extra = [...catalogNames].filter((n) => !specNames.has(n));
+if (missing.length || extra.length) {
+  throw new Error(
+    `ai-tools and agent-tools disagree — missing from the catalog: ${missing.join(', ') || 'none'}; unknown to TOOL_SPECS: ${extra.join(', ') || 'none'}`,
+  );
+}
+
+/**
  * Wrap text written by someone outside the company.
  *
  * The model is told, in the system prompt, that anything between these markers
@@ -295,7 +314,16 @@ export async function executeTool(
   name: string,
   rawArgs: string | Record<string, unknown>,
   token: string | undefined,
+  allowlist?: string[],
 ): Promise<ToolResult> {
+  // An agent only gets the tools its record names. The loop already filters the
+  // specs it offers, so reaching here off-list means the model invented a name
+  // or a spec and an allowlist drifted apart — refuse either way rather than
+  // trusting the filter upstream.
+  if (allowlist && !allowlist.includes(name)) {
+    return { name, content: `This agent is not permitted to use ${name}.`, wrote: false };
+  }
+
   let args: Record<string, unknown> = {};
   try {
     args = typeof rawArgs === 'string' ? JSON.parse(rawArgs || '{}') : (rawArgs ?? {});
@@ -393,16 +421,19 @@ export async function executeTool(
           return { name, content: `Task "${task.title}" is now unassigned.`, wrote: true };
         }
 
-        // Agents are declared in code and scoped to a venture, so match those
-        // first — an agent name is never also a user account.
-        const agent = agentsFor(task.project).find(
-          (a) => a.name.toLowerCase() === wanted.toLowerCase(),
+        // Agents are scoped to a venture, so match those first — an agent name
+        // is never also a user account. Paused agents are excluded: handing work
+        // to one that will not run is worse than refusing.
+        const agents = await fetchQuery(
+          api.agents.listByVenture, { venture: task.project }, opts,
         );
+        const live = agents.filter((a) => a.status === 'active');
+        const agent = live.find((a) => a.name.toLowerCase() === wanted.toLowerCase());
         if (agent) {
           await fetchMutation(api.tasks.setAssignee, {
             id: task._id,
             assigneeType: 'agent',
-            assigneeId: agentId(agent.name),
+            assigneeId: agent._id,
             assigneeName: agent.name,
           }, opts);
           return { name, content: `Assigned "${task.title}" to the ${agent.name} agent.`, wrote: true };
@@ -419,7 +450,7 @@ export async function executeTool(
 
         if (!person) {
           const options = team.filter((m) => !m.pending).map((m) => m.name || m.email);
-          const agentNames = agentsFor(task.project).map((a) => a.name);
+          const agentNames = live.map((a) => a.name);
           return {
             name,
             content: `No teammate or agent matches "${wanted}". People: ${options.join(', ') || 'none'}. Agents on ${task.project}: ${agentNames.join(', ') || 'none'}.`,
