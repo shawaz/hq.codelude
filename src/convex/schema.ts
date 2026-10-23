@@ -301,6 +301,49 @@ const schema = defineSchema({
     .index("by_org", ["orgId"])
     .index("by_org_primary", ["orgId", "isPrimary"]),
 
+  // ─── Social content scheduler ──────────────────────────────────────
+  // Drafts and publishing state live here rather than in the static marketing
+  // seed file, so the Content page can be used as the source of truth.
+  content_items: defineTable({
+    venture: v.string(),
+    account: v.string(),
+    platform: v.union(v.literal("Instagram"), v.literal("X"), v.literal("LinkedIn")),
+    type: v.union(
+      v.literal("Post"),
+      v.literal("Thread"),
+      v.literal("Carousel"),
+      v.literal("Reel"),
+      v.literal("Article"),
+    ),
+    status: v.union(
+      v.literal("idea"),
+      v.literal("draft"),
+      v.literal("review"),
+      v.literal("approved"),
+      v.literal("scheduled"),
+      v.literal("publishing"),
+      v.literal("published"),
+      v.literal("failed"),
+      v.literal("archived"),
+    ),
+    title: v.string(),
+    body: v.string(),
+    mediaUrl: v.optional(v.string()),
+    scheduledAt: v.optional(v.number()),
+    createdBy: v.id("users"),
+    owner: v.string(),
+    approvedBy: v.optional(v.id("users")),
+    approvedAt: v.optional(v.number()),
+    publishedAt: v.optional(v.number()),
+    publishedUrl: v.optional(v.string()),
+    publishError: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_venture", ["venture"])
+    .index("by_venture_status", ["venture", "status"])
+    .index("by_scheduled_status", ["status", "scheduledAt"]),
+
   // ─── Tasks ──────────────────────────────────────────────────────────
   // Migrated out of src/lib/tasks.ts, which was 87 hardcoded literals with no
   // way to create, edit or complete anything. That file is now a seed source
