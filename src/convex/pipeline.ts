@@ -12,7 +12,7 @@ import {
 
 // ─── Stages ───────────────────────────────────────────────────────────────────
 
-export const STAGES = ["prospect", "lead", "deal", "client"] as const;
+export const STAGES = ["prospect", "lead", "deal", "client", "competitor"] as const;
 
 /** The stage a record moves to on "convert". `client` is terminal. */
 const NEXT_STAGE: Record<string, string | null> = {
@@ -20,6 +20,8 @@ const NEXT_STAGE: Record<string, string | null> = {
   lead: "deal",
   deal: "client",
   client: null,
+  // Nothing converts into or out of a competitor.
+  competitor: null,
 };
 
 /** Default status when a record lands in a stage. */
@@ -28,6 +30,7 @@ const ENTRY_STATUS: Record<string, string> = {
   lead: "new",
   deal: "discovery",
   client: "active",
+  competitor: "watching",
 };
 
 const TOTAL = "*"; // sentinel status holding the per-segment grand total
@@ -42,6 +45,7 @@ const STAGE_PAGE: Record<string, string> = {
   lead: "leads",
   deal: "deals",
   client: "clients",
+  competitor: "competitors",
 };
 
 function pageForStage(stage: string): string {
@@ -387,6 +391,9 @@ const recordFields = {
   meetingNote: v.optional(v.string()),
   closeDate: v.optional(v.string()),
   since: v.optional(v.string()),
+  strength: v.optional(v.string()),
+  weakness: v.optional(v.string()),
+  edge: v.optional(v.string()),
   config: v.optional(v.string()),
   boundary: v.optional(v.any()),
   center: v.optional(v.array(v.number())),
@@ -624,6 +631,88 @@ export const submitLead = mutation({
       1,
     );
     return id;
+  },
+});
+
+/**
+ * A brand registering in the Franchiseen app, landed as a lead.
+ *
+ * Idempotent on the Franchiseen brand id, kept in `code` and found through the
+ * existing `by_code` index. The sync re-reads the whole pending queue every time
+ * it runs, so without this every refresh would deal another copy of the same
+ * brand into the funnel.
+ *
+ * Only the fields the app owns are refreshed on a repeat. Status, priority and
+ * notes are left alone — those belong to whoever is working the lead, and a sync
+ * that resets them to "new" would undo their morning.
+ */
+export const upsertFranchiseenBrand = internalMutation({
+  args: {
+    brandId: v.string(),
+    name: v.string(),
+    category: v.optional(v.string()),
+    website: v.optional(v.string()),
+    ownerEmail: v.optional(v.string()),
+    city: v.optional(v.string()),
+    interest: v.optional(v.string()),
+    value: v.optional(v.string()),
+    message: v.optional(v.string()),
+  },
+  returns: v.string(),
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("pipeline_orgs")
+      .withIndex("by_code", (q) => q.eq("code", args.brandId))
+      .first();
+
+    if (existing !== null) {
+      await ctx.db.patch(existing._id, {
+        name: args.name,
+        category: args.category,
+        website: args.website,
+        city: args.city,
+        interest: args.interest,
+        value: args.value,
+      });
+      return "updated";
+    }
+
+    const id = await ctx.db.insert("pipeline_orgs", {
+      stage: "lead",
+      venture: "Franchiseen",
+      segment: "brand",
+      name: args.name,
+      code: args.brandId,
+      category: args.category,
+      website: args.website,
+      city: args.city,
+      interest: args.interest,
+      value: args.value,
+      message: args.message,
+      status: "new",
+      priority: "medium",
+      // Distinct from "web-form" so clearBySource can undo a bad sync without
+      // touching leads a human actually typed in.
+      source: "franchiseen-app",
+      createdAt: Date.now(),
+    });
+
+    if (args.ownerEmail !== undefined && args.ownerEmail.length > 0) {
+      await ctx.db.insert("pipeline_contacts", {
+        orgId: id,
+        name: args.ownerEmail,
+        email: args.ownerEmail,
+        isPrimary: true,
+        createdAt: Date.now(),
+      });
+    }
+
+    await bumpBoth(
+      ctx,
+      { stage: "lead", venture: "Franchiseen", segment: "brand", status: "new" },
+      1,
+    );
+    return "created";
   },
 });
 

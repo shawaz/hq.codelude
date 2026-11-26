@@ -1,6 +1,6 @@
 export type Priority = 'high' | 'medium' | 'low';
 export type Status   = 'todo' | 'in-progress' | 'done';
-export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Llife' | 'Nanotrade';
+export type Project  = 'Roborns' | 'Franchiseen' | 'HubCV' | 'Llife' | 'Nanotrade' | 'Codelude';
 
 export interface Task {
   id: string;
@@ -15,8 +15,9 @@ export const PROJECT_COLORS: Record<Project, string> = {
   Roborns:    '#dbdbdb',
   Franchiseen:'#c8c8c8',
   HubCV:      '#b5b5b5',
-  Llife:    '#a5a5a5',
-  Nanotrade:    '#adadad',
+  Llife:      '#a5a5a5',
+  Nanotrade:  '#adadad',
+  Codelude:   '#eeeeee',
 };
 
 /**
@@ -157,4 +158,16 @@ export const SEED_TASKS: Task[] = [
   { id: 'rb19', project: 'Roborns', category: 'Comms',        priority: 'medium', status: 'todo', title: 'Update roborns.com site from Kapu to Mangaluru/DK' },
   { id: 'rb20', project: 'Roborns', category: 'Finance',      priority: 'medium', status: 'todo', title: 'Reconcile instrument — ₹18.1 Cr CCD (HQ) vs ₹15 Cr equity 8% pref (site)' },
   { id: 'rb21', project: 'Roborns', category: 'Finance',      priority: 'medium', status: 'todo', title: 'R7 verification checklist — no spend, no FD, no office until cleared' },
+  // ── HUBCV DEHRADUN CAMPAIGN & WA GATEWAY (Sep 2026) ──
+  { id: 'h16', project: 'HubCV', category: 'Marketing', priority: 'high', status: 'in-progress', title: 'HubCV Dehradun Campus Blitz — UPES, Graphic Era, DIT, GEHU onboarding (Aman lead)' },
+  { id: 'h17', project: 'HubCV', category: 'Product', priority: 'high', status: 'in-progress', title: 'Aman 7-Day Email Sequence & WhatsApp Gateway (+91 888 444 9055) automation' },
+  { id: 'h18', project: 'HubCV', category: 'Business', priority: 'high', status: 'todo', title: 'Dehradun 10,000 Verified Student Profile milestone tracking' },
+  // ── FRANCHISEEN MOBILE LAUNCH PIPELINE ──
+  { id: 'f19', project: 'Franchiseen', category: 'Product', priority: 'high', status: 'in-progress', title: 'Validate Franchiseen Preview APK v1.0.0-b9 on Android testing device' },
+  { id: 'f20', project: 'Franchiseen', category: 'Product', priority: 'high', status: 'todo', title: 'EAS build pipeline & Google Play Internal Testing track submission' },
+  // ── LLIFE.APP AMBIENT ASSISTANT ──
+  { id: 'c15', project: 'Llife', category: 'Product', priority: 'high', status: 'in-progress', title: 'Implement 5-Domain Ambient Intelligence specification (Finances, Education, Earnings, Mind, Body)' },
+  { id: 'c16', project: 'Llife', category: 'Product', priority: 'high', status: 'in-progress', title: 'Deploy Agent L master orchestrator and sub-agents (Agent S, Agent M, Agent A)' },
+  // ── CODELUDE HQ INFRASTRUCTURE & WA GATEWAY ──
+  { id: 'c17', project: 'Codelude', category: 'Infrastructure', priority: 'high', status: 'in-progress', title: 'Baileys WhatsApp Gateway management on VPS (centos@64.227.160.224) via Smithers' },
 ];

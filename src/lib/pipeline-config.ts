@@ -1,10 +1,15 @@
 /**
- * Shared configuration for the sales funnel: prospect → lead → deal → client.
- * All four dashboard pages render the same board from this config; only the
- * stage differs.
+ * Shared configuration for the sales funnel: prospect → lead → deal → client,
+ * plus competitors. All five dashboard pages render the same board from this
+ * config; only the stage differs.
+ *
+ * Competitors are not a funnel position — nothing converts into one and nothing
+ * converts out. They sit here because they are the same kind of record (an
+ * organisation, per venture, per segment) and the board already does the work:
+ * scoping, search, statuses, contacts.
  */
 
-export type Stage = 'prospect' | 'lead' | 'deal' | 'client';
+export type Stage = 'prospect' | 'lead' | 'deal' | 'client' | 'competitor';
 
 export { VENTURES } from './ventures';
 
@@ -79,6 +84,16 @@ export const STATUSES: Record<Stage, StatusDef[]> = {
     { key: 'at-risk',    label: 'At Risk',    color: '#b5b5b5' },
     { key: 'churned',    label: 'Churned',    color: '#9d9d9d' },
   ],
+  // Not a lifecycle so much as a classification — how close they are to what we
+  // actually sell. "Watching" is the entry point because a competitor is usually
+  // spotted before anyone has decided how much they matter.
+  competitor: [
+    { key: 'watching', label: 'Watching', color: '#7a7870' },
+    { key: 'direct',   label: 'Direct',   color: '#eeeeee' },
+    { key: 'indirect', label: 'Indirect', color: '#b5b5b5' },
+    { key: 'adjacent', label: 'Adjacent', color: '#a5a5a5' },
+    { key: 'dormant',  label: 'Dormant',  color: '#9d9d9d' },
+  ],
 };
 
 export const STAGE_META: Record<Stage, {
@@ -105,6 +120,12 @@ export const STAGE_META: Record<Stage, {
   client: {
     title: 'Clients',
     sub: 'Converted customers — per venture, per segment.',
+    next: null,
+    convertLabel: '',
+  },
+  competitor: {
+    title: 'Competitors',
+    sub: 'Who else is selling to this segment — and where we beat them.',
     next: null,
     convertLabel: '',
   },

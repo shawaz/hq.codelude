@@ -222,7 +222,7 @@ const schema = defineSchema({
   // Never collect() this table — always paginate or use an index.
 
   pipeline_orgs: defineTable({
-    stage: v.string(),          // "prospect" | "lead" | "deal" | "client"
+    stage: v.string(),          // "prospect" | "lead" | "deal" | "client" | "competitor"
     venture: v.string(),        // "HubCV", "Roborns", ...
     segment: v.string(),        // "school" | "compute" | "investor" | ...
     name: v.string(),
@@ -250,6 +250,12 @@ const schema = defineSchema({
     message: v.optional(v.string()),   // raw form/DM body
 
     // ── Deal stage (calls & appointments) ──
+    // Competitor-only, and optional like every other stage-specific field here
+    // (interest, closeDate, since). Same shape as COMPETITORS in lib/mktg.ts.
+    strength: v.optional(v.string()),
+    weakness: v.optional(v.string()),
+    edge: v.optional(v.string()),
+
     value: v.optional(v.string()),     // "₹18 Cr", "$99/month"
     meetingAt: v.optional(v.number()),  // scheduled call/appointment (epoch ms)
     meetingNote: v.optional(v.string()),

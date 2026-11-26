@@ -268,6 +268,18 @@ export const seedFromStatic = internalMutation({
         .withIndex("by_seedId", (q) => q.eq("seedId", r.seedId))
         .unique();
       if (existing) {
+        await ctx.db.patch(existing._id, {
+          venture: r.venture,
+          name: r.name,
+          emoji: r.emoji,
+          color: r.color,
+          type: r.type,
+          role: r.role,
+          provider: r.provider,
+          tools: r.tools,
+          tf: r.tf,
+          updatedAt: Date.now(),
+        });
         skipped++;
         continue;
       }

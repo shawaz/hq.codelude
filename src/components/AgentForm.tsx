@@ -43,7 +43,7 @@ export interface AgentDraft {
  * the form says so rather than letting it look deliberate.
  */
 const PROVIDERS: { value: AgentDraft['provider']; label: string }[] = [
-  { value: 'gemini',   label: 'Gemini 3.6 Flash' },
+  { value: 'gemini',   label: 'Gemini 3.8 Flash' },
   { value: 'opencode', label: 'Big Pickle (OpenCode)' },
   { value: 'deepseek', label: 'DeepSeek Flash' },
   { value: 'claude',   label: 'Claude Sonnet' },

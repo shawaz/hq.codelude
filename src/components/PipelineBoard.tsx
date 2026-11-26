@@ -74,6 +74,14 @@ const STAGE_FIELDS: Record<Stage, FormField[]> = {
     { name: 'value', label: 'Contract value' },
     { name: 'since', label: 'Client since', type: 'date' },
   ],
+  // Mirrors the shape of COMPETITORS in lib/mktg.ts, so that hand-kept list can
+  // be imported here rather than retyped.
+  competitor: [
+    { name: 'website',  label: 'Website' },
+    { name: 'strength', label: 'Their strength' },
+    { name: 'weakness', label: 'Their weakness' },
+    { name: 'edge',     label: 'Our edge' },
+  ],
 };
 
 function AddForm({
@@ -200,6 +208,7 @@ const STAGE_PAGE: Record<Stage, string> = {
   lead: 'leads',
   deal: 'deals',
   client: 'clients',
+  competitor: 'competitors',
 };
 
 export default function PipelineBoard({ stage }: { stage: Stage }) {

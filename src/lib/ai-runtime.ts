@@ -106,9 +106,9 @@ export const OPENAI_COMPATIBLE = {
   gemini: {
     url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
     keyEnv: 'GEMINI_API_KEY',
-    label: 'Gemini 3.6 Flash',
+    label: 'Gemini 3.8 Flash',
     models: [
-      'gemini-3.6-flash',
+      'gemini-3.8-flash',
       'gemini-3.5-flash',
       'gemini-3.7-flash',
     ],
@@ -154,7 +154,7 @@ const isCooling = (model: string) => {
  */
 const TOOL_MODEL: Record<OpenAIProvider, string> = {
   opencode: 'nemotron-3-ultra-free',
-  gemini: 'gemini-3.6-flash',
+  gemini: 'gemini-3.8-flash',
   deepseek: 'deepseek/deepseek-chat-v3-0324:free',
 };
 
