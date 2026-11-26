@@ -24,6 +24,8 @@ import type * as positions from "../positions.js";
 import type * as rename from "../rename.js";
 import type * as renameScope from "../renameScope.js";
 import type * as scopes from "../scopes.js";
+import type * as support from "../support.js";
+import type * as supportHttp from "../supportHttp.js";
 import type * as taskExtras from "../taskExtras.js";
 import type * as tasks from "../tasks.js";
 import type * as team from "../team.js";
@@ -51,6 +53,8 @@ declare const fullApi: ApiFromModules<{
   rename: typeof rename;
   renameScope: typeof renameScope;
   scopes: typeof scopes;
+  support: typeof support;
+  supportHttp: typeof supportHttp;
   taskExtras: typeof taskExtras;
   tasks: typeof tasks;
   team: typeof team;

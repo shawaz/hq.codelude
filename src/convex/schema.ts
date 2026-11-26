@@ -301,6 +301,143 @@ const schema = defineSchema({
     .index("by_org", ["orgId"])
     .index("by_org_primary", ["orgId", "isPrimary"]),
 
+  // ─── Central support desk ─────────────────────────────────────────────
+  // Franchiseen is the first client; `issuer` keeps ownership namespaced if
+  // another Codelude product later uses this same queue. Attachments are kept
+  // in Convex storage and referenced by ID only (never public URLs).
+  supportTickets: defineTable({
+    venture: v.string(),
+    channel: v.string(),
+    ticketNumber: v.string(),
+    requesterEmail: v.string(),
+    requesterIssuer: v.string(),
+    requesterSubject: v.optional(v.string()),
+    requesterName: v.optional(v.string()),
+    subject: v.string(),
+    category: v.string(),
+    description: v.string(),
+    status: v.union(
+      v.literal("new"), v.literal("open"), v.literal("waiting_on_user"),
+      v.literal("waiting_internal"), v.literal("resolved"), v.literal("closed"),
+    ),
+    priority: v.union(v.literal("urgent"), v.literal("high"), v.literal("normal"), v.literal("low")),
+    assigneeId: v.optional(v.id("users")),
+    contextType: v.optional(v.union(v.literal("brand"), v.literal("property"), v.literal("deal"), v.literal("account"))),
+    contextId: v.optional(v.string()),
+    contextLabel: v.optional(v.string()),
+    resolutionSummary: v.optional(v.string()),
+    idempotencyKey: v.string(),
+    version: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    lastActivityAt: v.number(),
+  })
+    .index("by_requester", ["requesterIssuer", "requesterEmail", "createdAt"])
+    .index("by_number", ["ticketNumber"])
+    .index("by_venture_activity", ["venture", "lastActivityAt"])
+    .index("by_status_activity", ["status", "lastActivityAt"])
+    .index("by_assignee_status", ["assigneeId", "status"])
+    .index("by_idempotency", ["requesterIssuer", "idempotencyKey"]),
+
+  supportMessages: defineTable({
+    ticketId: v.id("supportTickets"),
+    authorType: v.union(v.literal("requester"), v.literal("agent")),
+    authorEmail: v.string(),
+    authorName: v.optional(v.string()),
+    body: v.string(),
+    visibility: v.union(v.literal("requester"), v.literal("internal")),
+    attachmentIds: v.optional(v.array(v.id("supportAttachments"))),
+    createdAt: v.number(),
+    requestId: v.optional(v.string()),
+  })
+    .index("by_ticket_time", ["ticketId", "createdAt"])
+    .index("by_request_id", ["requestId"]),
+
+  supportEvents: defineTable({
+    ticketId: v.optional(v.id("supportTickets")),
+    articleId: v.optional(v.id("supportArticles")),
+    actorType: v.union(v.literal("requester"), v.literal("agent"), v.literal("system")),
+    actorEmail: v.optional(v.string()),
+    kind: v.string(),
+    fromValue: v.optional(v.string()),
+    toValue: v.optional(v.string()),
+    detail: v.optional(v.string()),
+    createdAt: v.number(),
+    requestId: v.optional(v.string()),
+  })
+    .index("by_ticket_time", ["ticketId", "createdAt"])
+    .index("by_request_id", ["requestId"]),
+
+  supportArticles: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    category: v.string(),
+    audience: v.array(v.string()),
+    language: v.string(),
+    body: v.string(),
+    published: v.boolean(),
+    revision: v.number(),
+    authorId: v.id("users"),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_published_category", ["published", "category"]),
+
+  supportAttachments: defineTable({
+    ticketId: v.id("supportTickets"),
+    storageId: v.id("_storage"),
+    name: v.string(),
+    size: v.number(),
+    contentType: v.string(),
+    requesterEmail: v.string(),
+    requesterIssuer: v.string(),
+    uploadedAt: v.number(),
+  }).index("by_ticket", ["ticketId"]),
+
+  supportUploadGrants: defineTable({
+    tokenHash: v.string(),
+    requesterEmail: v.string(),
+    requesterIssuer: v.string(),
+    name: v.string(),
+    size: v.number(),
+    contentType: v.string(),
+    expiresAt: v.number(),
+    used: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_token_hash", ["tokenHash"]),
+
+  supportDownloadGrants: defineTable({
+    tokenHash: v.string(),
+    attachmentId: v.id("supportAttachments"),
+    requesterEmail: v.string(),
+    requesterIssuer: v.string(),
+    expiresAt: v.number(),
+    used: v.boolean(),
+    createdAt: v.number(),
+  }).index("by_token_hash", ["tokenHash"]),
+
+  supportRequestIds: defineTable({
+    requestId: v.string(),
+    operation: v.string(),
+    resultId: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index("by_request_id", ["requestId"]),
+
+  supportNotificationOutbox: defineTable({
+    ticketId: v.id("supportTickets"),
+    eventId: v.string(),
+    recipientEmail: v.string(),
+    kind: v.string(),
+    payload: v.string(),
+    state: v.union(v.literal("pending"), v.literal("sent"), v.literal("failed")),
+    attempts: v.number(),
+    nextAttemptAt: v.number(),
+    createdAt: v.number(),
+  })
+    .index("by_state_retry", ["state", "nextAttemptAt"])
+    .index("by_event_id", ["eventId"]),
+
   // ─── Tasks ──────────────────────────────────────────────────────────
   // Migrated out of src/lib/tasks.ts, which was 87 hardcoded literals with no
   // way to create, edit or complete anything. That file is now a seed source
